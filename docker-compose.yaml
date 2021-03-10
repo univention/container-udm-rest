@@ -1,0 +1,13 @@
+---
+
+version: '3.8'
+
+services:
+  udm:
+    env_file: .env.univention-directory-manager-rest
+    ports:
+    - 9979:9979
+    volumes:
+    - ./CAcert.pem:/udm/CAcert.pem:ro
+
+...

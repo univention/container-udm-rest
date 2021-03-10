@@ -1,0 +1,16 @@
+[style]
+based_on_style = facebook
+blank_line_before_module_docstring = true
+
+column_limit = 120
+
+# The style for continuation alignment
+continuation_align_style=FIXED
+
+# Indent width used for line continuations.
+continuation_indent_width=4
+
+# The number of columns to use for indentation.
+indent_width=4
+
+# [EOF]
