@@ -1,0 +1,113 @@
+---
+
+stages:
+- lint-stage
+- build-stage
+- test-stage
+- publish-stage
+
+variables:
+  UNIV_ARTIFACTS: artifacts.knut.univention.de
+  UNIV_DOCKERHUB_CACHE:
+    ${UNIV_ARTIFACTS}/dockerhub_proxy_cache/
+  UPX_IMAGE_REGISTRY:
+    ${UNIV_ARTIFACTS}/upx/
+  # We need to turn off TLS or reconfigure GitLab, see:
+  # https://about.gitlab.com/releases/
+  # 2019/07/31/docker-in-docker-with-docker-19-dot-03/
+  DOCKER_TLS_CERTDIR: ""
+  # DOCKER_TLS_CERTDIR: "/certs"
+  # DOCKER_TLS_VERIFY: 1
+  # DOCKER_CERT_PATH: "$DOCKER_TLS_CERTDIR/client"
+
+  CI_PIPELINE_TAG: "${CI_PIPELINE_ID}-"
+
+  DOCKER_COMPOSE_PRODUCTION_FILES:
+    --file docker-compose.yaml
+    --file docker-compose.prod.yaml
+
+  DOCKER_COMPOSE_BUILD_FILES:
+    ${DOCKER_COMPOSE_PRODUCTION_FILES}
+    --file docker-compose.override.yaml
+
+default:
+  before_script:
+  - mkdir "$HOME/.docker/"
+  - echo "$DOCKER_AUTH_CONFIG" > "$HOME/.docker/config.json"
+
+pre-commit-job:
+  stage: lint-stage
+  tags:
+    - docker
+  image: ${UPX_IMAGE_REGISTRY}container-pre-commit/pre-commit:latest
+  variables:
+    PIP_CACHE_DIR: ${CI_PROJECT_DIR}/.cache/pip
+    PRE_COMMIT_HOME: ${CI_PROJECT_DIR}/.cache/pre-commit
+  cache:
+    paths:
+    - .cache/pip
+    - .cache/pre-commit
+    - venv/
+  before_script:
+  - echo "Explicitly skip the default action docker login"
+  script:
+  # Compose lint would fail without the referenced env files
+  - cp .env.univention-directory-manager-rest.example .env.univention-directory-manager-rest
+  - pre-commit run --all-files
+
+build-job:
+  # Only the debian flavor seems to be working with dind out of the box
+  # the alpine as of 1.28.0 does not because of a mismatch issue
+  # between "musl libc" vs glibc:
+  # https://github.com/docker/compose/issues/3465
+  # https://stackoverflow.com/a/42322893
+  image: ${UNIV_DOCKERHUB_CACHE}docker/compose:debian-1.28.0
+  stage: build-stage
+  tags:
+    - docker
+  services:
+    - name: ${UNIV_DOCKERHUB_CACHE}library/docker:20.10.2-dind
+      alias: docker
+      command: ["--insecure-registry=artifacts.knut.univention.de"]
+  script:
+    - cp .env.univention-directory-manager-rest.example .env.univention-directory-manager-rest
+    - docker-compose ${DOCKER_COMPOSE_BUILD_FILES} build
+    - docker-compose ${DOCKER_COMPOSE_BUILD_FILES} push
+
+test-job:
+  image: ${UNIV_DOCKERHUB_CACHE}docker/compose:debian-1.28.0
+  stage: test-stage
+  tags:
+    - docker
+  services:
+    - name: ${UNIV_DOCKERHUB_CACHE}library/docker:20.10.2-dind
+      alias: docker
+      command: ["--insecure-registry=artifacts.knut.univention.de"]
+  script:
+    - cp .env.univention-directory-manager-rest.example .env.univention-directory-manager-rest
+    - cp "${CA_CERT_FILE}" CAcert.pem
+    - docker-compose ${DOCKER_COMPOSE_PRODUCTION_FILES} pull
+    - docker-compose ${DOCKER_COMPOSE_PRODUCTION_FILES} up --detach --no-build
+    - docker-compose ${DOCKER_COMPOSE_PRODUCTION_FILES} down
+    - docker-compose ${DOCKER_COMPOSE_PRODUCTION_FILES} rm
+
+publish-job:
+  image: ${UNIV_DOCKERHUB_CACHE}docker/compose:debian-1.28.0
+  stage: publish-stage
+  tags:
+    - docker
+  only:
+    - main
+  services:
+    - name: ${UNIV_DOCKERHUB_MIRROR}library/docker:20.10.2-dind
+      alias: docker
+      command: ["--insecure-registry=artifacts.knut.univention.de"]
+  script:
+    - cp .env.univention-directory-manager-rest.example .env.univention-directory-manager-rest
+    - docker-compose ${DOCKER_COMPOSE_PRODUCTION_FILES} pull
+    - docker tag
+      ${UPX_IMAGE_REGISTRY}container-udm-rest/udm:${CI_PIPELINE_TAG}test
+      ${UPX_IMAGE_REGISTRY}container-udm-rest/udm:latest
+    - docker push
+      ${UPX_IMAGE_REGISTRY}container-udm-rest/udm:latest
+...

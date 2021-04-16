@@ -1,0 +1,17 @@
+[MESSAGES CONTROL]
+
+max-line-length=120
+
+# """C0330: Wrong hanging indentation before block (add 4 spaces)."""
+# yapf (and back) are reformatting code in a good way (PEP-8 compatible)
+# It is just pylint which does not like the result.
+
+# """R1711: Useless return at end of function or method (useless-return)"""
+# "Explicit is better than implicit."
+
+# """W0511: fixme"""
+# Don't let the pre-commit hook fail because of a TODO note
+
+disable=C0330,R1711,W0511
+
+# [EOF]

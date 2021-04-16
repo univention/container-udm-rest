@@ -1,0 +1,3 @@
+# Docker Compose
+.env.univention-directory-manager-rest
+CAcert.pem
