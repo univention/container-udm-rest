@@ -108,6 +108,11 @@ publish-job:
     - docker tag
       ${UPX_IMAGE_REGISTRY}container-udm-rest/udm:${CI_PIPELINE_TAG}test
       ${UPX_IMAGE_REGISTRY}container-udm-rest/udm:latest
+    - docker tag
+      ${UPX_IMAGE_REGISTRY}container-udm-rest/udm:latest
+      quay.io/univention/univention-upx-container-udm-rest-udm:experimental
     - docker push
       ${UPX_IMAGE_REGISTRY}container-udm-rest/udm:latest
+    - docker push
+      quay.io/univention/univention-upx-container-udm-rest-udm:experimental
 ...
