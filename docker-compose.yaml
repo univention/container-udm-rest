@@ -7,7 +7,11 @@ services:
     env_file: .env.univention-directory-manager-rest
     ports:
     - 9979:9979
-    volumes:
-    - ./CAcert.pem:/udm/CAcert.pem:ro
+    secrets:
+    - ca_cert
+
+secrets:
+  ca_cert:
+    file: ./CAcert.pem
 
 ...
