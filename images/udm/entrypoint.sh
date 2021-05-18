@@ -28,7 +28,7 @@ set -euxo pipefail
 # /usr/share/common-licenses/AGPL-3; if not, see
 # <https://www.gnu.org/licenses/>.
 
-ln --symbolic --force "CAcert.pem" "/etc/univention/ssl/ucsCA/CAcert.pem"
+ln --symbolic --force "${CA_CERT_FILE}" "/etc/univention/ssl/ucsCA/CAcert.pem"
 
 cat <<EOF > /etc/ldap/ldap.conf
 # This file should be world readable but not world writable.
