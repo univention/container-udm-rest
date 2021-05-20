@@ -34,6 +34,7 @@ cat <<EOF > /etc/ldap/ldap.conf
 # This file should be world readable but not world writable.
 
 TLS_CACERT /etc/univention/ssl/ucsCA/CAcert.pem
+TLS_REQCERT ${TLS_REQCERT:-demand}
 
 URI ${LDAP_URI}
 
