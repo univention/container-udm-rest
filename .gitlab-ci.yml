@@ -19,6 +19,7 @@ variables:
   # DOCKER_TLS_CERTDIR: "/certs"
   # DOCKER_TLS_VERIFY: 1
   # DOCKER_CERT_PATH: "$DOCKER_TLS_CERTDIR/client"
+  DOCKER_HOST: tcp://docker:2375
 
   CI_PIPELINE_TAG: "${CI_PIPELINE_ID}-"
 
@@ -66,7 +67,7 @@ build-job:
   tags:
     - docker
   services:
-    - name: ${UNIV_DOCKERHUB_CACHE}library/docker:20.10.2-dind
+    - name: ${UNIV_DOCKERHUB_CACHE}library/docker:18.09.7-dind
       alias: docker
       command: ["--insecure-registry=artifacts.knut.univention.de"]
   script:
@@ -80,7 +81,7 @@ test-job:
   tags:
     - docker
   services:
-    - name: ${UNIV_DOCKERHUB_CACHE}library/docker:20.10.2-dind
+    - name: ${UNIV_DOCKERHUB_CACHE}library/docker:18.09.7-dind
       alias: docker
       command: ["--insecure-registry=artifacts.knut.univention.de"]
   script:
@@ -99,7 +100,7 @@ publish-job:
   only:
     - main
   services:
-    - name: ${UNIV_DOCKERHUB_MIRROR}library/docker:20.10.2-dind
+    - name: ${UNIV_DOCKERHUB_CACHE}library/docker:18.09.7-dind
       alias: docker
       command: ["--insecure-registry=artifacts.knut.univention.de"]
   script:
