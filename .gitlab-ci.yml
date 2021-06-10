@@ -73,9 +73,9 @@ build-job:
       alias: docker
       command: ["--insecure-registry=artifacts.knut.univention.de"]
   script:
-    - cp .env.univention-directory-manager-rest.example .env.univention-directory-manager-rest
-    - docker-compose ${DOCKER_COMPOSE_BUILD_FILES} build
-    - docker-compose ${DOCKER_COMPOSE_BUILD_FILES} push
+  - apt-get update
+  - apt-get --assume-yes --verbose-versions --no-install-recommends install python3-sh
+  - python3 ci-build-script.py
 
 test-job:
   image: ${UNIV_DOCKERHUB_CACHE}docker/compose:debian-1.28.0

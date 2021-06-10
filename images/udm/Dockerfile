@@ -104,7 +104,10 @@ RUN \
       python3-univention-management-console=12.* \
       python3-uritemplate=0.* \
       univention-management-console-module-udm=10.* && \
-  rm -rf /apt /var/lib/apt/lists/*
+  rm -rf /apt /var/lib/apt/lists/* && \
+  awk \
+    '/^Package: python3-univention-directory-manager-rest$/{ while(!/^Version: /){getline} print $2 }' \
+    /var/lib/dpkg/status > /version
 
 ###############################################################################
 # Second stage image to get rid of unneeded files
@@ -112,6 +115,10 @@ RUN \
 FROM ${DOCKERHUB_CACHE}debian:${DEBIAN_BASE_IMAGE_TAG} AS final
 
 ARG APT_KEY_URL=https://updates.software-univention.de/univention-archive-key-ucs-5x.gpg
+ARG LABEL_CREATED=undefined
+ARG LABEL_REVISION=undefined
+ARG LABEL_SOURCE=undefined
+ARG LABEL_VERSION=undefined
 
 SHELL ["/bin/bash", "-euxo", "pipefail", "-c"]
 
@@ -173,6 +180,10 @@ COPY --from=build \
   /etc/univention/*.conf \
   /etc/univention/
 
+COPY --from=build \
+  /version \
+  /version
+
 RUN echo > /usr/lib/python3/dist-packages/univention/lib/package_manager.py
 
 # build all locales
@@ -201,6 +212,20 @@ CMD [ \
   "-d", "4", \
   "run" \
 ]
+
+LABEL org.opencontainers.image.created="${LABEL_CREATED}"
+LABEL org.opencontainers.image.description="REST service for UCS Directory Manager"
+LABEL org.opencontainers.image.licenses="AGPL-3.0-or-later"
+LABEL org.opencontainers.image.revision=$LABEL_REVISION
+LABEL org.opencontainers.image.source="${LABEL_SOURCE}"
+LABEL org.opencontainers.image.title="udm-rest"
+LABEL org.opencontainers.image.url="https://docs.software-univention.de/developer-reference-4.4.html#udm:rest_api"
+LABEL org.opencontainers.image.vendor="Univention GmbH"
+LABEL org.opencontainers.image.version="${LABEL_VERSION}"
+
+
+############################################################
+# Third stage to create a debug image
 
 FROM final as debug
 
