@@ -40,7 +40,9 @@ pre-commit-job:
   stage: lint-stage
   tags:
     - docker
-  image: ${UPX_IMAGE_REGISTRY}container-pre-commit/pre-commit:latest
+  image:
+    name: ${UPX_IMAGE_REGISTRY}container-pre-commit/pre-commit:latest
+    entrypoint: ["/bin/bash", "-c"]
   variables:
     PIP_CACHE_DIR: ${CI_PROJECT_DIR}/.cache/pip
     PRE_COMMIT_HOME: ${CI_PROJECT_DIR}/.cache/pre-commit
