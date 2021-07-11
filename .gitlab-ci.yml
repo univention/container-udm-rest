@@ -19,8 +19,6 @@ variables:
   # DOCKER_CERT_PATH: "$DOCKER_TLS_CERTDIR/client"
   DOCKER_HOST: tcp://docker:2375
 
-  CI_PIPELINE_TAG: ${CI_PIPELINE_ID}-
-
   DOCKER_COMPOSE_PRODUCTION_FILES:
     --file docker-compose.yaml
     --file docker-compose.prod.yaml
@@ -109,7 +107,7 @@ publish-job:
       .env.univention-directory-manager-rest
   - docker-compose ${DOCKER_COMPOSE_PRODUCTION_FILES} pull
   - docker tag
-      ${UPX_IMAGE_REGISTRY}container-udm-rest/udm:${CI_PIPELINE_TAG}test
+      ${UPX_IMAGE_REGISTRY}container-udm-rest/udm:${CI_PIPELINE_ID}-test
       ${UPX_IMAGE_REGISTRY}container-udm-rest/udm:latest
   - docker tag
       ${UPX_IMAGE_REGISTRY}container-udm-rest/udm:latest
