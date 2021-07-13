@@ -114,7 +114,7 @@ publish-job:
       .env.univention-directory-manager-rest
   - docker-compose ${DOCKER_COMPOSE_PRODUCTION_FILES} pull
   - docker tag
-      ${UPX_IMAGE_REGISTRY}container-udm-rest/udm:${CI_PIPELINE_ID}-test
+      ${UPX_IMAGE_REGISTRY}container-udm-rest/udm:build-${CI_PIPELINE_ID}
       ${UPX_IMAGE_REGISTRY}container-udm-rest/udm:latest
   - docker tag
       ${UPX_IMAGE_REGISTRY}container-udm-rest/udm:latest
