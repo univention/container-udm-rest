@@ -184,20 +184,22 @@ COPY --from=build \
   /version \
   /version
 
-RUN echo > /usr/lib/python3/dist-packages/univention/lib/package_manager.py
+RUN \
+  echo > /usr/lib/python3/dist-packages/univention/lib/package_manager.py && \
 
-# build all locales
-RUN echo -en 'en_US.UTF-8 UTF-8\nde_DE.UTF-8 UTF-8\n' >> /etc/locale.gen && \
-	localedef -i de_DE -c -f UTF-8 -A /usr/share/locale/locale.alias de_DE.UTF-8 && \
-	localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8
+  # build all locales
+  echo -en 'en_US.UTF-8 UTF-8\nde_DE.UTF-8 UTF-8\n' >> /etc/locale.gen && \
+    localedef -i de_DE -c -f UTF-8 -A /usr/share/locale/locale.alias de_DE.UTF-8 && \
+    localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8 && \
 
-# for base.conf:
-RUN mkdir --parents /etc/univention/
+  # for base.conf:
+  mkdir --parents /etc/univention/ && \
 
-# for CAcert.pem
-RUN mkdir --parents /etc/univention/ssl/ucsCA/
+  # for CAcert.pem
+  mkdir --parents /etc/univention/ssl/ucsCA/ && \
 
-RUN mkdir /udm/
+  mkdir /udm/
+
 COPY entrypoint.sh /udm/
 COPY env_to_ucr.py /udm/
 WORKDIR /udm/

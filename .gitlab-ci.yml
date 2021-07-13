@@ -19,8 +19,6 @@ variables:
   # DOCKER_CERT_PATH: "$DOCKER_TLS_CERTDIR/client"
   DOCKER_HOST: tcp://docker:2375
 
-  CI_PIPELINE_TAG: ${CI_PIPELINE_ID}-
-
   DOCKER_COMPOSE_PRODUCTION_FILES:
     --file docker-compose.yaml
     --file docker-compose.prod.yaml
@@ -52,6 +50,13 @@ pre-commit-job:
   before_script:
   - echo "Explicitly skip the default action docker login"
   script:
+  # The image currently supplies version 21.1.2
+  - /venv/bin/python -m pip install --upgrade pip==21.1.3
+  # pip/ruamel.yaml.clib depends on
+  #   gcc to compile test_ruamel_yaml.c
+  #   Scrt1.o and crti.o from musl-dev
+  #   Python.h from python3-dev
+  - apk add --no-cache gcc musl-dev python3-dev
   # Compose lint would fail without the referenced env files
   - cp .env.univention-directory-manager-rest.example .env.univention-directory-manager-rest
   - pre-commit run --all-files
@@ -109,7 +114,7 @@ publish-job:
       .env.univention-directory-manager-rest
   - docker-compose ${DOCKER_COMPOSE_PRODUCTION_FILES} pull
   - docker tag
-      ${UPX_IMAGE_REGISTRY}container-udm-rest/udm:${CI_PIPELINE_TAG}test
+      ${UPX_IMAGE_REGISTRY}container-udm-rest/udm:${CI_PIPELINE_ID}-test
       ${UPX_IMAGE_REGISTRY}container-udm-rest/udm:latest
   - docker tag
       ${UPX_IMAGE_REGISTRY}container-udm-rest/udm:latest
