@@ -8,9 +8,6 @@
 import os
 import sys
 
-# third party
-import sh  # pylint: disable=import-error
-
 # internal imports
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 LIBS_DIR = os.path.join(BASE_DIR, 'lib')
@@ -23,39 +20,30 @@ from ci_log import (  # noqa: E402,E501; pylint: disable=import-error,wrong-impo
 import ci_vars  # noqa: E402; pylint: disable=import-error,wrong-import-position
 import ci_version  # noqa: E402,E501; pylint: disable=import-error,wrong-import-position
 
-# pylint: disable=not-callable
-sh_out = sh(_out='/dev/stdout', _err='/dev/stderr', _cwd=BASE_DIR)
-
 
 def main():
     """The main script builds, labels and pushes"""
 
+    image_name = 'upx-udm-rest'
+
     envs = ci_vars.get_docker_envs(BASE_DIR, pull_push=True)
 
-    ci_pipeline_id = envs['compose']['CI_PIPELINE_ID']
-
-    upx_image_registry = os.environ.get(
-        'UPX_IMAGE_REGISTRY',
-        ci_vars.DEFAULT_UPX_IMAGE_REGISTRY,
-    )
-
-    image_path = '{}container-udm-rest/udm'.format(upx_image_registry)
     try:
+        # push tags "latest" and "<version>"
         ci_docker.pull_add_push_publish_version_tag(
-            image_path,
-            ci_pipeline_id,
+            image_name,
+            envs['common']['CI_PIPELINE_ID'],
             envs['docker'],
             envs['pull_push'],
-            image_path,
         )
     except ci_version.AppVersionNotFound:
         log.error('app version not found')
         return 2
     except ci_docker.DockerPullFailed:
-        log.error('dock pull failed')
+        log.error('docker pull failed')
         return 1
     except ci_docker.DockerPushFailed:
-        log.error('dock push failed')
+        log.error('docker push failed')
         return 3
 
     return 0
