@@ -173,7 +173,6 @@ def pull_add_push_publish_version_tag(
         build_path,
         quay_image_path,
         clean_version,
-        ci_pipeline_id,
         docker_env,
         pull_push_env,
     )
