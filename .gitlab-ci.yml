@@ -109,17 +109,8 @@ publish-job:
     alias: docker
     command: [--insecure-registry=artifacts.knut.univention.de]
   script:
-  - cp
-      .env.univention-directory-manager-rest.example
-      .env.univention-directory-manager-rest
-  - docker-compose ${DOCKER_COMPOSE_PRODUCTION_FILES} pull
-  - docker tag
-      ${UPX_IMAGE_REGISTRY}container-udm-rest/udm:build-${CI_PIPELINE_ID}
-      ${UPX_IMAGE_REGISTRY}container-udm-rest/udm:latest
-  - docker tag
-      ${UPX_IMAGE_REGISTRY}container-udm-rest/udm:latest
-      quay.io/univention/univention-upx-container-udm-rest-udm:experimental
-  - docker push ${UPX_IMAGE_REGISTRY}container-udm-rest/udm:latest
-  - docker push quay.io/univention/univention-upx-container-udm-rest-udm:experimental
+  - apt-get update
+  - apt-get --assume-yes --verbose-versions --no-install-recommends install python3-sh
+  - python3 ci-publish-script.py
 
 ...
