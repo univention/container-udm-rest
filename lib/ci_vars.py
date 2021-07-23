@@ -77,13 +77,13 @@ def get_docker_envs(
     envs['docker'] = docker_env
 
     # environment used by docker pull and push
-    if pull_push is True:
+    if pull_push:
         pull_push_env = get_env_vars(ADDITIONAL_PULL_PUSH_VARS)
         pull_push_env.update(docker_env)
         envs['pull_push'] = docker_env
 
     # labels shared between docker(-compose) build calls
-    if build is True or compose is True:
+    if build or compose:
         base_build_env = {
             'CI_PROJECT_URL': 'unset',
         }
@@ -107,11 +107,11 @@ def get_docker_envs(
         base_build_env.update(get_env_vars(COMMON_BUILD_VARS))
 
     # publish ci-variables in common if building with docker
-    if build is True:
+    if build:
         envs['common'].update(base_build_env)
 
     # environment used by docker-compose
-    if compose is True:
+    if compose:
         envs['common']['DOCKER_COMPOSE_BUILD_FILES'] = os.environ.get(
             'DOCKER_COMPOSE_BUILD_FILES', DEFAULT_DOCKER_COMPOSE_BUILD_FILES
         )

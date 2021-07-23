@@ -28,7 +28,12 @@ class DockerPushFailed(Exception):
     """Raised if docker pull fails"""
 
 
-def add_and_push_tag(image_name, tag, docker_env, pull_push_env):
+def add_and_push_tag(
+    image_name: str,
+    tag: str,
+    docker_env: dict,
+    pull_push_env: dict,
+):
     """Adds a tag to an image"""
     log.info('Adding tag {} to {}', tag, image_name)
     sh_out.docker.tag(image_name, tag, _env=docker_env)
@@ -40,7 +45,7 @@ def add_and_push_tag(image_name, tag, docker_env, pull_push_env):
     log.info('Done with this tag')
 
 
-def add_version_label(app_version, image_name, docker_env):
+def add_version_label(app_version: str, image_name: str, docker_env: dict):
     """Adds a version label to an image"""
     log.info('Adding version label {}', app_version)
     sh_out.docker.build(
@@ -56,12 +61,12 @@ def add_version_label(app_version, image_name, docker_env):
 
 
 def add_and_push_build_tags(  # pylint: disable=too-many-arguments
-    build_path,
-    push_path,
-    clean_version,
-    ci_pipeline_id,
-    docker_env,
-    pull_push_env,
+    build_path: str,
+    push_path: str,
+    clean_version: str,
+    ci_pipeline_id: str,
+    docker_env: dict,
+    pull_push_env: dict,
 ):
     """Add and push build tags"""
     tag = '{}:build-{}'.format(push_path, ci_pipeline_id)
@@ -74,11 +79,11 @@ def add_and_push_build_tags(  # pylint: disable=too-many-arguments
 
 
 def add_and_push_release_tags(
-    build_path,
-    push_path,
-    clean_version,
-    docker_env,
-    pull_push_env,
+    build_path: str,
+    push_path: str,
+    clean_version: str,
+    docker_env: dict,
+    pull_push_env: dict,
 ):
     """Add and push latest and version tags"""
     tag = '{}:latest'.format(push_path)
@@ -91,7 +96,10 @@ def add_and_push_release_tags(
 
 
 def add_and_push_build_version_label_and_tag(
-    image_name, ci_pipeline_id, docker_env, pull_push_env
+    image_name: str,
+    ci_pipeline_id: str,
+    docker_env: dict,
+    pull_push_env: dict,
 ):
     """Get the version, add it as a label and push it as a tag with build-id"""
 
@@ -121,7 +129,10 @@ def add_and_push_build_version_label_and_tag(
 
 
 def pull_add_push_publish_version_tag(
-    image_name, ci_pipeline_id, docker_env, pull_push_env
+    image_name: str,
+    ci_pipeline_id: str,
+    docker_env: dict,
+    pull_push_env: dict,
 ):
     """Get the version, push latest and version tags"""
 
