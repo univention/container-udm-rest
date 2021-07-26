@@ -10,13 +10,7 @@ variables:
   UNIV_ARTIFACTS: artifacts.knut.univention.de
   UNIV_DOCKERHUB_CACHE: ${UNIV_ARTIFACTS}/dockerhub_proxy_cache/
   UPX_IMAGE_REGISTRY: ${UNIV_ARTIFACTS}/upx/
-  # We need to turn off TLS or reconfigure GitLab, see:
-  # https://about.gitlab.com/releases/
-  # 2019/07/31/docker-in-docker-with-docker-19-dot-03/
   DOCKER_TLS_CERTDIR: ''
-  # DOCKER_TLS_CERTDIR: "/certs"
-  # DOCKER_TLS_VERIFY: 1
-  # DOCKER_CERT_PATH: "$DOCKER_TLS_CERTDIR/client"
   DOCKER_HOST: tcp://docker:2375
 
   DOCKER_COMPOSE_PRODUCTION_FILES:
@@ -62,33 +56,32 @@ pre-commit-job:
   - pre-commit run --all-files
 
 build-job:
-  # Only the debian flavor seems to be working with dind out of the box
-  # the alpine as of 1.28.0 does not because of a mismatch issue
-  # between "musl libc" vs glibc:
-  # https://github.com/docker/compose/issues/3465
-  # https://stackoverflow.com/a/42322893
-  image: ${UNIV_DOCKERHUB_CACHE}docker/compose:debian-1.28.0
+  image:
+    ${UPX_IMAGE_REGISTRY}docker/compose:1.30-debian-buster-python-3.7.3
   stage: build-stage
   tags:
   - docker
   services:
-  - name: ${UNIV_DOCKERHUB_CACHE}library/docker:18.09.7-dind
+  - name: ${UNIV_DOCKERHUB_CACHE}library/docker:20.10.7-dind
     alias: docker
-    command: [--insecure-registry=artifacts.knut.univention.de]
+    command:
+    - "--insecure-registry=artifacts.knut.univention.de"
+    - "--tls=false"
   script:
-  - apt-get update
-  - apt-get --assume-yes --verbose-versions --no-install-recommends install python3-sh
   - python3 ci-build-script.py
 
 test-job:
-  image: ${UNIV_DOCKERHUB_CACHE}docker/compose:debian-1.28.0
+  image:
+    ${UPX_IMAGE_REGISTRY}docker/compose:1.30-debian-buster-python-3.7.3
   stage: test-stage
   tags:
   - docker
   services:
-  - name: ${UNIV_DOCKERHUB_CACHE}library/docker:18.09.7-dind
+  - name: ${UNIV_DOCKERHUB_CACHE}library/docker:20.10.7-dind
     alias: docker
-    command: [--insecure-registry=artifacts.knut.univention.de]
+    command:
+    - "--insecure-registry=artifacts.knut.univention.de"
+    - "--tls=false"
   script:
   - cp .env.univention-directory-manager-rest.example .env.univention-directory-manager-rest
   - cp "${CA_CERT_FILE}" CAcert.pem
@@ -98,19 +91,20 @@ test-job:
   - docker-compose ${DOCKER_COMPOSE_PRODUCTION_FILES} rm
 
 publish-job:
-  image: ${UNIV_DOCKERHUB_CACHE}docker/compose:debian-1.28.0
+  image:
+    ${UPX_IMAGE_REGISTRY}docker/compose:1.30-debian-buster-python-3.7.3
   stage: publish-stage
   tags:
   - docker
   only:
   - main
   services:
-  - name: ${UNIV_DOCKERHUB_CACHE}library/docker:18.09.7-dind
+  - name: ${UNIV_DOCKERHUB_CACHE}library/docker:20.10.7-dind
     alias: docker
-    command: [--insecure-registry=artifacts.knut.univention.de]
+    command:
+    - "--insecure-registry=artifacts.knut.univention.de"
+    - "--tls=false"
   script:
-  - apt-get update
-  - apt-get --assume-yes --verbose-versions --no-install-recommends install python3-sh
   - python3 ci-publish-script.py
 
 ...
