@@ -38,11 +38,18 @@ def main():
         '.env.univention-directory-manager-rest.example',
         '.env.univention-directory-manager-rest',
     )
-    sh_out.docker_compose(
-        envs['common']['DOCKER_COMPOSE_BUILD_FILES'].split(),
-        'build',
-        _env=envs['compose'],
-    )
+    try:
+        sh_out.docker_compose(
+            envs['common']['DOCKER_COMPOSE_BUILD_FILES'].split(),
+            'build',
+            _env=envs['compose'],
+        )
+    except sh.ErrorReturnCode_255 as err:
+        log.error(f'compose failed: {err}')
+        return 1
+    except Exception as err:  # pylint: disable=broad-except
+        log.error(f'compose failed2: {err}')
+        return 11
 
     try:
         # push tags "build-<ci-pipeline-id>" and "<version>-<ci-pipeline-id>"
