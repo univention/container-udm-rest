@@ -65,15 +65,13 @@ repos:
   hooks:
   - id: hadolint-system
 
-# Disable temporarily because gitlab-api can not be accessed.
-# "urllib.error.HTTPError: HTTP Error 401: Unauthorized"
 # ".gitlab-ci.yml linter"
-# - repo: https://gitlab.com/univention/pre-commit-hooks/gitlab-ci-linter
-#   rev: v1.0.1
-#   hooks:
-#   - id: gitlab-ci-linter
-#     args:
-#     - '--server'
-#     - 'https://git.knut.univention.de'
+- repo: https://gitlab.com/univention/pre-commit-hooks/gitlab-ci-linter
+  rev: v1.0.1
+  hooks:
+  - id: gitlab-ci-linter
+    args:
+    - '--server'
+    - 'https://git.knut.univention.de'
 
 ...
