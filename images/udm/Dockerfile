@@ -211,8 +211,7 @@ CMD [ \
   "-c", "0", \
   "-p", "9979", \
  "-l", "en_US.UTF-8", \
-  "-d", "4", \
-  "run" \
+  "-d", "4" \
 ]
 
 LABEL org.opencontainers.image.created="${LABEL_CREATED}"
