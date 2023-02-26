@@ -7,9 +7,9 @@ stages:
 - publish-stage
 
 variables:
-  UNIV_ARTIFACTS: artifacts.knut.univention.de
-  UNIV_DOCKERHUB_CACHE: ${UNIV_ARTIFACTS}/dockerhub_proxy_cache/
-  UPX_IMAGE_REGISTRY: ${UNIV_ARTIFACTS}/upx/
+  UV_HOST_HARBOR: artifacts.knut.univention.de
+  DOCKERHUB_CACHE: ${UV_HOST_HARBOR}/dockerhub_proxy_cache/
+  UPX_IMAGE_REGISTRY: ${UV_HOST_HARBOR}/upx/
   DOCKER_TLS_CERTDIR: ''
   DOCKER_HOST: tcp://docker:2375
 
@@ -62,7 +62,7 @@ build-job:
   tags:
   - docker
   services:
-  - name: ${UNIV_DOCKERHUB_CACHE}library/docker:20.10.7-dind
+  - name: ${DOCKERHUB_CACHE}library/docker:20.10.7-dind
     alias: docker
     command:
     - "--insecure-registry=artifacts.knut.univention.de"
@@ -77,7 +77,7 @@ test-job:
   tags:
   - docker
   services:
-  - name: ${UNIV_DOCKERHUB_CACHE}library/docker:20.10.7-dind
+  - name: ${DOCKERHUB_CACHE}library/docker:20.10.7-dind
     alias: docker
     command:
     - "--insecure-registry=artifacts.knut.univention.de"
@@ -99,7 +99,7 @@ publish-job:
   only:
   - main
   services:
-  - name: ${UNIV_DOCKERHUB_CACHE}library/docker:20.10.7-dind
+  - name: ${DOCKERHUB_CACHE}library/docker:20.10.7-dind
     alias: docker
     command:
     - "--insecure-registry=artifacts.knut.univention.de"
