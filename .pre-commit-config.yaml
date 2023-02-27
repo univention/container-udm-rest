@@ -27,8 +27,8 @@ repos:
   - id: yapf
 
 # "flake8"
-- repo: https://gitlab.com/pycqa/flake8
-  rev: 3.8.4
+- repo: https://github.com/PyCQA/flake8
+  rev: 6.0.0
   hooks:
   - id: flake8
 
