@@ -50,12 +50,12 @@ def add_version_label(app_version: str, image_name: str, docker_env: dict):
     log.info('Adding version label {}', app_version)
     sh_out.docker.build(
         '--label',
-        'org.opencontainers.app.version={}'.format(app_version),
+        f'org.opencontainers.app.version={app_version}',
         '--tag',
         image_name,
         '-',
         _env=docker_env,
-        _in='FROM {}'.format(image_name),
+        _in=f'FROM {image_name}',
     )
     log.info('Done with labeling')
 
@@ -69,11 +69,11 @@ def add_and_push_build_tags(  # pylint: disable=too-many-arguments
     pull_push_env: dict,
 ):
     """Add and push build tags"""
-    tag = '{}:build-{}'.format(push_path, ci_pipeline_id)
+    tag = f'{push_path}:build-{ci_pipeline_id}'
     # push tag "build-<ci-pipeline-id>"
     add_and_push_tag(build_path, tag, docker_env, pull_push_env)
 
-    tag = '{}:{}-{}'.format(push_path, clean_version, ci_pipeline_id)
+    tag = f'{push_path}:{clean_version}-{ci_pipeline_id}'
     # push tag "<version>-<ci-pipeline-id>"
     add_and_push_tag(build_path, tag, docker_env, pull_push_env)
 
@@ -86,11 +86,11 @@ def add_and_push_release_tags(
     pull_push_env: dict,
 ):
     """Add and push latest and version tags"""
-    tag = '{}:latest'.format(push_path)
+    tag = f'{push_path}:latest'
     # push tag "latest"
     add_and_push_tag(build_path, tag, docker_env, pull_push_env)
 
-    tag = '{}:{}'.format(push_path, clean_version)
+    tag = f'{push_path}:{clean_version}'
     # push tag "<version>"
     add_and_push_tag(build_path, tag, docker_env, pull_push_env)
 
@@ -107,9 +107,9 @@ def add_and_push_build_version_label_and_tag(
         'UPX_IMAGE_REGISTRY',
         ci_vars.DEFAULT_UPX_IMAGE_REGISTRY,
     )
-    upx_image_path = '{}{}'.format(upx_image_registry, image_name)
+    upx_image_path = f'{upx_image_registry}{image_name}'
 
-    build_path = '{}:build-{}'.format(upx_image_path, ci_pipeline_id)
+    build_path = f'{upx_image_path}:build-{ci_pipeline_id}'
     app_version = ci_version.get_app_version(build_path, docker_env)
 
     add_version_label(app_version, build_path, docker_env)
@@ -140,15 +140,15 @@ def pull_add_push_publish_version_tag(
         'UPX_IMAGE_REGISTRY',
         ci_vars.DEFAULT_UPX_IMAGE_REGISTRY,
     )
-    upx_image_path = '{}{}'.format(upx_image_registry, image_name)
+    upx_image_path = f'{upx_image_registry}{image_name}'
 
     quay_image_registry = os.environ.get(
         'QUAY_IMAGE_REGISTRY',
         ci_vars.DEFAULT_QUAY_IMAGE_REGISTRY,
     )
-    quay_image_path = '{}{}'.format(quay_image_registry, image_name)
+    quay_image_path = f'{quay_image_registry}{image_name}'
 
-    build_path = '{}:build-{}'.format(upx_image_path, ci_pipeline_id)
+    build_path = f'{upx_image_path}:build-{ci_pipeline_id}'
 
     try:
         sh_out.docker.pull(build_path, _env=pull_push_env)
