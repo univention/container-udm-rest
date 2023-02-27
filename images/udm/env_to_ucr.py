@@ -36,4 +36,4 @@ with open('/etc/univention/base.conf', 'a', encoding='utf-8') as fd:
     for key, value in os.environ.items():
         if key.replace('_', '').isupper():
             continue
-        fd.write('\n%s: %s' % (key, value))
+        fd.write(f'\n{key}: {value}')
