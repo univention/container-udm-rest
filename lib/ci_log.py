@@ -17,7 +17,7 @@ class BraceString(str):
 # inspired by https://stackoverflow.com/a/26003573/509648
 class StyleAdapter(logging.LoggerAdapter):
     """Replace the default adapter just to reference BraceString"""
-    def __init__(self, logger, extra=None):
+    def __init__(self, logger, extra=None):  # pylint: disable=useless-parent-delegation
         super().__init__(logger, extra)
 
     def process(self, msg, kwargs):
