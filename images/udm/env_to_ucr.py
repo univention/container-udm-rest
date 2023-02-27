@@ -32,7 +32,7 @@
 
 import os
 
-with open('/etc/univention/base.conf', 'a') as fd:
+with open('/etc/univention/base.conf', 'a', encoding='utf-8') as fd:
     for key, value in os.environ.items():
         if key.replace('_', '').isupper():
             continue
