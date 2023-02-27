@@ -34,7 +34,7 @@ repos:
 
 # "pylint"
 - repo: https://github.com/PyCQA/pylint
-  rev: pylint-2.6.0
+  rev: v2.16.2
   hooks:
   - id: pylint
 
