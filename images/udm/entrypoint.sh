@@ -28,7 +28,7 @@ set -euxo pipefail
 # /usr/share/common-licenses/AGPL-3; if not, see
 # <https://www.gnu.org/licenses/>.
 
-ln --symbolic --force "${CA_CERT_FILE}" "/etc/univention/ssl/ucsCA/CAcert.pem"
+ln --symbolic --force "${CA_CERT_FILE:-/run/secrets/ca_cert}" "/etc/univention/ssl/ucsCA/CAcert.pem"
 
 cat <<EOF > /etc/ldap/ldap.conf
 # This file should be world readable but not world writable.
@@ -48,10 +48,6 @@ echo -n "${LDAP_ADMIN_PASSWORD}" > /etc/ldap.secret
 echo -n "${LDAP_MACHINE_PASSWORD}" > /etc/machine.secret
 
 python3 ./env_to_ucr.py
-
-# FIXME: The server is hardcoded to listen only on localhost. For now, make it global.
-#        The proper fix is to make the bind IP configurable.
-sed --in-place --regexp-extended --expression="s/127\.0\.0\.1/0.0.0.0/" /usr/lib/python3/dist-packages/univention/admin/rest/__main__.py
 
 exec python3 -m univention.admin.rest "$@"
 

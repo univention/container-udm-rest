@@ -48,7 +48,8 @@ RUN \
     ca-certificates=20* \
     curl=7.64.* \
     gpg=2.2.* \
-    gpg-agent=2.2.* && \
+    gpg-agent=2.2.* \
+    patch=2.7.* && \
   curl -fsSL "${APT_KEY_URL}" | apt-key add - && \
   rm -rf /var/lib/apt/lists/*
 
@@ -108,6 +109,13 @@ RUN \
   awk \
     '/^Package: python3-univention-directory-manager-rest$/{ while(!/^Version: /){getline} print $2 }' \
     /var/lib/dpkg/status > /version
+
+###############################################################################
+# Apply patches for containerization
+
+WORKDIR /
+COPY patch-server-socket-binding.patch /udm/patch-server-socket-binding.patch
+RUN patch -p1 < /udm/patch-server-socket-binding.patch
 
 ###############################################################################
 # Second stage image to get rid of unneeded files
@@ -210,17 +218,18 @@ ENTRYPOINT ["/udm/entrypoint.sh"]
 CMD [ \
   "-c", "0", \
   "-p", "9979", \
- "-l", "en_US.UTF-8", \
+  "-l", "en_US.UTF-8", \
   "-d", "4" \
 ]
 
+EXPOSE 9979
 LABEL org.opencontainers.image.created="${LABEL_CREATED}"
 LABEL org.opencontainers.image.description="REST service for UCS Directory Manager"
 LABEL org.opencontainers.image.licenses="AGPL-3.0-or-later"
 LABEL org.opencontainers.image.revision=$LABEL_REVISION
 LABEL org.opencontainers.image.source="${LABEL_SOURCE}"
 LABEL org.opencontainers.image.title="udm-rest"
-LABEL org.opencontainers.image.url="https://docs.software-univention.de/developer-reference-4.4.html#udm:rest_api"
+LABEL org.opencontainers.image.url="https://docs.software-univention.de/developer-reference/5.0/en/udm/rest-api.html"
 LABEL org.opencontainers.image.vendor="Univention GmbH"
 LABEL org.opencontainers.image.version="${LABEL_VERSION}"
 

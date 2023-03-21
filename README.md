@@ -2,22 +2,46 @@
 
 The CA certificate can simply be downloaded from a UCS server:
 ```bash
-mkdir -p /etc/univention/ssl/ucsCA/
 curl "http://${LDAP_SERVER_IP}/ucs-root-ca.crt" -o "CAcert.pem"
-echo "CA_CERT_FILE=CAcert.pem" >> .env.univention-directory-manager-rest
 ```
 
-LDAP Credentials/Settings can be obtained from the UCS Primary via:
+Create your environment `.env.univention-directory-manager-rest` file
+by running the script and pointing it to your UCS host:
 ```bash
-eval "$(univention-config-registry shell)"
-echo "LDAP_URI=ldap://${ldap_master}:${ldap_master_port}" >> .env.univention-directory-manager-rest
-echo "LDAP_BASE=${ldap_base}" >> .env.univention-directory-manager-rest
-echo "LDAP_MACHINE_PASSWORD=$(cat /etc/machine.secret)" >> .env.univention-directory-manager-rest
-echo "LDAP_ADMIN_PASSWORD=$(cat /etc/ldap.secret)" >> .env.univention-directory-manager-rest
+./build-dot-env.py root@<YOUR_UCS_HOST>
 ```
+This will fetch the necessary environment and UCR variables.
 
-Environment variables can simply be obtained from the DC Primary via:
-
+Now, build and run your container:
 ```bash
-univention-config-registry dump >> .env.univention-directory-manager-rest
+docker compose up --detach --remove-orphans --build
 ```
+
+Point your browser to http://localhost:9979/udm/ and enjoy!
+
+
+## Environment Variables
+
+- `CA_CERT_FILE=/run/secrets/ca_cert`
+
+   Path the the .pem file containing the server's certificate
+
+- `TLS_REQCERT=demand`
+
+   ???
+
+- `LDAP_URI`
+
+   URL of the LDAP server (e.g. `ldap://host:port`)
+
+- `LDAP_BASE`
+
+   Base DN (e.g. `dc=univention,dc=intranet`)
+
+- `LDAP_MACHINE_PASSWORD`
+
+  From `/etc/machine.secret`
+
+- `LDAP_ADMIN_PASSWORD`
+
+  From `/etc/ldap.secret`

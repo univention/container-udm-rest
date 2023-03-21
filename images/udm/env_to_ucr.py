@@ -32,8 +32,26 @@
 
 import os
 
-with open('/etc/univention/base.conf', 'a', encoding='utf-8') as fd:
-    for key, value in os.environ.items():
-        if key.replace('_', '').isupper():
+base_conf = {}
+with open('/etc/univention/base.conf', 'r', encoding='utf-8') as fd:
+    for line in fd.readlines():
+        line = line.strip()
+        if not line:
             continue
-        fd.write(f'\n{key}: {value}')
+        if line.startswith('#'):
+            continue
+        if ':' not in line:
+            print(f'base.conf contains line without colon: {line}')
+            continue
+        key, value = line.split(':', 1)
+        base_conf[key] = value
+
+for key, value in os.environ.items():
+    if key.replace('_', '').isupper():
+        continue
+    ldap_key = key.replace('.', '/')
+    base_conf[ldap_key] = value
+
+with open('/etc/univention/base.conf', 'w', encoding='utf-8') as fd:
+    for key, value in sorted(base_conf.items()):
+        fd.write(f'{key}: {value}\n')
