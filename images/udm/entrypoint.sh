@@ -49,6 +49,10 @@ echo -n "${LDAP_MACHINE_PASSWORD}" > /etc/machine.secret
 
 python3 ./env_to_ucr.py
 
+# FIXME: The server is hardcoded to listen only on localhost. For now, make it global.
+#        The proper fix is to make the bind IP configurable.
+sed --in-place --regexp-extended --expression="s/127\.0\.0\.1/0.0.0.0/" /usr/lib/python3/dist-packages/univention/admin/rest/__main__.py
+
 exec python3 -m univention.admin.rest "$@"
 
 # [EOF]
