@@ -105,6 +105,10 @@ RUN \
       python3-univention-management-console=12.* \
       python3-uritemplate=0.* \
       univention-management-console-module-udm=10.* && \
+  # static www content, stylesheet, js, etc. without all dependencies
+  apt-get download univention-directory-manager-rest && \
+  dpkg --force-depends --install univention-directory-manager-rest_10.*.deb && \
+  rm univention-directory-manager-rest_10.*.deb \
   rm -rf /apt /var/lib/apt/lists/* && \
   awk \
     '/^Package: python3-univention-directory-manager-rest$/{ while(!/^Version: /){getline} print $2 }' \
@@ -182,6 +186,10 @@ COPY --from=build \
 COPY --from=build \
   /etc/univention/directory/reports/ \
   /etc/univention/directory/reports/
+# static web, e.g. stylesheets and js
+COPY --from=build \
+  /var/www/univention/udm/ \
+  /var/www/univention/udm/
 
 # dummmy UCR
 COPY --from=build \
