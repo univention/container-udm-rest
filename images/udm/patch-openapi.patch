@@ -1,0 +1,42 @@
+--- old/usr/lib/python3/dist-packages/univention/admin/rest/module.py	2023-03-22 19:04:55.690162465 +0000
++++ new/usr/lib/python3/dist-packages/univention/admin/rest/module.py	2023-03-22 19:04:56.980087385 +0000
+@@ -4383,6 +4383,7 @@
+             (f"/udm/(networks/network)/{dn}/next-free-ip-address", NextFreeIpAddress),
+             (f"/udm/(users/user)/{dn}/service-specific-password", ServiceSpecificPassword),
+             ("/udm/progress/([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})", Operations),
++            (r"/udm/((?:css|js|schema|swaggerui)/.*)", tornado.web.StaticFileHandler, {"path": "/var/www/univention/udm", "default_filename": "index.html"}),
+             # TODO: decorator for dn argument, which makes sure no invalid dn syntax is used
+         ], default_handler_class=Nothing, **kwargs)
+
+--- old/var/www/univention/udm/schema/index.html	2023-03-22 19:06:24.569276411 +0000
++++ new/var/www/univention/udm/schema/index.html	2023-03-22 19:06:55.251281444 +0000
+@@ -4,9 +4,9 @@
+   <head>
+     <meta charset="UTF-8">
+     <title>Univention Directory Manager JSON-HTTP interface</title>
+-    <link rel="stylesheet" type="text/css" href="/univention/udm/swaggerui/swagger-ui.css" />
+-    <link rel="icon" type="image/png" href="/univention/udm/swaggerui/favicon-32x32.png" sizes="32x32" />
+-    <link rel="icon" type="image/png" href="/univention/udm/swaggerui/favicon-16x16.png" sizes="16x16" />
++    <link rel="stylesheet" type="text/css" href="/udm/swaggerui/swagger-ui.css" />
++    <link rel="icon" type="image/png" href="/udm/swaggerui/favicon-32x32.png" sizes="32x32" />
++    <link rel="icon" type="image/png" href="/udm/swaggerui/favicon-16x16.png" sizes="16x16" />
+     <style>
+       html
+       {
+@@ -33,13 +33,13 @@
+   <body>
+     <div id="swagger-ui"></div>
+
+-    <script src="/univention/udm/swaggerui/swagger-ui-bundle.js" charset="UTF-8"> </script>
+-    <script src="/univention/udm/swaggerui/swagger-ui-standalone-preset.js" charset="UTF-8"> </script>
++    <script src="/udm/swaggerui/swagger-ui-bundle.js" charset="UTF-8"> </script>
++    <script src="/udm/swaggerui/swagger-ui-standalone-preset.js" charset="UTF-8"> </script>
+     <script>
+     window.onload = function() {
+       // Begin Swagger UI call region
+       const ui = SwaggerUIBundle({
+-        url: "/univention/udm/openapi.json",
++        url: "/udm/openapi.json",
+         dom_id: '#swagger-ui',
+         deepLinking: true,
+         presets: [

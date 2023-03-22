@@ -118,8 +118,11 @@ RUN \
 # Apply patches for containerization
 
 WORKDIR /
+COPY patch-openapi.patch /udm/patch-openapi.patch
 COPY patch-server-socket-binding.patch /udm/patch-server-socket-binding.patch
-RUN patch -p1 < /udm/patch-server-socket-binding.patch
+RUN \
+  patch -p1 < /udm/patch-server-socket-binding.patch && \
+  patch -p1 < /udm/patch-openapi.patch
 
 ###############################################################################
 # Second stage image to get rid of unneeded files
