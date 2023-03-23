@@ -3,7 +3,7 @@ ARG DOCKER_PROXY
 FROM ${DOCKER_PROXY}hadolint/hadolint:v2.7.0 as hadolint
 
 # hadolint ignore=DL3007
-FROM docker-registry.knut.univention.de/knut/pre-commit:latest as base
+FROM docker-registry.knut.univention.de/knut/pre-commit:@sha256:8e37d7a194557e86cedb618d7d0c4513cc2ce495918a9b09685b79967e3412d3 as base
 
 # Note: Installing hadolint is somewhat cumbersome.
 #
