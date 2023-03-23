@@ -217,7 +217,12 @@ RUN \
   # for CAcert.pem
   mkdir --parents /etc/univention/ssl/ucsCA/ && \
   #
-  mkdir /udm/
+  mkdir /udm/ && \
+  #
+  # create stub for AppCenter attributes mapping
+  # See: https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/-/issues/1
+  mkdir --parents /var/lib/univention-appcenter/attributes/ && \
+  echo '{}' > /var/lib/univention-appcenter/attributes/mapping.json
 
 COPY entrypoint.sh /udm/
 COPY env_to_ucr.py /udm/
