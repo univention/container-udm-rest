@@ -20,6 +20,12 @@ repos:
   # "Trim Trailing Whitespace"
   - id: trailing-whitespace
 
+# "yapf"
+- repo: https://github.com/pre-commit/mirrors-yapf
+  rev: v0.32.0
+  hooks:
+  - id: yapf
+
 - repo: https://git.knut.univention.de/univention/dist/pre-commit-ucr
   rev: '0.0.9'
   hooks:
@@ -76,16 +82,22 @@ repos:
 # This is a wrapper for shellcheck as long as
 # shellcheck doesn't have it's own .pre-commit-hooks.yaml
 # https://github.com/koalaman/shellcheck/pull/1032
-#- repo: https://gitlab.com/univention/pre-commit-hooks/pre-commit-shell
-#  rev: v1.0.6
-#  hooks:
-#  - id: shell-lint
+- repo: https://gitlab.com/univention/pre-commit-hooks/pre-commit-shell
+  rev: v1.0.6
+  hooks:
+  - id: shell-lint
+
+# "Dockerfile linter"
+- repo: https://gitlab.com/univention/pre-commit-hooks/dockerfilelint-precommit-hooks
+  rev: v0.1.0
+  hooks:
+  - id: dockerfilelint
 
 # "docker-compose.yaml linter"
-# - repo: https://gitlab.com/univention/pre-commit-hooks/docker-compose-check
-#   rev: 7702a8801a158b8595569dd29e2dd655d8a08310
-#   hooks:
-#   - id: docker-compose-check
+- repo: https://gitlab.com/univention/pre-commit-hooks/docker-compose-check
+  rev: 7702a8801a158b8595569dd29e2dd655d8a08310
+  hooks:
+  - id: docker-compose-check
 
 # "Runs hadolint installed on the local system"
 - repo: https://gitlab.com/univention/pre-commit-hooks/docker-pre-commit
