@@ -104,7 +104,8 @@ RUN \
       python3-univention-directory-reports=12.* \
       python3-univention-management-console=12.* \
       python3-uritemplate=0.* \
-      univention-management-console-module-udm=10.* && \
+      univention-management-console-module-udm=10.* \
+      univention-saml-schema=7.*  && \
   # static www content, stylesheet, js, etc. without all dependencies
   apt-get download univention-directory-manager-rest && \
   dpkg --force-depends --install univention-directory-manager-rest_10.*.deb && \
