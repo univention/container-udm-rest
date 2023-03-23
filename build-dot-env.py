@@ -4,6 +4,7 @@
 
 """Extract UCR values from UCS and store in the .env file"""
 
+import socket
 import subprocess
 import sys
 from typing import List, Tuple
@@ -61,17 +62,20 @@ def split_key_value(line: str, sep: str) -> List[str]:
 if __name__ == '__main__':
     ucs_host = sys.argv[1]
 
+    # grab information from the UCS machine
     ucr = dict(split_key_value(line, ':') for line in ssh(ucs_host, 'ucr dump'))
     admin_secret = ssh(ucs_host, 'cat /etc/ldap.secret')[0]
     machine_secret = ssh(ucs_host, 'cat /etc/machine.secret')[0]
 
     vars = dict(read_dot_env(template_file))
 
+    # capital variable names will be environment vars
     vars['LDAP_URI'] = f'ldap://{ucr["ldap/master"]}:{ucr["ldap/master/port"]}'
     vars['LDAP_BASE'] = ucr["ldap/base"]
     vars['LDAP_ADMIN_PASSWORD'] = admin_secret
     vars['LDAP_MACHINE_PASSWORD'] = machine_secret
 
+    # fill all other variable names with values from UCR
     output = {}
     for key in vars.keys():
         if key.replace('_', '').isupper():
@@ -84,5 +88,9 @@ if __name__ == '__main__':
 
         env_key = key.replace('/', '.')
         output[env_key] = ucr[key]
+
+    # This is the fqdn of the UDM REST server, not the UCS host.
+    # Thus we have to get it from the local system, not from UCR.
+    output['hostname'], output['domainname'] = socket.getfqdn().split('.', 1)
 
     write_dot_env(output_file, output)

@@ -45,3 +45,15 @@ Point your browser to http://localhost:9979/udm/ and enjoy!
 - `LDAP_ADMIN_PASSWORD`
 
   From `/etc/ldap.secret`
+
+- `domainname`
+
+  External domain name of the container.
+
+  Used for assembling the FQDN in OpenAPI.
+
+- `hostname`
+
+  External host name of the container.
+
+  Used for assembling the FQDN in OpenAPI.
