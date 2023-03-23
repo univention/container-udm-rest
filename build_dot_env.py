@@ -10,9 +10,9 @@ import sys
 from typing import List, Tuple
 
 # default file with the keys to be filled
-template_file = '.env.univention-directory-manager-rest.example'
+TEMPLATE_FILE = '.env.univention-directory-manager-rest.example'
 # output file with actual values
-output_file = '.env.univention-directory-manager-rest'
+OUTPU_FILE = '.env.univention-directory-manager-rest'
 
 
 def ssh(host: str, command: str) -> List[str]:
@@ -35,8 +35,8 @@ def ssh(host: str, command: str) -> List[str]:
 
 def read_dot_env(filename: str) -> List[Tuple[str, str]]:
     """Read the given .env file into a list of key-value tuples."""
-    with open(filename, 'r', encoding='utf-8') as fd:
-        for line in fd.readlines():
+    with open(filename, 'r', encoding='utf-8') as file_handler:
+        for line in file_handler.readlines():
             if (not line) or line.startswith('#') or ('=' not in line):
                 continue
 
@@ -46,9 +46,9 @@ def read_dot_env(filename: str) -> List[Tuple[str, str]]:
 
 def write_dot_env(filename: str, variables: dict):
     """Write the given dict to a .env file."""
-    with open(filename, 'w', encoding='utf-8') as fd:
+    with open(filename, 'w', encoding='utf-8') as file_handler:
         for key, value in variables.items():
-            fd.write(f'{key}={value}\n')
+            file_handler.write(f'{key}={value}\n')
 
 
 def split_key_value(line: str, sep: str) -> List[str]:
@@ -59,16 +59,16 @@ def split_key_value(line: str, sep: str) -> List[str]:
 
 
 if __name__ == '__main__':
-    ucs_host = sys.argv[1]
+    UCS_HOST = sys.argv[1]
 
     # grab information from the UCS machine
     ucr = dict(
-        split_key_value(line, ':') for line in ssh(ucs_host, 'ucr dump')
+        split_key_value(line, ':') for line in ssh(UCS_HOST, 'ucr dump')
     )
-    admin_secret = ssh(ucs_host, 'cat /etc/ldap.secret')[0]
-    machine_secret = ssh(ucs_host, 'cat /etc/machine.secret')[0]
+    admin_secret = ssh(UCS_HOST, 'cat /etc/ldap.secret')[0]
+    machine_secret = ssh(UCS_HOST, 'cat /etc/machine.secret')[0]
 
-    envs = dict(read_dot_env(template_file))
+    envs = dict(read_dot_env(TEMPLATE_FILE))
 
     # capital variable names will be environment vars
     envs['LDAP_URI'] = f'ldap://{ucr["ldap/master"]}:{ucr["ldap/master/port"]}'
@@ -94,4 +94,4 @@ if __name__ == '__main__':
     # Thus we have to get it from the local system, not from UCR.
     output['hostname'], output['domainname'] = socket.getfqdn().split('.', 1)
 
-    write_dot_env(output_file, output)
+    write_dot_env(OUTPU_FILE, output)
