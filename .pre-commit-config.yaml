@@ -13,7 +13,6 @@ repos:
   - id: check-merge-conflict
   # "Check Yaml"
   - id: check-yaml
-    exclude: ^helm/.+/templates/
   # "Fix End of Files"
   - id: end-of-file-fixer
   # "Fix python encoding pragma"
@@ -22,7 +21,7 @@ repos:
   - id: trailing-whitespace
 
 - repo: https://git.knut.univention.de/univention/dist/pre-commit-ucr
-  rev: '0.0.7'
+  rev: '0.0.9'
   hooks:
     - id: ucr-flake8
     - id: ucr-ruff
@@ -38,7 +37,7 @@ repos:
     stages: [commit-msg]
 
 - repo: https://git.knut.univention.de/univention/dist/pre-commit-debian.git
-  rev: v1.0.0
+  rev: v1.1.0
   hooks:
     - id: debian-control
 
@@ -48,16 +47,23 @@ repos:
   hooks:
   - id: flake8
 
+# "pylint"
+- repo: https://github.com/PyCQA/pylint
+  rev: v2.17.1
+  hooks:
+  - id: pylint
+
 - repo: https://github.com/charliermarsh/ruff-pre-commit
-  rev: 'v0.0.246'
+  rev: 'v0.0.259'
   hooks:
     - id: ruff
     - id: ruff
       alias: "ruff-fix"
       stages: [ manual ]
       args: ["--fix"]
+
 - repo: https://github.com/pre-commit/mirrors-autopep8
-  rev: v2.0.1
+  rev: v2.0.2
   hooks:
   -   id: autopep8
       args: ["-d"]
