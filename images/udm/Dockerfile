@@ -43,13 +43,14 @@ WORKDIR /apt
 # Install Univention APT-Key
 
 RUN \
-  apt-get update && \
-  apt-get --assume-yes --verbose-versions --no-install-recommends install \
-    ca-certificates=20* \
-    curl=7.64.* \
-    gpg=2.2.* \
-    gpg-agent=2.2.* \
-    patch=2.7.* && \
+  apt-get --quiet update && \
+  DEBIAN_FRONTEND=noninteractive \
+    apt-get --assume-yes --verbose-versions --no-install-recommends install \
+      ca-certificates=20* \
+      curl=7.64.* \
+      gpg=2.2.* \
+      gpg-agent=2.2.* \
+      patch=2.7.* && \
   curl -fsSL "${APT_KEY_URL}" | apt-key add - && \
   rm -rf /var/lib/apt/lists/*
 
@@ -78,9 +79,9 @@ RUN \
   touch /usr/share/univention-lib/all.sh && \
   touch /usr/share/univention-lib/join.sh && \
   touch /usr/share/univention-lib/umc.sh && \
-  apt-get update && \
+  apt-get --quiet update && \
   DEBIAN_FRONTEND=noninteractive \
-    apt-get install --no-install-recommends --assume-yes \
+    apt-get --assume-yes --verbose-versions --no-install-recommends install \
       python3=3.7.* \
       python3-univention-directory-manager-rest=10.* \
       libunivention-debug1=12.* \
@@ -105,7 +106,8 @@ RUN \
       python3-univention-management-console=12.* \
       python3-uritemplate=0.* \
       univention-management-console-module-udm=10.* \
-      univention-saml-schema=7.*  && \
+      univention-saml-schema=7.* \
+      && \
   # static www content, stylesheet, js, etc. without all dependencies
   apt-get download univention-directory-manager-rest && \
   dpkg --force-depends --install univention-directory-manager-rest_10.*.deb && \
@@ -139,20 +141,22 @@ SHELL ["/bin/bash", "-euxo", "pipefail", "-c"]
 WORKDIR /apt
 
 RUN \
-  apt-get update && \
-  apt-get --assume-yes --verbose-versions --no-install-recommends install \
-    ca-certificates=20* \
-    curl=7.64.* \
-    gpg=2.2.* \
-    gpg-agent=2.2.* && \
+  apt-get --quiet update && \
+  DEBIAN_FRONTEND=noninteractive \
+    apt-get --assume-yes --verbose-versions --no-install-recommends install \
+      ca-certificates=20* \
+      curl=7.64.* \
+      gpg=2.2.* \
+      gpg-agent=2.2.* \
+      && \
   curl -fsSL "${APT_KEY_URL}" | apt-key add - && \
   rm -rf /var/lib/apt/lists/*
 
 COPY sources.list /etc/apt/sources.list.d/15_ucs-online-version.list
 RUN \
-  apt-get update && \
+  apt-get --quiet update && \
   DEBIAN_FRONTEND=noninteractive \
-    apt-get install --assume-yes --verbose-versions --no-install-recommends \
+    apt-get --assume-yes --verbose-versions --no-install-recommends install \
       libc-bin=2.* \
       libcurl3-gnutls=7.* \
       locales=2.* \
@@ -258,14 +262,14 @@ FROM final as debug
 SHELL ["/bin/bash", "-c"]
 
 # make this container debugable:
-RUN apt-get update -qq && \
+RUN apt-get --quiet update && \
   DEBIAN_FRONTEND=noninteractive \
-  apt-get --no-install-recommends -y install \
-  vim=2:8.* \
-  curl=7.* \
-  netcat=1.* \
-  iproute2=4.* \
-  && \
+    apt-get --assume-yes --verbose-versions --no-install-recommends install \
+      vim=2:8.* \
+      curl=7.* \
+      netcat=1.* \
+      iproute2=4.* \
+      && \
   rm -rf /var/lib/apt/lists/*
 
 # [EOF]
