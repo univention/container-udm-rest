@@ -77,9 +77,9 @@ def main(ucs_host):
 
     # fill all other variable names with values from UCR
     output = {}
-    for key in envs.keys():
+    for key, value in envs.items():
         if key.replace('_', '').isupper():
-            output[key] = envs[key]
+            output[key] = value
             continue
 
         if '.' in key:
