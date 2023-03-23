@@ -53,7 +53,11 @@ def write_dot_env(filename: str, variables: dict):
 
 def split_key_value(line: str, sep: str) -> List[str]:
     """Substitute for `line.split(sep, 1)` which handles empty values."""
-    key, value = line.split(sep, 1)
+    try:
+        key, value = line.split(sep, 1)
+    except ValueError:
+        print(f'Seperator {sep} not found in line {line}')
+        return (line, '')
     value = value.lstrip()
     return (key, value)
 
