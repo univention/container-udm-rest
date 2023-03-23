@@ -108,6 +108,7 @@ RUN \
       univention-management-console-module-udm=10.* \
       univention-saml-schema=7.* \
       && \
+  echo "176.9.110.24 updates.software-univention.de" >> /etc/hosts && \
   # static www content, stylesheet, js, etc. without all dependencies
   apt-get download univention-directory-manager-rest && \
   dpkg --force-depends --install univention-directory-manager-rest_10.*.deb && \
@@ -149,6 +150,7 @@ RUN \
       gpg=2.2.* \
       gpg-agent=2.2.* \
       && \
+  echo "176.9.110.24 updates.software-univention.de" >> /etc/hosts && \
   curl -fsSL "${APT_KEY_URL}" | apt-key add - && \
   rm -rf /var/lib/apt/lists/*
 
