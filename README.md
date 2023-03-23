@@ -8,7 +8,7 @@ curl "http://${LDAP_SERVER_IP}/ucs-root-ca.crt" -o "CAcert.pem"
 Create your environment `.env.univention-directory-manager-rest` file
 by running the script and pointing it to your UCS host:
 ```bash
-./build-dot-env.py root@<YOUR_UCS_HOST>
+./build_dot_env.py root@<YOUR_UCS_HOST>
 ```
 This will fetch the necessary environment and UCR variables.
 
@@ -18,6 +18,14 @@ docker compose up --detach --remove-orphans --build
 ```
 
 Point your browser to http://localhost:9979/udm/ and enjoy!
+
+
+## Linting
+
+You can run the pre-commit checker as follows:
+```bash
+docker compose run --rm pre-commit
+```
 
 
 ## Environment Variables

@@ -18,18 +18,20 @@ output_file = '.env.univention-directory-manager-rest'
 
 def ssh(host: str, command: str) -> List[str]:
     """Run the given command on the UCS system."""
-    ssh = subprocess.Popen(["ssh", host, command],
-                            shell=False,
-                            stdout=subprocess.PIPE,
-                            stderr=subprocess.PIPE)
-    stdout = ssh.stdout.readlines()
-    if len(stdout) > 0:
-        return [ line.decode().strip() for line in stdout ]
-    else:
-        stderr = ssh.stderr.readlines()
-        print("SSH error:")
-        print(stderr)
-        sys.exit(1)
+    with subprocess.Popen(
+        ["ssh", host, command],
+        shell=False,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE
+    ) as proc:
+        stdout = proc.stdout.readlines()
+        if len(stdout) == 0:
+            stderr = proc.stderr.readlines()
+            print("SSH error:")
+            print(stderr)
+            sys.exit(1)
+
+        return [line.decode().strip() for line in stdout]
 
 
 def read_dot_env(filename: str) -> List[Tuple[str, str]]:
@@ -37,18 +39,18 @@ def read_dot_env(filename: str) -> List[Tuple[str, str]]:
     with open(filename, 'r', encoding='utf-8') as fd:
         for line in fd.readlines():
             if (not line) \
-                or line.startswith('#') \
-                or ('=' not in line):
+              or line.startswith('#') \
+              or ('=' not in line):
                 continue
 
             key, value = line.split('=', 1)
             yield (key, value)
 
 
-def write_dot_env(filename: str, vars: dict):
+def write_dot_env(filename: str, variables: dict):
     """Write the given dict to a .env file."""
     with open(filename, 'w', encoding='utf-8') as fd:
-        for key, value in vars.items():
+        for key, value in variables.items():
             fd.write(f'{key}={value}\n')
 
 
@@ -63,23 +65,25 @@ if __name__ == '__main__':
     ucs_host = sys.argv[1]
 
     # grab information from the UCS machine
-    ucr = dict(split_key_value(line, ':') for line in ssh(ucs_host, 'ucr dump'))
+    ucr = dict(
+        split_key_value(line, ':') for line in ssh(ucs_host, 'ucr dump')
+    )
     admin_secret = ssh(ucs_host, 'cat /etc/ldap.secret')[0]
     machine_secret = ssh(ucs_host, 'cat /etc/machine.secret')[0]
 
-    vars = dict(read_dot_env(template_file))
+    envs = dict(read_dot_env(template_file))
 
     # capital variable names will be environment vars
-    vars['LDAP_URI'] = f'ldap://{ucr["ldap/master"]}:{ucr["ldap/master/port"]}'
-    vars['LDAP_BASE'] = ucr["ldap/base"]
-    vars['LDAP_ADMIN_PASSWORD'] = admin_secret
-    vars['LDAP_MACHINE_PASSWORD'] = machine_secret
+    envs['LDAP_URI'] = f'ldap://{ucr["ldap/master"]}:{ucr["ldap/master/port"]}'
+    envs['LDAP_BASE'] = ucr["ldap/base"]
+    envs['LDAP_ADMIN_PASSWORD'] = admin_secret
+    envs['LDAP_MACHINE_PASSWORD'] = machine_secret
 
     # fill all other variable names with values from UCR
     output = {}
-    for key in vars.keys():
+    for key in envs.keys():
         if key.replace('_', '').isupper():
-            output[key] = vars[key]
+            output[key] = envs[key]
             continue
 
         if '.' in key:

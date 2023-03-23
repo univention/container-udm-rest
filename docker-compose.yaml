@@ -10,8 +10,32 @@ services:
     secrets:
     - ca_cert
 
+  pre-commit:
+    profiles:
+      - test
+    platform: "linux/amd64"
+    build:
+      context: images/linter-pre-commit
+    container_name: udm-rest-pre-commit
+    environment:
+      PIP_CACHE_DIR: /cache/pip
+      PRE_COMMIT_HOME: /cache/pre-commit
+    working_dir: /work
+    volumes:
+      - type: bind
+        source: .
+        target: /work
+      - type: volume
+        # pre-commit installs dependencies, having them cached speeds things up
+        # a lot.
+        source: pre-commit-cache
+        target: /cache
+
 secrets:
   ca_cert:
     file: ./CAcert.pem
+
+volumes:
+  pre-commit-cache:
 
 ...
