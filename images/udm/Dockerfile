@@ -119,9 +119,9 @@ RUN \
 
 WORKDIR /
 COPY patch-openapi.patch /udm/patch-openapi.patch
-COPY patch-server-socket-binding.patch /udm/patch-server-socket-binding.patch
+COPY patch-start-language-processes.patch /udm/patch-start-language-processes.patch
 RUN \
-  patch -p1 < /udm/patch-server-socket-binding.patch && \
+  patch -p1 < /udm/patch-start-language-processes.patch && \
   patch -p1 < /udm/patch-openapi.patch
 
 ###############################################################################
@@ -155,6 +155,7 @@ RUN \
   DEBIAN_FRONTEND=noninteractive \
     apt-get install --assume-yes --verbose-versions --no-install-recommends \
       libc-bin=2.* \
+      libcurl3-gnutls=7.* \
       locales=2.* \
       python3=3.7.* \
       python3-ldap=3.* \
@@ -232,10 +233,10 @@ ENTRYPOINT ["/udm/entrypoint.sh"]
 
 # Parameters for UDM
 CMD [ \
-  "-c", "0", \
+  "-d", "4", \
   "-p", "9979", \
-  "-l", "en_US.UTF-8", \
-  "-d", "4" \
+  "-i", "0.0.0.0", \
+  "-c", "0" \
 ]
 
 EXPOSE 9979

@@ -49,6 +49,6 @@ echo -n "${LDAP_MACHINE_PASSWORD}" > /etc/machine.secret
 
 python3 ./env_to_ucr.py
 
-exec python3 -m univention.admin.rest "$@"
+exec python3 -m univention.admin.rest.server "$@"
 
 # [EOF]
