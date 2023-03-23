@@ -32,26 +32,37 @@
 
 import os
 
-base_conf = {}
-with open('/etc/univention/base.conf', 'r', encoding='utf-8') as fd:
-    for line in fd.readlines():
-        line = line.strip()
-        if not line:
-            continue
-        if line.startswith('#'):
-            continue
-        if ':' not in line:
-            print(f'base.conf contains line without colon: {line}')
-            continue
-        key, value = line.split(':', 1)
-        base_conf[key] = value
+BASE_PATH = '/etc/univention/base.conf'
 
-for key, value in os.environ.items():
-    if key.replace('_', '').isupper():
-        continue
-    LDAP_KEY = key.replace('.', '/')
-    base_conf[LDAP_KEY] = value
 
-with open('/etc/univention/base.conf', 'w', encoding='utf-8') as fd:
-    for key, value in sorted(base_conf.items()):
-        fd.write(f'{key}: {value}\n')
+def main(base_path):
+    """The main transformer function"""
+    base_conf = {}
+    with open(base_path, 'r', encoding='utf-8') as file_handler:
+        for line in file_handler.readlines():
+            line = line.strip()
+            if not line:
+                continue
+            if line.startswith('#'):
+                continue
+            if ':' not in line:
+                print(f'base.conf contains line without colon: {line}')
+                continue
+            key, value = line.split(':', 1)
+            base_conf[key] = value
+
+    for key, value in os.environ.items():
+        if key.replace('_', '').isupper():
+            continue
+        ldap_key = key.replace('.', '/')
+        base_conf[ldap_key] = value
+
+    with open(base_path, 'w', encoding='utf-8') as file_handler:
+        for key, value in sorted(base_conf.items()):
+            file_handler.write(f'{key}: {value}\n')
+
+
+if __name__ == '__main__':
+    main(BASE_PATH)
+
+# [EOF]
