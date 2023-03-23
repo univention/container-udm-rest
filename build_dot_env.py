@@ -9,7 +9,6 @@ import subprocess
 import sys
 from typing import List, Tuple
 
-
 # default file with the keys to be filled
 template_file = '.env.univention-directory-manager-rest.example'
 # output file with actual values
@@ -22,7 +21,7 @@ def ssh(host: str, command: str) -> List[str]:
         ["ssh", host, command],
         shell=False,
         stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE
+        stderr=subprocess.PIPE,
     ) as proc:
         stdout = proc.stdout.readlines()
         if len(stdout) == 0:
@@ -38,9 +37,7 @@ def read_dot_env(filename: str) -> List[Tuple[str, str]]:
     """Read the given .env file into a list of key-value tuples."""
     with open(filename, 'r', encoding='utf-8') as fd:
         for line in fd.readlines():
-            if (not line) \
-              or line.startswith('#') \
-              or ('=' not in line):
+            if (not line) or line.startswith('#') or ('=' not in line):
                 continue
 
             key, value = line.split('=', 1)
