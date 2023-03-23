@@ -4,129 +4,129 @@
 # See https://pre-commit.com/hooks.html for more hooks
 
 repos:
-- repo: https://github.com/pre-commit/pre-commit-hooks
-  rev: v4.4.0
-  hooks:
-  # "check for added large files"
-  - id: check-added-large-files
-  # "check for merge conflicts"
-  - id: check-merge-conflict
-  # "check yaml"
-  - id: check-yaml
-    args:
-    - --allow-multiple-documents
-  # "fix end of files"
-  - id: end-of-file-fixer
-  # "fix python encoding pragma"
-  - id: fix-encoding-pragma
-  # "trim trailing whitespace"
-  - id: trailing-whitespace
+  - repo: "https://github.com/pre-commit/pre-commit-hooks"
+    rev: "v4.4.0"
+    hooks:
+      # "check for added large files"
+      - id: "check-added-large-files"
+      # "check for merge conflicts"
+      - id: "check-merge-conflict"
+      # "check yaml"
+      - id: "check-yaml"
+        args:
+          - "--allow-multiple-documents"
+      # "fix end of files"
+      - id: "end-of-file-fixer"
+      # "fix python encoding pragma"
+      - id: "fix-encoding-pragma"
+      # "trim trailing whitespace"
+      - id: "trailing-whitespace"
 
-# "yapf"
-- repo: https://github.com/google/yapf
-  rev: v0.32.0
-  hooks:
-  - id: yapf
+  - repo: "https://github.com/google/yapf"
+    rev: "v0.32.0"
+    hooks:
+      # "yapf"
+      - id: "yapf"
 
-- repo: https://git.knut.univention.de/univention/dist/pre-commit-ucr
-  rev: '0.0.9'
-  hooks:
-    # "flake8 --select E1,E2 for UCR templates"
-    - id: ucr-flake8
-    # "ruff for UCR templates"
-    - id: ucr-ruff
-    # "autopep8 --select E1,E2 for UCR templates"
-    - id: ucr-autopep8
-      stages: [ manual ]
-    # "ruff --fix for UCR templates"
-    - id: ucr-ruff-fix
-      stages: [ manual ]
+  - repo: "https://git.knut.univention.de/univention/dist/pre-commit-ucr"
+    rev: "0.0.9"
+    hooks:
+      # "flake8 --select E1,E2 for UCR templates"
+      - id: "ucr-flake8"
+      # "ruff for UCR templates"
+      - id: "ucr-ruff"
+      # "autopep8 --select E1,E2 for UCR templates"
+      - id: "ucr-autopep8"
+        stages: ["manual"]
+      # "ruff --fix for UCR templates"
+      - id: "ucr-ruff-fix"
+        stages: ["manual"]
 
-- repo: https://github.com/compilerla/conventional-pre-commit
-  rev: v2.1.1
-  hooks:
-  - id: conventional-pre-commit
-    stages: [ commit-msg ]
+  - repo: "https://github.com/compilerla/conventional-pre-commit"
+    rev: "v2.1.1"
+    hooks:
+      - id: "conventional-pre-commit"
+        stages: ["commit-msg"]
 
-- repo: https://git.knut.univention.de/univention/dist/pre-commit-debian.git
-  rev: v1.1.0
-  hooks:
-    # "Debian control file formatter"
-    - id: debian-control
+  - repo: "https://git.knut.univention.de/univention/dist/pre-commit-debian.git"
+    rev: "v1.1.0"
+    hooks:
+      # "Debian control file formatter"
+      - id: "debian-control"
 
-- repo: https://github.com/PyCQA/flake8
-  rev: 6.0.0
-  hooks:
-  # "flake8"
-  - id: flake8
+  - repo: "https://github.com/PyCQA/flake8"
+    rev: "6.0.0"
+    hooks:
+      # "flake8"
+      - id: "flake8"
 
-- repo: https://github.com/PyCQA/pylint
-  rev: v2.17.1
-  hooks:
-  # "pylint"
-  - id: pylint
+  - repo: "https://github.com/PyCQA/pylint"
+    rev: "v2.17.1"
+    hooks:
+      # "pylint"
+      - id: "pylint"
 
-- repo: https://github.com/charliermarsh/ruff-pre-commit
-  rev: 'v0.0.259'
-  hooks:
-    # "ruff"
-    - id: ruff
-      alias: "ruff-main"
-    # "ruff"
-    - id: ruff
-      alias: "ruff-fix"
-      stages: [ manual ]
-      args: ["--fix"]
+  - repo: "https://github.com/charliermarsh/ruff-pre-commit"
+    rev: "v0.0.259"
+    hooks:
+      # "ruff"
+      - id: "ruff"
+        alias: "ruff-main"
+        # "ruff"
+      - id: "ruff"
+        alias: "ruff-fix"
+        stages: ["manual"]
+        args: ["--fix"]
 
-- repo: https://github.com/pre-commit/mirrors-autopep8
-  rev: v2.0.2
-  hooks:
-  # "autopep8"
-  - id: autopep8
-    args: ["--diff"]
-  # "autopep8"
-  - id: autopep8
-    alias: "autopep8-fix"
-    stages: [ manual ]
-    args: ["--in-place"]
+  - repo: "https://github.com/pre-commit/mirrors-autopep8"
+    rev: "v2.0.2"
+    hooks:
+      # "autopep8"
+      - id: "autopep8"
+        args: ["--diff"]
+      # "autopep8"
+      - id: "autopep8"
+        alias: "autopep8-fix"
+        stages: ["manual"]
+        args: ["--in-place"]
 
-# This is a wrapper for shellcheck as long as
-# shellcheck doesn't have it's own .pre-commit-hooks.yaml
-# https://github.com/koalaman/shellcheck/pull/1032
-- repo: https://gitlab.com/univention/pre-commit-hooks/pre-commit-shell
-  rev: v1.0.6
-  hooks:
-  # "Shell Syntax Check"
-  - id: shell-lint
+  # This is a wrapper for shellcheck as long as
+  # shellcheck doesn't have it's own .pre-commit-hooks.yaml
+  # https://github.com/koalaman/shellcheck/pull/1032
+  - repo: "https://gitlab.com/univention/pre-commit-hooks/pre-commit-shell"
+    rev: "v1.0.6"
+    hooks:
+      # "Shell Syntax Check"
+      - id: "shell-lint"
 
-- repo: https://gitlab.com/univention/pre-commit-hooks/dockerfilelint-precommit-hooks
-  rev: v0.1.0
-  hooks:
-  # "Dockerfile linter"
-  - id: dockerfilelint
+  - repo: "https://gitlab.com/univention/pre-commit-hooks/dockerfilelint-precommit-hooks"
+    rev: "v0.1.0"
+    hooks:
+      # "Dockerfile linter"
+      - id: "dockerfilelint"
 
-- repo: https://gitlab.com/univention/pre-commit-hooks/docker-compose-check
-  rev: 7702a8801a158b8595569dd29e2dd655d8a08310
-  hooks:
-  # "Validate docker-compose files"
-  - id: docker-compose-check
+  - repo: "https://gitlab.com/univention/pre-commit-hooks/docker-compose-check"
+    rev: "7702a8801a158b8595569dd29e2dd655d8a08310"
+    hooks:
+      # "Validate docker-compose files"
+      - id: "docker-compose-check"
 
-# "Runs hadolint installed on the local system"
-- repo: https://gitlab.com/univention/pre-commit-hooks/docker-pre-commit
-  rev: v2.0.0
-  hooks:
-  # "Lint Dockerfiles"
-  - id: hadolint-system
+  # "Runs hadolint installed on the local system"
+  - repo: "https://gitlab.com/univention/pre-commit-hooks/docker-pre-commit"
+    rev: "v2.0.0"
+    hooks:
+      # "Lint Dockerfiles"
+      - id: "hadolint-system"
 
 # Disable temporarily because gitlab-api can not be accessed.
 # "urllib.error.HTTPError: HTTP Error 401: Unauthorized"
-# ".gitlab-ci.yml linter"
-# - repo: https://gitlab.com/univention/pre-commit-hooks/gitlab-ci-linter
-#   rev: v1.0.1
-#   hooks:
-#   - id: gitlab-ci-linter
-#     args:
-#     - '--server'
-#     - 'https://git.knut.univention.de'
+  # - repo: "https://gitlab.com/univention/pre-commit-hooks/gitlab-ci-linter"
+  #   rev: "v1.0.1"
+  #   hooks:
+  #   # ".gitlab-ci.yml linter"
+  #     - id: "gitlab-ci-linter"
+  #       args:
+  #         - "--server"
+  #         - "https://git.knut.univention.de"
 
 ...
