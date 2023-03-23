@@ -58,15 +58,14 @@ def split_key_value(line: str, sep: str) -> List[str]:
     return (key, value)
 
 
-if __name__ == '__main__':
-    UCS_HOST = sys.argv[1]
-
+def main(ucs_host):
+    """Fetch UCR-variables from UCS-Host nd create a env-file for compose"""
     # grab information from the UCS machine
     ucr = dict(
-        split_key_value(line, ':') for line in ssh(UCS_HOST, 'ucr dump')
+        split_key_value(line, ':') for line in ssh(ucs_host, 'ucr dump')
     )
-    admin_secret = ssh(UCS_HOST, 'cat /etc/ldap.secret')[0]
-    machine_secret = ssh(UCS_HOST, 'cat /etc/machine.secret')[0]
+    admin_secret = ssh(ucs_host, 'cat /etc/ldap.secret')[0]
+    machine_secret = ssh(ucs_host, 'cat /etc/machine.secret')[0]
 
     envs = dict(read_dot_env(TEMPLATE_FILE))
 
@@ -95,3 +94,10 @@ if __name__ == '__main__':
     output['hostname'], output['domainname'] = socket.getfqdn().split('.', 1)
 
     write_dot_env(OUTPU_FILE, output)
+
+
+if __name__ == '__main__':
+    UCS_HOST = sys.argv[1]
+    main(UCS_HOST)
+
+# [EOF]
