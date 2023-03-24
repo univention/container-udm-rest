@@ -12,7 +12,7 @@ from typing import List, Tuple
 # default file with the keys to be filled
 TEMPLATE_FILE = '.env.univention-directory-manager-rest.example'
 # output file with actual values
-OUTPU_FILE = '.env.univention-directory-manager-rest'
+OUTPUT_FILE = '.env.univention-directory-manager-rest'
 
 
 def ssh(host: str, command: str) -> List[str]:
@@ -97,7 +97,7 @@ def main(ucs_host):
     # Thus we have to get it from the local system, not from UCR.
     output['hostname'], output['domainname'] = socket.getfqdn().split('.', 1)
 
-    write_dot_env(OUTPU_FILE, output)
+    write_dot_env(OUTPUT_FILE, output)
 
 
 if __name__ == '__main__':
