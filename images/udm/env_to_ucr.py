@@ -49,8 +49,8 @@ with open('/etc/univention/base.conf', 'r', encoding='utf-8') as fd:
 for key, value in os.environ.items():
     if key.replace('_', '').isupper():
         continue
-    ldap_key = key.replace('.', '/')
-    base_conf[ldap_key] = value
+    LDAP_KEY = key.replace('.', '/')
+    base_conf[LDAP_KEY] = value
 
 with open('/etc/univention/base.conf', 'w', encoding='utf-8') as fd:
     for key, value in sorted(base_conf.items()):
