@@ -120,9 +120,7 @@ RUN \
 
 WORKDIR /
 COPY patch-openapi.patch /udm/patch-openapi.patch
-COPY patch-start-language-processes.patch /udm/patch-start-language-processes.patch
 RUN \
-  patch -p1 < /udm/patch-start-language-processes.patch && \
   patch -p1 < /udm/patch-openapi.patch
 
 ###############################################################################

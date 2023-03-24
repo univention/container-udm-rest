@@ -66,6 +66,13 @@ docker compose run --rm pre-commit
 
   Used for assembling the FQDN in OpenAPI.
 
+- `directory/manager/rest/debug/level`
+
+  Log level of the REST API server (default: `4` for info level).
+
+  Larger values are more verbose.
+
+
 ## Implementation Status
 
 ### UDM Modules
