@@ -32,7 +32,7 @@ docker compose run --rm pre-commit
 
 - `CA_CERT_FILE=/run/secrets/ca_cert`
 
-   Path the the .pem file containing the server's certificate
+   Path to the .pem file containing the server's certificate
 
 - `TLS_REQCERT=demand`
 
