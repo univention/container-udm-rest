@@ -75,6 +75,9 @@ COPY fake.sh /usr/sbin/univention-management-console-acls
 RUN \
   mkdir /usr/share/univention-lib/ && \
   mkdir --parents /var/www/univention-directory-reports && \
+  # UCR would overwrite the resolvers, but we replaced ucr with a stub.
+  # Save the original file here and restore it afterwards.
+  cp /etc/resolv.conf /etc/resolv.conf.backup && \
   # The original file would source many bash-helper-functions not required here.
   touch /usr/share/univention-lib/all.sh && \
   touch /usr/share/univention-lib/join.sh && \
@@ -108,8 +111,8 @@ RUN \
       univention-management-console-module-udm=10.* \
       univention-saml-schema=7.* \
       && \
-  echo "176.9.110.24 updates.software-univention.de" >> /etc/hosts && \
   # static www content, stylesheet, js, etc. without all dependencies
+  cp /etc/resolv.conf.backup /etc/resolv.conf && \
   apt-get download univention-directory-manager-rest && \
   dpkg --force-depends --install univention-directory-manager-rest_10.*.deb && \
   rm univention-directory-manager-rest_10.*.deb \
@@ -150,7 +153,6 @@ RUN \
       gpg=2.2.* \
       gpg-agent=2.2.* \
       && \
-  echo "176.9.110.24 updates.software-univention.de" >> /etc/hosts && \
   curl -fsSL "${APT_KEY_URL}" | apt-key add - && \
   rm -rf /var/lib/apt/lists/*
 
