@@ -1,0 +1,53 @@
+---
+
+# Deployment-specific values for the `example` environment for udm-rest-api.
+# This is a YAML-formatted file.
+# Include the file with the `--values` parameter
+
+
+# -- Application configuration of the UDM REST API
+udmRestApi:
+  apiLogLevel: "4"
+  authGroups:
+    dcBackup: "cn=DC Backup Hosts,cn=groups,dc=example,dc=com"
+    dcSlaves: "cn=DC Slave Hosts,cn=groups,dc=example,dc=com"
+    domainAdmins: "cn=Domain Admins,cn=groups,dc=example,dc=com"
+  environment: "staging"
+  logLevel: "DEBUG"
+  ldap:
+    adminPassword: "secret"
+    base: "dc=example,dc=com"
+    host: "ucs"
+    hostDn: "cn=ucs-6274,cn=dc,cn=computers,dc=example,dc=com"
+    machinePassword: "secret"
+    port: 7389
+    serverIp: "127.0.0.1"
+  tlsReqcert: "demand"
+
+
+## Kubernetes ingress
+ingress:
+  enabled: true
+  host: "udm.example.com"
+
+
+## Istio support
+istio:
+  enabled: false
+  host: "udm.example.com"
+
+
+## Docker image
+image:
+  tag: "main"
+
+
+## Container deployment probes
+probes:
+  liveness:
+    enabled: false
+
+  readiness:
+    enabled: false
+
+...

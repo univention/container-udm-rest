@@ -1,0 +1,103 @@
+{
+  "$schema": "https://json-schema.org/schema#",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "istio",
+    "udmRestApi"
+  ],
+  "properties": {
+    "affinity": {
+      "type": "object"
+    },
+    "common": {
+      "type": "object"
+    },
+    "environment": {
+      "type": "object"
+    },
+    "fullnameOverride": {
+      "type": "string"
+    },
+    "image": {
+      "type": "object"
+    },
+    "ingress": {
+      "type": "object"
+    },
+    "istio": {
+      "type": "object",
+      "required": [
+        "host"
+      ],
+      "properties": {
+        "host": {
+          "type": "string"
+        }
+      }
+    },
+    "nameOverride": {
+      "type": "string"
+    },
+    "nodeSelector": {
+      "type": "object"
+    },
+    "podAnnotations": {
+      "type": "object"
+    },
+    "podSecurityContext": {
+      "type": "object"
+    },
+    "probes": {
+      "type": "object"
+    },
+    "replicaCount": {
+      "type": "integer"
+    },
+    "resources": {
+      "type": "object"
+    },
+    "securityContext": {
+      "type": "object"
+    },
+    "service": {
+      "type": "object"
+    },
+    "tolerations": {
+      "type": "array"
+    },
+    "udmRestApi": {
+      "type": "object",
+      "required": [
+        "ldap"
+      ],
+      "properties": {
+        "ldap": {
+          "type": "object",
+          "required": [
+            "adminPassword",
+            "base",
+            "machinePassword"
+          ],
+          "properties": {
+            "adminPassword": {
+              "type": "string"
+            },
+            "base": {
+              "type": "string"
+            },
+            "machinePassword": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "xxx": {
+      "type": "string"
+    },
+    "yyy": {
+      "type": "string"
+    }
+  }
+}

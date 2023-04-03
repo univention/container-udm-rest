@@ -15,6 +15,7 @@ repos:
       - id: "check-yaml"
         args:
           - "--allow-multiple-documents"
+        exclude: ^helm/templates/
       # "fix end of files"
       - id: "end-of-file-fixer"
       # "fix python encoding pragma"

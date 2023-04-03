@@ -1,0 +1,22 @@
+---
+
+apiVersion: "v2"
+type: "application"
+name: "udm-rest-api"
+description: "A Helm chart for the UDM REST API"
+home: "https://www.univention.de/"
+icon: https://www.univention.com/wp-content/themes/univention/assets/images/univention.svg
+
+# Chart version
+# Apply Semantic Versioning (https://semver.org/)
+version: "0.1.0"
+
+# UDM REST API Version
+appVersion: "10.0.6-1"
+
+dependencies:
+  - name: "common"
+    repository: "https://charts.bitnami.com/bitnami"
+    version: "^2.2.4"
+
+...
