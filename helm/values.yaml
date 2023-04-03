@@ -1,0 +1,144 @@
+---
+# Default values for udm-rest-api.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+## Global values
+affinity: {}
+environment: {}
+fullnameOverride: ""
+nameOverride: ""
+nodeSelector: {}
+podAnnotations: {}
+podSecurityContext: {}
+replicaCount: 1
+securityContext: {}
+tolerations: []
+
+
+# -- Application configuration of the UDM REST API
+udmRestApi:
+  apiLogLevel: "4"
+  authGroups:
+    # -- Set directory.manager.rest.authorized-groups.dc-backup
+    # dcBackup: "cn=DC Backup Hosts,cn=groups,dc=example,dc=com"
+    # -- Set directory.manager.rest.authorized-groups.dc-slaves
+    # dcSlaves: "cn=DC Slave Hosts,cn=groups,dc=example,dc=com"
+    # -- Set directory.manager.rest.authorized-groups.domain-admins
+    # domainAdmins: "cn=Domain Admins,cn=groups,dc=example,dc=com"
+  # -- TODO: Clarify usage of this parameter
+  environment: "production"
+  # -- Log level configuration. E.g. "DEBUG", "INFO", "WARNING", "ERROR".
+  logLevel: "WARNING"
+  ldap:
+    # -- Set password for the LDAP admin user
+    # adminPassword: "secret"
+    # -- Set LDAP-BaseDN
+    # base: "dc=example,dc=com"
+    host: "ucs"
+    # -- Set LDAP-HostDN
+    # hostDn: "cn=ucs-6274,cn=dc,cn=computers,dc=example,dc=com"
+    # -- Set UCS machine password
+    # machinePassword: "secret"
+    port: 389
+    serverIp: "127.0.0.1"
+  # -- How to handle certificate requests
+  tlsReqcert: "demand"
+
+
+# -- Kubernetes ingress
+ingress:
+  # -- Set this to `true` in order to enable the installation on Ingress related objects.
+  enabled: false
+  ingressClassName: "nginx"
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: "/$1"
+    nginx.ingress.kubernetes.io/use-regex: "true"
+  # -- The hostname. This parameter has to be supplied. Example `udm.example.com`.
+  # host: "sso.example.com"
+  paths:
+    - pathType: "Prefix"
+      path: "/udm/(.*)"
+  tls:
+    enabled: true
+    secretName: ""
+
+
+## Istio support
+istio:
+  # -- Set this to `true` in order to enable the installation on Istio related objects.
+  enabled: true
+  # -- The hostname. This parameter has to be supplied. Example `udm.example`.
+  # host: "sso.example.com"
+  virtualService:
+    enabled: true
+    annotations: {}
+    pathOverrides: []
+    paths:
+      - match: "prefix"
+        path: "/udm/"
+  gateway:
+    enabled: false
+    annotations:
+    selectorIstio: "ingressgateway"
+    externalGatewayName: "swp-istio-gateway"
+    tls:
+      enabled: true
+      httpsRedirect: true
+      secretName: ""
+
+
+## Docker image
+image:
+  registry: "registry.souvap-univention.de"
+  repository: "souvap/tooling/images/udm-rest-api"
+  tag: "0.1.0"
+  imagePullPolicy: "Always"
+
+  ## Define image sha256 as an alternative to `tag`
+  # sha256:
+
+
+## Container deployment probes
+probes:
+  liveness:
+    enabled: true
+    initialDelaySeconds: 120
+    timeoutSeconds: 3
+    periodSeconds: 30
+    failureThreshold: 3
+    successThreshold: 1
+
+  readiness:
+    enabled: true
+    initialDelaySeconds: 30
+    timeoutSeconds: 3
+    periodSeconds: 15
+    failureThreshold: 30
+    successThreshold: 1
+
+
+## Deployment resources
+resources:
+  requests:
+    memory: "512Mi"
+    cpu: "250m"
+  limits:
+    memory: "4Gi"
+    cpu: "4"
+
+## Kubernetes Service
+service:
+  enabled: true
+  type: "ClusterIP"
+  ports:
+    http:
+      containerPort: 9979
+      port: 9979
+      protocol: "TCP"
+
+  sessionAffinity:
+    enabled: false
+    timeoutSeconds: 10800
+
+...

@@ -1,0 +1,51 @@
+---
+
+apiVersion: "v1"
+kind: ConfigMap
+metadata:
+  name: '{{ include "common.names.fullname" . }}'
+data:
+  CA_CERT_FILE: "{{ .Values.udmRestApi.caCertFile }}"
+  ENVIRONMENT: "{{ .Values.udmRestApi.environment }}"
+  LOG_LEVEL: "{{ .Values.udmRestApi.logLevel }}"
+  LDAP_ADMIN_PASSWORD: {{ required "The parameter \"udmRestApi.ldap.adminPassword\" is required." .Values.udmRestApi.ldap.adminPassword | quote }}
+  LDAP_BASE: {{ required "The parameter \"udmRestApi.ldap.base\" is required." .Values.udmRestApi.ldap.base | quote }}
+  LDAP_MACHINE_PASSWORD: {{ required "The parameter \"udmRestApi.ldap.machinePassword\" is required." .Values.udmRestApi.ldap.machinePassword | quote }}
+  LDAP_URI: "ldap://{{ required "The parameter \"udmRestApi.ldap.host\" is required." .Values.udmRestApi.ldap.host | quote }}:{{ required "The parameter \"udmRestApi.ldap.port\" is required." .Values.udmRestApi.ldap.port | quote }}"
+  TLS_REQCERT: "{{ .Values.udmRestApi.tlsReqcert }}"
+  domainname: "{{ .Values.udmRestApi.domainname }}"
+  directory.manager.rest.authorized-groups.dc-backup: "{{ .Values.udmRestApi.authGroups.dcBackup }}"
+  directory.manager.rest.authorized-groups.dc-slaves: "{{ .Values.udmRestApi.authGroups.dcSlaves }}"
+  directory.manager.rest.authorized-groups.domain-admins: "{{ .Values.udmRestApi.authGroups.domainAdmins }}"
+  directory.manager.rest.debug.level: "{{ .Values.udmRestApi.apiLogLevel }}"
+  directory.manager.templates.alphanum.whitelist:
+  directory.reports.templates.csv.computer1: "computers/computer \"CSV Report\" /etc/univention/directory/reports/default computers.csv"
+  directory.reports.templates.csv.group1: "groups/group \"CSV Report\" /etc/univention/directory/reports/default groups.csv"
+  directory.reports.templates.csv.user1: "users/user \"CSV Report\" /etc/univention/directory/reports/default users.csv"
+  directory.reports.templates.pdf.computer1: "computers/computer \"PDF Document\" /etc/univention/directory/reports/default computers.rml"
+  directory.reports.templates.pdf.group1: "groups/group \"PDF Document\" /etc/univention/directory/reports/default groups.rml"
+  directory.reports.templates.pdf.user1: "users/user \"PDF Document\" /etc/univention/directory/reports/default users.rml"
+  directory.manager.user.activate_ldap_attribute_mailForwardCopyToSelf: "yes"
+  directory.manager.user_group.uniqueness: "true"
+  directory.manager.web.language: "en_US.UTF-8"
+  directory.manager.web.modules.autosearch: "1"
+  directory.manager.web.modules.computers.computer.add.default: "computers/windows"
+  directory.manager.web.modules.groups.group.caching.uniqueMember.timeout: "300"
+  directory.manager.web.modules.groups.group.checks.circular_dependency: "yes"
+  directory.manager.web.modules.search.advanced_on_open: "false"
+  directory.manager.web.modules.users.user.properties.homePostalAddress.syntax: "postalAddress"
+  directory.manager.web.modules.wizards.disabled: "no"
+  directory.manager.web.sizelimit: "2000"
+  directory.reports.cleanup.age: "43200"
+  directory.reports.cleanup.cron: "0 0 * * *"
+  directory.reports.logo: "/usr/share/univention-directory-reports/univention_logo.png"
+  hostname: "{{ .Values.udmRestApi.hostname }}"
+  ldap.base: "{{ .Values.udmRestApi.ldap.base }}"
+  ldap.master: "{{ .Values.udmRestApi.ldap.host }}"
+  ldap.master.port: "{{ .Values.udmRestApi.ldap.port }}"
+  ldap.server.name: "{{ .Values.udmRestApi.ldap.host }}"
+  ldap.server.port: "{{ .Values.udmRestApi.ldap.port }}"
+  ldap.server.ip: "{{ .Values.udmRestApi.ldap.serverIp }}"
+  ldap.hostdn: "{{ .Values.udmRestApi.ldap.hostDn }}"
+
+...
