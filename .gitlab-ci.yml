@@ -1,33 +1,72 @@
 ---
 
 stages:
-- lint-stage
-- build-stage
-- test-stage
-- publish-stage
+- lint
+- build
+- test
+- publish
+
+workflow:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH && $CI_OPEN_MERGE_REQUESTS
+      when: never
+    - if: $CI_COMMIT_BRANCH
 
 variables:
+  SOUVAP_REGISTRY_HOST: registry.souvap-univention.de
+  SOUVAP_REGISTRY_PATH: souvap/tooling/images/udm-rest-api
+  SOUVAP_REGISTRY_REPO: ${SOUVAP_REGISTRY_HOST}/${SOUVAP_REGISTRY_PATH}
+  SOUVAP_REGISTRY_USER: gitlab-ci-knut
   UV_HOST_HARBOR: artifacts.knut.univention.de
-  DOCKERHUB_CACHE: ${UV_HOST_HARBOR}/dockerhub_proxy_cache/
   UPX_IMAGE_REGISTRY: ${UV_HOST_HARBOR}/upx/
-  DOCKER_TLS_CERTDIR: ''
-  DOCKER_HOST: tcp://docker:2375
 
-  DOCKER_COMPOSE_PRODUCTION_FILES:
-    --file docker-compose.yaml
-    --file docker-compose.prod.yaml
+include:
+  - project: univention/dist/docker-services
+    file: kaniko.yml
 
-  DOCKER_COMPOSE_BUILD_FILES:
-    ${DOCKER_COMPOSE_PRODUCTION_FILES}
-    --file docker-compose.override.yaml
-
-default:
+.push-image-souvap:
+  variables:
+    GIT_STRATEGY: none
+  image: artifacts.knut.univention.de/dockerhub_proxy_cache/library/docker:20.10.12
+  services:
+    - name: docker-registry.knut.univention.de/ucs/docker:dind
+      alias: docker
   before_script:
-  - mkdir "$HOME/.docker/"
-  - echo "$DOCKER_AUTH_CONFIG" > "$HOME/.docker/config.json"
+    # derived from the .kaniko_pre to define the IMAGE_TAG and IMAGE_VERSION
+    - |-
+      if [ "${CI_COMMIT_REF_NAME:-}" = "${CI_DEFAULT_BRANCH:-}" ]; then
+        VERSION="latest"
+      elif [ -n "${CI_COMMIT_TAG:-}" ]; then
+        NOSLASH=$(echo "${CI_COMMIT_TAG:-}" | tr -s / -)
+        SANITIZED="${NOSLASH//[^a-zA-Z0-9\-\.]/}"
+        VERSION="$SANITIZED"
+      else
+        NOSLASH=$(echo "${CI_COMMIT_REF_NAME:-}" | tr -s / -)
+        SANITIZED="${NOSLASH//[^a-zA-Z0-9\-]/}"
+        VERSION="branch-$SANITIZED"
+      fi
+      if [ ! -z "${IMAGE_TAG:-}" ]; then
+        IMAGE_TAG="${CI_REGISTRY_IMAGE:-}:$VERSION"
+      fi
+    - echo "IMAGE_TAG=$IMAGE_TAG" | tee -a ./.env
+    - echo "IMAGE_VERSION=$VERSION" | tee -a ./.env
+  script:
+    # Load variables from before_script
+    - . ./.env
+    - SOUVAP_IMAGE_TAG="${SOUVAP_REGISTRY_REPO}/${SOUVAP_IMAGE_NAME}:${IMAGE_VERSION}"
+    - echo "logging in with CI_JOB_TOKEN"
+    - echo "${CI_JOB_TOKEN}" | docker login --username "${CI_REGISTRY_USER}" --password-stdin "${CI_REGISTRY}"
+    - 'echo "pulling image: ${IMAGE_TAG}"'
+    - docker pull "${IMAGE_TAG}"
+    - 'echo "tagging image: ${SOUVAP_IMAGE_TAG}"'
+    - docker tag "${IMAGE_TAG}" "${SOUVAP_IMAGE_TAG}"
+    # Use SouvAP-Repo-Access-Token to push image
+    - echo "${SOUVAP_REGISTRY_TOKEN}" | docker login --username "${SOUVAP_REGISTRY_USER}" --password-stdin "${SOUVAP_REGISTRY_HOST}"
+    - docker push "${SOUVAP_IMAGE_TAG}"
 
-pre-commit-job:
-  stage: lint-stage
+pre-commit:
+  stage: lint
   tags:
   - docker
   image:
@@ -55,56 +94,26 @@ pre-commit-job:
   - cp .env.univention-directory-manager-rest.example .env.univention-directory-manager-rest
   - pre-commit run --all-files
 
-build-job:
-  image:
-    ${UPX_IMAGE_REGISTRY}docker/compose:1.30-debian-buster-python-3.7.3
-  stage: build-stage
-  tags:
-  - docker
-  services:
-  - name: ${DOCKERHUB_CACHE}library/docker:20.10.7-dind
-    alias: docker
-    command:
-    - "--insecure-registry=artifacts.knut.univention.de"
-    - "--tls=false"
-  script:
-  - python3 ci-build-script.py
+build-udm-rest-image:
+  stage: build
+  extends: .kaniko
+  variables:
+    CI_REGISTRY_IMAGE: "$CI_REGISTRY_IMAGE/udm-rest-api"
+    KANIKO_BUILD_CONTEXT: "images/udm"
+    KANIKO_ARGS: "--skip-unused-stages=true --cache=true --cache-repo=$CI_REGISTRY_IMAGE-cache"
+  after_script:
+    - docker images --all
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH
 
-test-job:
-  image:
-    ${UPX_IMAGE_REGISTRY}docker/compose:1.30-debian-buster-python-3.7.3
-  stage: test-stage
-  tags:
-  - docker
-  services:
-  - name: ${DOCKERHUB_CACHE}library/docker:20.10.7-dind
-    alias: docker
-    command:
-    - "--insecure-registry=artifacts.knut.univention.de"
-    - "--tls=false"
-  script:
-  - cp .env.univention-directory-manager-rest.example .env.univention-directory-manager-rest
-  - cp "${CA_CERT_FILE}" CAcert.pem
-  - docker-compose ${DOCKER_COMPOSE_PRODUCTION_FILES} pull
-  - docker-compose ${DOCKER_COMPOSE_PRODUCTION_FILES} up --detach --no-build
-  - docker-compose ${DOCKER_COMPOSE_PRODUCTION_FILES} down
-  - docker-compose ${DOCKER_COMPOSE_PRODUCTION_FILES} rm
-
-publish-job:
-  image:
-    ${UPX_IMAGE_REGISTRY}docker/compose:1.30-debian-buster-python-3.7.3
-  stage: publish-stage
-  tags:
-  - docker
-  only:
-  - main
-  services:
-  - name: ${DOCKERHUB_CACHE}library/docker:20.10.7-dind
-    alias: docker
-    command:
-    - "--insecure-registry=artifacts.knut.univention.de"
-    - "--tls=false"
-  script:
-  - python3 ci-publish-script.py
+push-udm-rest-api-image-to-souvap:
+  stage: publish
+  needs:
+    - job: build-udm-rest-image
+  extends: .push-image-souvap
+  variables:
+    CI_REGISTRY_IMAGE: "$CI_REGISTRY_IMAGE/udm-rest-api"
+    SOUVAP_IMAGE_NAME: "udm-rest-api"
 
 ...
