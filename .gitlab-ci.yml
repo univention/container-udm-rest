@@ -1,10 +1,10 @@
 ---
 
 stages:
-- lint
-- build
-- test
-- publish
+  - lint
+  - build
+  - test
+  - publish
 
 workflow:
   rules:
@@ -71,7 +71,7 @@ include:
 lint-with-pre-commit:
   stage: lint
   tags:
-  - docker
+    - docker
   image:
     name: ${UPX_IMAGE_REGISTRY}upx-pre-commit:latest
     entrypoint: [/bin/bash, -c]
@@ -80,15 +80,15 @@ lint-with-pre-commit:
     PRE_COMMIT_HOME: ${CI_PROJECT_DIR}/.cache/pre-commit
   cache:
     paths:
-    - .cache/pip
-    - .cache/pre-commit
-    - venv/
+      - .cache/pip
+      - .cache/pre-commit
+      - venv/
   before_script:
-  - echo "Explicitly skip the default action docker login"
+    - echo "Explicitly skip the default action docker login"
   script:
-  # Compose lint would fail without the referenced env files
-  - cp .env.univention-directory-manager-rest.example .env.univention-directory-manager-rest
-  - pre-commit run --all-files
+    # Compose lint would fail without the referenced env files
+    - cp .env.univention-directory-manager-rest.example .env.univention-directory-manager-rest
+    - pre-commit run --all-files
 
 build-udm-rest-image:
   stage: build
