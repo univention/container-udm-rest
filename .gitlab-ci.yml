@@ -64,8 +64,11 @@ include:
       --username "${CI_REGISTRY_USER}"
       --password-stdin "${CI_REGISTRY}"
     - 'echo "pulling image: ${IMAGE_TAG}"'
+    - echo "pulling image2 ${IMAGE_TAG}"
+    - 'echo docker pull "${IMAGE_TAG}"'
     - 'docker pull "${IMAGE_TAG}"'
     - 'echo "tagging image: ${SOUVAP_IMAGE_TAG}"'
+    - echo "tagging image2 ${SOUVAP_IMAGE_TAG}"
     - 'docker tag "${IMAGE_TAG}" "${SOUVAP_IMAGE_TAG}"'
     # Use SouvAP-Repo-Access-Token to push image
     - >-
@@ -76,6 +79,7 @@ include:
 
 lint-with-pre-commit:
   stage: 'lint'
+  needs: []
   tags:
     - 'docker'
   image:
@@ -102,6 +106,9 @@ lint-with-pre-commit:
 build-udm-rest-image:
   stage: 'build'
   extends: '.kaniko'
+  needs:
+    - job: 'lint-with-pre-commit'
+      artifacts: false
   variables:
     CI_REGISTRY_IMAGE: '$CI_REGISTRY_IMAGE/udm-rest-api'
     KANIKO_BUILD_CONTEXT: 'images/udm'
@@ -138,9 +145,10 @@ build-helm-chart:
 
 publish-udm-rest-api-image-at-souvap:
   stage: 'publish'
+  extends: '.push-image-souvap'
   needs:
     - job: 'build-udm-rest-image'
-  extends: '.push-image-souvap'
+      artifacts: false
   variables:
     CI_REGISTRY_IMAGE: '$CI_REGISTRY_IMAGE/udm-rest-api'
     SOUVAP_IMAGE_NAME: 'udm-rest-api'
