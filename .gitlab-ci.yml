@@ -21,8 +21,6 @@ variables:
   SOUVAP_REGISTRY_PATH: 'souvap/tooling/images/udm-rest-api'
   SOUVAP_REGISTRY_REPO: '${SOUVAP_REGISTRY_HOST}/${SOUVAP_REGISTRY_PATH}'
   SOUVAP_REGISTRY_USER: 'gitlab-ci-knut'
-  UV_HOST_HARBOR: 'artifacts.knut.univention.de'
-  UPX_IMAGE_REGISTRY: '${UV_HOST_HARBOR}/upx/'
 
 include:
   - project: 'univention/dist/docker-services'
@@ -31,7 +29,7 @@ include:
 .push-image-souvap:
   variables:
     GIT_STRATEGY: 'none'
-  image: 'artifacts.knut.univention.de/dockerhub_proxy_cache/library/docker:20.10.12'
+  image: "${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/library/docker:20.10.12"
   services:
     - name: 'docker-registry.knut.univention.de/ucs/docker:dind'
       alias: 'docker'
@@ -83,7 +81,7 @@ lint-with-pre-commit:
   tags:
     - 'docker'
   image:
-    name: '${UPX_IMAGE_REGISTRY}upx-pre-commit:latest'
+    name: 'artifacts.knut.univention.de/upx/upx-pre-commit:latest'
     entrypoint: ['/bin/bash', '-c']
   variables:
     PIP_CACHE_DIR: '${CI_PROJECT_DIR}/.cache/pip'
