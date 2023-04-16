@@ -81,7 +81,8 @@ lint-with-pre-commit:
   tags:
     - 'docker'
   image:
-    name: 'artifacts.knut.univention.de/upx/upx-pre-commit:latest'
+    #name: 'artifacts.knut.univention.de/upx/upx-pre-commit:latest'
+    name: gitregistry.knut.univention.de/univention/customers/dataport/upx/container-pre-commit/upx-pre-commit:latest
     entrypoint: ['/bin/bash', '-c']
   variables:
     PIP_CACHE_DIR: '${CI_PROJECT_DIR}/.cache/pip'
