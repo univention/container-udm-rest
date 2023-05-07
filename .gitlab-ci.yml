@@ -100,6 +100,9 @@ lint-with-pre-commit:
       cp
       '.env.univention-directory-manager-rest.example'
       '.env.univention-directory-manager-rest'
+    - 'cd helm'
+    - 'helm repo add bitnami https://charts.bitnami.com/bitnami'
+    - 'helm dependency build'
     - 'pre-commit run --all-files'
 
 build-udm-rest-image:
