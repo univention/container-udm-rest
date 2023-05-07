@@ -130,4 +130,9 @@ repos:
   #         - "--server"
   #         - "https://git.knut.univention.de"
 
+  - repo: https://github.com/gruntwork-io/pre-commit
+    rev: v0.1.21
+    hooks:
+      - id: helmlint
+
 ...
