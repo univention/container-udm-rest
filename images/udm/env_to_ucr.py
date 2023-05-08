@@ -54,7 +54,7 @@ def main(base_path):
     for key, value in os.environ.items():
         if key.replace('_', '').isupper():
             continue
-        ldap_key = key.replace('.', '/')
+        ldap_key = key.replace('0', '/').replace('_', '-')
         base_conf[ldap_key] = value
 
     with open(base_path, 'w', encoding='utf-8') as file_handler:
