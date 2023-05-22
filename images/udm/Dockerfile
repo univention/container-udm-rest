@@ -52,7 +52,7 @@ RUN \
       gpg-agent=2.2.* \
       patch=2.7.* && \
   curl -fsSL "${APT_KEY_URL}" | apt-key add - && \
-  rm -rf /var/lib/apt/lists/*
+  rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*
 
 ###############################################################################
 # Install UDM REST API
@@ -71,21 +71,28 @@ COPY fake.sh /usr/local/bin/a2dissite
 COPY fake.sh /usr/local/bin/umc_frontend_new_hash
 COPY fake.sh /usr/local/bin/invoke-rc.d
 COPY fake.sh /usr/sbin/univention-management-console-acls
+COPY fake-uv-lib.sh /usr/local/bin/fake-uv-lib.sh
 
 RUN \
-  mkdir /usr/share/univention-lib/ && \
-  mkdir --parents /var/www/univention-directory-reports && \
-  # UCR would overwrite the resolvers, but we replaced ucr with a stub.
-  # Save the original file here and restore it afterwards.
-  cp /etc/resolv.conf /etc/resolv.conf.backup && \
-  # The original file would source many bash-helper-functions not required here.
-  touch /usr/share/univention-lib/all.sh && \
-  touch /usr/share/univention-lib/join.sh && \
-  touch /usr/share/univention-lib/umc.sh && \
   apt-get --quiet update && \
+  # install Univention bash helper functions dependency
+  DEBIAN_FRONTEND=noninteractive \
+    apt-get --assume-yes --verbose-versions --no-install-recommends install \
+      shell-univention-lib=9.* \
+      && \
+  # we do not need the many bash helper-functions here
+  cp /usr/local/bin/fake-uv-lib.sh /usr/share/univention-lib/all.sh && \
+  cp /usr/local/bin/fake-uv-lib.sh /usr/share/univention-lib/join.sh && \
+  cp /usr/local/bin/fake-uv-lib.sh /usr/share/univention-lib/umc.sh && \
+  mkdir --parents /var/www/univention-directory-reports && \
+  # install unlisted dependencies
   DEBIAN_FRONTEND=noninteractive \
     apt-get --assume-yes --verbose-versions --no-install-recommends install \
       python3=3.7.* \
+      python3-distutils=3.7.* \
+      && \
+  DEBIAN_FRONTEND=noninteractive \
+    apt-get --assume-yes --verbose-versions --no-install-recommends install \
       python3-univention-directory-manager-rest=10.* \
       libunivention-debug1=12.* \
       python3-ldap=3.* \
@@ -112,11 +119,10 @@ RUN \
       univention-saml-schema=7.* \
       && \
   # static www content, stylesheet, js, etc. without all dependencies
-  cp /etc/resolv.conf.backup /etc/resolv.conf && \
   apt-get download univention-directory-manager-rest && \
   dpkg --force-depends --install univention-directory-manager-rest_10.*.deb && \
   rm univention-directory-manager-rest_10.*.deb \
-  rm -rf /apt /var/lib/apt/lists/* && \
+  rm -rf /apt /var/lib/apt/lists/* /var/cache/apt/archives/* && \
   awk \
     '/^Package: python3-univention-directory-manager-rest$/{ while(!/^Version: /){getline} print $2 }' \
     /var/lib/dpkg/status > /version
