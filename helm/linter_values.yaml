@@ -39,7 +39,7 @@ istio:
 
 ## Docker image
 image:
-  tag: "main"
+  tag: "latest"
 
 
 ## Container deployment probes
