@@ -13,7 +13,7 @@ data:
   LDAP_HOST_DN: {{ required "The parameter \"udmRestApi.ldapHostDn\" is required." .Values.udmRestApi.ldapHostDn | quote }}
   TLS_REQCERT: "demand"
 
-  DEBUG_LEVEL: "{{ .Values.udmRestApi.debug_level }}"
+  DEBUG_LEVEL: "{{ .Values.udmRestApi.debugLevel }}"
   AUTHORIZED_DC_BACKUP: {{ required "The parameter \"udmRestApi.authGroups.dcBackup\" is required." .Values.udmRestApi.authGroups.dcBackup | quote }}
   AUTHORIZED_DC_SLAVES: {{ required "The parameter \"udmRestApi.authGroups.dcSlaves\" is required." .Values.udmRestApi.authGroups.dcSlaves | quote }}
   AUTHORIZED_DOMAIN_ADMINS: {{ required "The parameter \"udmRestApi.authGroups.domainAdmins\" is required." .Values.udmRestApi.authGroups.domainAdmins | quote }}

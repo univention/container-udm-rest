@@ -68,53 +68,68 @@ AUTHORIZED_DC_BACKUP=${AUTHORIZED_DC_BACKUP:-cn=DC Backup Hosts,cn=groups,dc=exa
 AUTHORIZED_DC_SLAVES=${AUTHORIZED_DC_SLAVES:-cn=DC Slave Hosts,cn=groups,dc=example,dc=org}
 AUTHORIZED_DOMAIN_ADMINS=${AUTHORIZED_DOMAIN_ADMINS:-cn=Domain Admins,cn=groups,dc=example,dc=org}
 
-ucr set \
-    ldap/master="${LDAP_HOST}" \
-    ldap/master/port="${LDAP_PORT}" \
-    ldap/server/name="${LDAP_HOST}" \
-    ldap/server/port="${LDAP_PORT}" \
-    ldap/hostdn="${LDAP_HOST_DN}" \
-    ldap/base="${LDAP_BASE_DN}" \
-    domainname="${DOMAINNAME}" \
-    hostname="${HOSTNAME}" \
-    directory/manager/rest/authorized-groups/dc-backup="${AUTHORIZED_DC_BACKUP}" \
-    directory/manager/rest/authorized-groups/dc-slaves="${AUTHORIZED_DC_SLAVES}" \
-    directory/manager/rest/authorized-groups/domain-admins="${AUTHORIZED_DOMAIN_ADMINS}" \
-    directory/manager/rest/debug_level="${DEBUG_LEVEL}" \
-    directory/manager/templates/alphanum/whitelist="" \
-    directory/manager/user/activate_ldap_attribute_mailForwardCopyToSelf="yes" \
-    directory/manager/user_group/uniqueness="true" \
-    directory/manager/web/language="de_DE.UTF-8" \
-    directory/manager/web/modules/autosearch="1" \
-    directory/manager/web/modules/computers/computer/add/default="computers/windows" \
-    directory/manager/web/modules/groups/group/caching/uniqueMember/timeout="300" \
-    directory/manager/web/modules/groups/group/checks/circular_dependency="yes" \
-    directory/manager/web/modules/search/advanced_on_open="false" \
-    directory/manager/web/modules/users/user/properties/homePostalAddress/syntax="postalAddress" \
-    directory/manager/web/modules/wizards/disabled="no" \
-    directory/manager/web/sizelimit="2000" \
-    directory/reports/cleanup/age="43200" \
-    directory/reports/cleanup/cron="0 0 * * *" \
-    directory/reports/logo="/usr/share/univention-directory-reports/univention_logo.png" \
-    directory/reports/templates/csv/computer1="computers/computer \"CSV Report\" /etc/univention/directory/reports/default computers.csv" \
-    directory/reports/templates/csv/group1="groups/group \"CSV Report\" /etc/univention/directory/reports/default groups.csv" \
-    directory/reports/templates/csv/user1="users/user \"CSV Report\" /etc/univention/directory/reports/default users.csv" \
-    directory/reports/templates/pdf/computer1="computers/computer \"PDF Document\" /etc/univention/directory/reports/default computers.rml" \
-    directory/reports/templates/pdf/group1="groups/group \"PDF Document\" /etc/univention/directory/reports/default groups.rml" \
-    directory/reports/templates/pdf/user1="users/user \"PDF Document\" /etc/univention/directory/reports/default users.rml" \
-    groups/default/domainadmins="Domain Admins" \
-    groups/default/printoperators="Printer-Admins" \
-    license/base="dc=example,dc=org" \
-    locale/default="de_DE.UTF-8:UTF-8" \
-    locale="de_DE.UTF-8:UTF-8 en_US.UTF-8:UTF-8" \
-    password/hashing/method="SHA-512" \
-    update/available="false" \
-    update/reboot/required="false" \
-    uuid/license="00000000-0000-0000-0000-000000000000" \
-    uuid/system="00000000-0000-0000-0000-000000000000" \
-    version/erratalevel="0" \
-    version/patchlevel="3" \
-    version/version="5.0"
+# FIXME: makeshift UCR replacement until DCD comes along
+ucr-set() {
+  # parameters: 1 - key, 2 - value
+  key="$1"
+  value="$2"
+  base_conf=/etc/univention/base.conf
+
+  # delete existing value
+  sed --in-place --expression="\#^${key}:#d" ${base_conf}
+  # add newline if necessary
+  [[ -n "$(tail --bytes=1 ${base_conf})" ]] && \
+    echo "" >> ${base_conf}
+  # set new value
+  echo -n "${key}: ${value}" >> ${base_conf}
+}
+
+ucr-set "ldap/master" "${LDAP_HOST}"
+ucr-set "ldap/master/port" "${LDAP_PORT}"
+ucr-set "ldap/server/name" "${LDAP_HOST}"
+ucr-set "ldap/server/port" "${LDAP_PORT}"
+ucr-set "ldap/hostdn" "${LDAP_HOST_DN}"
+ucr-set "ldap/base" "${LDAP_BASE_DN}"
+ucr-set "domainname" "${DOMAINNAME}"
+ucr-set "hostname" "${HOSTNAME}"
+ucr-set "directory/manager/rest/authorized-groups/dc-backup" "${AUTHORIZED_DC_BACKUP}"
+ucr-set "directory/manager/rest/authorized-groups/dc-slaves" "${AUTHORIZED_DC_SLAVES}"
+ucr-set "directory/manager/rest/authorized-groups/domain-admins" "${AUTHORIZED_DOMAIN_ADMINS}"
+ucr-set "directory/manager/rest/debug_level" "${DEBUG_LEVEL}"
+ucr-set "directory/manager/templates/alphanum/whitelist" ""
+ucr-set "directory/manager/user/activate_ldap_attribute_mailForwardCopyToSelf" "yes"
+ucr-set "directory/manager/user_group/uniqueness" "true"
+ucr-set "directory/manager/web/language" "de_DE.UTF-8"
+ucr-set "directory/manager/web/modules/autosearch" "1"
+ucr-set "directory/manager/web/modules/computers/computer/add/default" "computers/windows"
+ucr-set "directory/manager/web/modules/groups/group/caching/uniqueMember/timeout" "300"
+ucr-set "directory/manager/web/modules/groups/group/checks/circular_dependency" "yes"
+ucr-set "directory/manager/web/modules/search/advanced_on_open" "false"
+ucr-set "directory/manager/web/modules/users/user/properties/homePostalAddress/syntax" "postalAddress"
+ucr-set "directory/manager/web/modules/wizards/disabled" "no"
+ucr-set "directory/manager/web/sizelimit" "2000"
+ucr-set "directory/reports/cleanup/age" "43200"
+ucr-set "directory/reports/cleanup/cron" "0 0 * * *"
+ucr-set "directory/reports/logo" "/usr/share/univention-directory-reports/univention_logo.png"
+ucr-set "directory/reports/templates/csv/computer1" "computers/computer \"CSV Report\" /etc/univention/directory/reports/default computers.csv"
+ucr-set "directory/reports/templates/csv/group1" "groups/group \"CSV Report\" /etc/univention/directory/reports/default groups.csv"
+ucr-set "directory/reports/templates/csv/user1" "users/user \"CSV Report\" /etc/univention/directory/reports/default users.csv"
+ucr-set "directory/reports/templates/pdf/computer1" "computers/computer \"PDF Document\" /etc/univention/directory/reports/default computers.rml"
+ucr-set "directory/reports/templates/pdf/group1" "groups/group \"PDF Document\" /etc/univention/directory/reports/default groups.rml"
+ucr-set "directory/reports/templates/pdf/user1" "users/user \"PDF Document\" /etc/univention/directory/reports/default users.rml"
+ucr-set "groups/default/domainadmins" "Domain Admins"
+ucr-set "groups/default/printoperators" "Printer-Admins"
+ucr-set "license/base" "dc=example,dc=org"
+ucr-set "locale/default" "de_DE.UTF-8:UTF-8"
+ucr-set "locale" "de_DE.UTF-8:UTF-8 en_US.UTF-8:UTF-8"
+ucr-set "password/hashing/method" "SHA-512"
+ucr-set "update/available" "false"
+ucr-set "update/reboot/required" "false"
+ucr-set "uuid/license" "00000000-0000-0000-0000-000000000000"
+ucr-set "uuid/system" "00000000-0000-0000-0000-000000000000"
+ucr-set "version/erratalevel" "0"
+ucr-set "version/patchlevel" "3"
+ucr-set "version/version" "5.0"
 
 exec python3 -m univention.admin.rest.server "$@"
 
