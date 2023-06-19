@@ -239,7 +239,6 @@ RUN \
   echo '{}' > /var/lib/univention-appcenter/attributes/mapping.json
 
 COPY entrypoint.sh /udm/
-COPY env_to_ucr.py /udm/
 WORKDIR /udm/
 
 ENTRYPOINT ["/udm/entrypoint.sh"]

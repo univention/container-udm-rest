@@ -1,30 +1,31 @@
 ---
 
-version: '3.8'
+name: "dev-local"
 
 services:
-  udm:
-    env_file: .env.univention-directory-manager-rest
+  udm-rest-api:
+    build:
+      context: ./docker/udm-rest-api
+      platforms:
+        # FIXME: remove once arm64 packages are available at updates.software-univention.de
+        - "linux/amd64"
+      target: final
     ports:
-    - 9979:9979
+      - 9979:9979
+    env_file: .env.udm-rest-api
     secrets:
-    - ca_cert
+      - ca_cert
+      - ldap_secret
+      - machine_secret
 
   pre-commit:
     profiles:
       - test
-    platform: "linux/amd64"
-    build:
-      context: images/linter-pre-commit
-    container_name: udm-rest-pre-commit
-    environment:
-      PIP_CACHE_DIR: /cache/pip
-      PRE_COMMIT_HOME: /cache/pre-commit
-    working_dir: /work
+    image: gitregistry.knut.univention.de/univention/customers/dataport/upx/container-pre-commit/upx-pre-commit:latest
     volumes:
       - type: bind
         source: .
-        target: /work
+        target: /code
       - type: volume
         # pre-commit installs dependencies, having them cached speeds things up
         # a lot.
@@ -33,7 +34,11 @@ services:
 
 secrets:
   ca_cert:
-    file: ./CAcert.pem
+    file: ssl/certs/CAcert.pem
+  ldap_secret:
+    file: secret/ldap.secret
+  machine_secret:
+    file: secret/machine.secret
 
 volumes:
   pre-commit-cache:

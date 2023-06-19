@@ -1,0 +1,8 @@
+---
+
+services:
+  udm-rest-api:
+    extra_hosts:
+      {{ ansible_fqdn }}: "{{ ansible_host }}"
+
+...

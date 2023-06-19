@@ -1,0 +1,26 @@
+---
+{{ include "common.configMap" (dict "top" . "overrides" "udm-rest-api.configMap") }}
+
+{{- define "udm-rest-api.configMap" }}
+{{- with .top }}
+data:
+  DOMAINNAME: "{{ .Values.udmRestApi.domainname }}"
+  HOSTNAME: "{{ .Values.udmRestApi.hostname }}"
+  LDAP_HOST: {{ required "The parameter \"udmRestApi.ldapHost\" is required." .Values.udmRestApi.ldapHost | quote }}
+  LDAP_HOST_IP: {{ required "The parameter \"udmRestApi.ldapHostIp\" is required." .Values.udmRestApi.ldapHostIp | quote }}
+  LDAP_PORT: {{ required "The parameter \"udmRestApi.ldapPort\" is required." .Values.udmRestApi.ldapPort | quote }}
+  LDAP_BASE_DN: {{ required "The parameter \"udmRestApi.ldapBaseDn\" is required." .Values.udmRestApi.ldapBaseDn | quote }}
+  LDAP_HOST_DN: {{ required "The parameter \"udmRestApi.ldapHostDn\" is required." .Values.udmRestApi.ldapHostDn | quote }}
+  TLS_REQCERT: "demand"
+
+  DEBUG_LEVEL: "{{ .Values.udmRestApi.debug_level }}"
+  AUTHORIZED_DC_BACKUP: {{ required "The parameter \"udmRestApi.authGroups.dcBackup\" is required." .Values.udmRestApi.authGroups.dcBackup | quote }}
+  AUTHORIZED_DC_SLAVES: {{ required "The parameter \"udmRestApi.authGroups.dcSlaves\" is required." .Values.udmRestApi.authGroups.dcSlaves | quote }}
+  AUTHORIZED_DOMAIN_ADMINS: {{ required "The parameter \"udmRestApi.authGroups.domainAdmins\" is required." .Values.udmRestApi.authGroups.domainAdmins | quote }}
+
+  LDAP_SECRET_FILE: "{{ .Values.udmRestApi.ldapSecretFile }}"
+  MACHINE_SECRET_FILE: "{{ .Values.udmRestApi.machineSecretFile }}"
+  CA_CERT_FILE: "{{ .Values.udmRestApi.caCertFile }}"
+{{- end }}
+{{- end }}
+...

@@ -13,8 +13,10 @@ spec:
       {{- include "common.labels.matchLabels" . | nindent 6 }}
   template:
     metadata:
-      {{- with .Values.podAnnotations }}
       annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+        checksum/secret: {{ include (print $.Template.BasePath "/secret.yaml") . | sha256sum }}
+      {{- with .Values.podAnnotations }}
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
@@ -36,8 +38,14 @@ spec:
       securityContext:
         {{ toYaml . | nindent 8 | trim }}
       {{- end }}
+      {{- if .Values.udmRestApi.ldapHostIp }}
+      hostAliases:
+        - hostnames:
+            - {{ .Values.udmRestApi.ldapHost | quote }}
+          ip: {{ .Values.udmRestApi.ldapHostIp | quote }}
+      {{- end }}
       containers:
-        - name: "udm-rest-api"
+        - name: {{ .Chart.Name }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.registry }}/{{ .Values.image.repository }}{{ if .Values.image.sha256 }}@sha256:{{ .Values.image.sha256 }}{{ else }}:{{ .Values.image.tag }}{{ end }}"
@@ -45,6 +53,10 @@ spec:
           envFrom:
             - configMapRef:
                 name: {{ include "common.names.fullname" . }}
+          volumeMounts:
+            - name: secrets
+              # TODO: conflict with /run/secrets, should use a namespace
+              mountPath: /var/secrets
           ports:
             {{- range $key, $value := .Values.service.ports }}
             - name: {{ $key }}
@@ -73,5 +85,9 @@ spec:
           {{- end }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+      volumes:
+      - name: secrets
+        secret:
+          secretName: {{ include "common.names.fullname" . | quote }}
 
 ...

@@ -15,19 +15,14 @@ repos:
       - id: "check-yaml"
         args:
           - "--allow-multiple-documents"
-        exclude: ^helm/templates/
+        exclude: ^helm/.+/templates/
       # "fix end of files"
       - id: "end-of-file-fixer"
+        exclude: ^helm/.+/README.md
       # "fix python encoding pragma"
       - id: "fix-encoding-pragma"
       # "trim trailing whitespace"
       - id: "trailing-whitespace"
-
-  - repo: "https://github.com/google/yapf"
-    rev: "v0.32.0"
-    hooks:
-      # "yapf"
-      - id: "yapf"
 
   - repo: "https://git.knut.univention.de/univention/dist/pre-commit-ucr"
     rev: "0.0.9"
@@ -55,18 +50,6 @@ repos:
       # "Debian control file formatter"
       - id: "debian-control"
 
-  - repo: "https://github.com/PyCQA/flake8"
-    rev: "6.0.0"
-    hooks:
-      # "flake8"
-      - id: "flake8"
-
-  - repo: "https://github.com/PyCQA/pylint"
-    rev: "v2.17.1"
-    hooks:
-      # "pylint"
-      - id: "pylint"
-
   - repo: "https://github.com/charliermarsh/ruff-pre-commit"
     rev: "v0.0.259"
     hooks:
@@ -79,18 +62,6 @@ repos:
         stages: ["manual"]
         args: ["--fix"]
 
-  - repo: "https://github.com/pre-commit/mirrors-autopep8"
-    rev: "v2.0.2"
-    hooks:
-      # "autopep8"
-      - id: "autopep8"
-        args: ["--diff"]
-      # "autopep8"
-      - id: "autopep8"
-        alias: "autopep8-fix"
-        stages: ["manual"]
-        args: ["--in-place"]
-
   # This is a wrapper for shellcheck as long as
   # shellcheck doesn't have it's own .pre-commit-hooks.yaml
   # https://github.com/koalaman/shellcheck/pull/1032
@@ -100,24 +71,34 @@ repos:
       # "Shell Syntax Check"
       - id: "shell-lint"
 
-  - repo: "https://gitlab.com/univention/pre-commit-hooks/dockerfilelint-precommit-hooks"
-    rev: "v0.1.0"
-    hooks:
-      # "Dockerfile linter"
-      - id: "dockerfilelint"
-
+  # "docker-compose.yaml linter"
   - repo: "https://gitlab.com/univention/pre-commit-hooks/docker-compose-check"
     rev: "7702a8801a158b8595569dd29e2dd655d8a08310"
     hooks:
       # "Validate docker-compose files"
       - id: "docker-compose-check"
 
-  # "Runs hadolint installed on the local system"
+  # "Dockerfile linter"
   - repo: "https://gitlab.com/univention/pre-commit-hooks/docker-pre-commit"
     rev: "v2.0.0"
     hooks:
       # "Lint Dockerfiles"
       - id: "hadolint-system"
+
+  # "Helm chart linter"
+  - repo: https://github.com/gruntwork-io/pre-commit
+    rev: v0.1.21
+    hooks:
+      - id: helmlint
+
+  # "Helm docs linter"
+  - repo: https://github.com/norwoodj/helm-docs
+    rev: v1.11.0
+    hooks:
+    - id: helm-docs
+      args:
+        - --chart-search-root=helm
+        - --template-files=README.md.gotmpl
 
 # Disable temporarily because gitlab-api can not be accessed.
 # "urllib.error.HTTPError: HTTP Error 401: Unauthorized"
@@ -129,10 +110,5 @@ repos:
   #       args:
   #         - "--server"
   #         - "https://git.knut.univention.de"
-
-  - repo: https://github.com/gruntwork-io/pre-commit
-    rev: v0.1.21
-    hooks:
-      - id: helmlint
 
 ...

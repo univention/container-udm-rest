@@ -1,0 +1,8 @@
+---
+
+services:
+  udm-rest-api:
+    extra_hosts:
+      ucs-1234.univention.intranet: "10.200.12.34"
+
+...

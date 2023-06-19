@@ -1,0 +1,14 @@
+DOMAINNAME={{ local_domainname.stdout }}
+HOSTNAME={{ local_hostname.stdout }}
+LDAP_HOST={{ ansible_fqdn }}
+LDAP_PORT=7389
+LDAP_BASE_DN={{ ldap_base_dn.stdout }}
+LDAP_HOST_DN={{ ldap_host_dn.stdout }}
+
+# UDM REST API
+DEBUG_LEVEL=5
+
+# Path to SSL certificates
+CA_CERT_FILE=/run/secrets/ca_cert
+LDAP_SECRET=/run/secrets/ldap_secret
+MACHINE_SECRET=/run/secrets/machine_secret

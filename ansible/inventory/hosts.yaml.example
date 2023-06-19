@@ -1,0 +1,8 @@
+ucs_primary:
+  hosts:
+    my_dev_vm:
+      ansible_host: 192.0.2.10
+    my_other_dev_vm:
+      ansible_host: 192.0.2.20
+  vars:
+    ansible_user: root

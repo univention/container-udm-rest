@@ -1,9 +1,0 @@
----
-
-version: '3.8'
-
-services:
-  udm:
-    image: artifacts.knut.univention.de/upx/upx-udm-rest:build-${CI_PIPELINE_ID}
-
-...
