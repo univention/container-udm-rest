@@ -1,6 +1,0 @@
-ucs_primary:
-  hosts:
-    my_dev_vm:
-      ansible_host: 10.200.12.10
-  vars:
-    ansible_user: root
