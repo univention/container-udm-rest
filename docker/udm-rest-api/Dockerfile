@@ -212,10 +212,17 @@ COPY --from=build \
   /var/www/univention/udm/ \
   /var/www/univention/udm/
 
-# dummmy UCR
+# UCR
 COPY --from=build \
   /etc/univention/*.conf \
   /etc/univention/
+COPY --from=build \
+  /etc/univention/templates/ \
+  /etc/univention/templates/
+COPY --from=build \
+  /usr/sbin/univention-config-registry \
+  /usr/sbin/ucr \
+  /usr/sbin/
 
 COPY --from=build \
   /version \
@@ -231,6 +238,9 @@ RUN \
   #
   # for base.conf:
   mkdir --parents /etc/univention/ && \
+  #
+  # for UCR:
+  mkdir --parents /var/cache/univention-config/ && \
   #
   # for CAcert.pem
   mkdir --parents /etc/univention/ssl/ucsCA/ && \
