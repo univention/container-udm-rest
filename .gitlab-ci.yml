@@ -28,11 +28,6 @@ build-udm-rest:
     KANIKO_BUILD_CONTEXT: "docker/udm-rest-api"
     CI_REGISTRY_IMAGE: "$CI_REGISTRY_IMAGE/udm-rest-api"
 
-# TODO: Remove once we drop this job from common-ci
-publish-helm-charts:
-  rules:
-    - when: never
-
 push-image-souvap:
   # TODO, drop once common-ci sets the stage by default
   stage: publish
