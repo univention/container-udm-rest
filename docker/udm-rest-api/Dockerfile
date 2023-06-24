@@ -29,9 +29,9 @@
 # <https://www.gnu.org/licenses/>.
 
 ARG DEBIAN_BASE_IMAGE_TAG=buster-slim
-ARG DOCKERHUB_CACHE
+ARG DOCKER_PROXY
 
-FROM ${DOCKERHUB_CACHE}debian:${DEBIAN_BASE_IMAGE_TAG} AS build
+FROM ${DOCKER_PROXY}debian:${DEBIAN_BASE_IMAGE_TAG} AS build
 
 ARG APT_KEY_URL=https://updates.software-univention.de/univention-archive-key-ucs-5x.gpg
 
@@ -142,7 +142,7 @@ RUN \
 ###############################################################################
 # Second stage image to get rid of unneeded files
 
-FROM ${DOCKERHUB_CACHE}debian:${DEBIAN_BASE_IMAGE_TAG} AS final
+FROM ${DOCKER_PROXY}debian:${DEBIAN_BASE_IMAGE_TAG} AS final
 
 ARG APT_KEY_URL=https://updates.software-univention.de/univention-archive-key-ucs-5x.gpg
 ARG LABEL_CREATED=undefined
