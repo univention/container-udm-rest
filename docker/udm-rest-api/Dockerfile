@@ -217,12 +217,11 @@ COPY --from=build \
   /etc/univention/*.conf \
   /etc/univention/
 COPY --from=build \
-  /etc/univention/templates/ \
-  /etc/univention/templates/
-COPY --from=build \
   /usr/sbin/univention-config-registry \
   /usr/sbin/ucr \
   /usr/sbin/
+# Skipping /etc/univention/templates here
+# as we do not need to modify most system configuration files.
 
 COPY --from=build \
   /version \
@@ -240,7 +239,9 @@ RUN \
   mkdir --parents /etc/univention/ && \
   #
   # for UCR:
-  mkdir --parents /var/cache/univention-config/ && \
+  mkdir --parents \
+    /var/cache/univention-config/ \
+    /var/log/univention/ && \
   #
   # for CAcert.pem
   mkdir --parents /etc/univention/ssl/ucsCA/ && \

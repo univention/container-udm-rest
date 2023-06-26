@@ -63,6 +63,23 @@ ln --symbolic --force "${LDAP_SECRET_FILE}" /etc/ldap.secret
 ln --symbolic --force "${MACHINE_SECRET_FILE}" /etc/machine.secret
 
 ############################################################
+# Configure Univention Directory Reports
+# (In UCS this is done by `ucr commit`.)
+cat <<EOF > /etc/univention/directory/reports/config.ini
+[DEFAULT]
+# default report name
+report=PDF Document
+
+[reports]
+csv/computer1=computers/computer "CSV Report" /etc/univention/directory/reports/default computers.csv
+csv/group1=groups/group "CSV Report" /etc/univention/directory/reports/default groups.csv
+csv/user1=users/user "CSV Report" /etc/univention/directory/reports/default users.csv
+pdf/computer1=computers/computer "PDF Document" /etc/univention/directory/reports/default computers.rml
+pdf/group1=groups/group "PDF Document" /etc/univention/directory/reports/default groups.rml
+pdf/user1=users/user "PDF Document" /etc/univention/directory/reports/default users.rml
+EOF
+
+############################################################
 # Fill UCR
 AUTHORIZED_DC_BACKUP=${AUTHORIZED_DC_BACKUP:-cn=DC Backup Hosts,cn=groups,dc=example,dc=org}
 AUTHORIZED_DC_SLAVES=${AUTHORIZED_DC_SLAVES:-cn=DC Slave Hosts,cn=groups,dc=example,dc=org}
@@ -115,6 +132,15 @@ ucr set \
   version/erratalevel="0" \
   version/patchlevel="3" \
   version/version="5.0"
+
+ucr unset ldap/server/ip
+
+if [[ "${TLS_REQCERT}" = "never" ]]; then
+  ucr set directory/manager/rest/ldap-connection/user-read/start-tls=0
+elif [[ "${TLS_REQCERT}" == "try" || "${TLS_REQCERT}" == "allow" ]]; then
+  ucr set directory/manager/rest/ldap-connection/user-read/start-tls=1
+# for TLS_REQCERT == "demand" the default "start-tls=2" is correct
+fi
 
 exec python3 -m univention.admin.rest.server "$@"
 
