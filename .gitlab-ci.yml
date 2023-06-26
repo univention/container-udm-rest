@@ -29,8 +29,6 @@ build-udm-rest:
     CI_REGISTRY_IMAGE: "$CI_REGISTRY_IMAGE/udm-rest-api"
 
 push-image-souvap:
-  # TODO, drop once common-ci sets the stage by default
-  stage: publish
   needs:
     - job: build-udm-rest
   extends: .push-image-souvap
