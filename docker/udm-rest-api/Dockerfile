@@ -39,6 +39,7 @@ FROM ${PORTAL_UDM_EXTENSIONS_IMAGE}:${PORTAL_UDM_EXTENSIONS_TAG} AS portal-udm-e
 FROM ${DOCKER_PROXY}debian:${DEBIAN_BASE_IMAGE_TAG} AS ucs-base
 
 ARG APT_KEY_URL=https://updates.software-univention.de/univention-archive-key-ucs-5x.gpg
+ARG APT_KEY_URL_DEV=http://omar.knut.univention.de/build2/git/key.pub
 
 SHELL ["/bin/bash", "-euxo", "pipefail", "-c"]
 
@@ -57,9 +58,12 @@ RUN \
       gpg-agent=2.2.* \
       patch=2.7.* && \
   curl -fsSL "${APT_KEY_URL}" | apt-key add - && \
+  curl -fsSL "${APT_KEY_URL_DEV}" | apt-key add - && \
   rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*
 
 COPY sources.list /etc/apt/sources.list.d/15_ucs-online-version.list
+COPY dev-sources.list /etc/apt/sources.list.d/15_souvap-dev.list
+
 
 FROM ucs-base as build
 
