@@ -32,23 +32,23 @@ set -euxo pipefail
 # Link certificates in place
 CA_CERT_FILE=${CA_CERT_FILE:-/run/secrets/ca_cert}
 
-if [[ ! -f "${CA_CERT_FILE}" ]]; then
-  echo "SSL CA Certificate is missing at ${CA_CERT_FILE}"
-  exit 1
+if [[ -f "${CA_CERT_FILE}" ]]; then
+  echo "Using provided CA certificate at ${CA_CERT_FILE}"
+  CA_DIR="/etc/univention/ssl/ucsCA"
+
+  mkdir --parents "${CA_DIR}"
+  ln --symbolic --force "${CA_CERT_FILE}" "${CA_DIR}/CAcert.pem"
+else
+  unset CA_DIR
+  echo "No CA certificate provided!"
 fi
-
-CA_DIR="/etc/univention/ssl/ucsCA"
-
-mkdir --parents "${CA_DIR}"
-ln --symbolic --force "${CA_CERT_FILE}" "${CA_DIR}/CAcert.pem"
-
 
 ############################################################
 # Store LDAP configuration
 cat <<EOF > /etc/ldap/ldap.conf
 # This file should be world readable but not world writable.
 
-TLS_CACERT /etc/univention/ssl/ucsCA/CAcert.pem
+${CA_DIR:+TLS_CACERT /etc/univention/ssl/ucsCA/CAcert.pem}
 TLS_REQCERT ${TLS_REQCERT:-demand}
 
 URI ldap://${LDAP_HOST}:${LDAP_PORT}
@@ -58,9 +58,22 @@ EOF
 chmod 0644 /etc/ldap/ldap.conf
 
 LDAP_SECRET_FILE=${LDAP_SECRET_FILE:-/run/secrets/ldap_secret}
+if [[ -f "${LDAP_SECRET_FILE}" ]]; then
+  echo "Using LDAP admin secret"
+  ln --symbolic --force "${LDAP_SECRET_FILE}" /etc/ldap.secret
+else
+  echo "No LDAP admin secret provided!"
+fi
+
 MACHINE_SECRET_FILE=${MACHINE_SECRET_FILE:-/run/secrets/machine_secret}
-ln --symbolic --force "${LDAP_SECRET_FILE}" /etc/ldap.secret
-ln --symbolic --force "${MACHINE_SECRET_FILE}" /etc/machine.secret
+if [[ -f "${MACHINE_SECRET_FILE}" ]]; then
+  echo "Using LDAP machine secret"
+  ln --symbolic --force "${MACHINE_SECRET_FILE}" /etc/machine.secret
+else
+  echo "No LDAP machine secret found at ${MACHINE_SECRET_FILE}!"
+  echo "Check the \$MACHINE_SECRET_FILE variable and the file that it points to."
+  exit 1
+fi
 
 ############################################################
 # Configure Univention Directory Reports

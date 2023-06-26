@@ -545,7 +545,8 @@ false
   "ldapHostIp": null,
   "ldapPort": "389",
   "ldapSecretFile": "/var/secrets/ldap_secret",
-  "machineSecretFile": "/var/secrets/machine_secret"
+  "machineSecretFile": "/var/secrets/machine_secret",
+  "tlsReqCert": "demand"
 }
 </pre>
 </td>
@@ -598,7 +599,7 @@ null
 "/var/secrets/ca_cert"
 </pre>
 </td>
-			<td>Path to file with the CA certificate.</td>
+			<td>Path to file with the CA certificate. (Not needed when `tlsReqCert` set to `"never"`.)</td>
 		</tr>
 		<tr>
 			<td>udmRestApi.debugLevel</td>
@@ -661,7 +662,7 @@ null
 null
 </pre>
 </td>
-			<td>IP address of the LDAP server. (This is necessary to allow resolving the LDAP fqdn and pass the certificate checks.) Example: `"10.200.0.1"`</td>
+			<td>IP address of the LDAP server. (This resolved the `ldapHost` in order to facilitate TLS certificate checks.) Example: `"10.200.0.1"`</td>
 		</tr>
 		<tr>
 			<td>udmRestApi.ldapPort</td>
@@ -679,7 +680,7 @@ null
 "/var/secrets/ldap_secret"
 </pre>
 </td>
-			<td>Path to file with the LDAP secret.</td>
+			<td>Path to file with the LDAP secret. (TODO: This may be unnecessary here.)</td>
 		</tr>
 		<tr>
 			<td>udmRestApi.machineSecretFile</td>
@@ -689,6 +690,15 @@ null
 </pre>
 </td>
 			<td>Path to file with the LDAP machine secret.</td>
+		</tr>
+		<tr>
+			<td>udmRestApi.tlsReqCert</td>
+			<td>string</td>
+			<td><pre lang="json">
+"demand"
+</pre>
+</td>
+			<td>Whether to enforce TLS when connecting to LDAP. Possible options are: "never", "try", "allow", "demand". See https://www.openldap.org/doc/admin26/tls.html, Sec. 16.2.1.9.</td>
 		</tr>
 	</tbody>
 </table>

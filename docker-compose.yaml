@@ -15,8 +15,6 @@ services:
       - 9979:9979
     env_file: .env.udm-rest-api
     secrets:
-      - ca_cert
-      - ldap_secret
       - machine_secret
 
   pre-commit:
@@ -34,10 +32,6 @@ services:
         target: /cache
 
 secrets:
-  ca_cert:
-    file: ssl/certs/CAcert.pem
-  ldap_secret:
-    file: secret/ldap.secret
   machine_secret:
     file: secret/machine.secret
 

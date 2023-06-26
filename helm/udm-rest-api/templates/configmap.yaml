@@ -7,11 +7,11 @@ data:
   DOMAINNAME: "{{ .Values.udmRestApi.domainname }}"
   HOSTNAME: "{{ .Values.udmRestApi.hostname }}"
   LDAP_HOST: {{ required "The parameter \"udmRestApi.ldapHost\" is required." .Values.udmRestApi.ldapHost | quote }}
-  LDAP_HOST_IP: {{ required "The parameter \"udmRestApi.ldapHostIp\" is required." .Values.udmRestApi.ldapHostIp | quote }}
+  LDAP_HOST_IP: "{{ .Values.udmRestApi.ldapHostIp }}"
   LDAP_PORT: {{ required "The parameter \"udmRestApi.ldapPort\" is required." .Values.udmRestApi.ldapPort | quote }}
   LDAP_BASE_DN: {{ required "The parameter \"udmRestApi.ldapBaseDn\" is required." .Values.udmRestApi.ldapBaseDn | quote }}
   LDAP_HOST_DN: {{ required "The parameter \"udmRestApi.ldapHostDn\" is required." .Values.udmRestApi.ldapHostDn | quote }}
-  TLS_REQCERT: "demand"
+  TLS_REQCERT: {{ required "The parameter \"udmRestApi.tlsReqCert\" is required." .Values.udmRestApi.tlsReqCert | quote }}
 
   DEBUG_LEVEL: "{{ .Values.udmRestApi.debugLevel }}"
   AUTHORIZED_DC_BACKUP: {{ required "The parameter \"udmRestApi.authGroups.dcBackup\" is required." .Values.udmRestApi.authGroups.dcBackup | quote }}

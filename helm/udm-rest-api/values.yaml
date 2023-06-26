@@ -28,7 +28,7 @@ udmRestApi:
   # Example: `"ucs-1234.univention.intranet"`
   ldapHost: null
   # -- IP address of the LDAP server.
-  # (This is necessary to allow resolving the LDAP fqdn and pass the certificate checks.)
+  # (This resolved the `ldapHost` in order to facilitate TLS certificate checks.)
   # Example: `"10.200.0.1"`
   ldapHostIp: null
   # -- Port to connect to the LDAP server.
@@ -39,6 +39,10 @@ udmRestApi:
   # -- DN of the UMC instance.
   # Example: `"cn=ucs-1234,cn=dc,cn=computers,dc=example,dc=org"`
   ldapHostDn: null
+  # -- Whether to enforce TLS when connecting to LDAP.
+  # Possible options are: "never", "try", "allow", "demand".
+  # See https://www.openldap.org/doc/admin26/tls.html, Sec. 16.2.1.9.
+  tlsReqCert: "demand"
   # -- Debug level of the UDM REST API server.
   # (1 = errors only, 99 = most verbose)
   debugLevel: "5"
@@ -55,10 +59,12 @@ udmRestApi:
     domainAdmins: null
 
   # -- Path to file with the LDAP secret.
+  # (TODO: This may be unnecessary here.)
   ldapSecretFile: "/var/secrets/ldap_secret"
   # -- Path to file with the LDAP machine secret.
   machineSecretFile: "/var/secrets/machine_secret"
   # -- Path to file with the CA certificate.
+  # (Not needed when `tlsReqCert` set to `"never"`.)
   caCertFile: "/var/secrets/ca_cert"
 
 
