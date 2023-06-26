@@ -31,7 +31,7 @@
 ARG DEBIAN_BASE_IMAGE_TAG=buster-slim
 ARG DOCKER_PROXY
 
-FROM ${DOCKER_PROXY}debian:${DEBIAN_BASE_IMAGE_TAG} AS build
+FROM ${DOCKER_PROXY}debian:${DEBIAN_BASE_IMAGE_TAG} AS ucs-base
 
 ARG APT_KEY_URL=https://updates.software-univention.de/univention-archive-key-ucs-5x.gpg
 
@@ -54,10 +54,12 @@ RUN \
   curl -fsSL "${APT_KEY_URL}" | apt-key add - && \
   rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*
 
+COPY sources.list /etc/apt/sources.list.d/15_ucs-online-version.list
+
+FROM ucs-base as build
+
 ###############################################################################
 # Install UDM REST API
-
-COPY sources.list /etc/apt/sources.list.d/15_ucs-online-version.list
 
 # The following scripts get called during dpkg-install but are not required
 # in a container environment
@@ -142,31 +144,13 @@ RUN \
 ###############################################################################
 # Second stage image to get rid of unneeded files
 
-FROM ${DOCKER_PROXY}debian:${DEBIAN_BASE_IMAGE_TAG} AS final
+FROM ucs-base AS final
 
-ARG APT_KEY_URL=https://updates.software-univention.de/univention-archive-key-ucs-5x.gpg
 ARG LABEL_CREATED=undefined
 ARG LABEL_REVISION=undefined
 ARG LABEL_SOURCE=undefined
 ARG LABEL_VERSION=undefined
 
-SHELL ["/bin/bash", "-euxo", "pipefail", "-c"]
-
-WORKDIR /apt
-
-RUN \
-  apt-get --quiet update && \
-  DEBIAN_FRONTEND=noninteractive \
-    apt-get --assume-yes --verbose-versions --no-install-recommends install \
-      ca-certificates=20* \
-      curl=7.64.* \
-      gpg=2.2.* \
-      gpg-agent=2.2.* \
-      && \
-  curl -fsSL "${APT_KEY_URL}" | apt-key add - && \
-  rm -rf /var/lib/apt/lists/*
-
-COPY sources.list /etc/apt/sources.list.d/15_ucs-online-version.list
 RUN \
   apt-get --quiet update && \
   DEBIAN_FRONTEND=noninteractive \
