@@ -69,6 +69,14 @@ test-udm-rest:
   script:
     - 'pytest tests/integration --udm-rest-url "http://localhost:9979/udm/"'
 
+build-udm-rest-api-python-client:
+  stage: build
+  extends: .kaniko
+  needs: []
+  variables:
+    KANIKO_BUILD_CONTEXT: "docker/udm-rest-api-python-client"
+    CI_REGISTRY_IMAGE: "$CI_REGISTRY_IMAGE/udm-rest-api-python-client"
+
 push-image-souvap:
   needs:
     - job: "build-udm-rest-image"
