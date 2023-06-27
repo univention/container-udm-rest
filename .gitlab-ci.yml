@@ -28,6 +28,14 @@ build-udm-rest:
     KANIKO_BUILD_CONTEXT: "docker/udm-rest-api"
     CI_REGISTRY_IMAGE: "$CI_REGISTRY_IMAGE/udm-rest-api"
 
+build-udm-rest-cli-client:
+  stage: build
+  extends: .kaniko
+  needs: []
+  variables:
+    KANIKO_BUILD_CONTEXT: "docker/udm-rest-cli-client"
+    CI_REGISTRY_IMAGE: "$CI_REGISTRY_IMAGE/udm-rest-cli-client"
+
 push-image-souvap:
   needs:
     - job: build-udm-rest
