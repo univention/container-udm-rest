@@ -28,8 +28,13 @@
 # /usr/share/common-licenses/AGPL-3; if not, see
 # <https://www.gnu.org/licenses/>.
 
+ARG PORTAL_UDM_EXTENSIONS_IMAGE=gitregistry.knut.univention.de/univention/components/univention-portal/portal-udm-extensions
+ARG PORTAL_UDM_EXTENSIONS_TAG=latest
+
 ARG DEBIAN_BASE_IMAGE_TAG=buster-slim
 ARG DOCKER_PROXY
+
+FROM ${PORTAL_UDM_EXTENSIONS_IMAGE}:${PORTAL_UDM_EXTENSIONS_TAG} AS portal-udm-extensions
 
 FROM ${DOCKER_PROXY}debian:${DEBIAN_BASE_IMAGE_TAG} AS ucs-base
 
@@ -196,7 +201,19 @@ COPY --from=build \
   /var/www/univention/udm/ \
   /var/www/univention/udm/
 
+# Inject UDM Modules
+
+COPY --from=portal-udm-extensions /udm/api/portal.py \
+    /usr/lib/python3/dist-packages/univention/udm/modules/portal.py
+
+COPY --from=portal-udm-extensions /udm/syntax/univention-portal.py \
+    /usr/lib/python3/dist-packages/univention/admin/syntax.d/univention-portal.py
+
+COPY --from=portal-udm-extensions /udm/handlers \
+    /usr/lib/python3/dist-packages/univention/admin/handlers/portals
+
 # UCR
+
 COPY --from=build \
   /etc/univention/*.conf \
   /etc/univention/
