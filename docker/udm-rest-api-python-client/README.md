@@ -24,3 +24,20 @@ udm = UDM.http(uri, 'cn=admin', 'your-password')
 container = udm.get("container/cn")
 x = container.get("cn=test," + ldap_base)
 ```
+
+
+### Working with `ucs` sources
+
+Assuming that you have the repository `ucs` cloned as a sibling to this
+repository, then you can mount the Python source code of the api client into
+your container by adding the following content into your
+`docker-compose.override.yaml`:
+
+```yaml
+  api-client:
+    volumes:
+      - "../ucs/management/univention-directory-manager-rest/src/univention/admin/rest:/usr/lib/python3/dist-packages/univention/admin/rest"
+```
+
+This allows you to easily debug the code if you suspect that there is an issue
+in the Python client of the udm api.
