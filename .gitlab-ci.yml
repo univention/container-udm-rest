@@ -33,6 +33,7 @@ build-udm-rest-cli-client:
   extends: .kaniko
   needs: []
   variables:
+    KANIKO_CACHE_ARGS: ""
     KANIKO_BUILD_CONTEXT: "docker/udm-rest-cli-client"
     CI_REGISTRY_IMAGE: "$CI_REGISTRY_IMAGE/udm-rest-cli-client"
 
