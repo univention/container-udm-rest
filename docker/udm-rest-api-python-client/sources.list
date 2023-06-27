@@ -1,0 +1,2 @@
+deb https://updates.software-univention.de/ ucs503 main
+deb https://updates.software-univention.de/ errata503 main
