@@ -49,7 +49,8 @@ the settings of your LDAP directory server.
 The variable `LDAP_HOST_DN` should be set to the DN
 of the UDM REST API's "machine account".
 The corresponding password of this account should be placed
-in a text file at `/run/secrets/machine_secret`.
+in a text file at `/run/secrets/machine_secret` (recommended for production),
+or passed in the `MACHINE_SECRET` env (only for testing).
 
 The variable `AUTHORIZED_DOMAIN_ADMINS` should point to a DN
 which contains a group with a list of users which may access the UDM REST API.
@@ -77,6 +78,15 @@ and do not provide any CA certificates.
 You can run the pre-commit checker as follows:
 ```bash
 docker compose run --rm pre-commit
+```
+
+## Tests
+
+The test suite requires an LDAP server along with the UDM REST API.
+You can run it as follows:
+```bash
+docker compose up --detach ldap-server udm-rest-api
+docker compose run --rm test
 ```
 
 ## Implementation Status

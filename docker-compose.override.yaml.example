@@ -1,8 +1,9 @@
 ---
 
+# Ensure that the LDAP server is visible with the correct hostname when using TLS.
 services:
   udm-rest-api:
     extra_hosts:
-      ucs-1234.univention.intranet: "10.200.12.34"
+      ucs-6274.univention.intranet: "10.200.12.34"
 
 ...

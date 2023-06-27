@@ -1,7 +1,7 @@
+**/__pycache__/
 /.env.udm-rest-api
 /docker-compose.override.yaml
 /ansible/inventory/*.yaml
 /helm/*/charts/
-/lib/__pycache__/
 /secret/
 /ssl/

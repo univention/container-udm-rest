@@ -19,7 +19,7 @@ services:
 
   pre-commit:
     profiles:
-      - test
+      - "pre-commit"
     image: gitregistry.knut.univention.de/univention/customers/dataport/upx/container-pre-commit/upx-pre-commit:latest
     volumes:
       - type: bind
@@ -31,11 +31,39 @@ services:
         source: pre-commit-cache
         target: /cache
 
+  test:
+    profiles:
+      - "test"
+    platform: "linux/amd64"
+    build:
+      context: docker/testrunner
+    environment:
+      PYTEST_ADDOPTS: --udm-rest-url=http://udm-rest-api:9979/udm/
+    volumes:
+      - type: bind
+        source: .
+        target: /app/
+
+  ldap-server:
+    profiles:
+      - "test"
+    platform: linux/amd64
+    image: gitregistry.knut.univention.de/univention/customers/dataport/upx/container-ldap/ldap-server:latest
+    environment:
+      DOMAIN_NAME: univention-organization.intranet
+      LDAP_BASE_DN: dc=univention-organization,dc=intranet
+      LDAP_CN_ADMIN_PW: "univention"
+    ports:
+      - 389:389
+    volumes:
+      - ldap-shared-data:/var/lib/univention-ldap/:rw
+
 secrets:
   machine_secret:
     file: secret/machine.secret
 
 volumes:
   pre-commit-cache:
+  ldap-shared-data:
 
 ...

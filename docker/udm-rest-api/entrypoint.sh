@@ -57,6 +57,7 @@ BASE ${LDAP_BASE_DN}
 EOF
 chmod 0644 /etc/ldap/ldap.conf
 
+# TODO: Does this container really need to know this secret?
 LDAP_SECRET_FILE=${LDAP_SECRET_FILE:-/run/secrets/ldap_secret}
 if [[ -f "${LDAP_SECRET_FILE}" ]]; then
   echo "Using LDAP admin secret"
@@ -65,12 +66,16 @@ else
   echo "No LDAP admin secret provided!"
 fi
 
+# Machine account allows checking which users are authorized to use the API
 MACHINE_SECRET_FILE=${MACHINE_SECRET_FILE:-/run/secrets/machine_secret}
 if [[ -f "${MACHINE_SECRET_FILE}" ]]; then
-  echo "Using LDAP machine secret"
+  echo "Using LDAP machine secret from file"
   ln --symbolic --force "${MACHINE_SECRET_FILE}" /etc/machine.secret
+elif [[ -n "${MACHINE_SECRET}" ]]; then
+  echo "Using LDAP machine secret from env"
+  echo -n "${MACHINE_SECRET}" > /etc/machine.secret
 else
-  echo "No LDAP machine secret found at ${MACHINE_SECRET_FILE}!"
+  echo "No LDAP machine secret found at ${MACHINE_SECRET_FILE} and \$MACHINE_SECRET not set!"
   echo "Check the \$MACHINE_SECRET_FILE variable and the file that it points to."
   exit 1
 fi
@@ -105,8 +110,8 @@ ucr set \
   ldap/server/port="${LDAP_PORT}" \
   ldap/hostdn="${LDAP_HOST_DN}" \
   ldap/base="${LDAP_BASE_DN}" \
-  domainname="${DOMAINNAME}" \
-  hostname="${HOSTNAME}" \
+  domainname="${DOMAINNAME:-}" \
+  hostname="${HOSTNAME:-}" \
   directory/manager/rest/authorized-groups/dc-backup="${AUTHORIZED_DC_BACKUP}" \
   directory/manager/rest/authorized-groups/dc-slaves="${AUTHORIZED_DC_SLAVES}" \
   directory/manager/rest/authorized-groups/domain-admins="${AUTHORIZED_DOMAIN_ADMINS}" \

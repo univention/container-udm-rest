@@ -21,6 +21,8 @@ repos:
         exclude: ^helm/.+/README.md
       # "fix python encoding pragma"
       - id: "fix-encoding-pragma"
+        args:
+          - "--remove"
       # "trim trailing whitespace"
       - id: "trailing-whitespace"
 
@@ -50,17 +52,22 @@ repos:
       # "Debian control file formatter"
       - id: "debian-control"
 
-  - repo: "https://github.com/charliermarsh/ruff-pre-commit"
-    rev: "v0.0.259"
+  # "Python linter"
+  - repo: "https://github.com/astral-sh/ruff-pre-commit"
+    rev: "v0.0.275"
     hooks:
-      # "ruff"
       - id: "ruff"
-        alias: "ruff-main"
-        # "ruff"
-      - id: "ruff"
-        alias: "ruff-fix"
-        stages: ["manual"]
-        args: ["--fix"]
+        args:
+          - "--fix"
+          - "--exit-non-zero-on-fix"
+          - "--extend-select"
+          - "COM"
+
+  # "Python formatter"
+  - repo: "https://github.com/psf/black"
+    rev: "23.3.0"
+    hooks:
+      - id: "black"
 
   # This is a wrapper for shellcheck as long as
   # shellcheck doesn't have it's own .pre-commit-hooks.yaml
@@ -97,8 +104,8 @@ repos:
     hooks:
     - id: helm-docs
       args:
-        - --chart-search-root=helm
-        - --template-files=README.md.gotmpl
+        - "--chart-search-root=helm"
+        - "--template-files=README.md.gotmpl"
 
 # Disable temporarily because gitlab-api can not be accessed.
 # "urllib.error.HTTPError: HTTP Error 401: Unauthorized"
