@@ -17,6 +17,23 @@ services:
     secrets:
       - machine_secret
 
+  udm-rest-cli-client:
+    profiles:
+      - test
+    image: gitregistry.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/udm-rest-cli-client:branch-jbornhold-exp-adjusted-deb-files
+    build:
+      context: ./docker/udm-rest-cli-client
+      platforms:
+        - "linux/amd64"
+    environment:
+      UDM_API_URL: "http://udm-rest-api.default/udm/"
+      UDM_API_BINDDN: "cn=admin,dc=univention-organization,dc=intranet"
+      UDM_API_PASSWORD: "univention"
+      PYTHONPATH: "/ucs/management/univention-directory-manager-rest/src"
+    volumes:
+      - "../ucs:/ucs"
+      - "../:/root/wu"
+
   pre-commit:
     profiles:
       - test
