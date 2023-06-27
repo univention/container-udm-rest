@@ -260,11 +260,12 @@ WORKDIR /udm/
 ENTRYPOINT ["/udm/entrypoint.sh"]
 
 # Parameters for UDM
+# --processes 0 means one process per cpu core
 CMD [ \
-  "-d", "4", \
-  "-p", "9979", \
-  "-i", "0.0.0.0", \
-  "-c", "0" \
+  "--debug", "4", \
+  "--port", "9979", \
+  "--interface", "0.0.0.0", \
+  "--processes", "1" \
 ]
 
 EXPOSE 9979
