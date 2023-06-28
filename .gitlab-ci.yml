@@ -1,81 +1,82 @@
 ---
+
 variables:
   SOUVAP_HELM_PROJECT_ID: 101
-  SOUVAP_REGISTRY_PATH: souvap/tooling/images/udm-rest-api
+  SOUVAP_REGISTRY_PATH: "souvap/tooling/images/udm-rest-api"
 
 include:
-  - project: univention/customers/dataport/upx/common-ci
+  - project: "univention/customers/dataport/upx/common-ci"
     file:
-      - defaults/souvap-workflow.yaml
-      - defaults/stages.yaml
-      - templates/kaniko.yaml
-      - templates/souvap.yaml
-      - jobs/lint-commit-messages.yaml
-      - jobs/lint-pre-commit.yaml
-      - jobs/package-and-publish-helm-charts.yaml
+      - "defaults/souvap-workflow.yaml"
+      - "defaults/stages.yaml"
+      - "templates/kaniko.yaml"
+      - "templates/souvap.yaml"
+      - "jobs/lint-commit-messages.yaml"
+      - "jobs/lint-pre-commit.yaml"
+      - "jobs/package-and-publish-helm-charts.yaml"
 
 lint-pre-commit:
   before_script:
     # Compose lint would fail without the referenced env files
-    - cp .env.udm-rest-api.example .env.udm-rest-api
-    - helm repo add bitnami https://charts.bitnami.com/bitnami
+    - "cp .env.udm-rest-api.example .env.udm-rest-api"
+    - "helm repo add bitnami https://charts.bitnami.com/bitnami"
 
 build-udm-rest-image:
-  stage: build
-  extends: .kaniko
+  stage: "build"
+  extends: ".kaniko"
   needs: []
   variables:
     KANIKO_BUILD_CONTEXT: "docker/udm-rest-api"
     CI_REGISTRY_IMAGE: "${CI_REGISTRY_IMAGE}/udm-rest-api"
 
 build-testrunner-image:
-  stage: build
-  extends: .kaniko
+  stage: "build"
+  extends: ".kaniko"
   needs: []
   variables:
     KANIKO_BUILD_CONTEXT: "docker/testrunner"
     CI_REGISTRY_IMAGE: "${CI_REGISTRY_IMAGE}/testrunner"
 
 test-udm-rest:
-  stage: test
+  stage: "test"
   needs:
-    - job: build-udm-rest-image
+    - job: "build-udm-rest-image"
       artifacts: false
-    - job: build-testrunner-image
+    - job: "build-testrunner-image"
   image: "${CI_REGISTRY_IMAGE}/testrunner:${BUILD_VERSION}"
   services:
     - name: "${CI_REGISTRY}/univention/customers/dataport/upx/container-ldap/ldap-server:latest"
       variables:
-        DOMAIN_NAME: univention-organization.intranet
-        LDAP_BASE_DN: dc=univention-organization,dc=intranet
-        LDAP_CN_ADMIN_PW: univention
+        DOMAIN_NAME: "univention-organization.intranet"
+        LDAP_BASE_DN: "dc=univention-organization,dc=intranet"
+        LDAP_CN_ADMIN_PW: "univention"
     - name: "${CI_REGISTRY_IMAGE}/udm-rest-api:${BUILD_VERSION}"
       variables:
-        LDAP_HOST: localhost
+        LDAP_HOST: "localhost"
         LDAP_PORT: 389
-        LDAP_BASE_DN: dc=univention-organization,dc=intranet
-        LDAP_HOST_DN: cn=admin,dc=univention-organization,dc=intranet
-        TLS_REQCERT: never
+        LDAP_BASE_DN: "dc=univention-organization,dc=intranet"
+        LDAP_HOST_DN: "cn=admin,dc=univention-organization,dc=intranet"
+        TLS_REQCERT: "never"
         DEBUG_LEVEL: 5
-        AUTHORIZED_DOMAIN_ADMINS: cn=Domain Admins,cn=groups,dc=univention-organization,dc=intranet
-        MACHINE_SECRET: univention
+        AUTHORIZED_DOMAIN_ADMINS: "cn=Domain Admins,cn=groups,dc=univention-organization,dc=intranet"
+        MACHINE_SECRET: "univention"
   before_script:
     # TODO: maybe we can put a more sophisticated healthcheck here...
-    - echo "Waiting for container-ldap to start ... "
-    - timeout 60 bash -c 'until printf "" > /dev/tcp/localhost/389; do sleep 1; done'
-    - echo "Waiting container-udm-rest to start ... "
-    - timeout 60 bash -c 'until printf "" > /dev/tcp/localhost/9979; do sleep 1; done'
+    - 'echo "Waiting for container-ldap to start ... "'
+    - "timeout 60 bash -c 'until printf \"\" > /dev/tcp/localhost/389; do sleep 1; done'"
+    - 'echo "Waiting container-udm-rest to start ... "'
+    - "timeout 60 bash -c 'until printf \"\" > /dev/tcp/localhost/9979; do sleep 1; done'"
   script:
-    - pytest tests/integration --udm-rest-url "http://localhost:9979/udm/"
+    - 'pytest tests/integration --udm-rest-url "http://localhost:9979/udm/"'
 
 push-image-souvap:
   needs:
-    - job: build-udm-rest-image
-  extends: .push-image-souvap
+    - job: "build-udm-rest-image"
+  extends: ".push-image-souvap"
   variables:
     SOUVAP_IMAGE_NAME: "udm-rest-api"
 
 publish-helm-charts-souvap:
-  extends: .publish-helm-charts-souvap
+  extends: ".publish-helm-charts-souvap"
 
 ...
