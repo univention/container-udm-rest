@@ -1,0 +1,5 @@
+#!/bin/bash
+
+set -xeuo pipefail
+
+exec python3 -m univention.admin.rest.client "$@"

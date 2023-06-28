@@ -55,6 +55,7 @@ RUN \
 
 COPY sources.list /etc/apt/sources.list.d/15_ucs-online-version.list
 COPY dev-sources.list /etc/apt/sources.list.d/15_souvap-dev.list
+COPY univention-directory-manager /usr/bin
 
 
 FROM ucs-base as build
