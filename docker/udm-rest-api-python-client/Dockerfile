@@ -42,3 +42,5 @@ RUN ucs-dev-add-branch.sh jbornhold-udm-rest-client \
       # TODO: Tweak upstream debian package, missing dependencies
       python3-requests=2.* \
     && rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*
+
+COPY bin/* /usr/local/bin
