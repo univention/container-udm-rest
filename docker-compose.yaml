@@ -5,11 +5,10 @@ name: "dev-local"
 services:
   udm-rest-api:
     image: gitregistry.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/udm-rest-api:latest
+    # FIXME: remove once arm64 packages are available at updates.software-univention.de
+    platform: "linux/amd64"
     build:
       context: ./docker/udm-rest-api
-      platforms:
-        # FIXME: remove once arm64 packages are available at updates.software-univention.de
-        - "linux/amd64"
       target: final
     ports:
       - 9979:9979
