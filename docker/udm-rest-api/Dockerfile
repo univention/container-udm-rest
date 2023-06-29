@@ -262,6 +262,8 @@ ENTRYPOINT ["/udm/entrypoint.sh"]
 # Parameters for UDM
 # --processes 0 means one process per cpu core
 CMD [ \
+  "python3", \
+  "-m", "univention.admin.rest.server", \
   "--debug", "4", \
   "--port", "9979", \
   "--interface", "0.0.0.0", \

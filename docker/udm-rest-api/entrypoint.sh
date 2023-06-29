@@ -160,6 +160,6 @@ elif [[ "${TLS_REQCERT}" == "try" || "${TLS_REQCERT}" == "allow" ]]; then
 # for TLS_REQCERT == "demand" the default "start-tls=2" is correct
 fi
 
-exec python3 -m univention.admin.rest.server "$@"
+exec "$@"
 
 # [EOF]
