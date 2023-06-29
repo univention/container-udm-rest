@@ -59,6 +59,7 @@ FROM ucs-base as final
 RUN apt-get update \
     && apt-get --assume-yes --verbose-versions --no-install-recommends install \
       python3-univention-directory-manager-rest-client=10.* \
+      python3-yaml=3.* \
       # TODO: Tweak upstream debian package, missing dependencies
       python3-requests=2.* \
     && rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*
