@@ -1,0 +1,125 @@
+#!/usr/bin/env python3
+
+import copy
+import os
+import shlex
+import sys
+from unittest import mock
+
+import yaml
+
+
+def main():
+    global args
+    args = _get_args()
+
+    if args.action == "create":
+        action = Create(args)
+        action.process()
+        dump_action_data(action.data)
+    else:
+        raise NotImplementedError("TODO")
+
+
+def dump_action_data(data):
+    out_filename = os.environ.get("OUT_FILENAME", "/tmp/out.yaml")
+    print(f"Appending dump into {out_filename}")
+    with open(out_filename, "a") as out_file:
+        yaml.dump(
+            data,
+            out_file,
+            default_flow_style=False,
+            explicit_start=True,
+        )
+
+
+class Create:
+    def __init__(self, args):
+        self.args = args
+
+    def process(self):
+        self.properties = {}
+        self.data = {
+            "action": "create",
+            "module": self.args.object_type,
+            "position": self.args.position,
+            "properties": self.properties,
+        }
+        for item in args.set:
+            name, raw_value = item.split("=", 1)
+            value = self.parse_value(name, raw_value)
+            self.set_property(name, value)
+
+        for item in args.append:
+            name, raw_value = item.split("=", 1)
+            value = self.parse_value(name, raw_value)
+            self.add_to_property(name, value)
+
+        return self.data
+
+    def parse_value(self, name, raw_value):
+        parser = self.get_value_parser(name)
+        if parser:
+            return parser(raw_value)
+        return raw_value
+
+    def get_value_parser(self, name):
+        parsers = {
+            "activated": self.parse_bool,
+            "anonymous": self.parse_bool,
+            "description": self.parse_list_to_dict,
+            "displayName": self.parse_list_to_dict,
+            "link": self.parse_list,
+            "showUmc": self.parse_bool,
+            ("type", dict): self.parse_list_to_dict,
+        }
+        parser = parsers.get(name)
+        if not parser:
+            parser = parsers.get(("type", type(self.property_default(name))))
+        return parser
+
+    def parse_bool(self, raw_value):
+        return raw_value.lower() == "true"
+
+    def parse_list(self, raw_value):
+        return shlex.split(raw_value)
+
+    def parse_list_to_dict(self, raw_value):
+        key, value = shlex.split(raw_value)
+        return {key: value}
+
+    def set_property(self, name, value):
+        self.properties[name] = value
+
+    def add_to_property(self, name, value):
+        self.properties.setdefault(name, self.property_default(name))
+        property_value = self.properties[name]
+        if isinstance(property_value, list):
+            property_value.append(value)
+        elif isinstance(property_value, dict):
+            assert isinstance(value, dict)
+            property_value.update(value)
+        else:
+            raise Exception("Unsupported property type")
+
+    def property_default(self, name):
+        defaults = {
+            "displayName": {},
+            "description": {},
+            "link": [],
+        }
+        return copy.copy(defaults.get(name, []))
+
+
+@mock.patch.dict(sys.modules, {"univention.config_registry": mock.Mock()})
+@mock.patch("univention.admin.rest.client.__main__.CLIClient")
+def _get_args(cli_client_mock):
+    from univention.admin.rest.client import __main__ as client_main
+
+    client_main.main()
+    parser, args = cli_client_mock().init.call_args[0]
+    return args
+
+
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,14 @@
+ARG UCS_BASE_IMAGE=gitregistry.knut.univention.de/univention/customers/dataport/upx/container-ucs-base/ucs-base-dev-504
+ARG UCS_BASE_IMAGE_TAG=latest
+
+FROM ${UCS_BASE_IMAGE}:${UCS_BASE_IMAGE_TAG}
+
+# TODO: See https://git.knut.univention.de/univention/ucs/-/merge_requests/820
+RUN ucs-dev-add-branch.sh jbornhold-udm-rest-client \
+    && apt-get update \
+    && apt-get --assume-yes --verbose-versions --no-install-recommends install \
+      python3-univention-directory-manager-rest-client=10.* \
+      python3-yaml=3.* \
+    && rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*
+
+COPY bin/* /usr/local/bin/
