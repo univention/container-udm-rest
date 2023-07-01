@@ -25,12 +25,13 @@ def main():
 def dump_action_data(data):
     out_filename = os.environ.get("OUT_FILENAME", "/tmp/out.yaml")
     print(f"Appending dump into {out_filename}")
-    with open(out_filename, "a") as out_file:
+    with open(out_filename, "a", encoding="utf-8") as out_file:
         yaml.dump(
             data,
             out_file,
             default_flow_style=False,
             explicit_start=True,
+            allow_unicode=True,
         )
 
 
