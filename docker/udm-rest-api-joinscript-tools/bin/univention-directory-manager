@@ -11,6 +11,7 @@ import yaml
 
 def main():
     global args
+    fixup_sys_args()
     args = _get_args()
 
     if args.action == "create":
@@ -109,6 +110,23 @@ class Create:
             "link": [],
         }
         return copy.copy(defaults.get(name, []))
+
+
+def fixup_sys_args():
+    """
+    Fixes up `sys.args` as needed to bridge incompatibilities from the udm
+    cli to the udm rest cli parser.
+    """
+    translate = {
+        "--ignore_exists": "--ignore-exists",
+    }
+    for value, replacement in translate.items():
+        try:
+            idx = sys.argv.index(value)
+            sys.argv[idx] = replacement
+            print(f"Replaced {value} with {replacement} in argument list.")
+        except ValueError:
+            pass
 
 
 @mock.patch.dict(sys.modules, {"univention.config_registry": mock.Mock()})
