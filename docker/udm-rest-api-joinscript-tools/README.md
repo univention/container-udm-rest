@@ -28,3 +28,20 @@ export OUT_FILENAME=/tmp/udm-objects.yaml
 call-joinscript.sh 33univention-portal.inst
 cat /tmp/udm-objects.yaml
 ```
+
+
+## Development
+
+The easiest way to work on the sources is to run the container via `docker
+compose` so that the sources are mounted into the container. Then the
+environment variable `PATH` has to be modified, so that the right commands are
+executed.
+
+Note that the example below has mounted the sources of the univention portal
+into the container as well. You will have to tweak the file
+`docker-compose.overrides.yaml` for this.
+
+```shell
+source ./docker/udm-rest-api-joinscript-tools/dev-fixup-path.sh
+call-joinscript.sh ./wu/univention-portal/33univention-portal.inst
+```
