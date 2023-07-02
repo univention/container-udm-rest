@@ -25,9 +25,14 @@ docker compose run --rm -it api-tools bash
 
 ```shell
 export OUT_FILENAME=/tmp/udm-objects.yaml
-call-joinscript.sh 33univention-portal.inst
+./33univention-portal.inst
 cat /tmp/udm-objects.yaml
 ```
+
+Be aware that you will have to make the joinscript available, either by having a
+copy in the sources or by mounting in additional volumes. In the example above
+the file `33univention-portal.inst` has been manually copied into the place
+where the container has been started from.
 
 
 ## Development
@@ -43,5 +48,5 @@ into the container as well. You will have to tweak the file
 
 ```shell
 source ./docker/udm-rest-api-joinscript-tools/dev-fixup-path.sh
-call-joinscript.sh ./wu/univention-portal/33univention-portal.inst
+./wu/univention-portal/33univention-portal.inst
 ```

@@ -14,9 +14,11 @@ RUN ucs-dev-add-branch.sh jbornhold-udm-rest-client \
 
 COPY bin/* /usr/local/bin/
 
+COPY bin/fake.sh /usr/local/bin/die
 COPY bin/fake.sh /usr/local/bin/joinscript_init
 COPY bin/fake.sh /usr/local/bin/nc
 COPY bin/fake.sh /usr/local/bin/systemctl
+COPY bin/fake.sh /usr/local/bin/ucs_registerLDAPExtension
 COPY bin/fake.sh /usr/local/bin/umc_init
 COPY bin/fake.sh /usr/local/bin/umc_operation_create
 COPY bin/fake.sh /usr/local/bin/univention-portal
