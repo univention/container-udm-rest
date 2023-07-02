@@ -73,6 +73,7 @@ class Create:
             "displayName": self.parse_list_to_dict,
             "link": self.parse_list,
             "showUmc": self.parse_bool,
+            "icon": self.parse_base64,
             ("type", dict): self.parse_list_to_dict,
         }
         parser = parsers.get(name)
@@ -89,6 +90,9 @@ class Create:
     def parse_list_to_dict(self, raw_value):
         key, value = shlex.split(raw_value)
         return {key: value}
+
+    def parse_base64(self, raw_value):
+        return raw_value.replace("\n", "")
 
     def set_property(self, name, value):
         self.properties[name] = value
