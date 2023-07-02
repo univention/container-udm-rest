@@ -27,6 +27,17 @@ services:
     volumes:
       - "./:/src/"
 
+  join-data-loader:
+    profiles:
+      - test
+    image: gitregistry.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/udm-rest-api-join-data-loader:${IMAGE_TAG:-latest}
+    build:
+      context: ./docker/udm-rest-api-join-data-loader
+    platform: "linux/amd64"
+    working_dir: "/src"
+    volumes:
+      - "./:/src/"
+
   joinscript-tools:
     profiles:
       - test
