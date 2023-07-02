@@ -31,37 +31,14 @@
 ARG PORTAL_UDM_EXTENSIONS_IMAGE=gitregistry.knut.univention.de/univention/components/univention-portal/portal-udm-extensions
 ARG PORTAL_UDM_EXTENSIONS_TAG=latest
 
-ARG DEBIAN_BASE_IMAGE_TAG=buster-slim
-ARG DOCKER_PROXY
+ARG UCS_BASE_IMAGE=gitregistry.knut.univention.de/univention/customers/dataport/upx/container-ucs-base/ucs-base-dev-504
+ARG UCS_BASE_IMAGE_TAG=latest
+
 
 FROM ${PORTAL_UDM_EXTENSIONS_IMAGE}:${PORTAL_UDM_EXTENSIONS_TAG} AS portal-udm-extensions
 
-FROM ${DOCKER_PROXY}debian:${DEBIAN_BASE_IMAGE_TAG} AS ucs-base
 
-ARG APT_KEY_URL=https://updates.software-univention.de/univention-archive-key-ucs-5x.gpg
-
-SHELL ["/bin/bash", "-euxo", "pipefail", "-c"]
-
-WORKDIR /apt
-
-###############################################################################
-# Install Univention APT-Key
-
-RUN \
-  apt-get --quiet update && \
-  DEBIAN_FRONTEND=noninteractive \
-    apt-get --assume-yes --verbose-versions --no-install-recommends install \
-      ca-certificates=20* \
-      curl=7.64.* \
-      gpg=2.2.* \
-      gpg-agent=2.2.* \
-      patch=2.7.* && \
-  curl -fsSL "${APT_KEY_URL}" | apt-key add - && \
-  rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*
-
-COPY sources.list /etc/apt/sources.list.d/15_ucs-online-version.list
-
-FROM ucs-base as build
+FROM ${UCS_BASE_IMAGE}:${UCS_BASE_IMAGE_TAG} as build
 
 ###############################################################################
 # Install UDM REST API
@@ -80,12 +57,14 @@ COPY fake.sh /usr/local/bin/invoke-rc.d
 COPY fake.sh /usr/sbin/univention-management-console-acls
 COPY fake-uv-lib.sh /usr/local/bin/fake-uv-lib.sh
 
-RUN \
+# TODO: See https://git.knut.univention.de/univention/ucs/-/merge_requests/820
+RUN ucs-dev-add-branch.sh jbornhold-udm-rest-client && \
   apt-get --quiet update && \
   # install Univention bash helper functions dependency
   DEBIAN_FRONTEND=noninteractive \
     apt-get --assume-yes --verbose-versions --no-install-recommends install \
       shell-univention-lib=9.* \
+      patch=2.7.* \
       && \
   # we do not need the many bash helper-functions here
   cp /usr/local/bin/fake-uv-lib.sh /usr/share/univention-lib/all.sh && \
@@ -149,12 +128,15 @@ RUN \
 ###############################################################################
 # Second stage image to get rid of unneeded files
 
-FROM ucs-base AS final
+
+FROM ${UCS_BASE_IMAGE}:${UCS_BASE_IMAGE_TAG} as final
 
 ARG LABEL_CREATED=undefined
 ARG LABEL_REVISION=undefined
 ARG LABEL_SOURCE=undefined
 ARG LABEL_VERSION=undefined
+
+WORKDIR /apt
 
 RUN \
   apt-get --quiet update && \
