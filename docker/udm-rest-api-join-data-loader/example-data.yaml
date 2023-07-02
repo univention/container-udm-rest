@@ -1,0 +1,312 @@
+---
+action: create
+module: container/cn
+position: cn=univention,dc=univention-organization,dc=intranet
+properties:
+  name: portals
+---
+action: create
+module: container/cn
+position: cn=portals,cn=univention,dc=univention-organization,dc=intranet
+properties:
+  name: portal
+---
+action: create
+module: container/cn
+position: cn=portals,cn=univention,dc=univention-organization,dc=intranet
+properties:
+  name: category
+---
+action: create
+module: container/cn
+position: cn=portals,cn=univention,dc=univention-organization,dc=intranet
+properties:
+  name: entry
+---
+action: create
+module: container/cn
+position: cn=portals,cn=univention,dc=univention-organization,dc=intranet
+properties:
+  name: folder
+---
+action: create
+module: container/cn
+position: cn=portals,cn=univention,dc=univention-organization,dc=intranet
+properties:
+  name: config
+---
+action: create
+module: container/cn
+position: cn=portals,cn=univention,dc=univention-organization,dc=intranet
+properties:
+  name: announcement
+---
+action: create
+module: portals/entry
+position: cn=entry,cn=portals,cn=univention,dc=univention-organization,dc=intranet
+properties:
+  allowedGroups:
+  - cn=Domain Users,cn=groups,dc=univention-organization,dc=intranet
+  description:
+    de_DE: Ihr Passwort ändern
+    en_US: Change your password
+  displayName:
+    de_DE: Ihr Passwort ändern
+    en_US: Change your password
+  icon: ''
+  link:
+  - - en_US
+    - '#/selfservice/passwordchange'
+  linkTarget: samewindow
+  name: self-service-password-change
+---
+action: create
+module: portals/entry
+position: cn=entry,cn=portals,cn=univention,dc=univention-organization,dc=intranet
+properties:
+  description:
+    de_DE: Univention Forum (Hilfe)
+    en_US: Univention Forum (Help)
+    fr_FR: Forum Univention (Aide)
+  displayName:
+    de_DE: Univention Forum (Hilfe)
+    en_US: Univention Forum (Help)
+    fr_FR: Forum Univention (Aide)
+  link:
+  - - en_US
+    - https://help.univention.com
+  linkTarget: newwindow
+  name: univentionforum
+---
+action: create
+module: portals/entry
+position: cn=entry,cn=portals,cn=univention,dc=univention-organization,dc=intranet
+properties:
+  description:
+    de_DE: Feedback
+    en_US: Feedback
+    fr_FR: Impressions
+  displayName:
+    de_DE: Feedback
+    en_US: Feedback
+    fr_FR: Impressions
+  link:
+  - - en_US
+    - https://www.univention.com/feedback/?umc=portal
+  - - de_DE
+    - https://www.univention.de/produkt-feedback/?umc=portal
+  linkTarget: newwindow
+  name: univentionfeedback
+---
+action: create
+module: portals/entry
+position: cn=entry,cn=portals,cn=univention,dc=univention-organization,dc=intranet
+properties:
+  description:
+    de_DE: News, Tipps und Best Practices
+    en_US: News, tips and best practices
+    fr_FR: Nouvelles, conseils et bonne pratique
+  displayName:
+    de_DE: Univention Blog
+    en_US: Univention Blog
+    fr_FR: Univention Blog
+  icon: ''
+  link:
+  - - en_US
+    - https://www.univention.com/news/blog-en
+  - - de_DE
+    - https://www.univention.de/news/blog-de
+  linkTarget: newwindow
+  name: univentionblog
+---
+action: create
+module: portals/entry
+position: cn=entry,cn=portals,cn=univention,dc=univention-organization,dc=intranet
+properties:
+  description:
+    de_DE: Univention Webseite
+    en_US: Univention Website
+    fr_FR: Site Internet Univention
+  displayName:
+    de_DE: Univention Webseite
+    en_US: Univention Website
+    fr_FR: Site Internet Univention
+  link:
+  - - en_US
+    - https://www.univention.com
+  - - de_DE
+    - https://www.univention.de
+  linkTarget: newwindow
+  name: univentionwebsite
+---
+action: create
+module: portals/folder
+position: cn=folder,cn=portals,cn=univention,dc=univention-organization,dc=intranet
+properties:
+  displayName:
+    de_DE: Hilfe
+    en_US: Help
+    fr_FR: Aide
+  entries:
+  - cn=univentionforum,cn=entry,cn=portals,cn=univention,dc=univention-organization,dc=intranet
+  - cn=univentionfeedback,cn=entry,cn=portals,cn=univention,dc=univention-organization,dc=intranet
+  - cn=univentionblog,cn=entry,cn=portals,cn=univention,dc=univention-organization,dc=intranet
+  - cn=univentionwebsite,cn=entry,cn=portals,cn=univention,dc=univention-organization,dc=intranet
+  name: help
+---
+action: create
+module: portals/entry
+position: cn=entry,cn=portals,cn=univention,dc=univention-organization,dc=intranet
+properties:
+  anonymous: true
+  description:
+    de_DE: Univention Management Console zur Ver­wal­tung der UCS-Domäne und des lokalen
+      Systems
+    en_US: Univention Management Console for admin­is­tra­ting the UCS domain and
+      the local system
+    fr_FR: Console de gestion Univention pour admin­is­trer le domaine UCS et le système
+      local
+  displayName:
+    de_DE: System- und Domäneneinstellungen
+    en_US: System and domain settings
+    fr_FR: Réglages du système et du domaine
+  icon: ''
+  link:
+  - - en_US
+    - /univention/umc/
+  linkTarget: newwindow
+  name: umc-domain
+---
+action: create
+module: portals/entry
+position: cn=entry,cn=portals,cn=univention,dc=univention-organization,dc=intranet
+properties:
+  anonymous: true
+  description:
+    de_DE: Am Portal anmelden
+    en_US: Log in to the portal
+    fr_FR: Connectez-vous au portail
+  displayName:
+    de_DE: Anmelden
+    en_US: Login
+    fr_FR: Connexion
+  icon: ''
+  link:
+  - - en_US
+    - /univention/login/?location=/univention/portal/
+  linkTarget: samewindow
+  name: login-ucs
+---
+action: create
+module: portals/entry
+position: cn=entry,cn=portals,cn=univention,dc=univention-organization,dc=intranet
+properties:
+  activated: false
+  anonymous: true
+  description:
+    de_DE: Am Portal anmelden
+    en_US: Log in to the portal
+    fr_FR: Connectez-vous au portail
+  displayName:
+    de_DE: Anmelden (Single Sign-on)
+    en_US: Login (Single sign-on)
+    fr_FR: Connexion (authentification unique)
+  icon: ''
+  link:
+  - - en_US
+    - /univention/saml/?location=/univention/portal/
+  linkTarget: samewindow
+  name: login-saml
+---
+action: create
+module: portals/category
+position: cn=category,cn=portals,cn=univention,dc=univention-organization,dc=intranet
+properties:
+  displayName:
+    de_DE: Applikationen
+    en_US: Applications
+    fr_FR: Applications
+  entries:
+  - cn=login-ucs,cn=entry,cn=portals,cn=univention,dc=univention-organization,dc=intranet
+  - cn=login-saml,cn=entry,cn=portals,cn=univention,dc=univention-organization,dc=intranet
+  name: domain-service
+---
+action: create
+module: portals/category
+position: cn=category,cn=portals,cn=univention,dc=univention-organization,dc=intranet
+properties:
+  displayName:
+    de_DE: Verwaltung
+    en_US: Administration
+    fr_FR: Administration
+  entries:
+  - cn=umc-domain,cn=entry,cn=portals,cn=univention,dc=univention-organization,dc=intranet
+  name: domain-admin
+---
+action: create
+module: portals/entry
+position: cn=entry,cn=portals,cn=univention,dc=univention-organization,dc=intranet
+properties:
+  description:
+    de_DE: Wurzelzertifikat
+    en_US: Root certificate
+    fr_FR: Certificat racine
+  displayName:
+    de_DE: Wurzelzertifikat
+    en_US: Root certificate
+    fr_FR: Certificat racine
+  link:
+  - - en_US
+    - /ucs-root-ca.crt
+  linkTarget: samewindow
+  name: root-cert
+---
+action: create
+module: portals/entry
+position: cn=entry,cn=portals,cn=univention,dc=univention-organization,dc=intranet
+properties:
+  description:
+    de_DE: Zertifikat-Sperrliste
+    en_US: Certificate revocation list
+    fr_FR: Liste de révocation de certificats
+  displayName:
+    de_DE: Zertifikat-Sperrliste
+    en_US: Certificate revocation list
+    fr_FR: Liste de révocation de certificats
+  link:
+  - - en_US
+    - /ucsCA.crl
+  linkTarget: samewindow
+  name: certificate-revocation
+---
+action: create
+module: portals/folder
+position: cn=folder,cn=portals,cn=univention,dc=univention-organization,dc=intranet
+properties:
+  displayName:
+    de_DE: Zertifikate
+    en_US: Certificates
+    fr_FR: Certificats
+  entries:
+  - cn=root-cert,cn=entry,cn=portals,cn=univention,dc=univention-organization,dc=intranet
+  - cn=certificate-revocation,cn=entry,cn=portals,cn=univention,dc=univention-organization,dc=intranet
+  name: certificates
+---
+action: create
+module: portals/portal
+position: cn=portal,cn=portals,cn=univention,dc=univention-organization,dc=intranet
+properties:
+  categories:
+  - cn=domain-service,cn=category,cn=portals,cn=univention,dc=univention-organization,dc=intranet
+  - cn=domain-admin,cn=category,cn=portals,cn=univention,dc=univention-organization,dc=intranet
+  displayName:
+    de_DE: Univention Portal
+    en_US: Univention Portal
+    fr_FR: Portail Univention
+  menuLinks:
+  - cn=certificates,cn=folder,cn=portals,cn=univention,dc=univention-organization,dc=intranet
+  - cn=help,cn=folder,cn=portals,cn=univention,dc=univention-organization,dc=intranet
+  name: domain
+  showUmc: true
+  userLinks:
+  - cn=self-service-password-change,cn=entry,cn=portals,cn=univention,dc=univention-organization,dc=intranet
