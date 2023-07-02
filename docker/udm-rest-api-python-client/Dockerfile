@@ -28,35 +28,14 @@
 # /usr/share/common-licenses/AGPL-3; if not, see
 # <https://www.gnu.org/licenses/>.
 
-ARG DEBIAN_BASE_IMAGE_TAG=buster-slim
-ARG DOCKER_PROXY
 
-FROM ${DOCKER_PROXY}debian:${DEBIAN_BASE_IMAGE_TAG} AS ucs-base
+ARG UCS_BASE_IMAGE=gitregistry.knut.univention.de/univention/customers/dataport/upx/container-ucs-base/ucs-base-dev-504
+ARG UCS_BASE_IMAGE_TAG=latest
 
-ARG APT_KEY_URL=https://updates.software-univention.de/univention-archive-key-ucs-5x.gpg
+FROM ${UCS_BASE_IMAGE}:${UCS_BASE_IMAGE_TAG}
 
-SHELL ["/bin/bash", "-euxo", "pipefail", "-c"]
-
-WORKDIR /
-
-RUN \
-  apt-get --quiet update && \
-  DEBIAN_FRONTEND=noninteractive \
-    apt-get --assume-yes --verbose-versions --no-install-recommends install \
-      ca-certificates=20* \
-      curl=7.64.* \
-      gpg=2.2.* \
-      gpg-agent=2.2.* \
-      patch=2.7.* && \
-  curl -fsSL "${APT_KEY_URL}" | apt-key add - && \
-  rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*
-
-COPY sources.list /etc/apt/sources.list.d/15_ucs-online-version.list
-
-
-FROM ucs-base as final
-
-RUN apt-get update \
+RUN ucs-dev-add-branch.sh jbornhold-udm-rest-client \
+    && apt-get update \
     && apt-get --assume-yes --verbose-versions --no-install-recommends install \
       python3-univention-directory-manager-rest-client=10.* \
       python3-yaml=3.* \
