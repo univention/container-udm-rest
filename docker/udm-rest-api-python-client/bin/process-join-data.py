@@ -1,71 +1,77 @@
 #!/usr/bin/env python3
 
+import logging
 import os
 import sys
 
 import yaml
-from jinja2 import Environment, Template, StrictUndefined
+from jinja2 import Template, StrictUndefined
 
 from univention.admin.rest.client import UDM
 
 
-udm_api_url = os.environ["UDM_API_URL"]
-udm_api_user = os.environ["UDM_API_USER"]
-udm_api_password = os.environ["UDM_API_PASSWORD"]
-udm = UDM.http(udm_api_url, udm_api_user, udm_api_password)
-
-ldap_base = udm.get_ldap_base()
+log = logging.getLogger("app")
 
 
-def main():
-    input_filename = sys.argv[1]
+class App:
+    def __init__(self):
+        logging.basicConfig(level=logging.INFO)
 
-    with open(input_filename, "r") as input_file:
-        content = input_file.read()
+        udm_api_url = os.environ["UDM_API_URL"]
+        log.info("Connecting to UDM API at URL %s", udm_api_url)
+        udm_api_user = os.environ["UDM_API_USER"]
+        udm_api_password = os.environ["UDM_API_PASSWORD"]
+        self.udm = UDM.http(udm_api_url, udm_api_user, udm_api_password)
 
-    if is_template(input_filename):
-        content = render_template(content)
+    def run(self):
+        input_filename = sys.argv[1]
+        log.info("Processing file %s", input_filename)
 
-    actions = list(yaml.safe_load_all(content))
+        with open(input_filename, "r") as input_file:
+            content = input_file.read()
 
-    for action in actions:
-        process_action(action)
+        if is_template(input_filename):
+            log.info("Rendering file as Jinja2 template")
+            context = {
+                "ldap_base": self.udm.get_ldap_base(),
+            }
+            content = render_template(content, context)
+
+        actions = list(yaml.safe_load_all(content))
+
+        for action in actions:
+            self.process_action(action)
+
+    def process_action(self, data):
+        if data["action"] == "create":
+            self.ensure_udm_object(
+                module=data["module"],
+                position=data["position"],
+                properties=data["properties"],
+            )
+        else:
+            raise NotImplementedError(f"Action {data['action']} not supported.")
+
+    def ensure_udm_object(self, module, position, properties):
+        log.info(f"Ensuring udm object {module}, {position}, {properties.get('name')}")
+        module_obj = self.udm.get(module)
+        obj = module_obj.new(position=position)
+        obj.properties.update(properties)
+        try:
+            obj.save()
+        except Exception:
+            log.exception("Exception while trying to save the object")
 
 
 def is_template(filename):
     return filename.endswith(".j2")
 
 
-def render_template(content):
-    template = Template(
-        content,
-        undefined=StrictUndefined)
-    parameters = {
-        "ldap_base": ldap_base,
-    }
-    return template.render(parameters)
-
-
-def process_action(data):
-    print(data)
-    if data["action"] == "create":
-        ensure_udm_object(
-            module=data["module"],
-            position=data["position"],
-            properties=data["properties"],
-        )
-
-
-def ensure_udm_object(module, position, properties):
-    print(f"Ensuring udm object {module}, {position}, {properties.get('name')}")
-    module_obj = udm.get(module)
-    obj = module_obj.new(position=position)
-    obj.properties.update(properties)
-    try:
-        obj.save()
-    except Exception as e:
-        print(e)
+def render_template(content, context):
+    template = Template(content, undefined=StrictUndefined)
+    return template.render(context)
 
 
 if __name__ == "__main__":
-    main()
+    app = App()
+    app.run()
