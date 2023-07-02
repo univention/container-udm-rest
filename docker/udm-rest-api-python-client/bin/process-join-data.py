@@ -4,8 +4,10 @@ import os
 import sys
 
 import yaml
+from jinja2 import Environment, Template, StrictUndefined
 
 from univention.admin.rest.client import UDM
+
 
 udm_api_url = os.environ["UDM_API_URL"]
 udm_api_user = os.environ["UDM_API_USER"]
@@ -14,16 +16,38 @@ udm = UDM.http(udm_api_url, udm_api_user, udm_api_password)
 
 ldap_base = udm.get_ldap_base()
 
-with open(sys.argv[1], "r") as input_file:
-    actions = list(yaml.safe_load_all(input_file))
 
+def main():
+    input_filename = sys.argv[1]
 
-def main(actions):
+    with open(input_filename, "r") as input_file:
+        content = input_file.read()
+
+    if is_template(input_filename):
+        content = render_template(content)
+
+    actions = list(yaml.safe_load_all(content))
+
     for action in actions:
         process_action(action)
 
 
+def is_template(filename):
+    return filename.endswith(".j2")
+
+
+def render_template(content):
+    template = Template(
+        content,
+        undefined=StrictUndefined)
+    parameters = {
+        "ldap_base": ldap_base,
+    }
+    return template.render(parameters)
+
+
 def process_action(data):
+    print(data)
     if data["action"] == "create":
         ensure_udm_object(
             module=data["module"],
@@ -44,4 +68,4 @@ def ensure_udm_object(module, position, properties):
 
 
 if __name__ == "__main__":
-    main(actions)
+    main()
