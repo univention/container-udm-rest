@@ -21,6 +21,11 @@ data:
   LDAP_SECRET_FILE: "{{ .Values.udmRestApi.ldapSecretFile }}"
   MACHINE_SECRET_FILE: "{{ .Values.udmRestApi.machineSecretFile }}"
   CA_CERT_FILE: "{{ .Values.udmRestApi.caCertFile }}"
+
+  UDM_API_URL: 'http://{{ include "common.names.fullname" . }}/udm/'
+  UDM_API_USER: "cn=admin"
+  UDM_API_PASSWORD_FILE: "{{ .Values.udmRestApi.ldapSecretFile }}"
+
 {{- end }}
 {{- end }}
 ...
