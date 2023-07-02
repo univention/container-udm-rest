@@ -29,6 +29,7 @@ def dump_action_data(data):
         yaml.dump(
             data,
             out_file,
+            width=120,
             default_flow_style=False,
             explicit_start=True,
             allow_unicode=True,
