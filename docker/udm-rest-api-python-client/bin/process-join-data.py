@@ -20,7 +20,8 @@ class App:
         udm_api_url = os.environ["UDM_API_URL"]
         log.info("Connecting to UDM API at URL %s", udm_api_url)
         udm_api_user = os.environ["UDM_API_USER"]
-        udm_api_password = os.environ["UDM_API_PASSWORD"]
+        with open(os.environ["UDM_API_PASSWORD_FILE"], "r") as password_file:
+            udm_api_password = password_file.read()
         self.udm = UDM.http(udm_api_url, udm_api_user, udm_api_password)
 
     def run(self):
