@@ -66,6 +66,11 @@ udmRestApi:
   # -- Path to file with the CA certificate.
   # (Not needed when `tlsReqCert` set to `"never"`.)
   caCertFile: "/var/secrets/ca_cert"
+  loadJoinData:
+    # -- Enable loading of initial join data during installation and upgrade.
+    # This is usually required because it does roll out the initial structure of
+    # the LDAP directory.
+    enabled: true
 
 
 # -- Kubernetes ingress

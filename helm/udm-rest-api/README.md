@@ -88,6 +88,20 @@ helm uninstall udm-rest-api
 			<td></td>
 		</tr>
 		<tr>
+			<td>image.loadJoinData</td>
+			<td>object</td>
+			<td><pre lang="json">
+{
+  "imagePullPolicy": "Always",
+  "registry": "registry.souvap-univention.de",
+  "repository": "souvap/tooling/images/udm-rest-api/udm-rest-api-load-join-data",
+  "tag": "0.1.0"
+}
+</pre>
+</td>
+			<td>Image used to load the join data</td>
+		</tr>
+		<tr>
 			<td>image.registry</td>
 			<td>string</td>
 			<td><pre lang="json">
@@ -147,7 +161,7 @@ helm uninstall udm-rest-api
 false
 </pre>
 </td>
-			<td>Set this to `true` in order to enable the installation on Ingress related objects.</td>
+			<td>Set this to `true` in order to enable the installation of Ingress related objects.</td>
 		</tr>
 		<tr>
 			<td>ingress.paths</td>
@@ -170,7 +184,7 @@ false
 true
 </pre>
 </td>
-			<td>Set this to `true` in order to enable the installation on Istio related objects.</td>
+			<td>Set this to `true` in order to enable the installation of Istio related objects.</td>
 		</tr>
 		<tr>
 			<td>istio.gateway.annotations</td>
@@ -545,6 +559,9 @@ false
   "ldapHostIp": null,
   "ldapPort": "389",
   "ldapSecretFile": "/var/secrets/ldap_secret",
+  "loadJoinData": {
+    "enabled": true
+  },
   "machineSecretFile": "/var/secrets/machine_secret",
   "tlsReqCert": "demand"
 }
@@ -681,6 +698,15 @@ null
 </pre>
 </td>
 			<td>Path to file with the LDAP secret. (TODO: This may be unnecessary here.)</td>
+		</tr>
+		<tr>
+			<td>udmRestApi.loadJoinData.enabled</td>
+			<td>bool</td>
+			<td><pre lang="json">
+true
+</pre>
+</td>
+			<td>Enable loading of initial join data during installation and upgrade. This is usually required because it does roll out the initial structure of the LDAP directory.</td>
 		</tr>
 		<tr>
 			<td>udmRestApi.machineSecretFile</td>

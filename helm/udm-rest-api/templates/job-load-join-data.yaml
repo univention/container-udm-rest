@@ -1,3 +1,4 @@
+{{- if .Values.udmRestApi.loadJoinData.enabled }}
 ---
 apiVersion: batch/v1
 kind: Job
@@ -34,3 +35,4 @@ spec:
       - name: secrets
         secret:
           secretName: {{ include "common.names.fullname" . | quote }}
+{{- end }}
