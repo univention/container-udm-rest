@@ -77,6 +77,18 @@ build-udm-rest-api-python-client:
     KANIKO_BUILD_CONTEXT: "docker/udm-rest-api-python-client"
     CI_REGISTRY_IMAGE: "$CI_REGISTRY_IMAGE/udm-rest-api-python-client"
 
+build-udm-rest-api-join-data-loader:
+  stage: build
+  extends: .kaniko
+  needs:
+    - job: build-udm-rest-api-python-client
+      artifacts: true
+  variables:
+    KANIKO_BUILD_CONTEXT: "docker/udm-rest-api-join-data-loader"
+    CI_REGISTRY_IMAGE: "$CI_REGISTRY_IMAGE/udm-rest-api-join-data-loader"
+    KANIKO_ARGS: >-
+      --build-arg BASE_IMAGE_TAG=${BUILD_VERSION}
+
 build-udm-rest-api-joinscript-tools:
   stage: build
   extends: .kaniko
