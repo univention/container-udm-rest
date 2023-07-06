@@ -45,3 +45,11 @@ into the container as well. You will have to tweak the file
 source ./docker/udm-rest-api-joinscript-tools/dev-fixup-path.sh
 call-joinscript.sh ./wu/univention-portal/33univention-portal.inst
 ```
+
+To test the container, it can also be run locally:
+
+```shell
+docker run -it --rm -v ./33univention-portal.inst:/home/33univention-portal.inst \
+gitregistry.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/udm-rest-api-joinscript-tools \
+bash -c "call-joinscript.sh /home/33univention-portal.inst && cat /tmp/*" > complete_yaml.yml
+```
