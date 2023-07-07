@@ -55,8 +55,8 @@ properties:
     en_US: Change your password
   icon: ''
   link:
-    - en_US
-    - '#/selfservice/passwordchange'
+    - - en_US
+      - '#/selfservice/passwordchange'
   linkTarget: samewindow
   name: self-service-password-change
 ---
@@ -73,8 +73,8 @@ properties:
     en_US: Univention Forum (Help)
     fr_FR: Forum Univention (Aide)
   link:
-    - en_US
-    - https://help.univention.com
+    - - en_US
+      - https://help.univention.com
   linkTarget: newwindow
   name: univentionforum
 ---
@@ -91,10 +91,10 @@ properties:
     en_US: Feedback
     fr_FR: Impressions
   link:
-    - en_US
-    - https://www.univention.com/feedback/?umc=portal
-    - de_DE
-    - https://www.univention.de/produkt-feedback/?umc=portal
+    - - en_US
+      - https://www.univention.com/feedback/?umc=portal
+      - de_DE
+      - https://www.univention.de/produkt-feedback/?umc=portal
   linkTarget: newwindow
   name: univentionfeedback
 ---
@@ -112,10 +112,10 @@ properties:
     fr_FR: Univention Blog
   icon: ''
   link:
-    - en_US
-    - https://www.univention.com/news/blog-en
-    - de_DE
-    - https://www.univention.de/news/blog-de
+    - - en_US
+      - https://www.univention.com/news/blog-en
+      - de_DE
+      - https://www.univention.de/news/blog-de
   linkTarget: newwindow
   name: univentionblog
 ---
@@ -132,10 +132,10 @@ properties:
     en_US: Univention Website
     fr_FR: Site Internet Univention
   link:
-    - en_US
-    - https://www.univention.com
-    - de_DE
-    - https://www.univention.de
+    - - en_US
+      - https://www.univention.com
+      - de_DE
+      - https://www.univention.de
   linkTarget: newwindow
   name: univentionwebsite
 ---
@@ -169,8 +169,8 @@ properties:
     fr_FR: Réglages du système et du domaine
   icon: ''
   link:
-    - en_US
-    - /univention/umc/
+    - - en_US
+      - /univention/umc/
   linkTarget: newwindow
   name: umc-domain
 ---
@@ -189,8 +189,8 @@ properties:
     fr_FR: Connexion
   icon: ''
   link:
-    - en_US
-    - /univention/login/?location=/univention/portal/
+    - - en_US
+      - /univention/login/?location=/univention/portal/
   linkTarget: samewindow
   name: login-ucs
 ---
@@ -210,8 +210,8 @@ properties:
     fr_FR: Connexion (authentification unique)
   icon: ''
   link:
-    - en_US
-    - /univention/saml/?location=/univention/portal/
+    - - en_US
+      - /univention/saml/?location=/univention/portal/
   linkTarget: samewindow
   name: login-saml
 ---
@@ -253,8 +253,8 @@ properties:
     en_US: Certificate revocation list
     fr_FR: Liste de révocation de certificats
   link:
-    - en_US
-    - /ucsCA.crl
+    - - en_US
+      - /ucsCA.crl
   linkTarget: samewindow
   name: certificate-revocation
 ---
