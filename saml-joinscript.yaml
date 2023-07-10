@@ -1,0 +1,141 @@
+---
+action: create
+module: container/cn
+position: "cn=univention,"
+properties:
+  name: "saml-serviceprovider"
+  description: "SAML Service Provider definitions"
+---
+action: create
+module: settings/extended_attribute
+position: cn=custom attributes,cn=univention,
+properties:
+  CLIName: serviceprovider
+  groupName: SAML settings
+  ldapMapping: enabledServiceProviderIdentifier
+  longDescription: Enable user to use the specified service providers
+  mayChange: true
+  module:
+    - users/user
+    - settings/usertemplate
+  multivalue: true
+  name: serviceprovider
+  objectClass: univentionSAMLEnabled
+  shortDescription: Enable user for the following service providers
+  syntax: samlserviceprovider
+  tabAdvanced: false
+  tabPosition: 4
+  translationGroupName:
+    "de_DE": "SAML Einstellungen"
+    "fr_FR": "Réglages SAML"
+  translationLongDescription:
+    "de_DE": "Zulassen des Benutzer für die angegebenen Service Provider"
+    "fr_FR": "Permettre à l’utilisateur ou à l’utilisatrice d’utiliser les fournisseurs de services spécifiés"
+  translationShortDescription:
+    "de_DE": "Benutzer für folgende Service Provider freischalten"
+    "fr_FR": "Activer l’utilisateur ou l’utilisatrice pour les fournisseurs de services suivants"
+  translationTabName:
+    "de_DE": "Konto"
+    "fr_FR": "Compte"
+---
+action: create
+module: settings/extended_attribute
+position: cn=custom attributes,cn=univention,
+properties:
+  CLIName: serviceprovidergroup
+  groupName: SAML settings
+  ldapMapping: enabledServiceProviderIdentifierGroup
+  longDescription: Enable group to use the specified service providers
+  mayChange: true
+  module:
+    - groups/group
+  multivalue: true
+  name: serviceprovidergroup
+  objectClass: univentionSAMLEnabledGroup
+  shortDescription: Enable group for the following service providers
+  syntax: samlserviceprovider
+  tabAdvanced: false
+  tabName: General
+  translationGroupName:
+    "de_DE": "SAML Einstellungen"
+    "fr_FR": "Réglages SAML"
+  translationLongDescription:
+    "de_DE": "Zulassen der Gruppe für die angegebenen Service Provider"
+    "fr_FR": "Permettre au groupe d’utiliser les fournisseurs de services spécifiés"
+  translationShortDescription:
+    "de_DE": "Gruppe für folgende Service Provider freischalten"
+    "fr_FR": "Activer le groupe pour les fournisseurs de services suivants"
+  translationTabName:
+    "de_DE": "Allgemein"
+    "fr_FR": "Général"
+
+# TODO: Figure out how to continue with this:
+# univention-directory-manager settings/extended_attribute modify "$@" \
+# 	--dn "cn=serviceprovider,cn=custom attributes,cn=univention,$ldap_base" \
+# 	--append module="settings/usertemplate"
+#
+# univention-directory-manager saml/idpconfig modify "$@" \
+# 	--dn="id=default-saml-idp,cn=univention,$ldap_base" \
+# 	--append LdapGetAttributes="memberOf" || die
+#
+---
+action: create
+module: saml/serviceprovider
+position: cn=saml-serviceprovider,cn=univention,
+properties:
+  AssertionConsumerService:
+    - https://www.google.com/a/univention-test.mygbiz.com/acs
+  Identifier: google.com
+  NameIDFormat: urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified
+  isActivated: false
+  privacypolicyURL: http://support.google.com/a/bin/answer.py?hl=en&answer=60762
+  serviceProviderOrganizationName: Google Apps
+  simplesamlAttributes: false
+  simplesamlNameIDAttribute: uid
+---
+action: create
+module: saml/serviceprovider
+position: cn=saml-serviceprovider,cn=univention,
+properties:
+  AssertionConsumerService:
+    - https://sp.testshib.org/Shibboleth.sso/SAML2/POST
+  Identifier: https://sp.testshib.org/shibboleth-sp
+  NameIDFormat: urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified
+  isActivated: false
+  privacypolicyURL: https://www.testshib.org/policy.html
+  serviceProviderOrganizationName: TestShib Two
+  serviceproviderdescription: TestShib Two is a testing service intended for new installations
+    of Shibboleth. All SAML 2.0 implementations are welcome and may be tested against
+    Shibboleth here
+  simplesamlAttributes: false
+  simplesamlNameIDAttribute: uid
+---
+action: create
+module: saml/serviceprovider
+position: cn=saml-serviceprovider,cn=univention,
+properties:
+  AssertionConsumerService:
+    - https://sp.testshib.org/Shibboleth.sso/SAML2/POST
+  Identifier: https://saml.salesforce.com
+  NameIDFormat: urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified
+  isActivated: false
+  privacypolicyURL: https://trust.salesforce.com/trust/privacy/
+  serviceProviderOrganizationName: Salesforce
+  simplesamlAttributes: false
+  simplesamlNameIDAttribute: mailPrimaryAddress
+---
+action: create
+module: saml/idpconfig
+position: cn=univention,
+properties:
+  id: default-saml-idp
+  # dn: "id=default-saml-idp,cn=univention,{ldap_base}"
+  LdapGetAttributes:
+    - "uid"
+    - "mailPrimaryAddress"
+    - "memberOf"
+    - "enabledServiceProviderIdentifier"
+# idp_ldap_get_attributes="$saml_idp_ldap_get_attributes"
+# TODO: Make this configurable / editable
+# idp_ldap_get_attributes="$saml_idp_ldap_get_attributes"
+# ucr search saml/idp/ldap/get_attributes
