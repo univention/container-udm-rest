@@ -1,5 +1,16 @@
 ---
 action: create
+module: users/ldap
+position: cn=users,
+properties:
+  username: sys-idp-user
+  lastname: idp-user
+  name: idp-user
+  password: univention
+# TODO: We should make this a system user at some point.
+# lo.modify(dn, [('univentionObjectFlag', None, [b'functional', b'hidden'])])
+---
+action: create
 module: container/cn
 position: "cn=univention,"
 properties:
