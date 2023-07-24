@@ -37,6 +37,12 @@ services:
     working_dir: "/src"
     volumes:
       - "./:/src/"
+    environment:
+      UDM_API_URL: "http://udm-rest-api:9979/udm/"
+      UDM_API_USER: "cn=admin"
+      UDM_API_PASSWORD_FILE: "/run/secrets/ldap_secret"
+    secrets:
+      - ldap_secret
 
   joinscript-tools:
     profiles:
@@ -91,6 +97,8 @@ services:
       - ldap-shared-data:/var/lib/univention-ldap/:rw
 
 secrets:
+  ldap_secret:
+    file: secret/ldap.secret
   machine_secret:
     file: secret/machine.secret
 
