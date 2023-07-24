@@ -17,26 +17,27 @@
 -    <link rel="stylesheet" type="text/css" href="/univention/udm/swaggerui/swagger-ui.css" />
 -    <link rel="icon" type="image/png" href="/univention/udm/swaggerui/favicon-32x32.png" sizes="32x32" />
 -    <link rel="icon" type="image/png" href="/univention/udm/swaggerui/favicon-16x16.png" sizes="16x16" />
-+    <link rel="stylesheet" type="text/css" href="/udm/swaggerui/swagger-ui.css" />
-+    <link rel="icon" type="image/png" href="/udm/swaggerui/favicon-32x32.png" sizes="32x32" />
-+    <link rel="icon" type="image/png" href="/udm/swaggerui/favicon-16x16.png" sizes="16x16" />
++    <link rel="stylesheet" type="text/css" href="../swaggerui/swagger-ui.css" />
++    <link rel="icon" type="image/png" href="../swaggerui/favicon-32x32.png" sizes="32x32" />
++    <link rel="icon" type="image/png" href="../swaggerui/favicon-16x16.png" sizes="16x16" />
      <style>
        html
        {
-@@ -33,13 +33,13 @@
+@@ -33,13 +33,14 @@
    <body>
      <div id="swagger-ui"></div>
 
 -    <script src="/univention/udm/swaggerui/swagger-ui-bundle.js" charset="UTF-8"> </script>
 -    <script src="/univention/udm/swaggerui/swagger-ui-standalone-preset.js" charset="UTF-8"> </script>
-+    <script src="/udm/swaggerui/swagger-ui-bundle.js" charset="UTF-8"> </script>
-+    <script src="/udm/swaggerui/swagger-ui-standalone-preset.js" charset="UTF-8"> </script>
++    <script src="../swaggerui/swagger-ui-bundle.js" charset="UTF-8"> </script>
++    <script src="../swaggerui/swagger-ui-standalone-preset.js" charset="UTF-8"> </script>
      <script>
      window.onload = function() {
        // Begin Swagger UI call region
++      openapiUrl = window.location.pathname.replace(/\/schema\/.*$/, "/openapi.json");
        const ui = SwaggerUIBundle({
 -        url: "/univention/udm/openapi.json",
-+        url: "/udm/openapi.json",
++        url: openapiUrl,
          dom_id: '#swagger-ui',
          deepLinking: true,
          presets: [
