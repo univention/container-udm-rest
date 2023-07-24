@@ -80,7 +80,7 @@ ingress:
   # host: "sso.example.com"
   paths:
     - pathType: "Prefix"
-      path: "/univention(/udm/.*)"
+      path: "/univention/(udm/.*)"
   tls:
     enabled: true
     secretName: ""

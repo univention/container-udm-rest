@@ -127,7 +127,7 @@ helm uninstall udm-rest-api
   "ingressClassName": "nginx",
   "paths": [
     {
-      "path": "/univention(/udm/.*)",
+      "path": "/univention/(udm/.*)",
       "pathType": "Prefix"
     }
   ],
@@ -155,7 +155,7 @@ false
 			<td><pre lang="json">
 [
   {
-    "path": "/univention(/udm/.*)",
+    "path": "/univention/(udm/.*)",
     "pathType": "Prefix"
   }
 ]
