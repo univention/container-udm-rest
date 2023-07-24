@@ -1,0 +1,15 @@
+action: create
+module: users/ldap
+position: cn=users,{{ ldap_base }}
+properties:
+  username: sys-idp-user
+  lastname: idp-user
+  name: idp-user
+  password: univention
+# TODO: We should make this a system user at some point.
+# lo.modify(dn, [('univentionObjectFlag', None, [b'functional', b'hidden'])])
+#
+# FIXME: Running this produces an error in `udm-rest-api`:
+#   ERROR      (       51) : RsyslogEmitter().emit() failed: /dev/log does not exist, cannot emit entry ({"username": "cn=admin", "hostname": "95ffbfbd017d", "message": {"en": "Simple authentication account {username} created", "de": "Einfaches Authentisierungskonto {username} angelegt"}, "args": {"module": "users/ldap", "username": "sys-idp-user"}, "timestamp": "2023-07-10 15:40:19", "tags": [], "context_id": "16188c61-3647-40dc-9674-d9796ed23220", "event": "UDM_USERS_LDAP_CREATED", "type": "Entry v1"})
+#   Nevertheless, the user is created.
+########################
