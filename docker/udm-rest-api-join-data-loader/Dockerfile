@@ -16,6 +16,7 @@ WORKDIR /
 RUN mkdir /join-data
 
 COPY --from=portal-udm-extensions /udm/join-data/* /join-data/
+COPY join-data/* /join-data/
 COPY command.sh /
 
 CMD ["/command.sh"]
