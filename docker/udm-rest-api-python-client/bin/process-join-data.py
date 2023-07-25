@@ -55,7 +55,8 @@ class App:
             self.ensure_list_contains(
                 module=data["module"],
                 position=data["position"],
-                properties=data["properties"],
+                properties=data.get("properties", {}),
+                policies=data.get("policies", {}),
             )
         else:
             raise NotImplementedError(f"Action {data['action']} not supported.")
@@ -70,7 +71,7 @@ class App:
         except Exception:
             log.exception("Exception while trying to save the object")
 
-    def ensure_list_contains(self, module, position, properties):
+    def ensure_list_contains(self, module, position, properties, policies):
         log.info(f"Ensuring attribute list contains value {module}, {position}")
         obj = self.udm.obj_by_dn(position)
         needs_save = False
@@ -84,6 +85,17 @@ class App:
                     needs_save = True
                 else:
                     log.debug(f'Value "{value}" already present in property "{name}".')
+        for name, values in policies.items():
+            log.info(f'Ensuring values "{values}" in policy "{name}" of "{position}".')
+            current_values = obj.policies[name]
+            for value in values:
+                if value not in current_values:
+                    log.debug(f'Adding value "{value}" into policy "{name}".')
+                    current_values.append(value)
+                    needs_save = True
+                else:
+                    log.debug(f'Value "{value}" already present in policy "{name}".')
+
         if needs_save:
             log.info(f'Saving object "{obj.dn}".')
             obj.save()
