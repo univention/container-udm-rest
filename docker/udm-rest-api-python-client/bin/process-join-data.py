@@ -51,6 +51,12 @@ class App:
                 position=data["position"],
                 properties=data["properties"],
             )
+        elif data["action"] == "ensure_list_contains":
+            self.ensure_list_contains(
+                module=data["module"],
+                position=data["position"],
+                properties=data["properties"],
+            )
         else:
             raise NotImplementedError(f"Action {data['action']} not supported.")
 
@@ -64,6 +70,25 @@ class App:
         except Exception:
             log.exception("Exception while trying to save the object")
 
+    def ensure_list_contains(self, module, position, properties):
+        log.info(f"Ensuring attribute list contains value {module}, {position}")
+        obj = self.udm.obj_by_dn(position)
+        needs_save = False
+        for name, values in properties.items():
+            log.info(f'Ensuring values "{values}" in property "{name}" of "{position}".')
+            current_values = obj.properties[name]
+            for value in values:
+                if value not in current_values:
+                    log.debug(f'Adding value "{value}" into property "{name}".')
+                    current_values.append(value)
+                    needs_save = True
+                else:
+                    log.debug(f'Value "{value}" already present in property "{name}".')
+        if needs_save:
+            log.info(f'Saving object "{obj.dn}".')
+            obj.save()
+        else:
+            log.info(f'No changes made to object "{obj.dn}".')
 
 def is_template(filename):
     return filename.endswith(".j2")
