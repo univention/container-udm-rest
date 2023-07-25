@@ -16,6 +16,7 @@ log = logging.getLogger("app")
 class App:
     def __init__(self):
         logging.basicConfig(level=logging.INFO)
+        log.setLevel(logging.DEBUG)
 
         udm_api_url = os.environ["UDM_API_URL"]
         log.info("Connecting to UDM API at URL %s", udm_api_url)
