@@ -25,26 +25,23 @@ module: policies/umc
 position: cn=UMC,cn=policies,{{ ldap_base }}
 properties:
   name: default-umc-all
-# ---
-# # TODO: Support policies
-# action: ensure_list_contains
-# module: groups/group
-# position: cn=Domain Admins,cn=groups,{{ ldap_base }}
-# policies:
-#   policy/umc:
-#     - "cn=default-umc-all,cn=UMC,cn=policies,{{ ldap_base }}"
 ---
-# default user policy
+action: ensure_list_contains
+module: groups/group
+position: cn=Domain Admins,cn=groups,{{ ldap_base }}
+policies:
+  policies/umc:
+    - "cn=default-umc-all,cn=UMC,cn=policies,{{ ldap_base }}"
+---
 action: create
 module: policies/umc
 position: cn=UMC,cn=policies,{{ ldap_base }}
 properties:
   name: default-umc-users
-# ---
-# # TODO: Support policies
-# action: ensure_list_contains
-# module: groups/group
-# position: cn=Domain Users,cn=groups,{{ ldap_base }}
-# policies:
-#   policy/umc:
-#     - "cn=default-umc-users,cn=UMC,cn=policies,{{ ldap_base }}"
+---
+action: ensure_list_contains
+module: groups/group
+position: cn=Domain Users,cn=groups,{{ ldap_base }}
+policies:
+  policies/umc:
+    - "cn=default-umc-users,cn=UMC,cn=policies,{{ ldap_base }}"
