@@ -3,46 +3,48 @@
 ---
 action: create
 module: container/cn
-position: cn=univention,dc=univention-organization,dc=intranet
+position: cn=univention,{{ ldap_base }}
 properties:
   name: UMC
 ---
 action: create
 module: container/cn
-position: cn=policies,dc=univention-organization,dc=intranet
+position: cn=policies,{{ ldap_base }}
 properties:
   name: UMC
   policyPath: true
 ---
 action: create
 module: container/cn
-position: cn=UMC,cn=univention,dc=univention-organization,dc=intranet
+position: cn=UMC,cn=univention,{{ ldap_base }}
 properties:
   name: operations
 ---
 action: create
 module: policies/umc
-position: cn=UMC,cn=policies,dc=univention-organization,dc=intranet
+position: cn=UMC,cn=policies,{{ ldap_base }}
 properties:
   name: default-umc-all
 # ---
-# link default admin policy to the group "Domain Admins"
-# TODO: implement modify policy
-# action: modify
+# # TODO: Support policies
+# action: ensure_list_contains
 # module: groups/group
-# position: cn=Domain Admins,cn=groups,dc=univention-organization,dc=intranet
-# policy-reference: "cn=default-umc-all,cn=UMC,cn=policies,dc=univention-organization,dc=intranet"
+# position: cn=Domain Admins,cn=groups,{{ ldap_base }}
+# policies:
+#   policy/umc:
+#     - "cn=default-umc-all,cn=UMC,cn=policies,{{ ldap_base }}"
 ---
 # default user policy
 action: create
 module: policies/umc
-position: cn=UMC,cn=policies,dc=univention-organization,dc=intranet
+position: cn=UMC,cn=policies,{{ ldap_base }}
 properties:
   name: default-umc-users
 # ---
-# link default user policy to the group "Domain Users"
-# TODO: implement modify policy
-# action: modify
+# # TODO: Support policies
+# action: ensure_list_contains
 # module: groups/group
-# position: cn=Domain Users,cn=groups,dc=univention-organization,dc=intranet
-# policy-reference: "cn=default-umc-users,cn=UMC,cn=policies,dc=univention-organization,dc=intranet"
+# position: cn=Domain Users,cn=groups,{{ ldap_base }}
+# policies:
+#   policy/umc:
+#     - "cn=default-umc-users,cn=UMC,cn=policies,{{ ldap_base }}"
