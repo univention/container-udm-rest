@@ -7,7 +7,7 @@ import sys
 import yaml
 from jinja2 import Template, StrictUndefined
 
-from univention.admin.rest.client import UDM
+from univention.admin.rest.client import UDM, UnprocessableEntity
 
 
 log = logging.getLogger("app")
@@ -68,8 +68,13 @@ class App:
         obj.properties.update(properties)
         try:
             obj.save()
-        except Exception:
-            log.exception("Exception while trying to save the object")
+        except UnprocessableEntity as exc:
+            object_exists_message = '"dn" Object exists'
+            # TODO: Find a more solid way to check if the object exists
+            if object_exists_message in str(exc):
+                log.info(f'Object does already exist, not updating anything.')
+            else:
+                raise
 
     def ensure_list_contains(self, module, position, properties, policies):
         log.info(f"Ensuring attribute list contains value {module}, {position}")
