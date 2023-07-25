@@ -72,7 +72,7 @@ class App:
             object_exists_message = '"dn" Object exists'
             # TODO: Find a more solid way to check if the object exists
             if object_exists_message in str(exc):
-                log.info(f'Object does already exist, not updating anything.')
+                log.info("Object does already exist, not updating anything.")
             else:
                 raise
 
@@ -81,7 +81,9 @@ class App:
         obj = self.udm.obj_by_dn(position)
         needs_save = False
         for name, values in properties.items():
-            log.info(f'Ensuring values "{values}" in property "{name}" of "{position}".')
+            log.info(
+                f'Ensuring values "{values}" in property "{name}" of "{position}".',
+            )
             current_values = obj.properties[name]
             for value in values:
                 if value not in current_values:
@@ -106,6 +108,7 @@ class App:
             obj.save()
         else:
             log.info(f'No changes made to object "{obj.dn}".')
+
 
 def is_template(filename):
     return filename.endswith(".j2")
