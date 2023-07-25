@@ -187,20 +187,23 @@ properties:
   operation:
     - command: "udm/get"
       option: ""
-# TODO: Implement modify support
-# ---
-# action: modify
-# module: policies/umc
-# position: "cn=default-umc-all,cn=UMC,cn=policies,dc=univention-organization,dc=intranet"
-# --append allow="cn=udm-all,cn=operations,cn=UMC,cn=univention,dc=univention-organization,dc=intranet"
+---
+action: ensure_list_contains
+module: policies/umc
+position: "cn=default-umc-all,cn=UMC,cn=policies,dc=univention-organization,dc=intranet"
+properties:
+  allow:
+    - "cn=udm-all,cn=operations,cn=UMC,cn=univention,dc=univention-organization,dc=intranet"
+---
 action: create
 module: policies/umc
 position: cn=UMC,cn=policies,dc=univention-organization,dc=intranet
 properties:
   name: default-udm-self
-# TODO: Implement modify support
-# ---
-# action: modify
-# module: policies/umc
-# position: "cn=default-udm-self,cn=UMC,cn=policies,dc=univention-organization,dc=intranet"
-# --append allow="cn=udm-self,cn=operations,cn=UMC,cn=univention,dc=univention-organization,dc=intranet"
+---
+action: ensure_list_contains
+module: policies/umc
+position: "cn=default-udm-self,cn=UMC,cn=policies,dc=univention-organization,dc=intranet"
+properties:
+  allow:
+    - "cn=udm-self,cn=operations,cn=UMC,cn=univention,dc=univention-organization,dc=intranet"
