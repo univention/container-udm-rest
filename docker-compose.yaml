@@ -106,6 +106,15 @@ services:
     volumes:
       - ldap-shared-data:/var/lib/univention-ldap/:rw
 
+  # Environment to build the documentation
+  docs:
+    image: docker-registry.knut.univention.de/sphinx:latest
+    working_dir: /src/docs
+    volumes:
+      - ".:/src"
+    profiles:
+      - docs
+
 secrets:
   ldap_secret:
     file: secret/ldap.secret

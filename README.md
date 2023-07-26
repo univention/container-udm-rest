@@ -5,7 +5,7 @@
 ### BYOL: Bring Your Own LDAP
 
 Check out the [LDAP container](https://git.knut.univention.de/univention/customers/dataport/upx/container-ldap) in a separate folder.
-Follow the instructions from the LDAP repo to initialize the server.
+Follow the instructions from the LDAP repository to initialize the server.
 
 Then copy the provided `.env.udm-rest-api.example` to `.env.udm-rest-api`
 and customize it if needed:
@@ -35,9 +35,9 @@ docker compose up --detach --remove-orphans --build
 
 ## Access via Browser
 
-Point your browser to http://localhost:9979/udm/ and enjoy!
+Point your browser to <http://localhost:9979/udm/> and enjoy!
 
-There is also an OpenAPI interface available: http://localhost:9979/udm/schema/
+There is also an OpenAPI interface available: <http://localhost:9979/udm/schema/>.
 
 ## Configuration
 
@@ -50,7 +50,7 @@ The variable `LDAP_HOST_DN` should be set to the DN
 of the UDM REST API's "machine account".
 The corresponding password of this account should be placed
 in a text file at `/run/secrets/machine_secret` (recommended for production),
-or passed in the `MACHINE_SECRET` env (only for testing).
+or passed in the `MACHINE_SECRET` environment (only for testing).
 
 The variable `AUTHORIZED_DOMAIN_ADMINS` should point to a DN
 which contains a group with a list of users which may access the UDM REST API.
@@ -94,7 +94,7 @@ docker compose run --rm test
 ### UDM Modules
 
 The list of modules on the front page is generated [here](https://git.knut.univention.de/univention/ucs/-/blob/5.0-3/management/univention-directory-manager-rest/src/univention/admin/rest/module.py#L2116).
-A scan of the modules present in the filesystem happens [here](https://git.knut.univention.de/univention/ucs/-/blob/5.0-3/management/univention-directory-manager-modules/modules/univention/admin/modules.py#L121).
+A scan of the modules present in the file-system happens [here](https://git.knut.univention.de/univention/ucs/-/blob/5.0-3/management/univention-directory-manager-modules/modules/univention/admin/modules.py#L121).
 
 Currently supported are the default Univention UDM modules
 which are installed in `/usr/lib/python3/dist-packages/univention/admin/handlers/`,
