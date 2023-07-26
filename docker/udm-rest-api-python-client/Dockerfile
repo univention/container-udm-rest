@@ -45,6 +45,24 @@ RUN ucs-dev-add-branch.sh jbornhold-udm-rest-client \
     && rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*
 
 
+FROM base as test
+
+RUN apt-get update \
+    && apt-get --assume-yes --verbose-versions --no-install-recommends install \
+      python3-pip=18.* \
+    && rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/* \
+    && pip3 install --no-cache-dir pipenv==2023.6.18
+
+WORKDIR /src
+
+COPY Pipfile Pipfile.lock ./
+
+RUN pipenv sync --dev --system \
+    && rm -r ~/.cache
+
+CMD ["pytest", "docker/udm-rest-api-python-client"]
+
+
 FROM base as final
 
 COPY bin/* /usr/local/bin

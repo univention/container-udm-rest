@@ -27,6 +27,17 @@ services:
     volumes:
       - "./:/src/"
 
+  api-client-test:
+    profiles:
+      - test
+    build:
+      context: ./docker/udm-rest-api-python-client
+      target: test
+    platform: "linux/amd64"
+    working_dir: "/src"
+    volumes:
+      - "./:/src/"
+
   join-data-loader:
     profiles:
       - test
