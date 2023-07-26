@@ -14,16 +14,11 @@ log = logging.getLogger("app")
 
 
 class App:
-    def __init__(self):
+    def __init__(self, udm):
         logging.basicConfig(level=logging.INFO)
         log.setLevel(logging.DEBUG)
 
-        udm_api_url = os.environ["UDM_API_URL"]
-        log.info("Connecting to UDM API at URL %s", udm_api_url)
-        udm_api_user = os.environ["UDM_API_USER"]
-        with open(os.environ["UDM_API_PASSWORD_FILE"], "r") as password_file:
-            udm_api_password = password_file.read()
-        self.udm = UDM.http(udm_api_url, udm_api_user, udm_api_password)
+        self.udm = udm
 
     def run(self):
         input_filename = sys.argv[1]
@@ -80,6 +75,7 @@ class App:
         log.info(f"Ensuring attribute list contains value {module}, {position}")
         obj = self.udm.obj_by_dn(position)
         needs_save = False
+
         for name, values in properties.items():
             log.info(
                 f'Ensuring values "{values}" in property "{name}" of "{position}".',
@@ -119,6 +115,17 @@ def render_template(content, context):
     return template.render(context)
 
 
+def _connect_to_udm():
+    udm_api_url = os.environ["UDM_API_URL"]
+    log.info("Connecting to UDM API at URL %s", udm_api_url)
+    udm_api_user = os.environ["UDM_API_USER"]
+    with open(os.environ["UDM_API_PASSWORD_FILE"], "r") as password_file:
+        udm_api_password = password_file.read()
+    udm = UDM.http(udm_api_url, udm_api_user, udm_api_password)
+    return udm
+
+
 if __name__ == "__main__":
-    app = App()
+    udm = _connect_to_udm()
+    app = App(udm)
     app.run()
