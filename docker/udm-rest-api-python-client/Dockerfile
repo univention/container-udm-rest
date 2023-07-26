@@ -32,7 +32,7 @@
 ARG UCS_BASE_IMAGE=gitregistry.knut.univention.de/univention/customers/dataport/upx/container-ucs-base/ucs-base-dev-504
 ARG UCS_BASE_IMAGE_TAG=latest
 
-FROM ${UCS_BASE_IMAGE}:${UCS_BASE_IMAGE_TAG}
+FROM ${UCS_BASE_IMAGE}:${UCS_BASE_IMAGE_TAG} as base
 
 RUN ucs-dev-add-branch.sh jbornhold-udm-rest-client \
     && apt-get update \
@@ -43,5 +43,8 @@ RUN ucs-dev-add-branch.sh jbornhold-udm-rest-client \
       # TODO: Tweak upstream debian package, missing dependencies
       python3-requests=2.* \
     && rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*
+
+
+FROM base as final
 
 COPY bin/* /usr/local/bin
