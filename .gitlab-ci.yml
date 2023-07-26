@@ -7,6 +7,9 @@ variables:
 include:
   - project: "univention/customers/dataport/upx/common-ci"
     file:
+      # TODO: Sphinx docs inherits a stage definition from upstream,
+      # has to be included before our default stages to avoid trouble.
+      - "jobs/sphinx-docs.yaml"
       - "defaults/souvap-workflow.yaml"
       - "defaults/stages.yaml"
       - "templates/kaniko.yaml"
