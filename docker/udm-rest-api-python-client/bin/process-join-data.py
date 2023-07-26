@@ -75,12 +75,21 @@ class App:
         log.info(f"Ensuring attribute list contains value {module}, {position}")
         obj = self.udm.obj_by_dn(position)
         needs_save = False
+        needs_save |= self._ensure_values_in_dict(properties, obj.properties)
+        needs_save |= self._ensure_values_in_dict(policies, obj.policies)
+        if needs_save:
+            log.info(f'Saving object "{obj.dn}".')
+            obj.save()
+        else:
+            log.info(f'No changes made to object "{obj.dn}".')
 
-        for name, values in properties.items():
+    def _ensure_values_in_dict(self, values, obj_values):
+        needs_save = False
+        for name, values in values.items():
             log.info(
-                f'Ensuring values "{values}" in property "{name}" of "{position}".',
+                f'Ensuring values "{values}" in "{name}".',
             )
-            current_values = obj.properties[name]
+            current_values = obj_values[name]
             for value in values:
                 if value not in current_values:
                     log.debug(f'Adding value "{value}" into property "{name}".')
@@ -88,22 +97,7 @@ class App:
                     needs_save = True
                 else:
                     log.debug(f'Value "{value}" already present in property "{name}".')
-        for name, values in policies.items():
-            log.info(f'Ensuring values "{values}" in policy "{name}" of "{position}".')
-            current_values = obj.policies[name]
-            for value in values:
-                if value not in current_values:
-                    log.debug(f'Adding value "{value}" into policy "{name}".')
-                    current_values.append(value)
-                    needs_save = True
-                else:
-                    log.debug(f'Value "{value}" already present in policy "{name}".')
-
-        if needs_save:
-            log.info(f'Saving object "{obj.dn}".')
-            obj.save()
-        else:
-            log.info(f'No changes made to object "{obj.dn}".')
+        return needs_save
 
 
 def is_template(filename):
