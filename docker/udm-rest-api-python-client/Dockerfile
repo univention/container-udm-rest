@@ -60,7 +60,9 @@ COPY Pipfile Pipfile.lock ./
 RUN pipenv sync --dev --system \
     && rm -r ~/.cache
 
-CMD ["pytest", "docker/udm-rest-api-python-client"]
+WORKDIR /src/docker/udm-rest-api-python-client
+
+CMD ["pytest"]
 
 
 FROM base as final
