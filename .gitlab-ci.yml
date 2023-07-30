@@ -22,7 +22,6 @@ lint-pre-commit:
   before_script:
     # Compose lint would fail without the referenced env files
     - "cp .env.udm-rest-api.example .env.udm-rest-api"
-    - "helm repo add bitnami https://charts.bitnami.com/bitnami"
 
 build-udm-rest-image:
   stage: "build"
