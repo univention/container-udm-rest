@@ -11,7 +11,7 @@ data:
   LDAP_PORT: {{ required "The parameter \"udmRestApi.ldapPort\" is required." .Values.udmRestApi.ldapPort | quote }}
   LDAP_BASE_DN: {{ required "The parameter \"udmRestApi.ldapBaseDn\" is required." .Values.udmRestApi.ldapBaseDn | quote }}
   LDAP_HOST_DN: {{ required "The parameter \"udmRestApi.ldapHostDn\" is required." .Values.udmRestApi.ldapHostDn | quote }}
-  TLS_REQCERT: {{ required "The parameter \"udmRestApi.tlsReqCert\" is required." .Values.udmRestApi.tlsReqCert | quote }}
+  TLS_MODE: {{ required "The parameter \"udmRestApi.tlsMode\" is required." .Values.udmRestApi.tlsMode | quote }}
 
   DEBUG_LEVEL: "{{ .Values.udmRestApi.debugLevel }}"
   AUTHORIZED_DC_BACKUP: {{ required "The parameter \"udmRestApi.authGroups.dcBackup\" is required." .Values.udmRestApi.authGroups.dcBackup | quote }}
@@ -22,6 +22,7 @@ data:
   MACHINE_SECRET_FILE: "{{ .Values.udmRestApi.machineSecretFile }}"
   CA_CERT_FILE: "{{ .Values.udmRestApi.caCertFile }}"
 
+  # used by the load-join-data job
   UDM_API_URL: 'http://{{ include "common.names.fullname" . }}/udm/'
   UDM_API_USER: "cn=admin"
   UDM_API_PASSWORD_FILE: "{{ .Values.udmRestApi.ldapSecretFile }}"

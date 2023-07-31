@@ -39,10 +39,9 @@ udmRestApi:
   # -- DN of the UMC instance.
   # Example: `"cn=ucs-1234,cn=dc,cn=computers,dc=example,dc=org"`
   ldapHostDn: null
-  # -- Whether to enforce TLS when connecting to LDAP.
-  # Possible options are: "never", "try", "allow", "demand".
-  # See https://www.openldap.org/doc/admin26/tls.html, Sec. 16.2.1.9.
-  tlsReqCert: "demand"
+  # -- Set desired TLS mode.
+  # Options: `"secure"`, `"unvalidated"`, `"off"`.
+  tlsMode: "secure"
   # -- Debug level of the UDM REST API server.
   # (1 = errors only, 99 = most verbose)
   debugLevel: "5"

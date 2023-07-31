@@ -563,7 +563,7 @@ false
     "enabled": true
   },
   "machineSecretFile": "/var/secrets/machine_secret",
-  "tlsReqCert": "demand"
+  "tlsMode": "secure"
 }
 </pre>
 </td>
@@ -718,13 +718,13 @@ true
 			<td>Path to file with the LDAP machine secret.</td>
 		</tr>
 		<tr>
-			<td>udmRestApi.tlsReqCert</td>
+			<td>udmRestApi.tlsMode</td>
 			<td>string</td>
 			<td><pre lang="json">
-"demand"
+"secure"
 </pre>
 </td>
-			<td>Whether to enforce TLS when connecting to LDAP. Possible options are: "never", "try", "allow", "demand". See https://www.openldap.org/doc/admin26/tls.html, Sec. 16.2.1.9.</td>
+			<td>Set desired TLS mode. Options: `"secure"`, `"unvalidated"`, `"off"`.</td>
 		</tr>
 	</tbody>
 </table>

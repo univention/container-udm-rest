@@ -59,7 +59,7 @@ test-udm-rest:
         LDAP_PORT: 389
         LDAP_BASE_DN: "dc=univention-organization,dc=intranet"
         LDAP_HOST_DN: "cn=admin,dc=univention-organization,dc=intranet"
-        TLS_REQCERT: "never"
+        TLS_MODE: "off"
         DEBUG_LEVEL: 5
         AUTHORIZED_DOMAIN_ADMINS: "cn=Domain Admins,cn=groups,dc=univention-organization,dc=intranet"
         MACHINE_SECRET: "univention"

@@ -29,18 +29,38 @@ set -euxo pipefail
 # <https://www.gnu.org/licenses/>.
 
 ############################################################
-# Link certificates in place
-CA_CERT_FILE=${CA_CERT_FILE:-/run/secrets/ca_cert}
+# Prepare LDAP TLS certificates and settings
+TLS_MODE="${TLS_MODE:-secure}"
 
-if [[ -f "${CA_CERT_FILE}" ]]; then
-  echo "Using provided CA certificate at ${CA_CERT_FILE}"
+case "${TLS_MODE}" in
+  "secure")
+    TLS_REQCERT="demand"
+    UDM_STARTTLS=2
+    ;;
+  "unvalidated")
+    TLS_REQCERT="allow"
+    UDM_STARTTLS=1
+    ;;
+  "off")
+    TLS_REQCERT="never"
+    UDM_STARTTLS=0
+    ;;
+  *)
+    echo "TLS_MODE must be one of: secure, unvalidated, off."
+    exit 1
+esac
+
+if [[ "${TLS_MODE}" != "off" ]]; then
+  CA_CERT_FILE=${CA_CERT_FILE:-/run/secrets/ca_cert}
   CA_DIR="/etc/univention/ssl/ucsCA"
+
+  if [[ ! -f "${CA_CERT_FILE}" ]]; then
+    echo "\$CA_CERT_FILE is not a file at ${CA_CERT_FILE}"
+    exit 1
+  fi
 
   mkdir --parents "${CA_DIR}"
   ln --symbolic --force "${CA_CERT_FILE}" "${CA_DIR}/CAcert.pem"
-else
-  unset CA_DIR
-  echo "No CA certificate provided!"
 fi
 
 ############################################################
@@ -116,6 +136,7 @@ ucr set \
   directory/manager/rest/authorized-groups/dc-slaves="${AUTHORIZED_DC_SLAVES}" \
   directory/manager/rest/authorized-groups/domain-admins="${AUTHORIZED_DOMAIN_ADMINS}" \
   directory/manager/rest/debug_level="${DEBUG_LEVEL}" \
+  directory/manager/rest/ldap-connection/user-read/start-tls=${UDM_STARTTLS} \
   directory/manager/templates/alphanum/whitelist="" \
   directory/manager/user/activate_ldap_attribute_mailForwardCopyToSelf="yes" \
   directory/manager/user_group/uniqueness="true" \
@@ -152,13 +173,6 @@ ucr set \
   version/version="5.0"
 
 ucr unset ldap/server/ip
-
-if [[ "${TLS_REQCERT}" = "never" ]]; then
-  ucr set directory/manager/rest/ldap-connection/user-read/start-tls=0
-elif [[ "${TLS_REQCERT}" == "try" || "${TLS_REQCERT}" == "allow" ]]; then
-  ucr set directory/manager/rest/ldap-connection/user-read/start-tls=1
-# for TLS_REQCERT == "demand" the default "start-tls=2" is correct
-fi
 
 exec "$@"
 
