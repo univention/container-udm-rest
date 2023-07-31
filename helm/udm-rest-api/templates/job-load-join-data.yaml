@@ -18,6 +18,10 @@ spec:
         {{- include "common.labels.standard" . | nindent 8 }}
     spec:
       restartPolicy: OnFailure
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       containers:
       - name: load-join-data
         {{- with .Values.image.loadJoinData }}
