@@ -39,7 +39,7 @@ helm uninstall udm-rest-api
 
 | Repository | Name | Version |
 |------------|------|---------|
-| oci://gitregistry.knut.univention.de/univention/customers/dataport/upx/common-helm/helm | common | ^0.1.0 |
+| oci://gitregistry.knut.univention.de/univention/customers/dataport/upx/common-helm/helm | common | ^0.2.0 |
 
 ## Values
 
@@ -268,6 +268,15 @@ true
 </pre>
 </td>
 			<td>The hostname. This parameter has to be supplied. Example `udm.example`. host: "sso.example.com"</td>
+		</tr>
+		<tr>
+			<td>mountSecrets</td>
+			<td>bool</td>
+			<td><pre lang="json">
+true
+</pre>
+</td>
+			<td></td>
 		</tr>
 		<tr>
 			<td>nameOverride</td>
