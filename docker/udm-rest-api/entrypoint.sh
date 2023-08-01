@@ -136,6 +136,7 @@ ucr set \
   directory/manager/rest/authorized-groups/dc-slaves="${AUTHORIZED_DC_SLAVES}" \
   directory/manager/rest/authorized-groups/domain-admins="${AUTHORIZED_DOMAIN_ADMINS}" \
   directory/manager/rest/debug_level="${DEBUG_LEVEL}" \
+  directory/manager/rest/processes="${N_SUBPROCESSES}" \
   directory/manager/rest/ldap-connection/user-read/start-tls=${UDM_STARTTLS} \
   directory/manager/templates/alphanum/whitelist="" \
   directory/manager/user/activate_ldap_attribute_mailForwardCopyToSelf="yes" \

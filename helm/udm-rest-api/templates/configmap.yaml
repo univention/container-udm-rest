@@ -11,6 +11,7 @@ data:
   LDAP_PORT: {{ required "The parameter \"udmRestApi.ldapPort\" is required." .Values.udmRestApi.ldapPort | quote }}
   LDAP_BASE_DN: {{ required "The parameter \"udmRestApi.ldapBaseDn\" is required." .Values.udmRestApi.ldapBaseDn | quote }}
   LDAP_HOST_DN: {{ required "The parameter \"udmRestApi.ldapHostDn\" is required." .Values.udmRestApi.ldapHostDn | quote }}
+  N_SUBPROCESSES: "{{ .Values.udmRestApi.numberOfSubprocesses }}"
   TLS_MODE: {{ required "The parameter \"udmRestApi.tlsMode\" is required." .Values.udmRestApi.tlsMode | quote }}
 
   DEBUG_LEVEL: "{{ .Values.udmRestApi.debugLevel }}"

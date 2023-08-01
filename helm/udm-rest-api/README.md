@@ -572,6 +572,7 @@ false
     "enabled": true
   },
   "machineSecretFile": "/var/secrets/machine_secret",
+  "numberOfSubprocesses": 1,
   "tlsMode": "secure"
 }
 </pre>
@@ -725,6 +726,15 @@ true
 </pre>
 </td>
 			<td>Path to file with the LDAP machine secret.</td>
+		</tr>
+		<tr>
+			<td>udmRestApi.numberOfSubprocesses</td>
+			<td>int</td>
+			<td><pre lang="json">
+1
+</pre>
+</td>
+			<td>How many subprocesses to spawn (0: one per core). Default: `1`.</td>
 		</tr>
 		<tr>
 			<td>udmRestApi.tlsMode</td>

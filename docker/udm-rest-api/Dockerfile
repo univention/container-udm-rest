@@ -248,8 +248,7 @@ CMD [ \
   "-m", "univention.admin.rest.server", \
   "--debug", "4", \
   "--port", "9979", \
-  "--interface", "0.0.0.0", \
-  "--processes", "1" \
+  "--interface", "0.0.0.0" \
 ]
 
 EXPOSE 9979
