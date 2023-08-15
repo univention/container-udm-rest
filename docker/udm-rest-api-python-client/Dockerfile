@@ -32,7 +32,7 @@
 ARG UCS_BASE_IMAGE=gitregistry.knut.univention.de/univention/customers/dataport/upx/container-ucs-base/ucs-base-dev-504
 ARG UCS_BASE_IMAGE_TAG=latest
 
-FROM ${UCS_BASE_IMAGE}:${UCS_BASE_IMAGE_TAG} as base
+FROM ${UCS_BASE_IMAGE}:${UCS_BASE_IMAGE_TAG} as final
 
 RUN ucs-dev-add-branch.sh jbornhold-udm-rest-client \
     && apt-get update \
@@ -43,28 +43,3 @@ RUN ucs-dev-add-branch.sh jbornhold-udm-rest-client \
       # TODO: Tweak upstream debian package, missing dependencies
       python3-requests=2.* \
     && rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*
-
-
-FROM base as test
-
-RUN apt-get update \
-    && apt-get --assume-yes --verbose-versions --no-install-recommends install \
-      python3-pip=18.* \
-    && rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/* \
-    && pip3 install --no-cache-dir pipenv==2023.6.18
-
-WORKDIR /src
-
-COPY Pipfile Pipfile.lock ./
-
-RUN pipenv sync --dev --system \
-    && rm -r ~/.cache
-
-WORKDIR /src/docker/udm-rest-api-python-client
-
-CMD ["pytest"]
-
-
-FROM base as final
-
-COPY bin/* /usr/local/bin
