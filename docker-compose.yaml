@@ -27,17 +27,6 @@ services:
     volumes:
       - "./:/src/"
 
-  joinscript-tools:
-    profiles:
-      - test
-    image: gitregistry.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/udm-rest-api-joinscript-tools:${IMAGE_TAG:-latest}
-    build:
-      context: ./docker/udm-rest-api-joinscript-tools
-    platform: "linux/amd64"
-    working_dir: "/src"
-    volumes:
-      - "./:/src/"
-
   pre-commit:
     profiles:
       - "pre-commit"
