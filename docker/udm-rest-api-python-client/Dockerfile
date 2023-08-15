@@ -40,6 +40,4 @@ RUN ucs-dev-add-branch.sh jbornhold-udm-rest-client \
       python3-univention-directory-manager-rest-client=10.* \
       python3-yaml=3.* \
       python3-jinja2=2.* \
-      # TODO: Tweak upstream debian package, missing dependencies
-      python3-requests=2.* \
     && rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*
