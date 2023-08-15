@@ -568,9 +568,6 @@ false
   "ldapHostIp": null,
   "ldapPort": "389",
   "ldapSecretFile": "/var/secrets/ldap_secret",
-  "loadJoinData": {
-    "enabled": true
-  },
   "machineSecretFile": "/var/secrets/machine_secret",
   "tlsMode": "secure"
 }
@@ -707,15 +704,6 @@ null
 </pre>
 </td>
 			<td>Path to file with the LDAP secret. (TODO: This may be unnecessary here.)</td>
-		</tr>
-		<tr>
-			<td>udmRestApi.loadJoinData.enabled</td>
-			<td>bool</td>
-			<td><pre lang="json">
-true
-</pre>
-</td>
-			<td>Enable loading of initial join data during installation and upgrade. This is usually required because it does roll out the initial structure of the LDAP directory.</td>
 		</tr>
 		<tr>
 			<td>udmRestApi.machineSecretFile</td>
