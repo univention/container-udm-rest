@@ -29,13 +29,12 @@
 # <https://www.gnu.org/licenses/>.
 
 
-ARG UCS_BASE_IMAGE=gitregistry.knut.univention.de/univention/customers/dataport/upx/container-ucs-base/ucs-base-dev-504
+ARG UCS_BASE_IMAGE=gitregistry.knut.univention.de/univention/customers/dataport/upx/container-ucs-base/ucs-base-504
 ARG UCS_BASE_IMAGE_TAG=latest
 
 FROM ${UCS_BASE_IMAGE}:${UCS_BASE_IMAGE_TAG} as final
 
-RUN ucs-dev-add-branch.sh jbornhold-udm-rest-client \
-    && apt-get update \
+RUN apt-get update \
     && apt-get --assume-yes --verbose-versions --no-install-recommends install \
       python3-univention-directory-manager-rest-client=10.* \
       python3-yaml=3.* \
