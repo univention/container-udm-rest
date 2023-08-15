@@ -27,23 +27,6 @@ services:
     volumes:
       - "./:/src/"
 
-  join-data-loader:
-    profiles:
-      - test
-    image: gitregistry.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/udm-rest-api-join-data-loader:${IMAGE_TAG:-latest}
-    build:
-      context: ./docker/udm-rest-api-join-data-loader
-    platform: "linux/amd64"
-    working_dir: "/src"
-    volumes:
-      - "./:/src/"
-    environment:
-      UDM_API_URL: "http://udm-rest-api:9979/udm/"
-      UDM_API_USER: "cn=admin"
-      UDM_API_PASSWORD_FILE: "/run/secrets/ldap_secret"
-    secrets:
-      - ldap_secret
-
   joinscript-tools:
     profiles:
       - test
