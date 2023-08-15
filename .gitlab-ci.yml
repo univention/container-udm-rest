@@ -80,14 +80,6 @@ build-udm-rest-api-python-client:
     KANIKO_BUILD_CONTEXT: "docker/udm-rest-api-python-client"
     CI_REGISTRY_IMAGE: "$CI_REGISTRY_IMAGE/udm-rest-api-python-client"
 
-build-udm-rest-api-joinscript-tools:
-  stage: build
-  extends: .kaniko
-  needs: []
-  variables:
-    KANIKO_BUILD_CONTEXT: "docker/udm-rest-api-joinscript-tools"
-    CI_REGISTRY_IMAGE: "$CI_REGISTRY_IMAGE/udm-rest-api-joinscript-tools"
-
 push-image-souvap:
   needs:
     - job: "build-udm-rest-image"
