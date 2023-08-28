@@ -1,8 +1,8 @@
 ---
 
 variables:
-  SOUVAP_HELM_PROJECT_ID: 101
-  SOUVAP_REGISTRY_PATH: "souvap/tooling/images/udm-rest-api"
+  SOUVAP_HELM_PROJECT_ID: 155
+  SOUVAP_REGISTRY_PATH: souvap/tooling/images/univention
 
 include:
   - project: "univention/customers/dataport/upx/common-ci"
