@@ -1,0 +1,193 @@
+# Like what you see? Join us!
+# https://www.univention.com/about-us/careers/vacancies/
+#
+# Copyright 2010-2023 Univention GmbH
+#
+# https://www.univention.de/
+#
+# All rights reserved.
+#
+# The source code of this program is made available
+# under the terms of the GNU Affero General Public License version 3
+# (GNU AGPL V3) as published by the Free Software Foundation.
+#
+# Binary versions of this program provided by Univention to you as
+# well as other copyrighted, protected or trademarked materials like
+# Logos, graphics, fonts, specific documentations and configurations,
+# cryptographic keys etc. are subject to a license agreement between
+# you and Univention and not subject to the GNU AGPL V3.
+#
+# In the case you use this program under the terms of the GNU AGPL V3,
+# the program is provided in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public
+# License with the Debian GNU/Linux or Univention distribution in file
+# /usr/share/common-licenses/AGPL-3; if not, see
+# <https://www.gnu.org/licenses/>.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: univention-directory-manager-modules\n"
+"Report-Msgid-Bugs-To: packages@univention.de\n"
+"POT-Creation-Date: 2022-10-06 13:27+0200\n"
+"PO-Revision-Date: 2011-10-09 19:21+0200\n"
+"Last-Translator: Univention GmbH <packages@univention.de>\n"
+"Language-Team: German <packages@univention.de>\n"
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: unicode\n"
+
+#: modules/univention/admin/handlers/groups/group.py:122
+msgid "AD group type"
+msgstr "AD Gruppentyp"
+
+#: modules/univention/admin/handlers/groups/group.py:123
+msgid "Active Directory group type"
+msgstr "Active Directory Gruppentyp"
+
+#: modules/univention/admin/handlers/groups/group.py:224
+msgid "Basic settings"
+msgstr "Grundeinstellungen"
+
+#: modules/univention/admin/handlers/groups/group.py:132
+msgid "Description"
+msgstr "Beschreibung"
+
+#: modules/univention/admin/handlers/groups/group.py:224
+msgid "General"
+msgstr "Allgemein"
+
+#: modules/univention/admin/handlers/groups/group.py:59
+#: modules/univention/admin/handlers/groups/group.py:60
+msgid "Group"
+msgstr "Gruppe"
+
+#: modules/univention/admin/handlers/groups/group.py:92
+#: modules/univention/admin/handlers/groups/group.py:244
+msgid "Group ID"
+msgstr "Gruppen-ID"
+
+#: modules/univention/admin/handlers/groups/group.py:225
+msgid "Group account"
+msgstr "Gruppen-Konto"
+
+#: modules/univention/admin/handlers/groups/group.py:61
+#: modules/univention/admin/handlers/groups/group.py:180
+msgid "Groups"
+msgstr "Gruppen"
+
+#: modules/univention/admin/handlers/groups/group.py:199
+msgid "Groups that are allowed to send e-mails to the group"
+msgstr "Gruppen, die berechtigt sind, E-Mails an diese Gruppe zu versenden"
+
+#: modules/univention/admin/handlers/groups/group.py:238
+msgid "Host members"
+msgstr "enthaltene Rechner"
+
+#: modules/univention/admin/handlers/groups/group.py:238
+msgid "Host members of this group"
+msgstr "in dieser Gruppe enthaltene Rechner"
+
+#: modules/univention/admin/handlers/groups/group.py:151
+msgid "Hosts"
+msgstr "enthaltene Rechner"
+
+#: modules/univention/admin/handlers/groups/group.py:244
+msgid "ID of this group"
+msgstr "ID dieser Gruppe"
+
+#: modules/univention/admin/handlers/groups/group.py:215
+msgid "Immutable Identifier of the source IAM"
+msgstr "Unveränderlicher Identifikator der IAM-Quelle"
+
+#: modules/univention/admin/handlers/groups/group.py:208
+msgid "Immutable Object Identifier"
+msgstr "Unveränderlicher Objekt-Identifikator"
+
+#: modules/univention/admin/handlers/groups/group.py:216
+msgid "Immutable attribute to identfy source IAM"
+msgstr "Unveränderliches Attribut zur Identifizierung der IAM-Quelle"
+
+#: modules/univention/admin/handlers/groups/group.py:209
+msgid "Immutable attribute to track the identity of an object in UDM"
+msgstr ""
+"Unveränderliches Attribut, um die Identität eines Objekts in UDM zu "
+"verfolgen"
+
+#: modules/univention/admin/handlers/groups/group.py:602
+#, python-format
+msgid "It is used as %s."
+msgstr "Sie wird als %s genutzt."
+
+#: modules/univention/admin/handlers/groups/group.py:233
+msgid "Mail"
+msgstr "Mail"
+
+#: modules/univention/admin/handlers/groups/group.py:162
+msgid "Mail address"
+msgstr "Mail-Adresse"
+
+#: modules/univention/admin/handlers/groups/group.py:233
+msgid "Mail settings of this group"
+msgstr "Mail-Einstellungen dieser Gruppe"
+
+#: modules/univention/admin/handlers/groups/group.py:115
+msgid "Manage samba privileges"
+msgstr "Samba-Privilegien verwalten"
+
+#: modules/univention/admin/handlers/groups/group.py:170
+#: modules/univention/admin/handlers/groups/group.py:241
+msgid "Member of"
+msgstr "Mitglied von"
+
+#: modules/univention/admin/handlers/groups/group.py:228
+msgid "Members of this group"
+msgstr "Mitglieder dieser Gruppe"
+
+#: modules/univention/admin/handlers/groups/group.py:241
+msgid "Membership in other groups"
+msgstr "Mitgliedschaft in weiteren Gruppen"
+
+#: modules/univention/admin/handlers/groups/group.py:83
+msgid "Name"
+msgstr "Name"
+
+#: modules/univention/admin/handlers/groups/group.py:70
+msgid "Posix group"
+msgstr "Posix-Gruppe"
+
+#: modules/univention/admin/handlers/groups/group.py:99
+msgid "Relative ID"
+msgstr "Relative ID"
+
+#: modules/univention/admin/handlers/groups/group.py:75
+msgid "Samba group"
+msgstr "Samba-Gruppe"
+
+#: modules/univention/admin/handlers/groups/group.py:114
+msgid "Samba privilege"
+msgstr "Samba-Privileg"
+
+#: modules/univention/admin/handlers/groups/group.py:141
+msgid "Users"
+msgstr "Benutzer"
+
+#: modules/univention/admin/handlers/groups/group.py:190
+msgid "Users that are allowed to send e-mails to the group"
+msgstr "Benutzer, die berechtigt sind, E-Mails an diese Gruppe zu versenden"
+
+#: modules/univention/admin/handlers/groups/group.py:247
+msgid "Windows"
+msgstr "Windows"
+
+#: modules/univention/admin/handlers/groups/group.py:247
+msgid "Windows account settings"
+msgstr "Windows-Kontoeinstellungen"
+
+#: modules/univention/admin/handlers/groups/group.py:106
+msgid "Windows group type"
+msgstr "Windows Gruppentyp"

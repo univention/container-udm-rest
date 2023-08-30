@@ -213,6 +213,9 @@ COPY --from=build \
   /version \
   /version
 
+# Add UDM REST sources
+COPY ./src/ /usr/lib/python3/dist-packages/
+
 RUN \
   echo > /usr/lib/python3/dist-packages/univention/lib/package_manager.py && \
   #

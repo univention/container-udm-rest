@@ -1,0 +1,103 @@
+# Like what you see? Join us!
+# https://www.univention.com/about-us/careers/vacancies/
+#
+# Copyright 2010-2023 Univention GmbH
+#
+# https://www.univention.de/
+#
+# All rights reserved.
+#
+# The source code of this program is made available
+# under the terms of the GNU Affero General Public License version 3
+# (GNU AGPL V3) as published by the Free Software Foundation.
+#
+# Binary versions of this program provided by Univention to you as
+# well as other copyrighted, protected or trademarked materials like
+# Logos, graphics, fonts, specific documentations and configurations,
+# cryptographic keys etc. are subject to a license agreement between
+# you and Univention and not subject to the GNU AGPL V3.
+#
+# In the case you use this program under the terms of the GNU AGPL V3,
+# the program is provided in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public
+# License with the Debian GNU/Linux or Univention distribution in file
+# /usr/share/common-licenses/AGPL-3; if not, see
+# <https://www.gnu.org/licenses/>.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: univention-directory-manager-modules\n"
+"Report-Msgid-Bugs-To: packages@univention.de\n"
+"POT-Creation-Date: 2022-04-22 22:53+0200\n"
+"PO-Revision-Date: 2006-01-12 13:25+0100\n"
+"Last-Translator: Univention GmbH <packages@univention.de>\n"
+"Language-Team: German <packages@univention.de>\n"
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: unicode\n"
+
+#: modules/univention/admin/handlers/networks/network.py:127
+msgid "Basic settings"
+msgstr "Grundeinstellungen"
+
+#: modules/univention/admin/handlers/networks/network.py:137
+msgid "DHCP preferences"
+msgstr "DHCP-Einstellungen"
+
+#: modules/univention/admin/handlers/networks/network.py:119
+msgid "DHCP service"
+msgstr "DHCP-Einträge"
+
+#: modules/univention/admin/handlers/networks/network.py:107
+msgid "DNS forward lookup zone"
+msgstr "Forward Lookup Zone für DNS-Einträge"
+
+#: modules/univention/admin/handlers/networks/network.py:133
+msgid "DNS preferences"
+msgstr "DNS-Einstellungen"
+
+#: modules/univention/admin/handlers/networks/network.py:113
+msgid "DNS reverse lookup zone"
+msgstr "Reverse Lookup Zone für DNS-Einträge"
+
+#: modules/univention/admin/handlers/networks/network.py:127
+msgid "General"
+msgstr "Allgemein"
+
+#: modules/univention/admin/handlers/networks/network.py:128
+msgid "General network settings"
+msgstr "Grundeinstellungen - Netzwerk"
+
+#: modules/univention/admin/handlers/networks/network.py:100
+msgid "IP address range"
+msgstr "IP-Adressbereich"
+
+#: modules/univention/admin/handlers/networks/network.py:69
+msgid "Name"
+msgstr "Name"
+
+#: modules/univention/admin/handlers/networks/network.py:86
+msgid "Netmask"
+msgstr "Netzmaske"
+
+#: modules/univention/admin/handlers/networks/network.py:56
+msgid "Network"
+msgstr "Netzwerk"
+
+#: modules/univention/admin/handlers/networks/network.py:57
+#: modules/univention/admin/handlers/networks/network.py:78
+msgid "Networks"
+msgstr "Netzwerk"
+
+#: modules/univention/admin/handlers/networks/network.py:55
+msgid "Networks: Network"
+msgstr "Netze: Netz"
+
+#: modules/univention/admin/handlers/networks/network.py:94
+msgid "Next IP address"
+msgstr "Nächste IP-Adresse"
