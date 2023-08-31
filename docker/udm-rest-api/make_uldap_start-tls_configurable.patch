@@ -1,0 +1,91 @@
+diff --git a/base/univention-python/modules/uldap.py b/base/univention-python/modules/uldap.py
+index 1f57fa7f78..d310570503 100644
+--- /usr/lib/python3/dist-packages/univention/uldap.py
++++ /usr/lib/python3/dist-packages/univention/uldap.py
+@@ -82,7 +82,7 @@ def explodeDn(dn, notypes=0):
+     return ldap.dn.explode_dn(dn, notypes)
+
+
+-def getRootDnConnection(start_tls=2, decode_ignorelist=[], reconnect=True):
++def getRootDnConnection(start_tls=None, decode_ignorelist=[], reconnect=True):
+     # type: (int, List[str], bool) -> access
+     """
+     Open a LDAP connection to the local LDAP server with the LDAP root account.
+@@ -107,7 +107,7 @@ def getRootDnConnection(start_tls=2, decode_ignorelist=[], reconnect=True):
+     return access(host=host, port=port, base=ucr['ldap/base'], binddn=binddn, bindpw=bindpw, start_tls=start_tls, decode_ignorelist=decode_ignorelist, reconnect=reconnect)
+
+
+-def getAdminConnection(start_tls=2, decode_ignorelist=[], reconnect=True):
++def getAdminConnection(start_tls=None, decode_ignorelist=[], reconnect=True):
+     # type: (int, List[str], bool) -> access
+     """
+     Open a LDAP connection to the Primary Directory Node LDAP server using the admin credentials.
+@@ -126,7 +126,7 @@ def getAdminConnection(start_tls=2, decode_ignorelist=[], reconnect=True):
+     return access(host=ucr['ldap/master'], port=port, base=ucr['ldap/base'], binddn='cn=admin,' + ucr['ldap/base'], bindpw=bindpw, start_tls=start_tls, decode_ignorelist=decode_ignorelist, reconnect=reconnect)
+
+
+-def getBackupConnection(start_tls=2, decode_ignorelist=[], reconnect=True):
++def getBackupConnection(start_tls=None, decode_ignorelist=[], reconnect=True):
+     # type: (int, List[str], bool) -> access
+     """
+     Open a LDAP connection to a Backup Directory Node LDAP server using the admin credentials.
+@@ -151,7 +151,7 @@ def getBackupConnection(start_tls=2, decode_ignorelist=[], reconnect=True):
+         return access(host=backup, port=port, base=ucr['ldap/base'], binddn='cn=backup,' + ucr['ldap/base'], bindpw=bindpw, start_tls=start_tls, decode_ignorelist=decode_ignorelist, reconnect=reconnect)
+
+
+-def getMachineConnection(start_tls=2, decode_ignorelist=[], ldap_master=True, secret_file="/etc/machine.secret", reconnect=True, random_server=False):
++def getMachineConnection(start_tls=None, decode_ignorelist=[], ldap_master=True, secret_file="/etc/machine.secret", reconnect=True, random_server=False):
+     # type: (int, List[str], bool, str, bool, bool) -> access
+     """
+     Open a LDAP connection using the machine credentials.
+@@ -240,7 +240,7 @@ class access(object):
+     :param bool reconnect: Automatically re-establish connection to LDAP server if connection breaks.
+     """
+
+-    def __init__(self, host='localhost', port=None, base='', binddn='', bindpw='', start_tls=2, ca_certfile=None, decode_ignorelist=[], use_ldaps=False, uri=None, follow_referral=False, reconnect=True):
++    def __init__(self, host='localhost', port=None, base='', binddn='', bindpw='', start_tls=None, ca_certfile=None, decode_ignorelist=[], use_ldaps=False, uri=None, follow_referral=False, reconnect=True):
+         # type: (str, int, str, Optional[str], str, int, str, List, bool, str, bool, bool) -> None
+         self.host = host
+         self.base = base
+@@ -259,6 +259,9 @@ class access(object):
+         ucr = ConfigRegistry()
+         ucr.load()
+
++        if self.start_tls is None:
++            self.start_tls = int(ucr.get('uldap/start-tls', 2))
++
+         if not self.port:  # if no explicit port is given
+             self.port = int(ucr.get('ldap/server/port', 7389))  # take UCR value
+             if use_ldaps and self.port == 7389:  # adjust the standard port for ssl
+
+diff --git a/management/univention-directory-manager-modules/modules/univention/admin/uldap.py b/management/univention-directory-manager-modules/modules/univention/admin/uldap.py
+index 32d36885b7..b1c0857349 100644
+--- /usr/lib/python3/dist-packages/univention/admin/uldap.py
++++ /usr/lib/python3/dist-packages/univention/admin/uldap.py
+@@ -147,7 +147,7 @@ def getBaseDN(host='localhost', port=None, uri=None):
+     return result[0][1]['namingContexts'][0].decode('utf-8')
+
+
+-def getAdminConnection(start_tls=2, decode_ignorelist=[]):
++def getAdminConnection(start_tls=None, decode_ignorelist=[]):
+     # type: (int, List[str]) -> Tuple[univention.admin.uldap.access, univention.admin.uldap.position]
+     """
+     Open a LDAP connection using the admin credentials.
+@@ -163,7 +163,7 @@ def getAdminConnection(start_tls=2, decode_ignorelist=[]):
+     return access(lo=lo), pos
+
+
+-def getMachineConnection(start_tls=2, decode_ignorelist=[], ldap_master=True):
++def getMachineConnection(start_tls=None, decode_ignorelist=[], ldap_master=True):
+     # type: (int, List[str], bool) -> Tuple[univention.admin.uldap.access, univention.admin.uldap.position]
+     """
+     Open a LDAP connection using the machine credentials.
+@@ -449,7 +449,7 @@ class access(object):
+         # type: () -> int
+         return self.lo.start_tls
+
+-    def __init__(self, host='localhost', port=None, base=u'', binddn=u'', bindpw=u'', start_tls=2, lo=None, follow_referral=False, uri=None):
++    def __init__(self, host='localhost', port=None, base=u'', binddn=u'', bindpw=u'', start_tls=None, lo=None, follow_referral=False, uri=None):
+         # type: (str, int, str, str, str, int, univention.uldap.access, bool) -> None
+         """
+         :param str host: The hostname of the |LDAP| server.

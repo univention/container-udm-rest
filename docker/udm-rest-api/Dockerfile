@@ -121,9 +121,15 @@ RUN ucs-dev-add-branch.sh jbornhold-udm-rest-client && \
 # Apply patches for containerization
 
 WORKDIR /
-COPY patch-openapi.patch /udm/patch-openapi.patch
+COPY patch-openapi.patch \
+     make_uldap_start-tls_configurable.patch \
+     /
+
 RUN \
-  patch -p1 < /udm/patch-openapi.patch
+  patch -p 1 -i /patch-openapi.patch && \
+    rm /patch-openapi.patch && \
+  patch -p 0 -d / -i /make_uldap_start-tls_configurable.patch && \
+    rm /make_uldap_start-tls_configurable.patch
 
 ###############################################################################
 # Second stage image to get rid of unneeded files

@@ -91,7 +91,7 @@ MACHINE_SECRET_FILE=${MACHINE_SECRET_FILE:-/run/secrets/machine_secret}
 if [[ -f "${MACHINE_SECRET_FILE}" ]]; then
   echo "Using LDAP machine secret from file"
   ln --symbolic --force "${MACHINE_SECRET_FILE}" /etc/machine.secret
-elif [[ -n "${MACHINE_SECRET}" ]]; then
+elif [[ -n "${MACHINE_SECRET:-}" ]]; then
   echo "Using LDAP machine secret from env"
   echo -n "${MACHINE_SECRET}" > /etc/machine.secret
 else
@@ -136,7 +136,7 @@ ucr set \
   directory/manager/rest/authorized-groups/dc-slaves="${AUTHORIZED_DC_SLAVES}" \
   directory/manager/rest/authorized-groups/domain-admins="${AUTHORIZED_DOMAIN_ADMINS}" \
   directory/manager/rest/debug_level="${DEBUG_LEVEL}" \
-  directory/manager/rest/ldap-connection/user-read/start-tls=${UDM_STARTTLS} \
+  directory/manager/rest/ldap-connection/user-read/start-tls="${UDM_STARTTLS}" \
   directory/manager/templates/alphanum/whitelist="" \
   directory/manager/user/activate_ldap_attribute_mailForwardCopyToSelf="yes" \
   directory/manager/user_group/uniqueness="true" \
@@ -164,6 +164,7 @@ ucr set \
   locale/default="de_DE.UTF-8:UTF-8" \
   locale="de_DE.UTF-8:UTF-8 en_US.UTF-8:UTF-8" \
   password/hashing/method="SHA-512" \
+  uldap/start-tls="${UDM_STARTTLS}" \
   update/available="false" \
   update/reboot/required="false" \
   uuid/license="00000000-0000-0000-0000-000000000000" \
