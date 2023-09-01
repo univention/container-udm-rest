@@ -77,7 +77,7 @@ ingress:
     nginx.ingress.kubernetes.io/rewrite-target: "/$1"
     nginx.ingress.kubernetes.io/use-regex: "true"
   # -- The hostname. This parameter has to be supplied. Example `udm.example.com`.
-  # host: "sso.example.com"
+  host: null
   paths:
     - pathType: "Prefix"
       path: "/univention/(udm/.*)"

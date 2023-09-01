@@ -138,6 +138,7 @@ helm uninstall udm-rest-api
     "nginx.ingress.kubernetes.io/use-regex": "true"
   },
   "enabled": true,
+  "host": null,
   "ingressClassName": "nginx",
   "paths": [
     {
@@ -164,18 +165,13 @@ true
 			<td>Set this to `true` in order to enable the installation of Ingress related objects.</td>
 		</tr>
 		<tr>
-			<td>ingress.paths</td>
-			<td>list</td>
+			<td>ingress.host</td>
+			<td>string</td>
 			<td><pre lang="json">
-[
-  {
-    "path": "/univention/(udm/.*)",
-    "pathType": "Prefix"
-  }
-]
+null
 </pre>
 </td>
-			<td>The hostname. This parameter has to be supplied. Example `udm.example.com`. host: "sso.example.com"</td>
+			<td>The hostname. This parameter has to be supplied. Example `udm.example.com`.</td>
 		</tr>
 		<tr>
 			<td>istio.enabled</td>
