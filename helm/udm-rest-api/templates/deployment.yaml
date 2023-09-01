@@ -1,3 +1,12 @@
 ---
-{{ include "common.deployment" (dict "top" .) }}
+{{ include "common.deployment" (dict "top" . "overrides" "udm-rest-api.deployment") }}
 ...
+
+{{- define "udm-rest-api.deployment" }}
+spec:
+  template:
+    metadata:
+      annotations:
+        checksum/config: {{ include (print .top.Template.BasePath "/configmap.yaml") .top | sha256sum | quote }}
+        checksum/secret: {{ include (print .top.Template.BasePath "/secret.yaml") .top | sha256sum | quote }}
+{{- end }}
