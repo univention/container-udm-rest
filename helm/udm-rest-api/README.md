@@ -137,7 +137,7 @@ helm uninstall udm-rest-api
     "nginx.ingress.kubernetes.io/rewrite-target": "/$1",
     "nginx.ingress.kubernetes.io/use-regex": "true"
   },
-  "enabled": false,
+  "enabled": true,
   "ingressClassName": "nginx",
   "paths": [
     {
@@ -158,7 +158,7 @@ helm uninstall udm-rest-api
 			<td>ingress.enabled</td>
 			<td>bool</td>
 			<td><pre lang="json">
-false
+true
 </pre>
 </td>
 			<td>Set this to `true` in order to enable the installation of Ingress related objects.</td>
@@ -181,7 +181,7 @@ false
 			<td>istio.enabled</td>
 			<td>bool</td>
 			<td><pre lang="json">
-true
+false
 </pre>
 </td>
 			<td>Set this to `true` in order to enable the installation of Istio related objects.</td>

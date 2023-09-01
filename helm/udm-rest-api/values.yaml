@@ -71,7 +71,7 @@ udmRestApi:
 # -- Kubernetes ingress
 ingress:
   # -- Set this to `true` in order to enable the installation of Ingress related objects.
-  enabled: false
+  enabled: true
   ingressClassName: "nginx"
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: "/$1"
@@ -89,7 +89,7 @@ ingress:
 ## Istio support
 istio:
   # -- Set this to `true` in order to enable the installation of Istio related objects.
-  enabled: true
+  enabled: false
   # -- The hostname. This parameter has to be supplied. Example `udm.example`.
   # host: "sso.example.com"
   virtualService:
