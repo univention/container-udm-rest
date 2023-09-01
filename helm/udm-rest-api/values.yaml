@@ -76,6 +76,9 @@ ingress:
   annotations:
     nginx.ingress.kubernetes.io/configuration-snippet: |
       rewrite ^/univention(/udm/.*)$ $1 break;
+    nginx.org/location-snippets: |
+      rewrite ^/univention(/udm/.*)$ $1 break;
+    nginx.org/mergeable-ingress-type: "minion"
   # -- The hostname. This parameter has to be supplied. Example `udm.example.com`.
   host: null
   paths:

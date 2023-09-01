@@ -134,15 +134,16 @@ helm uninstall udm-rest-api
 			<td><pre lang="json">
 {
   "annotations": {
-    "nginx.ingress.kubernetes.io/rewrite-target": "/$1",
-    "nginx.ingress.kubernetes.io/use-regex": "true"
+    "nginx.ingress.kubernetes.io/configuration-snippet": "rewrite ^/univention(/udm/.*)$ $1 break;\n",
+    "nginx.org/location-snippets": "rewrite ^/univention(/udm/.*)$ $1 break;\n",
+    "nginx.org/mergeable-ingress-type": "minion"
   },
   "enabled": true,
   "host": null,
   "ingressClassName": "nginx",
   "paths": [
     {
-      "path": "/univention/(udm/.*)",
+      "path": "/univention/udm/",
       "pathType": "Prefix"
     }
   ],
