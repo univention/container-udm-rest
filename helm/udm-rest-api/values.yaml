@@ -124,13 +124,6 @@ image:
   ## Define image sha256 as an alternative to `tag`
   # sha256:
 
-  # -- Image used to load the join data
-  loadJoinData:
-    registry: "registry.souvap-univention.de"
-    repository: "souvap/tooling/images/udm-rest-api/udm-rest-api-load-join-data"
-    tag: "0.1.0"
-    imagePullPolicy: "Always"
-
 
 ## Container deployment probes
 probes:

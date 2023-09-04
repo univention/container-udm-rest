@@ -88,20 +88,6 @@ helm uninstall udm-rest-api
 			<td></td>
 		</tr>
 		<tr>
-			<td>image.loadJoinData</td>
-			<td>object</td>
-			<td><pre lang="json">
-{
-  "imagePullPolicy": "Always",
-  "registry": "registry.souvap-univention.de",
-  "repository": "souvap/tooling/images/udm-rest-api/udm-rest-api-load-join-data",
-  "tag": "0.1.0"
-}
-</pre>
-</td>
-			<td>Image used to load the join data</td>
-		</tr>
-		<tr>
 			<td>image.registry</td>
 			<td>string</td>
 			<td><pre lang="json">
