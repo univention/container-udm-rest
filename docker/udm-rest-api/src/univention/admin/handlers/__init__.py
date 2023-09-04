@@ -613,7 +613,8 @@ class simpleLdap(object):
     def _write_admin_diary_create(self):
         self._write_admin_diary_event('CREATED')
 
-    def modify(self, modify_childs=True, ignore_license=False, serverctrls=None, response=None):  # type: (bool, bool, List[ldap.controls.LDAPControl], Dict[Text, Any]) -> Text
+    def modify(self, modify_childs=True, ignore_license=False, serverctrls=None, responses=None):
+        # type: (bool, bool, List[ldap.controls.LDAPControl], List[Dict]) -> Text
         """
         Modifies the LDAP object by building the difference between the current state and the old state of this object and write this modlist to LDAP.
 
@@ -622,6 +623,12 @@ class simpleLdap(object):
 
         :param ignore_license: If the license is exceeded the modification may fail. Setting this to True causes license checks to be disabled
         :type ignore_license: bool
+
+        :param serverctrls: a list of ldap.controls.LDAPControl instances sent to the server along with the LDAP request
+        :type serverctrls: list[ldap.controls.LDAPControl]
+
+        :param response: An optional dictionary to receive the server controls of the result.
+        :type response: dict[str, Any]
 
         :raises: :class:`univention.admin.uexceptions.invalidOperation` if objects of this type do not support to be modified.
 
@@ -640,27 +647,31 @@ class simpleLdap(object):
         if not self.exists():
             raise univention.admin.uexceptions.noObject(self.dn)
 
-        if not isinstance(response, dict):
-            response = {}
+        if not isinstance(responses, list):
+            responses = []
 
         try:
             self._ldap_pre_ready()
             self.ready()
 
-            dn = self._modify(modify_childs, ignore_license=ignore_license, response=response)
+            dn = self._modify(modify_childs, ignore_license=ignore_license, serverctrls=serverctrls, responses=responses)
         except Exception:
             self._safe_cancel()
             raise
 
-        for c in response.get('ctrls', []):
-            if c.controlType == PostReadControl.controlType:
-                self.oldattr.update(c.entry)
+        if len(responses) > 0:
+            # modify *may* perform two LDAP operations: rename and modify.
+            # We are only interested in changes to the object content, i.e. the result from the last operation.
+            for c in responses[-1].get('ctrls', []):
+                if c.controlType == PostReadControl.controlType:
+                    self.oldattr.update(c.entry)
         return dn
 
     def _write_admin_diary_modify(self):
         self._write_admin_diary_event('MODIFIED')
 
-    def _create_temporary_ou(self):  # type: () -> Text
+    def _create_temporary_ou(self, serverctrls=None, response=None):
+        # type: (Optional[List[ldap.controls.LDAPControl]], Optional[Dict[Text, Any]]) -> Text
         name = u'temporary_move_container_%s' % time.time()
 
         module = univention.admin.modules.get('container/ou')
@@ -669,11 +680,12 @@ class simpleLdap(object):
         temporary_object = module.object(None, self.lo, position)
         temporary_object.open()
         temporary_object['name'] = name
-        temporary_object.create()
+        temporary_object.create(serverctrls=serverctrls, response=response)
 
         return u'ou=%s' % ldap.dn.escape_dn_chars(name)
 
-    def _delete_temporary_ou_if_empty(self, temporary_ou):  # type: (str) -> None
+    def _delete_temporary_ou_if_empty(self, temporary_ou, serverctrls=None, response=None):
+        # type: (str, Optional[List[ldap.controls.LDAPControl]], Optional[Dict[Text, Any]]) -> None
         """
         Try to delete the organizational unit entry if it is empty.
 
@@ -688,17 +700,21 @@ class simpleLdap(object):
         temporary_object = univention.admin.modules.lookup(module, None, self.lo, scope='base', base=dn, required=True, unique=True)[0]
         temporary_object.open()
         try:
-            temporary_object.remove()
+            temporary_object.remove(serverctrls=serverctrls, response=response)
         except (univention.admin.uexceptions.ldapError, ldap.NOT_ALLOWED_ON_NONLEAF):
             pass
 
-    def move(self, newdn, ignore_license=False, temporary_ou=None):  # type: (str, bool, str) -> str
+    def move(self, newdn, ignore_license=False, temporary_ou=None, serverctrls=None, responses=None):
+        # type: (str, bool, str, Optional[List[ldap.controls.LDAPControl]], Optional[Dict[Text, Any]]) -> str
         """
         Moves the LDAP object to the target position.
 
         :param str newdn: The DN of the target position.
         :param bool ignore_license: If the license is exceeded the modification may fail. Setting this to True causes license checks to be disabled.
         :param str temporary_ou: The distiguished name of a temporary container which is used to rename the object if only is letter casing changes.
+        :param serverctrls: a list of ldap.controls.LDAPControl instances sent to the server along with the LDAP request
+        :type serverctrls: list[ldap.controls.LDAPControl]
+        :param list responses: An optional list to receive the server controls of the result.
 
         :raises: :class:`univention.admin.uexceptions.invalidOperation` if objects of this type do not support to be moved.
         :raises: :class:`univention.admin.uexceptions.noObject` if the object does not exists.
@@ -737,9 +753,12 @@ class simpleLdap(object):
                 raise univention.admin.uexceptions.ldapError(_('Moving not possible: old and new DN are identical.'))
             else:
                 # We must use a temporary folder because OpenLDAP does not allow a rename of an container with subobjects
-                temporary_ou = self._create_temporary_ou()
+                response = {}
+                temporary_ou = self._create_temporary_ou(serverctrls, response)
+                if isinstance(responses, list) and response:
+                    responses.append(response)
                 temp_dn = dn2str(str2dn(newdn)[:1] + str2dn(temporary_ou) + str2dn(self.lo.base))
-                self.dn = n(self.move(temp_dn, ignore_license, temporary_ou))
+                self.dn = n(self.move(temp_dn, ignore_license, temporary_ou, serverctrls, responses))
 
         if newdn.lower().endswith(self.dn.lower()):
             raise univention.admin.uexceptions.ldapError(_("Moving into one's own sub container not allowed."))
@@ -760,7 +779,10 @@ class simpleLdap(object):
                 for key in self.keys():
                     copyobject[key] = self[key]
                 copyobject.policies = self.policies
-                copyobject.create()
+                response = {}
+                copyobject.create(serverctrls, response)
+                if isinstance(responses, list) and response:
+                    responses.append(response)
                 to_be_moved = []
                 moved = []
                 pattern = re.compile(u'%s$' % (re.escape(self.dn),), flags=re.I)
@@ -790,11 +812,14 @@ class simpleLdap(object):
 
                     for subobject, subolddn, subnewdn in to_be_moved:
                         subobject.open()
-                        subobject.move(subnewdn)
+                        subobject.move(subnewdn, serverctrls=serverctrls, responses=responses)
                         moved.append((subolddn, subnewdn))
 
-                    univention.admin.objects.get(univention.admin.modules.get(self.module), None, self.lo, position='', dn=self.dn).remove()
-                    self._delete_temporary_ou_if_empty(temporary_ou)
+                    univention.admin.objects.get(univention.admin.modules.get(self.module), None, self.lo, position='', dn=self.dn).remove(serverctrls, responses)
+                    response = {}
+                    self._delete_temporary_ou_if_empty(temporary_ou, serverctrls, response)
+                    if isinstance(responses, list) and response:
+                        responses.append(response)
                 except BaseException:
                     ud.debug(ud.ADMIN, ud.ERROR, 'move: subtree move failed, trying to move back.')
                     position = univention.admin.uldap.position(self.lo.base)
@@ -812,16 +837,17 @@ class simpleLdap(object):
                 return newdn
             else:
                 # normal move, fails on subtrees
-                res = n(self._move(newdn, ignore_license=ignore_license))
-                self._delete_temporary_ou_if_empty(temporary_ou)
+                res = n(self._move(newdn, ignore_license=ignore_license, serverctrls=serverctrls, responses=responses))
+                self._delete_temporary_ou_if_empty(temporary_ou, serverctrls, response)
                 return res
 
         else:
-            res = n(self._move(newdn, ignore_license=ignore_license))
-            self._delete_temporary_ou_if_empty(temporary_ou)
+            res = n(self._move(newdn, ignore_license=ignore_license, serverctrls=serverctrls, responses=responses))
+            self._delete_temporary_ou_if_empty(temporary_ou, serverctrls, response)
             return res
 
-    def move_subelements(self, olddn, newdn, subelements, ignore_license=False):  # type: (str, str, List[Tuple[str, Dict]], bool) -> Optional[List[Tuple[str, str]]]
+    def move_subelements(self, olddn, newdn, subelements, ignore_license=False, serverctrls=None, responses=None):
+        # type: (str, str, List[Tuple[str, Dict]], bool, Optional[List[ldap.controls.LDAPControl]], Optional[Dict[Text, Any]]) -> Optional[List[Tuple[str, str]]]
         """
         Internal function to move all children of a container.
 
@@ -830,6 +856,9 @@ class simpleLdap(object):
         :param subelements: A list of 2-tuples (old-dn, old-attrs) for each child of the parent container.
         :type subelements: tuple[str, dict]
         :param bool ignore_license: If the license is exceeded the modification may fail. Setting this to True causes license checks to be disabled.
+        :param serverctrls: a list of ldap.controls.LDAPControl instances sent to the server along with the LDAP request
+        :type serverctrls: list[ldap.controls.LDAPControl]
+        :param list responses: An optional list to receive the server controls of the result.
         :returns: A list of 2-tuples (old-dn, new-dn)
         :rtype: list[tuple[str, str]]
         """
@@ -847,7 +876,7 @@ class simpleLdap(object):
                         subold_rdn = u'+'.join(explode_rdn(subolddn, 1))
                         raise univention.admin.uexceptions.invalidOperation(_('Unable to move object %(name)s (%(type)s) in subtree, trying to revert changes.') % {'name': subold_rdn, 'type': univention.admin.modules.identifyOne(subolddn, suboldattrs)})
                     subobject.open()
-                    subobject._move(subnewdn)
+                    subobject._move(subnewdn, serverctrls=serverctrls, responses=responses)
                     moved.append((subolddn, subnewdn))
                 return moved
             except Exception:
@@ -857,16 +886,20 @@ class simpleLdap(object):
                     submodule = univention.admin.modules.get(submodule)
                     subobject = univention.admin.objects.get(submodule, None, self.lo, position='', dn=subnewdn)
                     subobject.open()
-                    subobject.move(subolddn)
+                    subobject.move(subolddn, serverctrls=serverctrls, responses=responses)
                 raise
 
         return None  # FIXME
 
-    def remove(self, remove_childs=False):  # type: (bool) -> None
+    def remove(self, remove_childs=False, serverctrls=None, responses=None):
+        # type: (bool, Optional[List[ldap.controls.LDAPControl]], Optional[List]) -> None
         """
         Removes this LDAP object.
 
         :param bool remove_childs: Specifies to remove children objects before removing this object.
+        :param serverctrls: a list of ldap.controls.LDAPControl instances sent to the server along with the LDAP request
+        :type serverctrls: list[ldap.controls.LDAPControl]
+        :param list response: An optional list to receive the server controls of the result.
 
         :raises: :class:`univention.admin.uexceptions.ldapError` (Operation not allowed on non-leaf: subordinate objects must be deleted first) if the object contains childrens and *remove_childs* is False.
         :raises: :class:`univention.admin.uexceptions.invalidOperation` if objects of this type do not support to be removed.
@@ -881,7 +914,7 @@ class simpleLdap(object):
         if self.lo.compare_dn(self.dn, self.lo.whoami()):
             raise univention.admin.uexceptions.invalidOperation(_('The own object cannot be removed.'))
 
-        return self._remove(remove_childs)
+        return self._remove(remove_childs, serverctrls, responses)
 
     def get_gid_for_primary_group(self):  # type: () -> str
         """
@@ -1341,7 +1374,7 @@ class simpleLdap(object):
 
         return al
 
-    def _modify(self, modify_childs=True, ignore_license=False, response=None, serverctrls=None):
+    def _modify(self, modify_childs=True, ignore_license=False, serverctrls=None, responses=None):
         """Modify the object. Should only be called by :func:`univention.admin.handlers.simpleLdap.modify`."""
         self.__prevent_ad_property_change()
 
@@ -1367,10 +1400,10 @@ class simpleLdap(object):
         # FIXME: timeout without exception if objectClass of Object is not exsistant !!
         ud.debug(ud.ADMIN, 99, 'Modify dn=%r;\nmodlist=%r;\noldattr=%r;' % (self.dn, ml, self.oldattr))
         try:
-            self.dn = self.lo.modify(self.dn, ml, ignore_license=ignore_license, serverctrls=serverctrls, response=response, rename_callback=wouldRename.on_rename)
+            self.dn = self.lo.modify(self.dn, ml, ignore_license=ignore_license, serverctrls=serverctrls, responses=responses, rename_callback=wouldRename.on_rename)
         except wouldRename as exc:
             self._ldap_pre_rename(exc.args[1])
-            self.dn = self.lo.modify(self.dn, ml, ignore_license=ignore_license, serverctrls=serverctrls, response=response)
+            self.dn = self.lo.modify(self.dn, ml, ignore_license=ignore_license, serverctrls=serverctrls, responses=responses)
             self._ldap_post_rename(exc.args[0])
         if ml:
             self._write_admin_diary_modify()
@@ -1502,37 +1535,52 @@ class simpleLdap(object):
 
         return ml
 
-    def _move_in_subordinates(self, olddn):
+    def _move_in_subordinates(self, olddn, serverctrls=None, responses=None):
         result = self.lo.searchDn(base=self.lo.base, filter=filter_format(u'(&(objectclass=person)(secretary=%s))', [olddn]))
         for subordinate in result:
-            self.lo.modify(subordinate, [('secretary', olddn.encode('utf-8'), self.dn.encode('utf-8'))])
+            response = {}
+            self.lo.modify(subordinate, [('secretary', olddn.encode('utf-8'), self.dn.encode('utf-8'))], serverctrls=serverctrls, response=response)
+            if isinstance(responses, list) and response:
+                responses.append(response)
 
-    def _move_in_groups(self, olddn):
+    def _move_in_groups(self, olddn, serverctrls=None, responses=None):
         for group in self.oldinfo.get('groups', []) + [self.oldinfo.get('machineAccountGroup', '')]:
             if group != '':
                 try:
+                    response = {}
                     self.lo.modify(
-                        group, [('uniqueMember', [olddn.encode("UTF-8")], None)])
+                        group, [('uniqueMember', [olddn.encode("UTF-8")], None)],
+                        serverctrls=serverctrls, response=response)
+                    if isinstance(responses, list) and response:
+                        responses.append(response)
                 except univention.admin.uexceptions.ldapError as exc:
                     if not isinstance(exc.original_exception, ldap.NO_SUCH_ATTRIBUTE):
                         raise
                 try:
-                    self.lo.modify(group, [('uniqueMember', None, [self.dn.encode("UTF-8")])])
+                    response = {}
+                    self.lo.modify(group, [('uniqueMember', None, [self.dn.encode("UTF-8")])], serverctrls=serverctrls, response=response)
+                    if isinstance(responses, list) and response:
+                        responses.append(response)
                 except univention.admin.uexceptions.ldapError as exc:
                     if not isinstance(exc.original_exception, ldap.TYPE_OR_VALUE_EXISTS):
                         raise
 
-    def _move(self, newdn, modify_childs=True, ignore_license=False):  # type: (str, bool, bool) -> str
+    def _move(self, newdn, modify_childs=True, ignore_license=False, serverctrls=None, responses=None):
+        # type: (str, bool, bool, Optional[List[ldap.controls.LDAPControl]], Optional[List]) -> str
         """Moves this object to the new DN. Should only be called by :func:`univention.admin.handlers.simpleLdap.move`."""
         self._ldap_pre_move(newdn)
 
+        response = {}
         olddn = self.dn
-        self.lo.rename(self.dn, newdn)
+        self.lo.rename(self.dn, newdn, serverctrls=serverctrls, response=response)
         self.dn = newdn
+        if isinstance(responses, list) and response:
+            responses.append(response)
 
         try:
-            self._move_in_groups(olddn)  # can be done always, will do nothing if oldinfo has no attribute 'groups'
-            self._move_in_subordinates(olddn)
+            # TODO: provisioning
+            self._move_in_groups(olddn, serverctrls=serverctrls, responses=responses)  # can be done always, will do nothing if oldinfo has no attribute 'groups'
+            self._move_in_subordinates(olddn, serverctrls=serverctrls, responses=responses)
             self._ldap_post_move(olddn)
         except Exception:
             # move back
@@ -1546,7 +1594,8 @@ class simpleLdap(object):
     def _write_admin_diary_move(self, position):
         self._write_admin_diary_event('MOVED', {'position': position})
 
-    def _remove(self, remove_childs=False):  # type: (bool) -> None
+    def _remove(self, remove_childs=False, serverctrls=None, responses=None):
+        # type: (bool, Optional[List[ldap.controls.LDAPControl]], Optional[List]) -> None
         """Removes this object. Should only be called by :func:`univention.admin.handlers.simpleLdap.remove`."""
         ud.debug(ud.ADMIN, ud.INFO, 'handlers/__init__._remove() called for %r with remove_childs=%r' % (self.dn, remove_childs))
 
@@ -1568,15 +1617,18 @@ class simpleLdap(object):
                     subobject = submodule.object(None, self.lo, None, dn=subolddn, attributes=suboldattrs)
                     subobject.open()
                     try:
-                        subobject.remove(remove_childs)
+                        subobject.remove(remove_childs, serverctrls, responses)
                     except univention.admin.uexceptions.base as exc:
                         ud.debug(ud.ADMIN, ud.ERROR, 'remove: could not remove %r: %s: %s' % (subolddn, type(exc).__name__, exc))
                     break
                 else:
                     ud.debug(ud.ADMIN, ud.WARN, 'remove: could not identify UDM module of %r' % (subolddn,))
 
-        self.lo.delete(self.dn)
+        response = {}
+        self.lo.delete(self.dn, serverctrls=serverctrls, response=response)
         self._exists = False
+        if isinstance(responses, list) and response:
+            responses.append(response)
 
         self._ldap_post_remove()
 

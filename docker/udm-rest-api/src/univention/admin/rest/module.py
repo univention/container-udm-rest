@@ -67,7 +67,7 @@ from concurrent.futures import ThreadPoolExecutor
 from genshi import XML
 from genshi.output import HTMLSerializer
 from ldap.controls import SimplePagedResultsControl
-from ldap.controls.readentry import PostReadControl
+from ldap.controls.readentry import PostReadControl, PreReadControl
 from ldap.controls.sss import SSSRequestControl
 from ldap.dn import explode_rdn
 from ldap.filter import filter_format
@@ -1116,6 +1116,99 @@ def _param_to_openapi(param):
 
 
 class Resource(ResourceBase, RequestHandler):
+
+    def emit_events_s(self, responses, request_id=None):
+        """Forward object modifications to the provisioning service.
+
+        Searches the given list of server `responses` for pre- and post-read controls
+        and sends those to an external queue for further processing and forwarding.
+
+        Optionally a `request_id` can be provided to mark all changes originating
+        from a particular request.
+        """
+        if isinstance(responses, dict):
+            responses = [responses]
+
+        def _get_control(response, ctrl_type):
+            for control in response.get('ctrls', []):
+                if control.controlType == ctrl_type:
+                    return control
+        
+        def _ldap_to_udm(raw):
+            object_types = raw.entry.get("univentionObjectType", [])
+            if not isinstance(object_types, list) or len(object_types) < 1:
+                MODULE.error("ReadControl response is missing `univentionObjectType`!")
+                return None
+    
+            try:
+                object_type = object_types[0].decode('utf-8')
+                module = self.get_module(object_type)
+                obj = module.module.object(co=None, lo=self.ldap_connection,
+                                           position=None, dn=raw.dn,
+                                           superordinate=None,
+                                           attributes=raw.entry)
+                obj.open()
+                uobj = Object.get_representation(module, obj, ['*'], self.ldap_connection, False)
+                return obj, uobj
+            except NotFound:
+                MODULE.error("ReadControl response has object type %r, but the module was not found!" % object_type)
+                return None
+
+        for response in responses:
+            pre = _get_control(response, PreReadControl.controlType)
+            post = _get_control(response, PostReadControl.controlType)
+
+            if pre or post:
+                MODULE.info(f"Provisioning information (request id: {request_id})")
+
+            if pre and post and (pre.dn != post.dn):
+                MODULE.info(f"Object moved from {pre.dn}")
+                MODULE.info(f"               to {post.dn}")
+            elif pre and post:
+                MODULE.info(f"Object changed: {pre.dn}")
+                for key in sorted(set(post.entry.keys()).union(pre.entry.keys())):
+                    old_value = pre.entry.get(key)
+                    new_value = post.entry.get(key)
+                    if old_value == new_value:
+                        MODULE.info(f"  {key}: {new_value}")
+                    else:
+                        if old_value:
+                            MODULE.info(f" -{key}: {old_value}")
+                        if new_value:
+                            MODULE.info(f" +{key}: {new_value}")
+            elif pre:
+                MODULE.info(f"Object deleted: {pre.dn}")
+                for key, value in sorted(pre.entry.items(), key = lambda i: i[0]):
+                    MODULE.info(f"  {key}: {value}")
+            elif post:
+                MODULE.info(f"Object created: {post.dn}")
+                for key, value in sorted(post.entry.items(), key = lambda i: i[0]):
+                    MODULE.info(f"  {key}: {value}")
+
+            # rebuild UDM representation
+            if pre:
+                udm_pre, rudm_pre = _ldap_to_udm(pre)
+                if udm_pre:
+                    MODULE.info("UDM pre")
+                    for key, value in sorted(udm_pre.items(), key = lambda i: i[0]):
+                        MODULE.info(f"  {key}: {value}")
+                    MODULE.info("UDM pre representation")
+                    for key, value in sorted(rudm_pre.items(), key = lambda i: i[0]):
+                        MODULE.info(f"  {key}: {value}")
+            if post:
+                udm_post, rudm_post = _ldap_to_udm(post)
+                if udm_post:
+                    MODULE.info("UDM post")
+                    for key, value in sorted(udm_post.items(), key = lambda i: i[0]):
+                        MODULE.info(f"  {key}: {value}")
+                    MODULE.info("UDM post representation")
+                    for key, value in sorted(rudm_post.items(), key = lambda i: i[0]):
+                        MODULE.info(f"  {key}: {value}")
+
+
+    async def emit_events(self, responses, request_id=None):
+        """Async version of `emit_events_s`."""
+        await self.pool_submit(self.emit_events_s, responses, request_id)
 
     def options(self, *args, **kwargs):
         """Display API descriptions."""
@@ -2949,7 +3042,7 @@ class Objects(FormBase, ReportingBase, _OpenAPIBase, Resource):
         """Create a new {module.object_name} object"""
         obj = Object(self.application, self.request)
         obj.ldap_connection, obj.ldap_position = self.ldap_connection, self.ldap_position
-        serverctrls = [PostReadControl(True, ['entryUUID'])]
+        serverctrls = [PostReadControl(True, ['entryUUID', '*', '+'])]
         response = {}
         result = {}
         representation = {
@@ -2960,6 +3053,8 @@ class Objects(FormBase, ReportingBase, _OpenAPIBase, Resource):
             'properties': properties,
         }
         obj = await obj.create(object_type, None, representation, result, serverctrls=serverctrls, response=response)
+        await self.emit_events(response)
+
         self.set_header('Location', self.urljoin(quote_dn(obj.dn)))
         self.set_status(201)
         self.add_caching(public=False, must_revalidate=True)
@@ -3038,10 +3133,22 @@ class ObjectsMove(Resource):
         self.set_status(201)  # FIXME: must be 202
         self.set_header('Location', self.abspath('progress', status['id']))
         self.finish()
+
+        def move_and_inform(module, dn, position):
+            serverctrls = [
+                PreReadControl(True, ['*', '+']),
+                PostReadControl(True, ['*', '+'])
+            ]
+            responses = []
+            dn = module.move(dn, position, serverctrls, responses)
+            self.emit_events_s(responses, status_id)
+            return dn
+
         try:
             for i, dn in enumerate(dns, 1):
                 module = get_module(object_type, dn, self.ldap_write_connection)
-                dn = await self.pool_submit(module.move, dn, position)
+                dn = await self.pool_submit(move_and_inform, module, dn, position)
+
                 status['moved'].append(dn)
                 status['description'] = _('Moved %d of %d objects. Last object was: %s.') % (i, len(dns), dn)
                 status['max'] = len(dns)
@@ -3262,11 +3369,14 @@ class Object(FormBase, _OpenAPIBase, Resource):
         }
         if not obj:
             module = self.get_module(object_type)
-            serverctrls = [PostReadControl(True, ['entryUUID'])]
+            serverctrls = [
+                PostReadControl(True, ['entryUUID', '*', '+'])
+            ]
             response = {}
             result = {}
 
             obj = await self.create(object_type, dn, representation, result, serverctrls=serverctrls, response=response)
+            await self.emit_events(response)
             self.set_header('Location', self.urljoin(quote_dn(obj.dn)))
             self.set_status(201)
             self.add_caching(public=False, must_revalidate=True)
@@ -3283,11 +3393,24 @@ class Object(FormBase, _OpenAPIBase, Resource):
         self.set_entity_tags(obj)
 
         if position and not self.ldap_write_connection.compare_dn(self.ldap_write_connection.parentDn(dn), position):
-            await self.move(module, dn, position)
+            serverctrls = [
+                PreReadControl(True, ['*', '+']),
+                PostReadControl(True, ['*', '+'])
+            ]
+            responses = []
+            await self.move(module, dn, position, serverctrls=serverctrls, responses=responses)
+            await self.emit_events(responses)
             return
         else:
+            serverctrls = [
+                PreReadControl(True, ['*', '+']),
+                PostReadControl(True, ['*', '+'])
+            ]
+            responses = []
             result = {}
-            obj = await self.modify(module, obj, representation, result)
+
+            obj = await self.modify(module, obj, representation, result, serverctrls=serverctrls, responses=responses)
+            await self.emit_events(responses)
             self.set_header('Location', self.urljoin(quote_dn(obj.dn)))
             self.add_caching(public=False, must_revalidate=True, no_cache=True, no_store=True)
             if result:
@@ -3331,8 +3454,16 @@ class Object(FormBase, _OpenAPIBase, Resource):
             representation['position'] = entry['position']
         if representation['superordinate'] is None:
             representation['superordinate'] = entry.get('superordinate')
+
+        serverctrls = [
+            PreReadControl(True, ['*', '+']),
+            PostReadControl(True, ['*', '+'])
+        ]
+        responses = []
         result = {}
-        obj = await self.modify(module, obj, representation, result)
+
+        obj = await self.modify(module, obj, representation, result, serverctrls=serverctrls, responses=responses)
+        await self.emit_events(responses)
         self.add_caching(public=False, must_revalidate=True, no_cache=True, no_store=True)
         self.set_header('Location', self.urljoin(quote_dn(obj.dn)))
         if result:
@@ -3341,7 +3472,7 @@ class Object(FormBase, _OpenAPIBase, Resource):
             self.set_status(204)
         raise Finish()
 
-    async def create(self, object_type, dn=None, representation=None, result=None, **kwargs):
+    async def create(self, object_type, dn=None, representation=None, result=None, serverctrls=None, response=None, **kwargs):
         module = self.get_module(object_type, ldap_connection=self.ldap_write_connection)
         container = self.request.body_arguments['position']
         superordinate = self.request.body_arguments['superordinate']
@@ -3366,13 +3497,13 @@ class Object(FormBase, _OpenAPIBase, Resource):
         if dn and not self.ldap_write_connection.compare_dn(dn, obj._ldap_dn()):
             self.raise_sanitization_error('dn', _('Trying to create an object with wrong RDN.'))
 
-        dn = await self.pool_submit(self.handle_udm_errors, obj.create, **kwargs)
+        dn = await self.pool_submit(self.handle_udm_errors, obj.create, serverctrls=serverctrls, response=response, **kwargs)
         return obj
 
-    async def modify(self, module, obj, representation, result):
+    async def modify(self, module, obj, representation, result, serverctrls=None, responses=None, **kwargs):
         assert obj._open
         self.set_properties(module, obj, representation, result)
-        await self.pool_submit(self.handle_udm_errors, obj.modify)
+        await self.pool_submit(self.handle_udm_errors, obj.modify, serverctrls=serverctrls, responses=responses, **kwargs)
         return obj
 
     def handle_udm_errors(self, action, *args, **kwargs):
@@ -3501,7 +3632,7 @@ class Object(FormBase, _OpenAPIBase, Resource):
             except ValidationError as exc:
                 multi_error.add_error(exc, property_name)
 
-    async def move(self, module, dn, position):
+    async def move(self, module, dn, position, serverctrls=None, responses=None, **kwargs):
         status_id = str(uuid.uuid4())
         status = shared_memory.dict()
         status.update({
@@ -3522,7 +3653,7 @@ class Object(FormBase, _OpenAPIBase, Resource):
         self.add_caching(public=False, must_revalidate=True)
         self.content_negotiation(dict(status))
         try:
-            dn = await self.pool_submit(module.move, dn, position)
+            dn = await self.pool_submit(module.move, dn, position, serverctrls=serverctrls, responses=responses, **kwargs)
         except Exception:
             status['errors'] = True
             status['traceback'] = traceback.format_exc()  # FIXME: error handling
@@ -3545,16 +3676,21 @@ class Object(FormBase, _OpenAPIBase, Resource):
         module, obj = await self.pool_submit(self.get_module_object, object_type, dn, self.ldap_write_connection)
         assert obj._open
 
+        serverctrls = [PreReadControl(True, ['*', '+'])]
+
         try:
-            def remove():
+            def remove(**kwargs):
                 try:
                     MODULE.info('Removing LDAP object %s' % (dn,))
-                    obj.remove(remove_childs=recursive)
+                    responses = []
+                    obj.remove(remove_childs=recursive, serverctrls=serverctrls, responses=responses, **kwargs)
+                    self.emit_events_s(responses)
                     if cleanup:
                         udm_objects.performCleanup(obj)
                 except udm_errors.base as exc:
                     UDM_Error(exc).reraise()
             await self.pool_submit(remove)
+
         except udm_errors.primaryGroupUsed:
             raise
         self.add_caching(public=False, must_revalidate=True)
@@ -3663,7 +3799,16 @@ class UserPhoto(Resource):
             raise HTTPError(413, 'too large: maximum: 262144 bytes')
         obj['jpegPhoto'] = base64.b64encode(photo).decode('ASCII')
 
-        await self.pool_submit(obj.modify)
+        def modify_and_inform(obj):
+            serverctrls = [
+                PreReadControl(True, ['*', '+']),
+                PostReadControl(True, ['*', '+'])
+            ]
+            response = {}
+            obj.modify(serverctrls=serverctrls, response=response)
+            self.emit_events_s(response)
+
+        await self.pool_submit(modify_and_inform, obj)
 
         self.set_status(204)
         raise Finish()
@@ -4265,8 +4410,17 @@ class ServiceSpecificPassword(Resource):
         obj = await self.pool_submit(module.get, dn)
         obj['serviceSpecificPassword'] = {'service': service, 'password': new_password}
 
+        def modify_and_inform(obj):
+            serverctrls = [
+                PreReadControl(True, ['*', '+']),
+                PostReadControl(True, ['*', '+'])
+            ]
+            response = {}
+            obj.modify(serverctrls=serverctrls, response=response)
+            self.emit_events_s(response)
+
         try:
-            await self.pool_submit(obj.modify)
+            await self.pool_submit(modify_and_inform)
         except udm_errors.valueError as exc:
             # ValueError raised if Service is not supported
             raise HTTPError(400, str(exc))

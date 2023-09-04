@@ -712,8 +712,8 @@ class access(object):
             response['ctrls'] = resp_ctrls
 
     @_fix_reconnect_handling
-    def modify(self, dn, changes, serverctrls=None, response=None, rename_callback=None):
-        # type: (str, List[Tuple[str, Any, Any]], Optional[List[ldap.controls.LDAPControl]], Optional[dict], Optional[Callable]) -> str
+    def modify(self, dn, changes, serverctrls=None, responses=None, rename_callback=None):
+        # type: (str, List[Tuple[str, Any, Any]], Optional[List[ldap.controls.LDAPControl]], Optional[List], Optional[Callable]) -> str
         """
         Modify LDAP entry DN with attributes in changes=(attribute-name, old-values, new-values).
 
@@ -721,7 +721,7 @@ class access(object):
         :param changes: The modify-list of 3-tuples (attribute-name, old-values, new-values).
         :param serverctrls: a list of ldap.controls.LDAPControl instances sent to the server along with the LDAP request
         :type serverctrls: list[ldap.controls.LDAPControl]
-        :param dict response: An optional dictionary to receive the server controls of the result.
+        :param list responses: An optional list to receive the server controls of the results.
         :returns: The distinguished name.
         :rtype: str
         """
@@ -753,16 +753,21 @@ class access(object):
             ml.append((op, key, val))
         ml = self.__encode_entry(ml)
 
+        if isinstance(responses, list):
+            responses.extend([{}, {}])
+        else:
+            responses = [None, None]
+
         # check if we need to rename the object
         new_dn, new_rdn = self.__get_new_dn(dn, ml)
         if not self.compare_dn(dn, new_dn):
             if rename_callback:
                 rename_callback(dn, new_dn, ml)
             univention.debug.debug(univention.debug.LDAP, univention.debug.WARN, 'rename %s' % (new_rdn,))
-            self.rename_ext_s(dn, new_rdn, serverctrls=serverctrls, response=response)
+            self.rename_ext_s(dn, new_rdn, serverctrls=serverctrls, response=responses[-2])
             dn = new_dn
         if ml:
-            self.modify_ext_s(dn, ml, serverctrls=serverctrls, response=response)
+            self.modify_ext_s(dn, ml, serverctrls=serverctrls, response=responses[-1])
 
         return dn
 
@@ -885,23 +890,32 @@ class access(object):
             response['ctrls'] = resp_ctrls
 
     @_fix_reconnect_handling
-    def delete(self, dn):
-        # type: (str) -> None
+    def delete(self, dn, serverctrls=None, response=None):
+        # type: (str, Optional[List[ldap.controls.LDAPControl]], Optional[dict]) -> None
         """
         Delete a LDAP object.
 
         :param str dn: The distinguished name of the object to remove.
+        :param serverctrls: a list of ldap.controls.LDAPControl instances sent to the server along with the LDAP request
+        :type serverctrls: list[ldap.controls.LDAPControl]
+        :param dict response: An optional dictionary to receive the server controls of the result.
         """
+        if not serverctrls:
+            serverctrls = []
+
         univention.debug.debug(univention.debug.LDAP, univention.debug.ALL, 'uldap.delete %s' % dn)
         if dn:
             univention.debug.debug(univention.debug.LDAP, univention.debug.ALL, 'delete')
             try:
-                self.lo.delete_s(dn)
+                rtype, rdata, rmsgid, resp_ctrls = self.lo.delete_ext_s(dn, serverctrls=serverctrls)
             except ldap.REFERRAL as exc:
                 if not self.follow_referral:
                     raise
                 lo_ref = self._handle_referral(exc)
-                lo_ref.delete_s(dn)
+                rtype, rdata, rmsgid, resp_ctrls = lo_ref.delete_ext_s(dn, serverctrls=serverctrls)
+
+        if serverctrls and isinstance(response, dict) and dn:
+            response['ctrls'] = resp_ctrls
 
     def parentDn(self, dn):
         # type: (str) -> Optional[str]

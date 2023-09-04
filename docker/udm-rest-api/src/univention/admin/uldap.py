@@ -450,7 +450,7 @@ class access(object):
         return self.lo.start_tls
 
     def __init__(self, host='localhost', port=None, base=u'', binddn=u'', bindpw=u'', start_tls=2, lo=None, follow_referral=False, uri=None):
-        # type: (str, int, str, str, str, int, univention.uldap.access, bool) -> None
+        # type: (str, int, str, str, str, int, univention.uldap.access, bool, str) -> None
         """
         :param str host: The hostname of the |LDAP| server.
         :param int port: The |TCP| port number of the |LDAP| server.
@@ -771,8 +771,8 @@ class access(object):
             ud.debug(ud.LDAP, ud.ALL, 'add dn=%s err=%s' % (dn, msg))
             raise univention.admin.uexceptions.ldapError(_err2str(msg), original_exception=msg)
 
-    def modify(self, dn, changes, exceptions=False, ignore_license=False, serverctrls=None, response=None, rename_callback=None):
-        # type: (str, List[Tuple[str, Any, Any]], bool, int, Optional[List[ldap.controls.LDAPControl]], Optional[Dict], Optional[Callable]) -> str
+    def modify(self, dn, changes, exceptions=False, ignore_license=False, serverctrls=None, responses=None, rename_callback=None):
+        # type: (str, List[Tuple[str, Any, Any]], bool, int, Optional[List[ldap.controls.LDAPControl]], Optional[List], Optional[Callable]) -> str
         """
         Modify LDAP entry DN with attributes in changes=(attribute-name, old-values, new-values).
 
@@ -782,7 +782,7 @@ class access(object):
         :param bool ignore_license: Ignore license check if True.
         :param serverctrls: a list of ldap.controls.LDAPControl instances sent to the server along with the LDAP request
         :type serverctrls: list[ldap.controls.LDAPControl]
-        :param dict response: An optional dictionary to receive the server controls of the result.
+        :param list responses: An optional list to receive the server controls of the result.
         :returns: The distinguished name.
         :rtype: str
         """
@@ -792,9 +792,9 @@ class access(object):
             raise univention.admin.uexceptions.licenseDisableModify()
         ud.debug(ud.LDAP, ud.ALL, 'mod dn=%s ml=%s' % (dn, changes))
         if exceptions:
-            return self.lo.modify(dn, changes, serverctrls=serverctrls, response=response, rename_callback=rename_callback)
+            return self.lo.modify(dn, changes, serverctrls=serverctrls, responses=responses, rename_callback=rename_callback)
         try:
-            return self.lo.modify(dn, changes, serverctrls=serverctrls, response=response, rename_callback=rename_callback)
+            return self.lo.modify(dn, changes, serverctrls=serverctrls, responses=responses, rename_callback=rename_callback)
         except ldap.NO_SUCH_OBJECT as msg:
             ud.debug(ud.LDAP, ud.ALL, 'mod dn=%s err=%s' % (dn, msg))
             raise univention.admin.uexceptions.noObject(dn)
@@ -841,13 +841,16 @@ class access(object):
             ud.debug(ud.LDAP, ud.ALL, 'ren dn=%s err=%s' % (dn, msg))
             raise univention.admin.uexceptions.ldapError(_err2str(msg), original_exception=msg)
 
-    def delete(self, dn, exceptions=False):
-        # type: (str, bool) -> None
+    def delete(self, dn, exceptions=False, serverctrls=None, response=None):
+        # type: (str, bool, Optional[List[ldap.controls.LDAPControl]], Optional[Dict]) -> None
         """
         Delete a LDAP object.
 
         :param str dn: The distinguished name of the object to remove.
         :param bool exceptions: Raise the low level exception instead of the wrapping UDM exceptions.
+        :param serverctrls: a list of ldap.controls.LDAPControl instances sent to the server along with the LDAP request
+        :type serverctrls: list[ldap.controls.LDAPControl]
+        :param dict response: An optional dictionary to receive the server controls of the result.
         :raises univention.admin.uexceptions.noObject: if the object does not exist.
         :raises univention.admin.uexceptions.permissionDenied: if the user does not have the required permissions.
         :raises univention.admin.uexceptions.ldapError: if the syntax of the DN is invalid.
@@ -856,12 +859,12 @@ class access(object):
         self._validateLicense()
         if exceptions:
             try:
-                return self.lo.delete(dn)
+                return self.lo.delete(dn, serverctrls, response)
             except ldap.INSUFFICIENT_ACCESS:
                 raise univention.admin.uexceptions.permissionDenied()
         ud.debug(ud.LDAP, ud.ALL, 'del dn=%s' % (dn,))
         try:
-            return self.lo.delete(dn)
+            return self.lo.delete(dn, serverctrls, response)
         except ldap.NO_SUCH_OBJECT as msg:
             ud.debug(ud.LDAP, ud.ALL, 'del dn=%s err=%s' % (dn, msg))
             raise univention.admin.uexceptions.noObject(dn)

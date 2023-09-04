@@ -122,12 +122,15 @@ RUN ucs-dev-add-branch.sh jbornhold-udm-rest-client && \
 
 WORKDIR /
 COPY patch-openapi.patch \
+     ldap-read-control-encoding.patch \
      make_uldap_start-tls_configurable.patch \
      /
 
 RUN \
   patch -p 1 -i /patch-openapi.patch && \
     rm /patch-openapi.patch && \
+  patch -p 0 -d / -i /ldap-read-control-encoding.patch && \
+    rm /ldap-read-control-encoding.patch && \
   patch -p 0 -d / -i /make_uldap_start-tls_configurable.patch && \
     rm /make_uldap_start-tls_configurable.patch
 

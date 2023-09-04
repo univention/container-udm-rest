@@ -570,7 +570,7 @@ class UDM_Module(object):
 
         return obj.dn
 
-    def move(self, ldap_dn, container):
+    def move(self, ldap_dn, container, serverctrls=None, responses=None):
         """Moves an LDAP object"""
         ldap_connection, ldap_position = self.get_ldap_connection()
         superordinate = udm_objects.get_superordinate(self.module, None, ldap_connection, ldap_dn)
@@ -581,7 +581,7 @@ class UDM_Module(object):
             rdn = udm.uldap.explodeDn(ldap_dn)[0]
             dest = '%s,%s' % (rdn, container)
             MODULE.info('Moving LDAP object %s to %s' % (ldap_dn, dest))
-            obj.move(dest)
+            obj.move(dest, serverctrls=serverctrls, responses=responses)
             return dest
         except udm_errors.base as e:
             MODULE.warn('Failed to move LDAP object %s: %s: %s' % (ldap_dn, e.__class__.__name__, str(e)))
