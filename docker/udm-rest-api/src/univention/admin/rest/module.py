@@ -34,6 +34,7 @@
 # <https://www.gnu.org/licenses/>.
 
 
+# import asyncio
 import base64
 import binascii
 import copy
@@ -69,8 +70,8 @@ from genshi.output import HTMLSerializer
 from ldap.controls import SimplePagedResultsControl
 from ldap.controls.readentry import PostReadControl
 from ldap.controls.sss import SSSRequestControl
-from ldap.dn import explode_rdn
 from ldap.filter import filter_format
+from tornado.platform.asyncio import AnyThreadEventLoopPolicy
 from tornado.concurrent import run_on_executor
 from tornado.web import Finish, HTTPError, RequestHandler
 
@@ -81,6 +82,8 @@ import univention.admin.types as udm_types
 import univention.admin.uexceptions as udm_errors
 import univention.directory.reports as udr
 import univention.udm
+from univention.admin.rest.object import decode_properties, get_representation, superordinate_names
+from univention.admin.rest.provisioning import accessWithProvisioning
 from univention.admin.rest.shared_memory import JsonEncoder, shared_memory
 from univention.config_registry import handler_set
 from univention.lib.i18n import Translation
@@ -144,7 +147,11 @@ def get_ldap_connection(type_, binddn, bindpw):
     default_uri = "ldap://%s:%d" % (ucr.get('ldap/master'), ucr.get_int('ldap/master/port', '7389'))
     uri = ucr.get(f'directory/manager/rest/ldap-connection/{type_}/uri', default_uri)
     start_tls = ucr.get_int('directory/manager/rest/ldap-connection/user-read/start-tls', 2)
-    return get_connection(bind=None, binddn=binddn, bindpw=bindpw, host=None, port=None, base=ucr['ldap/base'], start_tls=start_tls, uri=uri)
+    lo, po = get_connection(bind=None, binddn=binddn, bindpw=bindpw, host=None, port=None, base=ucr['ldap/base'], start_tls=start_tls, uri=uri)
+    if not isinstance(lo, accessWithProvisioning):
+        MODULE.debug("Wrapping ldap_connection of type " + str(lo.__class__) + " with provisioning support.")
+        lo.__class__ = accessWithProvisioning
+    return lo, po
 
 
 class Param:
@@ -383,13 +390,6 @@ class NotFound(HTTPError):
 
     def __init__(self, object_type=None, dn=None):
         super().__init__(404, None, '%r %r' % (object_type, dn or ''))  # FIXME: create error message
-
-
-def superordinate_names(module):
-    superordinates = module.superordinate_names
-    if set(superordinates) == {'settings/cn'}:
-        return []
-    return superordinates
 
 
 class ResourceBase:
@@ -2808,7 +2808,7 @@ class Objects(FormBase, ReportingBase, _OpenAPIBase, Resource):
                 # best would be if lookup() would support opening because that already does error handling.
                 obj.open()
 
-            entry = Object.get_representation(objmodule, obj, properties, self.ldap_connection)
+            entry = get_representation(objmodule, obj, properties, self.ldap_connection)
             entry['uri'] = self.abspath(obj.module, quote_dn(obj.dn))
             self.add_link(entry, 'self', entry['uri'], name=entry['dn'], title=entry['id'], dont_set_http_header=True)
             self.add_resource(result, 'udm:object', entry)
@@ -3084,7 +3084,7 @@ class Object(FormBase, _OpenAPIBase, Resource):
         props = {}
         props.update(self._options(object_type, obj.dn))
         props['uri'] = self.abspath(obj.module, quote_dn(obj.dn))
-        props.update(self.get_representation(module, obj, ['*'], self.ldap_connection, copy))
+        props.update(get_representation(module, obj, ['*'], self.ldap_connection, copy))
         for reference in module.get_references(obj):
             # TODO: add a reference for the "position" object?!
             if reference['module'] != 'udm':
@@ -3167,74 +3167,6 @@ class Object(FormBase, _OpenAPIBase, Resource):
         etag.update(json.dumps(obj.info, sort_keys=True).encode('utf-8'))
         return '"%s"' % etag.hexdigest()
 
-    @classmethod
-    def get_representation(cls, module, obj, properties, ldap_connection, copy=False, add=False):
-        def _remove_uncopyable_properties(obj):
-            if not copy:
-                return
-            for name, p in obj.descriptions.items():
-                if not p.copyable:
-                    obj.info.pop(name, None)
-
-        # TODO: check if we really want to set the default values
-        _remove_uncopyable_properties(obj)
-        obj.set_defaults = True
-        obj.set_default_values()
-        _remove_uncopyable_properties(obj)
-
-        values = {}
-        if properties:
-            if '*' not in properties:
-                values = {key: value for (key, value) in obj.info.items() if (key in properties) and obj.descriptions[key].show_in_lists}
-            else:
-                values = {key: obj[key] for key in obj.descriptions if (add or obj.has_property(key)) and obj.descriptions[key].show_in_lists}
-
-            for passwd in module.password_properties:
-                if passwd in values:
-                    values[passwd] = None
-            values = dict(decode_properties(module, obj, values))
-
-        if add:
-            # we need to remove dynamic default values as they reference other currently not set variables
-            # (e.g. shares/share sets sambaName='' or users/user sets unixhome=/home/)
-            for name, p in obj.descriptions.items():
-                regex = re.compile(r'<(?P<key>[^>]+)>(?P<ext>\[[\d:]+\])?')  # from univention.admin.pattern_replace()
-                if name not in obj.info or name not in values:
-                    continue
-                if isinstance(p.base_default, str) and regex.search(p.base_default):
-                    values[name] = None
-
-        props = {}
-        props['dn'] = obj.dn
-        props['objectType'] = module.name
-        props['id'] = module.obj_description(obj)
-        if not props['id']:
-            props['id'] = '+'.join(explode_rdn(obj.dn, True))
-        #props['path'] = ldap_dn2path(obj.dn, include_rdn=False)
-        props['position'] = ldap_connection.parentDn(obj.dn) if obj.dn else obj.position.getDn()
-        props['properties'] = values
-        props['options'] = {opt['id']: opt['value'] for opt in module.get_options(udm_object=obj)}
-        props['policies'] = {}
-        if '*' in properties or add:
-            for policy in module.policies:
-                props['policies'].setdefault(policy['objectType'], [])
-            for policy in obj.policies:
-                pol_mod = get_module(None, policy, ldap_connection)
-                if pol_mod and pol_mod.name:
-                    props['policies'].setdefault(pol_mod.name, []).append(policy)
-        if superordinate_names(module):
-            props['superordinate'] = obj.superordinate and obj.superordinate.dn
-        if obj.entry_uuid:
-            props['uuid'] = obj.entry_uuid
-        # TODO: objectFlag is available for every module. remove the extended attribute and always map it.
-        # alternative: add some other meta information to this object, e.g. is_hidden_object: True, is_synced_from_active_directory: True, ...
-        if '*' in properties or 'objectFlag' in properties:
-            props['properties'].setdefault('objectFlag', [x.decode('utf-8', 'replace') for x in obj.oldattr.get('univentionObjectFlag', [])])
-        if copy or add:
-            props.pop('dn', None)
-            props.pop('id', None)
-        return props
-
     @sanitize
     async def put(
             self,
@@ -3313,7 +3245,7 @@ class Object(FormBase, _OpenAPIBase, Resource):
 
         self.set_entity_tags(obj)
 
-        entry = Object.get_representation(module, obj, ['*'], self.ldap_write_connection, False)
+        entry = get_representation(module, obj, ['*'], self.ldap_write_connection, False)
         representation = {
             'position': position,
             'superordinate': superordinate,
@@ -3741,7 +3673,7 @@ class ObjectAdd(FormBase, _OpenAPIBase, Resource):
 
         obj = module.module.object(dn, self.ldap_connection, ldap_position, superordinate=superordinate)
         obj.open()
-        result.update(Object.get_representation(module, obj, ['*'], self.ldap_connection, copy, True))
+        result.update(get_representation(module, obj, ['*'], self.ldap_connection, copy, True))
 
         form = self.add_form(result, action=self.urljoin(''), method='POST', id='add', layout='create-form')
         self.add_form_element(form, 'position', position or '')
@@ -3841,7 +3773,7 @@ class ObjectEdit(FormBase, Resource):
             self.add_form_element(form, '', _('Move'), type='submit')
 
         if 'edit' in module.operations:
-            representation = Object.get_representation(module, obj, ['*'], self.ldap_connection)
+            representation = get_representation(module, obj, ['*'], self.ldap_connection)
             result.update(representation)
             for policy in module.policies:
                 ptype = policy['objectType']
@@ -4274,20 +4206,6 @@ class ServiceSpecificPassword(Resource):
         self.content_negotiation(result)
 
 
-def decode_properties(module, obj, properties):
-    for key, value in properties.items():
-        prop = module.get_property(key)
-        codec = udm_types.TypeHint.detect(prop, key)
-        yield key, codec.decode_json(value)
-
-
-def encode_properties(module, obj, properties):
-    for key, value in properties.items():
-        prop = module.get_property(key)
-        codec = udm_types.TypeHint.detect(prop, key)
-        yield key, codec.encode_json(value)
-
-
 def quote_dn(dn):
     if isinstance(dn, str):
         dn = dn.encode('utf-8')
@@ -4338,6 +4256,8 @@ def _get_post_read_entry_uuid(response):
 class Application(tornado.web.Application):
 
     def __init__(self, **kwargs):
+        # asyncio.set_event_loop_policy(AnyThreadEventLoopPolicy())
+
         #module_type = '([a-z]+)'
         module_type = '(%s)' % '|'.join(re.escape(mod) for mod in Modules.mapping)
         object_type = '([A-Za-z0-9_-]+/[A-Za-z0-9_-]+)'
@@ -4387,6 +4307,7 @@ class Application(tornado.web.Application):
             (f"/udm/(networks/network)/{dn}/next-free-ip-address", NextFreeIpAddress),
             (f"/udm/(users/user)/{dn}/service-specific-password", ServiceSpecificPassword),
             ("/udm/progress/([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})", Operations),
+            (r"/udm/((?:css|js|schema|swaggerui)/.*)", tornado.web.StaticFileHandler, {"path": "/var/www/univention/udm", "default_filename": "index.html"}),
             # TODO: decorator for dn argument, which makes sure no invalid dn syntax is used
         ], default_handler_class=Nothing, **kwargs)
 

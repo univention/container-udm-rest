@@ -1,0 +1,19 @@
+Do not decode the PreReadControl and PostReadControl attribute values, keep them as bytes.
+
+See the issue and fix from Florian here: https://github.com/python-ldap/python-ldap/issues/399
+
+Debian buster ships the python3-ldap package in version 3.1.0.
+The fix is included in python-ldap from version 3.4.0 onwards, and possibly in the python3-ldap package provided by the Univention package repository.
+
+--- /usr/lib/python3/dist-packages/ldap/controls/readentry.py
++++ /usr/lib/python3/dist-packages/ldap/controls/readentry.py
+@@ -43,7 +43,7 @@
+     self.dn = str(decodedEntry[0])
+     self.entry = {}
+     for attr in decodedEntry[1]:
+-      self.entry[str(attr[0])] = [ str(attr_value) for attr_value in attr[1] ]
++      self.entry[str(attr[0])] = [ bytes(attr_value) for attr_value in attr[1] ]
+ 
+ 
+ class PreReadControl(ReadEntryControl):
+
