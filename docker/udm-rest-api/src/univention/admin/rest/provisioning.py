@@ -5,11 +5,11 @@ import urllib.request
 
 from concurrent.futures import ThreadPoolExecutor
 from ldap.controls.readentry import PostReadControl, PreReadControl
-from tornado.concurrent import run_on_executor
-from tornado.web import HTTPError
+from tornado.httpclient import AsyncHTTPClient, HTTPError, HTTPRequest
+import tornado.gen
 
-import univention.admin.uldap
 from univention.admin.rest.object import get_representation
+import univention.admin.uldap
 from univention.management.console.log import MODULE
 from univention.management.console.modules.udm.udm_ldap import UDM_Module
 
@@ -25,8 +25,8 @@ class accessWithProvisioning(univention.admin.uldap.access):
             raise ModuleNotFound
         return module
 
-    @run_on_executor(executor="pool")
-    def publish_provisioning(self, items):
+    @tornado.gen.coroutine
+    def send_to_provisioning(self, items):
         base_url = os.getenv("PROVISIONING_URL", "http://host.docker.internal:7777")
         realm = os.getenv("PROVISIONING_REALM", "udm")
         if not base_url:
@@ -44,13 +44,16 @@ class accessWithProvisioning(univention.admin.uldap.access):
                     "new": new_object,
                 }
             }
-            req = urllib.request.Request(url, method="POST", data=json.dumps(data).encode("utf-8"))
-            req.add_header("content-type", "application/json")
-            with urllib.request.urlopen(req) as conn:
-                if 200 <= conn.status <= 203:
-                    MODULE.info("Message sent to provisioning service.")
-                else:
-                    MODULE.error(f"Could not send to provisioning service: {conn.status}, {conn.reason}")
+
+            request = HTTPRequest(url=url, method="POST",
+                              body=json.dumps(data).encode("utf-8"),
+                              headers={"content-type", "application/json"})
+            try:
+                client = AsyncHTTPClient()
+                response = yield client.fetch(request, raise_error=True)
+                MODULE.info(f"Message sent to provisioning service (response: {response.status}, {response.reason}).")
+            except HTTPError as err:
+                MODULE.error(f"Could not send to provisioning service: {response.status}, {response.reason}")
 
     def _handle_control_responses(self, responses):
         def _get_control(response, ctrl_type):
@@ -109,7 +112,10 @@ class accessWithProvisioning(univention.admin.uldap.access):
         if publish:
             # Collect all events into a list and publish that from inside *one* future,
             # thus ensuring that all events are published in the order as they occurred.
-            self.publish_provisioning(publish)
+
+            tornado.ioloop.IOLoop.current().add_future(
+                self.send_to_provisioning(publish),
+                callback=lambda _future: None)
 
     def _extract_responses(self, func, response_name, *args, **kwargs):
         # Note: the original call must not pass `serverctrls` and/or `response` via `args`!

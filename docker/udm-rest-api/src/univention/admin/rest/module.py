@@ -34,7 +34,7 @@
 # <https://www.gnu.org/licenses/>.
 
 
-# import asyncio
+import asyncio
 import base64
 import binascii
 import copy
@@ -4256,7 +4256,7 @@ def _get_post_read_entry_uuid(response):
 class Application(tornado.web.Application):
 
     def __init__(self, **kwargs):
-        # asyncio.set_event_loop_policy(AnyThreadEventLoopPolicy())
+        asyncio.set_event_loop_policy(AnyThreadEventLoopPolicy())
 
         #module_type = '([a-z]+)'
         module_type = '(%s)' % '|'.join(re.escape(mod) for mod in Modules.mapping)
