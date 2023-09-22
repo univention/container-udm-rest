@@ -53,7 +53,9 @@ class accessWithProvisioning(univention.admin.uldap.access):
                 response = yield client.fetch(request, raise_error=True)
                 MODULE.info(f"Message sent to provisioning service (response: {response.status}, {response.reason}).")
             except HTTPError as err:
-                MODULE.error(f"Could not send to provisioning service: {response.status}, {response.reason}")
+                MODULE.error(f"Could not send to provisioning service: {err}")
+            except Exception as ex:
+                MODULE.error(f"Could not send to provisioning service: {ex}")
 
     def _handle_control_responses(self, responses):
         def _get_control(response, ctrl_type):
@@ -108,7 +110,7 @@ class accessWithProvisioning(univention.admin.uldap.access):
                 publish.append((topic, pre, post))
             else:
                 MODULE.debug("No control responses for UDM objects were returned.")
-        
+
         if publish:
             # Collect all events into a list and publish that from inside *one* future,
             # thus ensuring that all events are published in the order as they occurred.
