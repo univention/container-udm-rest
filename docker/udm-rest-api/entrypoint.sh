@@ -175,6 +175,8 @@ ucr set \
 
 ucr unset ldap/server/ip
 
+# Uncomment the following line to keep the container running for debugging
+# exec /bin/bash -c "sleep infinity"
 exec "$@"
 
 # [EOF]

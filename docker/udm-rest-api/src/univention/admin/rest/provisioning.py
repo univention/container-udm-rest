@@ -25,8 +25,7 @@ class accessWithProvisioning(univention.admin.uldap.access):
             raise ModuleNotFound
         return module
 
-    @tornado.gen.coroutine
-    def send_to_provisioning(self, items):
+    async def send_to_provisioning(self, items):
         base_url = os.getenv("PROVISIONING_URL", "http://host.docker.internal:7777")
         realm = os.getenv("PROVISIONING_REALM", "udm")
         if not base_url:
@@ -47,11 +46,12 @@ class accessWithProvisioning(univention.admin.uldap.access):
 
             request = HTTPRequest(url=url, method="POST",
                               body=json.dumps(data).encode("utf-8"),
-                              headers={"content-type", "application/json"})
+                              headers={"content-type": "application/json"})
             try:
                 client = AsyncHTTPClient()
-                response = yield client.fetch(request, raise_error=True)
-                MODULE.info(f"Message sent to provisioning service (response: {response.status}, {response.reason}).")
+                MODULE.debug(f"Trying to send message to provisioning service...")
+                response = await client.fetch(request, raise_error=True)
+                MODULE.info(f"Message sent to provisioning service (response: {response.code}, {response.reason}).")
             except HTTPError as err:
                 MODULE.error(f"Could not send to provisioning service: {err}")
             except Exception as ex:
@@ -114,10 +114,8 @@ class accessWithProvisioning(univention.admin.uldap.access):
         if publish:
             # Collect all events into a list and publish that from inside *one* future,
             # thus ensuring that all events are published in the order as they occurred.
-
-            tornado.ioloop.IOLoop.current().add_future(
-                self.send_to_provisioning(publish),
-                callback=lambda _future: None)
+            tornado.ioloop.IOLoop.current().run_sync(
+                lambda: self.send_to_provisioning(publish))
 
     def _extract_responses(self, func, response_name, *args, **kwargs):
         # Note: the original call must not pass `serverctrls` and/or `response` via `args`!
