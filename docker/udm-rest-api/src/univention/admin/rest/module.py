@@ -34,7 +34,6 @@
 # <https://www.gnu.org/licenses/>.
 
 
-import asyncio
 import base64
 import binascii
 import copy
@@ -61,7 +60,6 @@ import ldap
 import tornado.gen
 import tornado.httpclient
 import tornado.httputil
-import tornado.ioloop
 import tornado.log
 import tornado.web
 from concurrent.futures import ThreadPoolExecutor
@@ -71,7 +69,6 @@ from ldap.controls import SimplePagedResultsControl
 from ldap.controls.readentry import PostReadControl
 from ldap.controls.sss import SSSRequestControl
 from ldap.filter import filter_format
-from tornado.platform.asyncio import AnyThreadEventLoopPolicy
 from tornado.concurrent import run_on_executor
 from tornado.web import Finish, HTTPError, RequestHandler
 
@@ -4256,8 +4253,6 @@ def _get_post_read_entry_uuid(response):
 class Application(tornado.web.Application):
 
     def __init__(self, **kwargs):
-        asyncio.set_event_loop_policy(AnyThreadEventLoopPolicy())
-
         #module_type = '([a-z]+)'
         module_type = '(%s)' % '|'.join(re.escape(mod) for mod in Modules.mapping)
         object_type = '([A-Za-z0-9_-]+/[A-Za-z0-9_-]+)'

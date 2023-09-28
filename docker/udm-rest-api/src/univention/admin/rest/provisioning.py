@@ -5,8 +5,7 @@ import urllib.request
 
 from concurrent.futures import ThreadPoolExecutor
 from ldap.controls.readentry import PostReadControl, PreReadControl
-from tornado.httpclient import AsyncHTTPClient, HTTPError, HTTPRequest
-import tornado.gen
+import tornado.httpclient
 
 from univention.admin.rest.object import get_representation
 import univention.admin.uldap
@@ -14,10 +13,10 @@ from univention.management.console.log import MODULE
 from univention.management.console.modules.udm.udm_ldap import UDM_Module
 
 
-class accessWithProvisioning(univention.admin.uldap.access):
+# Thread pool for submitting to the provisioning service.
+_pool = ThreadPoolExecutor(max_workers=1)
 
-    # Thread pool for submitting to the provisioning service.
-    pool = ThreadPoolExecutor(max_workers=1)
+class accessWithProvisioning(univention.admin.uldap.access):
 
     def _get_module(self, object_type):
         module = UDM_Module(object_type, ldap_connection=self, ldap_position=None)
@@ -25,7 +24,7 @@ class accessWithProvisioning(univention.admin.uldap.access):
             raise ModuleNotFound
         return module
 
-    async def send_to_provisioning(self, items):
+    def send_to_provisioning(self, items):
         base_url = os.getenv("PROVISIONING_URL", "http://host.docker.internal:7777")
         realm = os.getenv("PROVISIONING_REALM", "udm")
         if not base_url:
@@ -44,17 +43,16 @@ class accessWithProvisioning(univention.admin.uldap.access):
                 }
             }
 
-            request = HTTPRequest(url=url, method="POST",
+            request = tornado.httpclient.HTTPRequest(url=url, method="POST",
                               body=json.dumps(data).encode("utf-8"),
                               headers={"content-type": "application/json"})
             try:
-                client = AsyncHTTPClient()
+                client = tornado.httpclient.HTTPClient()
                 MODULE.debug(f"Trying to send message to provisioning service...")
-                response = await client.fetch(request, raise_error=True)
+                response = client.fetch(request, raise_error=True)
                 MODULE.info(f"Message sent to provisioning service (response: {response.code}, {response.reason}).")
-            except HTTPError as err:
-                response = err.response
-                MODULE.error(f"Sending to provisioning service failed (response: {response.code}, {response.reason}).")
+            except tornado.httpclient.HTTPError as err:
+                MODULE.error(f"Sending to provisioning service failed (response: {err.response.code}, {err.response.reason}).")
             except Exception as ex:
                 MODULE.error(f"Could not send to provisioning service: {ex}")
 
@@ -113,10 +111,11 @@ class accessWithProvisioning(univention.admin.uldap.access):
                 MODULE.debug("No control responses for UDM objects were returned.")
 
         if publish:
-            # Collect all events into a list and publish that from inside *one* future,
+            # Collect all events into a list and publish that from inside function call,
             # thus ensuring that all events are published in the order as they occurred.
-            tornado.ioloop.IOLoop.current().run_sync(
-                lambda: self.send_to_provisioning(publish))
+            # Submitting it to the thread pool in a fire-and-forget way allows the
+            # surrounding request handler to finish.
+            _pool.submit(self.send_to_provisioning, publish)
 
     def _extract_responses(self, func, response_name, *args, **kwargs):
         # Note: the original call must not pass `serverctrls` and/or `response` via `args`!
