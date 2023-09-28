@@ -613,7 +613,7 @@ class simpleLdap(object):
     def _write_admin_diary_create(self):
         self._write_admin_diary_event('CREATED')
 
-    def modify(self, modify_childs=True, ignore_license=False, serverctrls=None, response=None):  # type: (bool, bool, List[ldap.controls.LDAPControl], Dict[Text, Any]) -> Text
+    def modify(self, modify_childs=True, ignore_license=False, serverctrls=None, responses=None):  # type: (bool, bool, List[ldap.controls.LDAPControl], List[Dict[Text, Any]]) -> Text
         """
         Modifies the LDAP object by building the difference between the current state and the old state of this object and write this modlist to LDAP.
 
@@ -640,19 +640,19 @@ class simpleLdap(object):
         if not self.exists():
             raise univention.admin.uexceptions.noObject(self.dn)
 
-        if not isinstance(response, dict):
-            response = {}
+        if not isinstance(responses, list):
+            responses = []
 
         try:
             self._ldap_pre_ready()
             self.ready()
 
-            dn = self._modify(modify_childs, ignore_license=ignore_license, response=response)
+            dn = self._modify(modify_childs, ignore_license=ignore_license, responses=responses, serverctrls=serverctrls)
         except Exception:
             self._safe_cancel()
             raise
 
-        for c in response.get('ctrls', []):
+        for c in responses[-1].get('ctrls', []):
             if c.controlType == PostReadControl.controlType:
                 self.oldattr.update(c.entry)
         return dn
@@ -1341,7 +1341,7 @@ class simpleLdap(object):
 
         return al
 
-    def _modify(self, modify_childs=True, ignore_license=False, response=None, serverctrls=None):
+    def _modify(self, modify_childs=True, ignore_license=False, responses=None, serverctrls=None):
         """Modify the object. Should only be called by :func:`univention.admin.handlers.simpleLdap.modify`."""
         self.__prevent_ad_property_change()
 
@@ -1367,10 +1367,10 @@ class simpleLdap(object):
         # FIXME: timeout without exception if objectClass of Object is not exsistant !!
         ud.debug(ud.ADMIN, 99, 'Modify dn=%r;\nmodlist=%r;\noldattr=%r;' % (self.dn, ml, self.oldattr))
         try:
-            self.dn = self.lo.modify(self.dn, ml, ignore_license=ignore_license, serverctrls=serverctrls, response=response, rename_callback=wouldRename.on_rename)
+            self.dn = self.lo.modify(self.dn, ml, ignore_license=ignore_license, serverctrls=serverctrls, responses=responses, rename_callback=wouldRename.on_rename)
         except wouldRename as exc:
             self._ldap_pre_rename(exc.args[1])
-            self.dn = self.lo.modify(self.dn, ml, ignore_license=ignore_license, serverctrls=serverctrls, response=response)
+            self.dn = self.lo.modify(self.dn, ml, ignore_license=ignore_license, serverctrls=serverctrls, responses=responses)
             self._ldap_post_rename(exc.args[0])
         if ml:
             self._write_admin_diary_modify()

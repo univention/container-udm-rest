@@ -3183,7 +3183,7 @@ class Object(FormBase, _OpenAPIBase, Resource):
         try:
             module, obj = await self.pool_submit(self.get_module_object, object_type, dn, ldap_connection=self.ldap_write_connection)
         except NotFound:
-            module, obj = None
+            module, obj = None, None
 
         representation = {
             'position': position,

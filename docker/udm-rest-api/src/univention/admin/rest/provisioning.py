@@ -53,7 +53,8 @@ class accessWithProvisioning(univention.admin.uldap.access):
                 response = await client.fetch(request, raise_error=True)
                 MODULE.info(f"Message sent to provisioning service (response: {response.code}, {response.reason}).")
             except HTTPError as err:
-                MODULE.error(f"Could not send to provisioning service: {err}")
+                response = err.response
+                MODULE.error(f"Sending to provisioning service failed (response: {response.code}, {response.reason}).")
             except Exception as ex:
                 MODULE.error(f"Could not send to provisioning service: {ex}")
 
@@ -127,7 +128,7 @@ class accessWithProvisioning(univention.admin.uldap.access):
 
         kwargs["serverctrls"] = [
             # strip the caller's Pre-/PostReadControls from the `serverctrls`
-            control for control in kwargs.get("serverctrls", [])
+            control for control in (kwargs.get("serverctrls") or [])
             if control.controlType not in [ PreReadControl.controlType, PostReadControl.controlType ]
         ] + [
             # always add our all-inclusive Pre-/PostReadControls

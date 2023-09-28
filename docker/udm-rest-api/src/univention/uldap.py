@@ -731,9 +731,9 @@ class access(object):
             serverctrls = []
 
         if isinstance(responses, list):
-            responses.extend([{}, {}])
+            responses += [{}, {}]
         else:
-            responses = [None, None]
+            responses = [{}, {}]
 
         ml = []
         for key, oldvalue, newvalue in changes:
