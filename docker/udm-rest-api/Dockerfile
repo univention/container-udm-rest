@@ -31,12 +31,11 @@
 ARG PORTAL_UDM_EXTENSIONS_IMAGE=gitregistry.knut.univention.de/univention/components/univention-portal/portal-udm-extensions
 ARG PORTAL_UDM_EXTENSIONS_TAG=latest
 
-ARG UCS_BASE_IMAGE=gitregistry.knut.univention.de/univention/customers/dataport/upx/container-ucs-base/ucs-base-dev-504
-ARG UCS_BASE_IMAGE_TAG=latest
+ARG UCS_BASE_IMAGE=gitregistry.knut.univention.de/univention/customers/dataport/upx/container-ucs-base/ucs-base-dev-505
+ARG UCS_BASE_IMAGE_TAG=v0.6.0
 
 
 FROM ${PORTAL_UDM_EXTENSIONS_IMAGE}:${PORTAL_UDM_EXTENSIONS_TAG} AS portal-udm-extensions
-
 
 FROM ${UCS_BASE_IMAGE}:${UCS_BASE_IMAGE_TAG} as build
 
@@ -57,9 +56,7 @@ COPY fake.sh /usr/local/bin/invoke-rc.d
 COPY fake.sh /usr/sbin/univention-management-console-acls
 COPY fake-uv-lib.sh /usr/local/bin/fake-uv-lib.sh
 
-# TODO: See https://git.knut.univention.de/univention/ucs/-/merge_requests/820
-RUN ucs-dev-add-branch.sh jbornhold-udm-rest-client && \
-  apt-get --quiet update && \
+RUN apt-get --quiet update && \
   # install Univention bash helper functions dependency
   DEBIAN_FRONTEND=noninteractive \
     apt-get --assume-yes --verbose-versions --no-install-recommends install \
