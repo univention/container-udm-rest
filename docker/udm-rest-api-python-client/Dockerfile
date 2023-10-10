@@ -29,7 +29,7 @@
 # <https://www.gnu.org/licenses/>.
 
 
-ARG UCS_BASE_IMAGE=gitregistry.knut.univention.de/univention/customers/dataport/upx/container-ucs-base/ucs-base-504
+ARG UCS_BASE_IMAGE=gitregistry.knut.univention.de/univention/components/ucs-base-image/ucs-base-505
 ARG UCS_BASE_IMAGE_TAG=latest
 
 FROM ${UCS_BASE_IMAGE}:${UCS_BASE_IMAGE_TAG} as final
