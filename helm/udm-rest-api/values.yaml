@@ -68,6 +68,10 @@ udmRestApi:
   caCertFile: "/var/secrets/ca_cert"
 
 
+  provisioningUrl: "http://provisioning-api:7777"
+  provisioningRealm: "udm"
+
+
 # -- Kubernetes ingress
 ingress:
   # -- Set this to `true` in order to enable the installation of Ingress related objects.

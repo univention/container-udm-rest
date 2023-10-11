@@ -22,6 +22,9 @@ data:
   MACHINE_SECRET_FILE: "{{ .Values.udmRestApi.machineSecretFile }}"
   CA_CERT_FILE: "{{ .Values.udmRestApi.caCertFile }}"
 
+  PROVISIONING_URL: "{{ .Values.udmRestApi.provisioningUrl }}"
+  PROVISIONING_REALM: "{{ .Values.udmRestApi.provisioningRealm }}"
+
   # used by the load-join-data job
   UDM_API_URL: 'http://{{ include "common.names.fullname" . }}/udm/'
   UDM_API_USER: "cn=admin"
