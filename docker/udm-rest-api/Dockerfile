@@ -206,8 +206,9 @@ COPY --from=build \
   /usr/sbin/univention-config-registry \
   /usr/sbin/ucr \
   /usr/sbin/
-# Skipping /etc/univention/templates here
-# as we do not need to modify most system configuration files.
+COPY --from=build \
+  /etc/univention/templates \
+  /etc/univention/templates
 
 COPY --from=build \
   /version \
