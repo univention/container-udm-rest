@@ -32,6 +32,15 @@ build-udm-rest-image:
     KANIKO_BUILD_CONTEXT: "docker/udm-rest-api"
     CI_REGISTRY_IMAGE: "${CI_REGISTRY_IMAGE}/udm-rest-api"
 
+build-udm-rest-test-image:
+  stage: "build"
+  extends: ".kaniko"
+  needs: []
+  variables:
+    KANIKO_BUILD_CONTEXT: "docker/udm-rest-api"
+    CI_REGISTRY_IMAGE: "${CI_REGISTRY_IMAGE}/udm-rest-api-test"
+    KANIKO_ARGS: "--target=test"
+
 build-testrunner-image:
   stage: "build"
   extends: ".kaniko"
@@ -43,7 +52,7 @@ build-testrunner-image:
 test-udm-rest:
   stage: "test"
   needs:
-    - job: "build-udm-rest-image"
+    - job: "build-udm-rest-test-image"
       artifacts: false
     - job: "build-testrunner-image"
   image: "${CI_REGISTRY_IMAGE}/testrunner:${BUILD_VERSION}"
@@ -54,15 +63,8 @@ test-udm-rest:
         LDAP_BASE_DN: "dc=univention-organization,dc=intranet"
         LDAP_CN_ADMIN_PW: "univention"
         TLS_MODE: "off"
-    - name: "${CI_REGISTRY_IMAGE}/udm-rest-api:${BUILD_VERSION}"
+    - name: "${CI_REGISTRY_IMAGE}/udm-rest-api-test:${BUILD_VERSION}"
       variables:
-        LDAP_HOST: "localhost"
-        LDAP_PORT: 389
-        LDAP_BASE_DN: "dc=univention-organization,dc=intranet"
-        LDAP_HOST_DN: "cn=admin,dc=univention-organization,dc=intranet"
-        TLS_MODE: "off"
-        DEBUG_LEVEL: 5
-        AUTHORIZED_DOMAIN_ADMINS: "cn=Domain Admins,cn=groups,dc=univention-organization,dc=intranet"
         MACHINE_SECRET: "univention"
   before_script:
     # TODO: maybe we can put a more sophisticated healthcheck here...

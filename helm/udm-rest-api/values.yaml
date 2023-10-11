@@ -8,6 +8,7 @@ affinity: {}
 environment: {}
 fullnameOverride: ""
 mountSecrets: true
+mountUcr: true
 nameOverride: ""
 nodeSelector: {}
 podAnnotations: {}
@@ -16,48 +17,14 @@ replicaCount: 1
 securityContext: {}
 tolerations: []
 
+# TODO: does this belong here?
+global:
+  configMapUcrDefaults: "stack-data-ums-ucr"
+  configMapUcr: "stack-data-swp-ucr"
+  configMapUcrForced: "stack-data-dev-ucr"
 
 # -- Application configuration of the UDM REST API
 udmRestApi:
-  # -- Domain name of the instance.
-  # Example: `example.org`
-  domainname: ""
-  # -- Host name of the instance.
-  # Example: `souvap`
-  hostname: ""
-  # -- Hostname of the LDAP server.
-  # Example: `"ucs-1234.univention.intranet"`
-  ldapHost: null
-  # -- IP address of the LDAP server.
-  # (This resolved the `ldapHost` in order to facilitate TLS certificate checks.)
-  # Example: `"10.200.0.1"`
-  ldapHostIp: ""
-  # -- Port to connect to the LDAP server.
-  ldapPort: "389"
-  # -- Base DN of the LDAP directory.
-  # Example: `"dc=example,dc=org"`
-  ldapBaseDn: null
-  # -- DN of the UMC instance.
-  # Example: `"cn=ucs-1234,cn=dc,cn=computers,dc=example,dc=org"`
-  ldapHostDn: null
-  # -- Set desired TLS mode.
-  # Options: `"secure"`, `"unvalidated"`, `"off"`.
-  tlsMode: "secure"
-  # -- Debug level of the UDM REST API server.
-  # (1 = errors only, 99 = most verbose)
-  debugLevel: "5"
-  # -- Authorized groups with special rights.
-  authGroups:
-    # -- Set directory.manager.rest.authorized-groups.dc-backup
-    # Example: `"cn=DC Backup Hosts,cn=groups,dc=example,dc=com"`
-    dcBackup: null
-    # -- Set directory.manager.rest.authorized-groups.dc-slaves
-    # Example: `"cn=DC Slave Hosts,cn=groups,dc=example,dc=com"`
-    dcSlaves: null
-    # -- Set directory.manager.rest.authorized-groups.domain-admins
-    # Example: `"cn=Domain Admins,cn=groups,dc=example,dc=com"`
-    domainAdmins: null
-
   # -- Path to file with the LDAP secret.
   # (TODO: This may be unnecessary here.)
   ldapSecretFile: "/var/secrets/ldap_secret"

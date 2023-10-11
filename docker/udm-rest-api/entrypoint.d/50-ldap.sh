@@ -30,26 +30,30 @@ set -euxo pipefail
 
 ############################################################
 # Prepare LDAP TLS certificates and settings
-TLS_MODE="${TLS_MODE:-secure}"
+UDM_STARTTLS="$(ucr get uldap/start-tls)"
+if [[ -z "${UDM_STARTTLS}" ]]; then
+  UDM_STARTTLS=2
+fi
 
-case "${TLS_MODE}" in
-  "secure")
+case "${UDM_STARTTLS}" in
+  "2")
+    TLS_MODE="secure"
     TLS_REQCERT="demand"
-    UDM_STARTTLS=2
     ;;
-  "unvalidated")
+  "1")
+    TLS_MODE="unvalidated"
     TLS_REQCERT="allow"
-    UDM_STARTTLS=1
     ;;
-  "off")
+  "0")
+    TLS_MODE="off"
     TLS_REQCERT="never"
-    UDM_STARTTLS=0
     ;;
   *)
-    echo "TLS_MODE must be one of: secure, unvalidated, off."
+    echo "UCR variable 'uldap/start-tls' must be one of: 0, 1, 2"
     exit 1
 esac
 
+# TODO: Install the certificates of the LDAP server from Kubernetes secrets.
 if [[ "${TLS_MODE}" != "off" ]]; then
   CA_CERT_FILE=${CA_CERT_FILE:-/run/secrets/ca_cert}
   CA_DIR="/etc/univention/ssl/ucsCA"
@@ -65,6 +69,9 @@ fi
 
 ############################################################
 # Store LDAP configuration
+LDAP_HOST="$(ucr get ldap/server/name)"
+LDAP_PORT="$(ucr get ldap/server/port)"
+LDAP_BASE_DN="$(ucr get ldap/basedn)"
 cat <<EOF > /etc/ldap/ldap.conf
 # This file should be world readable but not world writable.
 
@@ -99,5 +106,3 @@ else
   echo "Check the \$MACHINE_SECRET_FILE variable and the file that it points to."
   exit 1
 fi
-
-# [EOF]

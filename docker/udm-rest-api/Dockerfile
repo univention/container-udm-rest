@@ -283,4 +283,15 @@ RUN apt-get --quiet update && \
       && \
   rm -rf /var/lib/apt/lists/*
 
+
+############################################################
+# Fourth stage to create an image for running tests
+
+FROM final as test
+
+SHELL ["/bin/bash", "-c"]
+
+# load a UCR config for testing
+COPY test-base.conf /etc/univention/base.conf
+
 # [EOF]
