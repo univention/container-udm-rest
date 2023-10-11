@@ -239,10 +239,8 @@ RUN \
   mkdir --parents /var/lib/univention-appcenter/attributes/ && \
   echo '{}' > /var/lib/univention-appcenter/attributes/mapping.json
 
-COPY entrypoint.sh /udm/
+COPY entrypoint.d /entrypoint.d/
 WORKDIR /udm/
-
-ENTRYPOINT ["/udm/entrypoint.sh"]
 
 # Parameters for UDM
 # --processes 0 means one process per cpu core

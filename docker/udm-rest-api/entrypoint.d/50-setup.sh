@@ -175,6 +175,4 @@ ucr set \
 
 ucr unset ldap/server/ip
 
-exec "$@"
-
 # [EOF]
