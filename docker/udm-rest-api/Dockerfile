@@ -32,7 +32,7 @@ ARG PORTAL_UDM_EXTENSIONS_IMAGE=gitregistry.knut.univention.de/univention/compon
 ARG PORTAL_UDM_EXTENSIONS_TAG=latest
 
 ARG UCS_BASE_IMAGE=gitregistry.knut.univention.de/univention/components/ucs-base-image/ucs-base-505
-ARG UCS_BASE_IMAGE_TAG=v0.7.0
+ARG UCS_BASE_IMAGE_TAG=v0.7.5
 
 
 FROM ${PORTAL_UDM_EXTENSIONS_IMAGE}:${PORTAL_UDM_EXTENSIONS_TAG} AS portal-udm-extensions
