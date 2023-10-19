@@ -543,12 +543,12 @@ false
   },
   "caCertFile": "/var/secrets/ca_cert",
   "debugLevel": "5",
-  "domainname": null,
-  "hostname": null,
+  "domainname": "",
+  "hostname": "",
   "ldapBaseDn": null,
   "ldapHost": null,
   "ldapHostDn": null,
-  "ldapHostIp": null,
+  "ldapHostIp": "",
   "ldapPort": "389",
   "ldapSecretFile": "/var/secrets/ldap_secret",
   "machineSecretFile": "/var/secrets/machine_secret",
@@ -620,7 +620,7 @@ null
 			<td>udmRestApi.domainname</td>
 			<td>string</td>
 			<td><pre lang="json">
-null
+""
 </pre>
 </td>
 			<td>Domain name of the instance. Example: `example.org`</td>
@@ -629,7 +629,7 @@ null
 			<td>udmRestApi.hostname</td>
 			<td>string</td>
 			<td><pre lang="json">
-null
+""
 </pre>
 </td>
 			<td>Host name of the instance. Example: `souvap`</td>
@@ -665,7 +665,7 @@ null
 			<td>udmRestApi.ldapHostIp</td>
 			<td>string</td>
 			<td><pre lang="json">
-null
+""
 </pre>
 </td>
 			<td>IP address of the LDAP server. (This resolved the `ldapHost` in order to facilitate TLS certificate checks.) Example: `"10.200.0.1"`</td>
