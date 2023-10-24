@@ -41,11 +41,17 @@ ingress:
   enabled: true
   ingressClassName: "nginx"
   annotations:
+    # Ingress-Nginx
     nginx.ingress.kubernetes.io/configuration-snippet: |
       rewrite ^/univention(/udm/.*)$ $1 break;
+    # Nginx
     nginx.org/location-snippets: |
       rewrite ^/univention(/udm/.*)$ $1 break;
     nginx.org/mergeable-ingress-type: "minion"
+    # HAProxy
+    haproxy.org/path-rewrite: ^/univention(/udm/.*)$ \1
+    # HAProxy - Community: https://haproxy-ingress.github.io/
+    haproxy-ingress.github.io/rewrite-target: /udm/
   # -- The hostname. This parameter has to be supplied. Example `udm.example.com`.
   host: null
   paths:
