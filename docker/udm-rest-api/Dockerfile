@@ -31,11 +31,15 @@
 ARG PORTAL_UDM_EXTENSIONS_IMAGE=gitregistry.knut.univention.de/univention/components/univention-portal/portal-udm-extensions
 ARG PORTAL_UDM_EXTENSIONS_TAG=latest
 
+ARG OX_CONNECTOR_EXTENSIONS_IMAGE=gitregistry.knut.univention.de/univention/open-xchange/provisioning/ox-connector-dependencies
+ARG OX_CONNECTOR_EXTENSIONS_TAG=0.3.0
+
 ARG UCS_BASE_IMAGE=gitregistry.knut.univention.de/univention/components/ucs-base-image/ucs-base-505
 ARG UCS_BASE_IMAGE_TAG=v0.7.5
 
 
 FROM ${PORTAL_UDM_EXTENSIONS_IMAGE}:${PORTAL_UDM_EXTENSIONS_TAG} AS portal-udm-extensions
+FROM ${OX_CONNECTOR_EXTENSIONS_IMAGE}:${OX_CONNECTOR_EXTENSIONS_TAG} AS ox-connector-extensions
 
 FROM ${UCS_BASE_IMAGE}:${UCS_BASE_IMAGE_TAG} as build
 
@@ -56,7 +60,10 @@ COPY fake.sh /usr/local/bin/invoke-rc.d
 COPY fake.sh /usr/sbin/univention-management-console-acls
 COPY fake-uv-lib.sh /usr/local/bin/fake-uv-lib.sh
 
-RUN apt-get --quiet update && \
+WORKDIR /apt
+
+RUN chown _apt . && \
+  apt-get --quiet update && \
   # install Univention bash helper functions dependency
   DEBIAN_FRONTEND=noninteractive \
     apt-get --assume-yes --verbose-versions --no-install-recommends install \
@@ -141,7 +148,7 @@ ARG LABEL_VERSION=undefined
 
 WORKDIR /apt
 
-RUN \
+RUN chown _apt . && \
   apt-get --quiet update && \
   DEBIAN_FRONTEND=noninteractive \
     apt-get --assume-yes --verbose-versions --no-install-recommends install \
@@ -177,6 +184,9 @@ COPY --from=build \
 COPY --from=build \
   /usr/share/univention-management-console-frontend/js/dijit/themes/umc/icons/ \
   /usr/share/univention-management-console-frontend/js/dijit/themes/umc/icons/
+COPY --from=ox-connector-extensions /dependencies/icons/ \
+    /usr/share/univention-management-console-frontend/js/dijit/themes/umc/icons/
+
 # available reports
 COPY --from=build \
   /etc/univention/directory/reports/ \
@@ -196,6 +206,16 @@ COPY --from=portal-udm-extensions /udm/syntax/univention-portal.py \
 
 COPY --from=portal-udm-extensions /udm/handlers \
     /usr/lib/python3/dist-packages/univention/admin/handlers/portals
+
+COPY --from=ox-connector-extensions /dependencies/syntax.d/50_ox.py \
+    /usr/lib/python3/dist-packages/univention/admin/syntax.d/50_ox.py
+
+# oxmail and oxresources
+COPY --from=ox-connector-extensions /dependencies/handlers \
+    /usr/lib/python3/dist-packages/univention/admin/handlers
+
+COPY --from=ox-connector-extensions /dependencies/hooks.d \
+    /usr/lib/python3/dist-packages/univention/admin/hooks.d
 
 # UCR
 
