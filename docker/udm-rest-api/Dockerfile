@@ -210,6 +210,9 @@ COPY --from=portal-udm-extensions /udm/handlers \
 COPY --from=ox-connector-extensions /dependencies/syntax.d/50_ox.py \
     /usr/lib/python3/dist-packages/univention/admin/syntax.d/50_ox.py
 
+COPY --from=ox-connector-extensions /dependencies/ox-common.xml \
+    /usr/share/univention-management-console/modules/udm-oxresources-oxresources.xml
+
 # oxmail and oxresources
 COPY --from=ox-connector-extensions /dependencies/handlers \
     /usr/lib/python3/dist-packages/univention/admin/handlers
