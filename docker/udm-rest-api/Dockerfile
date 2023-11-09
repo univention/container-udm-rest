@@ -32,7 +32,7 @@ ARG PORTAL_UDM_EXTENSIONS_IMAGE=gitregistry.knut.univention.de/univention/compon
 ARG PORTAL_UDM_EXTENSIONS_TAG=latest
 
 ARG OX_CONNECTOR_EXTENSIONS_IMAGE=gitregistry.knut.univention.de/univention/open-xchange/provisioning/ox-connector-dependencies
-ARG OX_CONNECTOR_EXTENSIONS_TAG=0.3.0
+ARG OX_CONNECTOR_EXTENSIONS_TAG=0.3.4
 
 ARG UCS_BASE_IMAGE=gitregistry.knut.univention.de/univention/components/ucs-base-image/ucs-base-505
 ARG UCS_BASE_IMAGE_TAG=v0.7.5
