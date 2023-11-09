@@ -21,7 +21,7 @@ tolerations: []
 global:
   configMapUcrDefaults: "stack-data-ums-ucr"
   configMapUcr: "stack-data-swp-ucr"
-  configMapUcrForced: "stack-data-dev-ucr"
+  configMapUcrForced: null
 
   imageRegistry: "gitregistry.knut.univention.de"
 
