@@ -58,7 +58,7 @@ build-testrunner-image:
     CI_REGISTRY_IMAGE: "${CI_REGISTRY_IMAGE}/testrunner"
     VERSION: "${RELEASE_VERSION}"
 
-test-udm-rest:
+test-udm-rest-v1:
   stage: "test"
   needs:
     - job: "build-udm-rest-test-image"
@@ -83,6 +83,37 @@ test-udm-rest:
     - "timeout 60 bash -c 'until printf \"\" > /dev/tcp/localhost/9979; do sleep 1; done'"
   script:
     - 'pytest tests/integration --udm-rest-url "http://localhost:9979/udm/"'
+
+test-udm-rest:
+  stage: test
+  needs:
+    - job: "build-udm-rest-test-image"
+    - job: "build-testrunner-image"
+      artifacts: false
+  variables:
+    DOCKER_HOST: tcp://localhost:2377/
+  services:
+    - name: "${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/docker:24.0.7-dind"
+      entrypoint: []
+      command:
+        - dockerd
+        - --host
+        - tcp://0.0.0.0:2377
+      variables:
+        DOCKER_DRIVER: overlay2
+  image: "gitregistry.knut.univention.de/univention/customers/dataport/upx/dev-env/debian-kind-base:latest"
+  before_script:
+    # Using Gitlab's job variables does not work in this case
+    - export DOCKER_API_VERSION="1.43"
+    - 'echo "Waiting for dockerd to start ... "'
+    - "timeout 60 bash -c 'until printf \"\" > /dev/tcp/localhost/2377; do sleep 1; done'"
+  script:
+    - export IMAGE_TAG=${BUILD_IMAGE_TAG}
+    - cp .env.udm-rest-api.example .env.udm-rest-api
+    - mkdir secret
+    - echo -n univention > secret/machine.secret
+    - echo -n univention > secret/ldap.secret
+    - docker compose up --detach --wait --wait-timeout 60 --pull always udm-rest-api ldap-server
 
 build-udm-rest-api-python-client:
   stage: build
