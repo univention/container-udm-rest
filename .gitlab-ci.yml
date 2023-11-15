@@ -94,6 +94,10 @@ test-udm-rest-v2:
     - docker volume ls
     - MY_ID=$(docker container ls -q)
     - docker container inspect $MY_ID
+    - |
+      for vol in $(docker volume ls -q); do
+          docker volume inspect "$vol"
+      done
     - mount
     - exit 1
 
