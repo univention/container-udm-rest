@@ -118,7 +118,7 @@ test-dind:
   image: docker:dind
   script:
     - dockerd --help
-    - dockerd --host tcp://0.0.0.0:2376
+    - dockerd --host tcp://0.0.0.0:2377
     - exit 1
 
 # build-udm-rest-api-python-client:
