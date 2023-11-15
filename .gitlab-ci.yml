@@ -82,25 +82,25 @@ include:
 #   script:
 #     - 'pytest tests/integration --udm-rest-url "http://localhost:9979/udm/"'
 
-test-udm-rest-v2:
-  stage: "test"
-  needs: []
-  image: "gitregistry.knut.univention.de/univention/customers/dataport/upx/dev-env/debian-kind-base:latest"
-  script:
-    - env | sort
-    # - kubectl cluster-info
-    - docker ps
-    # - docker compose --help
-    - docker volume ls
-    - MY_ID=$(docker container ls -q)
-    - docker container inspect $MY_ID
-    - |
-      for vol in $(docker volume ls -q); do
-          docker volume inspect "$vol"
-      done
-    - mount
-    - echo $PWD
-    - exit 1
+# test-udm-rest-v2:
+#   stage: "test"
+#   needs: []
+#   image: "gitregistry.knut.univention.de/univention/customers/dataport/upx/dev-env/debian-kind-base:latest"
+#   script:
+#     - env | sort
+#     # - kubectl cluster-info
+#     - docker ps
+#     # - docker compose --help
+#     - docker volume ls
+#     - MY_ID=$(docker container ls -q)
+#     - docker container inspect $MY_ID
+#     - |
+#       for vol in $(docker volume ls -q); do
+#           docker volume inspect "$vol"
+#       done
+#     - mount
+#     - echo $PWD
+#     - exit 1
 
 
 test-dind:
@@ -110,7 +110,7 @@ test-dind:
     DOCKER_HOST: tcp://localhost:2377/
     DOCKER_DRIVER: overlay2
   services:
-    - name: docker:dind
+    - name: "${CI_DEPENENCY_PROXY_GROUP_IMAGE_PREFIX}/docker:dind"
       alias: docker
       entrypoint: []
       command:
