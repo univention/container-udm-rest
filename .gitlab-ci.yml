@@ -101,6 +101,22 @@ test-udm-rest-v2:
     - mount
     - exit 1
 
+
+test-dind:
+  stage: test
+  needs: []
+  variables:
+    DOCKER_HOST: tcp://docker:2375/
+    DOCKER_DRIVER: overlay2
+  services:
+    - docker:dind
+  image: "gitregistry.knut.univention.de/univention/customers/dataport/upx/dev-env/debian-kind-base:latest"
+  script:
+    - docker version
+    - docker ps
+    - docker-compose version
+    - exit 1
+
 # build-udm-rest-api-python-client:
 #   stage: build
 #   extends: .kaniko
