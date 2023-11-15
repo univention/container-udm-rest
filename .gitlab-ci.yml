@@ -113,7 +113,7 @@ test-dind:
   image: "gitregistry.knut.univention.de/univention/customers/dataport/upx/dev-env/debian-kind-base:latest"
   script:
     - 'echo "Waiting for dind to start ... "'
-    - "timeout 120 bash -c 'until printf \"\" > /dev/tcp/localhost/2375; do sleep 1; done'"
+    - "timeout 120 bash -c 'until printf \"\" > /dev/tcp/docker/2375; do sleep 1; done'"
     - docker version
     - docker ps
     - docker-compose version
