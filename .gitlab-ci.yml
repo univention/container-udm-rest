@@ -130,6 +130,7 @@ test-dind:
     - mkdir secret
     - echo -n univention > secret/machine.secret
     - echo -n univention > secret/ldap.secret
+    - docker compose run -it --rm docs make html
     - docker compose up udm-rest-api
     - exit 1
 
