@@ -91,6 +91,7 @@ test-udm-rest-v2:
     # - kubectl cluster-info
     - docker ps
     - docker compose --help
+    - mount
     - exit 1
 
 # build-udm-rest-api-python-client:
