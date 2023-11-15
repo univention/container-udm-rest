@@ -6,7 +6,7 @@ services:
   udm-rest-api:
     image: gitregistry.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/udm-rest-api:latest
     # FIXME: remove once arm64 packages are available at updates.software-univention.de
-    platform: "linux/amd64"
+    # platform: "linux/amd64"
     build:
       context: ./docker/udm-rest-api
       target: final
@@ -22,7 +22,7 @@ services:
     image: gitregistry.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/udm-rest-api-python-client:${IMAGE_TAG:-latest}
     build:
       context: ./docker/udm-rest-api-python-client
-    platform: "linux/amd64"
+    # platform: "linux/amd64"
     working_dir: "/src"
     volumes:
       - "./:/src/"
@@ -44,7 +44,7 @@ services:
   test:
     profiles:
       - "test"
-    platform: "linux/amd64"
+    # platform: "linux/amd64"
     build:
       context: docker/testrunner
     environment:
@@ -57,7 +57,7 @@ services:
   ldap-server:
     profiles:
       - "test"
-    platform: linux/amd64
+    # platform: linux/amd64
     image: gitregistry.knut.univention.de/univention/customers/dataport/upx/container-ldap/ldap-server:latest
     environment:
       DOMAIN_NAME: univention-organization.intranet
