@@ -127,6 +127,8 @@ test-dind:
     - docker run --rm -v /builds:/builds debian ls -la ${PWD}
     - docker run --rm -v .:/src debian ls -la /src
     - cp .env.udm-rest-api.example .env.udm-rest-api
+    - echo -n univention > secret/machine.secret
+    - echo -n univention > secret/ldap.secret
     - docker compose up udm-rest-api
     - exit 1
 
