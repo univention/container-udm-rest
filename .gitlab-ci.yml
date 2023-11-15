@@ -118,6 +118,7 @@ test-dind:
   image: docker:dind
   script:
     - dockerd --help
+    - dockerd
     - exit 1
 
 # build-udm-rest-api-python-client:
