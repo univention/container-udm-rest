@@ -47,6 +47,7 @@ build-udm-rest-test-image:
     KANIKO_BUILD_CONTEXT: "docker/udm-rest-api"
     CI_REGISTRY_IMAGE: "${CI_REGISTRY_IMAGE}/udm-rest-api-test"
     KANIKO_ARGS: "--target=test"
+    VERSION: "${RELEASE_VERSION}"
 
 build-testrunner-image:
   stage: "build"
@@ -55,6 +56,7 @@ build-testrunner-image:
   variables:
     KANIKO_BUILD_CONTEXT: "docker/testrunner"
     CI_REGISTRY_IMAGE: "${CI_REGISTRY_IMAGE}/testrunner"
+    VERSION: "${RELEASE_VERSION}"
 
 test-udm-rest:
   stage: "test"
