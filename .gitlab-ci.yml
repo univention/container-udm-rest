@@ -126,6 +126,7 @@ test-dind:
     - docker run --rm debian echo "Hello World!"
     - docker run --rm -v /builds:/builds debian ls -la ${PWD}
     - docker run --rm -v .:/src debian ls -la /src
+    - cp .env.udm-rest-api.example .env.udm-rest-api
     - docker compose up udm-rest-api
     - exit 1
 
