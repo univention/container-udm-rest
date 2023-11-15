@@ -113,6 +113,8 @@ test-dind:
       alias: docker
       command:
         - --debug
+        - -H
+        - tcp://0.0.0.0:2376
   image: "gitregistry.knut.univention.de/univention/customers/dataport/upx/dev-env/debian-kind-base:latest"
   script:
     - cat /etc/hosts
