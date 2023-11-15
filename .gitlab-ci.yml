@@ -105,24 +105,19 @@ test-udm-rest-v2:
 test-dind:
   stage: test
   needs: []
-  variables:
-    DOCKER_HOST: tcp://docker:2375/
-    DOCKER_DRIVER: overlay2
-  services:
-    - name: docker:dind
-      alias: docker
-      command:
-        - --debug
-        - -H
-        - tcp://0.0.0.0:2376
-  image: "gitregistry.knut.univention.de/univention/customers/dataport/upx/dev-env/debian-kind-base:latest"
+  # variables:
+  #   DOCKER_HOST: tcp://docker:2375/
+  #   DOCKER_DRIVER: overlay2
+  # services:
+  #   - name: docker:dind
+  #     alias: docker
+  #     command:
+  #       - --debug
+  #       - -H
+  #       - tcp://0.0.0.0:2376
+  image: docker:dind
   script:
-    - cat /etc/hosts
-    - 'echo "Waiting for dind to start ... "'
-    - "timeout 120 bash -c 'until printf \"\" > /dev/tcp/localhost/2375; do sleep 1; done'"
-    - docker version
-    - docker ps
-    - docker-compose version
+    - dockerd --help
     - exit 1
 
 # build-udm-rest-api-python-client:
