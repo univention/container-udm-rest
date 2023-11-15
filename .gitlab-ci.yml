@@ -125,6 +125,7 @@ test-dind:
     - docker ps
     - docker run --rm debian echo "Hello World!"
     - docker run --rm -v /builds:/builds debian ls -la ${PWD}
+    - docker run --rm -v .:/src debian ls -la /src
     - exit 1
 
 # build-udm-rest-api-python-client:
