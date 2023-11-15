@@ -109,7 +109,7 @@ test-dind:
   variables:
     DOCKER_HOST: tcp://localhost:2377/
     DOCKER_DRIVER: overlay2
-    DOCKER_API_VERSION: 1.43
+    DOCKER_API_VERSION: "1.43"
   services:
     - name: "${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/docker:24.0.7-dind"
       alias: docker
