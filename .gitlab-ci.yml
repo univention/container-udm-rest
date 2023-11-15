@@ -110,7 +110,7 @@ test-dind:
     DOCKER_HOST: tcp://localhost:2377/
     DOCKER_DRIVER: overlay2
   services:
-    - name: "${CI_DEPENENCY_PROXY_GROUP_IMAGE_PREFIX}/docker:dind"
+    - name: "${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/docker:dind"
       alias: docker
       entrypoint: []
       command:
