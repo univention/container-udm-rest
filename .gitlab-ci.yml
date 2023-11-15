@@ -118,10 +118,12 @@ test-dind:
         - --host
         - tcp://0.0.0.0:2377
   image: "gitregistry.knut.univention.de/univention/customers/dataport/upx/dev-env/debian-kind-base:latest"
-  script:
+  before_script:
+    # Using Gitlab's job variables does not work in this case
+    - export DOCKER_API_VERSION="1.43"
     - 'echo "Waiting for dind to start ... "'
     - "timeout 120 bash -c 'until printf \"\" > /dev/tcp/localhost/2377; do sleep 1; done'"
-    - export DOCKER_API_VERSION="1.43"
+  script:
     - docker version
     - echo ${DOCKER_API_VERSION}
     - curl http://localhost:2377/info
