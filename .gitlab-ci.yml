@@ -90,7 +90,10 @@ test-udm-rest-v2:
     - env | sort
     # - kubectl cluster-info
     - docker ps
-    - docker compose --help
+    # - docker compose --help
+    - docker volume ls
+    - MY_ID=$(docker container ls -q)
+    - docker container inspect $MY_ID
     - mount
     - exit 1
 
