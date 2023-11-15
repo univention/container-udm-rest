@@ -89,6 +89,7 @@ test-udm-rest-v2:
   script:
     - env | sort
     - kubectl cluster-info
+    - docker ps
     - exit 1
 
 # build-udm-rest-api-python-client:
