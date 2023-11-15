@@ -88,6 +88,7 @@ test-udm-rest-v2:
   image: "gitregistry.knut.univention.de/univention/customers/dataport/upx/dev-env/debian-kind-base:latest"
   script:
     - env | sort
+    - kubectl cluster-info
     - exit 1
 
 # build-udm-rest-api-python-client:
