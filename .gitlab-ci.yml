@@ -99,6 +99,7 @@ test-udm-rest-v2:
           docker volume inspect "$vol"
       done
     - mount
+    - echo $PWD
     - exit 1
 
 
@@ -123,7 +124,7 @@ test-dind:
     - docker version
     - docker ps
     - docker run --rm debian echo "Hello World!"
-    - docker run --rm -v /build:/build debian ls -la /
+    - docker run --rm -v /builds:/builds debian ls -la /
     - exit 1
 
 # build-udm-rest-api-python-client:
