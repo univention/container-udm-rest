@@ -88,7 +88,7 @@ test-udm-rest-v2:
   image: "gitregistry.knut.univention.de/univention/customers/dataport/upx/dev-env/debian-kind-base:latest"
   script:
     - env | sort
-    - kubectl cluster-info
+    # - kubectl cluster-info
     - docker ps
     - exit 1
 
