@@ -112,6 +112,7 @@ test-dind:
     - docker:dind
   image: "gitregistry.knut.univention.de/univention/customers/dataport/upx/dev-env/debian-kind-base:latest"
   script:
+    - sleep 30
     - docker version
     - docker ps
     - docker-compose version
