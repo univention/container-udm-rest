@@ -101,7 +101,7 @@ test-udm-rest:
         - tcp://0.0.0.0:2377
       variables:
         DOCKER_DRIVER: overlay2
-  image: "gitregistry.knut.univention.de/univention/customers/dataport/upx/dev-env/debian-kind-base:latest"
+  image: "gitregistry.knut.univention.de/univention/customers/dataport/upx/dev-env/debian-kind-base:branch-jbornhold-test-new-docker-version"
   before_script:
     # Using Gitlab's job variables does not work in this case
     - export DOCKER_API_VERSION="1.43"
