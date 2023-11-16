@@ -116,7 +116,7 @@ test-udm-rest:
     - docker compose config udm-rest-api ldap-server test
     - docker compose up --wait --wait-timeout 60 --quiet-pull --pull always udm-rest-api
     - docker compose logs --follow &
-    - docker compose run --rm test pytest tests/integration --udm-rest-url "http://udm-rest-api:9979/udm/"
+    - docker compose run --rm --quiet-pull test pytest tests/integration --udm-rest-url "http://udm-rest-api:9979/udm/"
 
 build-udm-rest-api-python-client:
   stage: build
