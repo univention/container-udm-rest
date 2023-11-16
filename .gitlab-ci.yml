@@ -121,6 +121,7 @@ test-udm-rest:
     # - docker ps
     # - docker inspect dev-local-udm-rest-api-1
     - docker compose run --rm --quiet-pull test curl -i http://udm-rest-api:9979 &
+    - sleep 10
     - docker ps
     # - docker compose run --rm --quiet-pull test pytest tests/integration --udm-rest-url "http://udm-rest-api:9979/udm/"
 
