@@ -100,8 +100,8 @@ test-udm-rest:
         - dockerd
         - --host
         - tcp://0.0.0.0:2377
-        - --bridge
-        - mydocker
+        # - --bridge
+        # - mydocker
         # --debug
       variables:
         DOCKER_DRIVER: overlay2
