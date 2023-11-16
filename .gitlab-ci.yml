@@ -98,10 +98,10 @@ test-udm-rest:
       entrypoint: []
       command:
         - dockerd
-        - --help
-        # - --bridge my-docker-bridge
-        # - --host
-        # - tcp://0.0.0.0:2377
+        - --host
+        - tcp://0.0.0.0:2377
+        - --bridge
+        - mydocker
         # --debug
       variables:
         DOCKER_DRIVER: overlay2
