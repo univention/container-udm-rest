@@ -4,7 +4,7 @@ name: "dev-local"
 
 services:
   udm-rest-api:
-    image: gitregistry.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/udm-rest-api:latest
+    image: gitregistry.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/udm-rest-api:${IMAGE_TAG:-latest}
     # FIXME: remove once arm64 packages are available at updates.software-univention.de
     platform: "linux/amd64"
     build:
