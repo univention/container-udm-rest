@@ -1,0 +1,4 @@
+{ "nextcloudEnabled": "portaltile-fileshare",
+  "isOxUser": "portaltile-groupware" , 
+	"openprojectActivated": "portaltile-mgmt-project" 
+}

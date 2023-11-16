@@ -263,6 +263,9 @@ RUN \
 COPY entrypoint.d /entrypoint.d/
 WORKDIR /udm/
 
+COPY attribute-to-group-mapper/AttributeToGroupMapper.py /usr/lib/python3/dist-packages/univention/admin/hooks.d/AttributeToGroupMapper.py
+COPY attribute-to-group-mapper/flag_to_group_mapping.json.example /usr/share/attribute-to-group-mapper/flag_to_group_mapping.json
+
 # Parameters for UDM
 # --processes 0 means one process per cpu core
 CMD [ \
