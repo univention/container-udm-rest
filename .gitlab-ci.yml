@@ -124,7 +124,7 @@ test-udm-rest:
     - docker network ls
     # - docker ps
     - docker inspect dev-local-udm-rest-api-1
-    - docker compose run --rm --quiet-pull test curl -i http://172.19.0.2:9979
+    - docker compose run --rm --quiet-pull test env
     - docker compose run --rm --quiet-pull test curl -i http://udm-rest-api:9979 &
     - sleep 10
     - docker ps
