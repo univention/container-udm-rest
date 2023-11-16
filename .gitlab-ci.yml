@@ -113,6 +113,7 @@ test-udm-rest:
     - mkdir secret
     - echo -n univention > secret/machine.secret
     - echo -n univention > secret/ldap.secret
+    - docker compose config
     - docker compose up --wait --wait-timeout 60 --quiet-pull --pull always udm-rest-api
     - docker compose logs --follow &
     - docker compose run --rm test pytest tests/integration --udm-rest-url "http://udm-rest-api:9979/udm/"
