@@ -124,7 +124,8 @@ test-udm-rest:
     - docker network ls
     # - docker ps
     - docker inspect dev-local-udm-rest-api-1
-    # - docker compose run --rm --quiet-pull test curl -i http://172.18.0.2:9979
+    - IP_ADDRESS=$(docker container inspect dev-local-udm-rest-api-1 -f '{{ (index .NetworkSettings.Networks "dev-local_default").IPAddress }}')
+    - docker compose run --rm --quiet-pull test curl -i http://${IP_ADDRESS}:9979
     - docker compose run --rm --quiet-pull --name testrunner test curl -i http://dev-local-udm-rest-api-1:9979 &
     - sleep 30
     - docker ps
