@@ -45,6 +45,7 @@ services:
     profiles:
       - "test"
     platform: "linux/amd64"
+    image: gitregistry.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/testrunner:${IMAGE_TAG:-latest}
     build:
       context: docker/testrunner
     environment:
