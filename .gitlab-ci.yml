@@ -109,6 +109,7 @@ test-dind:
   variables:
     DOCKER_HOST: tcp://localhost:2377/
     DOCKER_DRIVER: overlay2
+    FF_NETWORK_PER_BUILD: "true"
   services:
     - name: "${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/docker:24.0.7-dind"
       alias: docker
@@ -128,6 +129,8 @@ test-dind:
     - echo ${DOCKER_API_VERSION}
     - curl http://localhost:2377/info
     - curl http://localhost:2377/version
+    - curl http://docker:2377/info
+    - curl http://docker:2377/version
     - docker ps
     - docker run --rm debian echo "Hello World!"
     - docker run --rm -v /builds:/builds debian ls -la ${PWD}
