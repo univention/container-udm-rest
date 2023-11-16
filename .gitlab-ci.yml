@@ -108,7 +108,7 @@ test-udm-rest:
     - 'echo "Waiting for dockerd to start ... "'
     - "timeout 60 bash -c 'until printf \"\" > /dev/tcp/localhost/2377; do sleep 1; done'"
   script:
-    - export IMAGE_TAG=${BUILD_IMAGE_TAG}
+    - export IMAGE_TAG=${BUILD_IMAGE_VERSION}
     - cp .env.udm-rest-api.example .env.udm-rest-api
     - mkdir secret
     - echo -n univention > secret/machine.secret
