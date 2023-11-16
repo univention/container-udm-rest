@@ -131,7 +131,7 @@ test-dind:
     - echo ${DOCKER_API_VERSION}
     - curl http://localhost:2377/info
     - curl http://localhost:2377/version
-    - docker run --rm --name curl curlimages/curl curl http://docker:2377/info
+    - docker run --network bridge --rm --name curl curlimages/curl curl http://docker:2377/info
     - curl http://docker:2377/version
     - docker ps
     - docker run --rm debian echo "Hello World!"
