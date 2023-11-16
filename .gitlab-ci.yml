@@ -19,6 +19,10 @@ include:
       - "jobs/lint-commit-messages.yaml"
       - "jobs/lint-pre-commit.yaml"
       - "jobs/package-and-publish-helm-charts.yaml"
+  - project: "univention/dist/docker-services"
+    ref: "master"
+    file:
+      - "dind.yml"
 
 lint-pre-commit:
   before_script:
@@ -42,45 +46,55 @@ build-udm-rest-image:
 build-udm-rest-test-image:
   stage: "build"
   extends: ".kaniko"
-  needs: []
+  needs:
+    - job: "pre-semantic-release"
+      artifacts: true
   variables:
     KANIKO_BUILD_CONTEXT: "docker/udm-rest-api"
     CI_REGISTRY_IMAGE: "${CI_REGISTRY_IMAGE}/udm-rest-api-test"
     KANIKO_ARGS: "--target=test"
+    VERSION: "${RELEASE_VERSION}"
 
 build-testrunner-image:
   stage: "build"
   extends: ".kaniko"
-  needs: []
+  needs:
+    - job: "pre-semantic-release"
+      artifacts: true
   variables:
     KANIKO_BUILD_CONTEXT: "docker/testrunner"
     CI_REGISTRY_IMAGE: "${CI_REGISTRY_IMAGE}/testrunner"
+    VERSION: "${RELEASE_VERSION}"
 
 test-udm-rest:
   stage: "test"
   needs:
-    - job: "build-udm-rest-test-image"
-      artifacts: false
+    - job: "build-udm-rest-image"
+      artifacts: true
     - job: "build-testrunner-image"
-  image: "${CI_REGISTRY_IMAGE}/testrunner:${BUILD_VERSION}"
-  services:
-    - name: "${CI_REGISTRY}/univention/customers/dataport/upx/container-ldap/ldap-server:latest"
-      variables:
-        DOMAIN_NAME: "univention-organization.intranet"
-        LDAP_BASE_DN: "dc=univention-organization,dc=intranet"
-        LDAP_CN_ADMIN_PW: "univention"
-        TLS_MODE: "off"
-    - name: "${CI_REGISTRY_IMAGE}/udm-rest-api-test:${BUILD_VERSION}"
-      variables:
-        MACHINE_SECRET: "univention"
+      artifacts: false
+  extends: .dind
+  image: "${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/docker:24.0.7"
   before_script:
-    # TODO: maybe we can put a more sophisticated healthcheck here...
-    - 'echo "Waiting for container-ldap to start ... "'
-    - "timeout 60 bash -c 'until printf \"\" > /dev/tcp/localhost/389; do sleep 1; done'"
-    - 'echo "Waiting container-udm-rest to start ... "'
-    - "timeout 60 bash -c 'until printf \"\" > /dev/tcp/localhost/9979; do sleep 1; done'"
+    # Allow that the Docker API version is negotiated between client and server
+    - unset DOCKER_API_VERSION
+    - export IMAGE_TAG=$BUILD_VERSION
+    - echo -e "\e[0Ksection_start:`date +%s`:docker_debug[collapsed=true]\r\e[0KDocker version details"
+    - echo $IMAGE_TAG
+    - docker version
+    - echo -e "\e[0Ksection_end:`date +%s`:docker_debug\r\e[0K"
+    - cp .env.udm-rest-api.example .env.udm-rest-api
+    - mkdir secret
+    - echo "univention" > secret/machine.secret
+    - echo "univention" > secret/ldap.secret
+    - echo -e "\e[0Ksection_start:`date +%s`:docker_compose_config[collapsed=true]\r\e[0KDocker Compose configuration"
+    - docker compose config udm-rest-api ldap-server test
+    - echo -e "\e[0Ksection_end:`date +%s`:docker_compose_config\r\e[0K"
+    - docker compose up --no-build --quiet-pull --wait --wait-timeout 60 udm-rest-api ldap-server
   script:
-    - 'pytest tests/integration --udm-rest-url "http://localhost:9979/udm/"'
+    - docker compose run --quiet-pull --rm test pytest tests/integration
+  after_script:
+    - docker compose down --volumes
 
 build-udm-rest-api-python-client:
   stage: build
