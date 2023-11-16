@@ -98,9 +98,11 @@ test-udm-rest:
       entrypoint: []
       command:
         - dockerd
-        - --host
-        - tcp://0.0.0.0:2377
-        - --bridge my-docker-bridge
+        - --help
+        # - --bridge my-docker-bridge
+        # - --host
+        # - tcp://0.0.0.0:2377
+        # --debug
       variables:
         DOCKER_DRIVER: overlay2
   image: "gitregistry.knut.univention.de/univention/customers/dataport/upx/dev-env/debian-kind-base:branch-jbornhold-test-new-docker-version"
