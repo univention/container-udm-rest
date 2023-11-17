@@ -71,7 +71,7 @@ fi
 # Store LDAP configuration
 LDAP_HOST="$(ucr get ldap/server/name)"
 LDAP_PORT="$(ucr get ldap/server/port)"
-LDAP_BASE_DN="$(ucr get ldap/basedn)"
+LDAP_BASE_DN="$(ucr get ldap/base)"
 cat <<EOF > /etc/ldap/ldap.conf
 # This file should be world readable but not world writable.
 
