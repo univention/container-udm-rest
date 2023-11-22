@@ -156,8 +156,8 @@ helm uninstall udm-rest-api
 			<td><pre lang="json">
 {
   "annotations": {
-    "nginx.ingress.kubernetes.io/configuration-snippet": "rewrite ^/univention(/udm/.*)$ $1 break;\n",
-    "nginx.org/location-snippets": "rewrite ^/univention(/udm/.*)$ $1 break;\n",
+    "nginx.ingress.kubernetes.io/configuration-snippet": "rewrite ^/univention(/udm/.*)$ $1 break;\n\n# Some endpoints return very large response headers\nproxy_busy_buffers_size 128k;\nproxy_buffers 4 128k;\nproxy_buffer_size 64k;\n",
+    "nginx.org/location-snippets": "rewrite ^/univention(/udm/.*)$ $1 break;\n\n# Some endpoints return very large response headers\nproxy_busy_buffers_size 128k;\nproxy_buffers 4 128k;\nproxy_buffer_size 64k;\n",
     "nginx.org/mergeable-ingress-type": "minion"
   },
   "enabled": true,
