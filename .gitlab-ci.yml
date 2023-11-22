@@ -1,23 +1,18 @@
 ---
-
-variables:
-  SOUVAP_HELM_PROJECT_ID: 155
-  SOUVAP_REGISTRY_PATH: souvap/tooling/images/univention
-
 include:
   - project: "univention/customers/dataport/upx/common-ci"
-    ref: "v0.5.4"
+    ref: "v1.9.4"
     file:
       # TODO: Sphinx docs inherits a stage definition from upstream,
       # has to be included before our default stages to avoid trouble.
       - "jobs/sphinx-docs.yaml"
-      - "defaults/souvap-workflow.yaml"
       - "defaults/stages.yaml"
-      - "templates/kaniko.yaml"
-      - "templates/semantic-release-env.yaml"
+      - "defaults/souvap-workflow.yaml"
       - "templates/souvap.yaml"
-      - "jobs/lint-commit-messages.yaml"
       - "jobs/lint-pre-commit.yaml"
+      - "jobs/lint-commit-messages.yaml"
+      - "jobs/semantic-release-env.yaml"
+      - "jobs/container-build.yaml"
       - "jobs/package-and-publish-helm-charts.yaml"
   - project: "univention/dist/docker-services"
     ref: "master"
@@ -29,44 +24,41 @@ lint-pre-commit:
     # Compose lint would fail without the referenced env files
     - "cp .env.udm-rest-api.example .env.udm-rest-api"
 
-pre-semantic-release:
-  extends: ".pre-semantic-release"
+.build-matrix: &build-matrix
+  - IMAGE_NAME:
+      - "udm-rest-api"
+      - "udm-rest-api-python-client"
+      - "testrunner"
 
-build-udm-rest-image:
-  stage: "build"
-  extends: ".kaniko"
-  needs:
-    - job: "pre-semantic-release"
-      artifacts: true
-  variables:
-    KANIKO_BUILD_CONTEXT: "docker/udm-rest-api"
-    CI_REGISTRY_IMAGE: "${CI_REGISTRY_IMAGE}/udm-rest-api"
-    VERSION: "${RELEASE_VERSION}"
+.publish-matrix: &publish-matrix
+  - IMAGE_NAME:
+      - "udm-rest-api"
+      - "udm-rest-api-python-client"
 
-build-testrunner-image:
-  stage: "build"
-  extends: ".kaniko"
-  needs:
-    - job: "pre-semantic-release"
-      artifacts: true
-  variables:
-    KANIKO_BUILD_CONTEXT: "docker/testrunner"
-    CI_REGISTRY_IMAGE: "${CI_REGISTRY_IMAGE}/testrunner"
-    VERSION: "${RELEASE_VERSION}"
+container-build:
+  parallel:
+    matrix: *build-matrix
+
+container-generate-sbom:
+  parallel:
+    matrix: *build-matrix
+
+container-sign:
+  parallel:
+    matrix: *build-matrix
+
+container-security-scan:
+  parallel:
+    matrix: *build-matrix
 
 test-udm-rest:
   stage: "test"
-  needs:
-    - job: "build-udm-rest-image"
-      artifacts: true
-    - job: "build-testrunner-image"
-      artifacts: false
   extends: .dind
   image: "${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/docker:24.0.7"
   before_script:
     # Allow that the Docker API version is negotiated between client and server
     - unset DOCKER_API_VERSION
-    - export IMAGE_TAG=$BUILD_VERSION
+    - export IMAGE_TAG=${RELEASE_VERSION}
     - echo -e "\e[0Ksection_start:`date +%s`:docker_debug[collapsed=true]\r\e[0KDocker version details"
     - echo $IMAGE_TAG
     - docker version
@@ -84,30 +76,11 @@ test-udm-rest:
   after_script:
     - docker compose down --volumes
 
-build-udm-rest-api-python-client:
-  stage: build
-  extends: .kaniko
-  needs:
-    - job: "pre-semantic-release"
-      artifacts: true
-  variables:
-    KANIKO_BUILD_CONTEXT: "docker/udm-rest-api-python-client"
-    CI_REGISTRY_IMAGE: "$CI_REGISTRY_IMAGE/udm-rest-api-python-client"
-    VERSION: "${RELEASE_VERSION}"
-
-push-image-souvap:
-  needs:
-    - job: "build-udm-rest-image"
-  extends: ".push-image-souvap"
-  variables:
-    SOUVAP_IMAGE_NAME: "udm-rest-api"
-
-package-helm-charts:
-  needs:
-    - job: "pre-semantic-release"
-      artifacts: true
+publish-images:
+  extends: .push-image-souvap
+  parallel:
+    matrix: *publish-matrix
 
 publish-helm-charts-souvap:
-  extends: ".publish-helm-charts-souvap"
-
+  extends: .publish-helm-charts-souvap
 ...
