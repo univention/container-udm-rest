@@ -23,6 +23,8 @@ global:
   configMapUcr: "stack-data-swp-ucr"
   configMapUcrForced: "stack-data-dev-ucr"
 
+  imageRegistry: "registry.souvap-univention.de"
+
 # -- Application configuration of the UDM REST API
 udmRestApi:
   # -- Path to file with the LDAP secret.
@@ -83,7 +85,8 @@ istio:
 
 ## Docker image
 image:
-  registry: "registry.souvap-univention.de"
+  # -- Define registry for this image. Uses `global.imageRegistry` as default if not defined.
+  registry: null
   repository: "souvap/tooling/images/udm-rest-api/udm-rest-api"
   tag: "0.1.0"
   imagePullPolicy: "Always"
