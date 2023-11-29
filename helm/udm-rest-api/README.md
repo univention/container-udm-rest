@@ -106,6 +106,15 @@ helm uninstall udm-rest-api
 			<td></td>
 		</tr>
 		<tr>
+			<td>global.imageRegistry</td>
+			<td>string</td>
+			<td><pre lang="json">
+"gitregistry.knut.univention.de"
+</pre>
+</td>
+			<td></td>
+		</tr>
+		<tr>
 			<td>image.imagePullPolicy</td>
 			<td>string</td>
 			<td><pre lang="json">
@@ -118,16 +127,16 @@ helm uninstall udm-rest-api
 			<td>image.registry</td>
 			<td>string</td>
 			<td><pre lang="json">
-"registry.souvap-univention.de"
+""
 </pre>
 </td>
-			<td></td>
+			<td>Define registry for this image. Uses `global.imageRegistry` as default if not defined.</td>
 		</tr>
 		<tr>
 			<td>image.repository</td>
 			<td>string</td>
 			<td><pre lang="json">
-"souvap/tooling/images/udm-rest-api/udm-rest-api"
+"univention/customers/dataport/upx/container-udm-rest/udm-rest-api"
 </pre>
 </td>
 			<td></td>

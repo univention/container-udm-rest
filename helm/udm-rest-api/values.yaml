@@ -23,7 +23,7 @@ global:
   configMapUcr: "stack-data-swp-ucr"
   configMapUcrForced: "stack-data-dev-ucr"
 
-  imageRegistry: "registry.souvap-univention.de"
+  imageRegistry: "gitregistry.knut.univention.de"
 
 # -- Application configuration of the UDM REST API
 udmRestApi:
@@ -86,8 +86,8 @@ istio:
 ## Docker image
 image:
   # -- Define registry for this image. Uses `global.imageRegistry` as default if not defined.
-  registry: null
-  repository: "souvap/tooling/images/udm-rest-api/udm-rest-api"
+  registry: ""
+  repository: "univention/customers/dataport/upx/container-udm-rest/udm-rest-api"
   tag: "0.1.0"
   imagePullPolicy: "Always"
 
