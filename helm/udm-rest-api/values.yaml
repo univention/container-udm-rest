@@ -27,8 +27,8 @@ global:
 
 # -- Application configuration of the UDM REST API
 udmRestApi:
+  # TODO: This may be unnecessary here.
   # -- Path to file with the LDAP secret.
-  # (TODO: This may be unnecessary here.)
   ldapSecretFile: "/var/secrets/ldap_secret"
   # -- Path to file with the LDAP machine secret.
   machineSecretFile: "/var/secrets/machine_secret"

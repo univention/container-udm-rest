@@ -605,7 +605,7 @@ false
 "/var/secrets/ldap_secret"
 </pre>
 </td>
-			<td>Path to file with the LDAP secret. (TODO: This may be unnecessary here.)</td>
+			<td>Path to file with the LDAP secret.</td>
 		</tr>
 		<tr>
 			<td>udmRestApi.machineSecretFile</td>
