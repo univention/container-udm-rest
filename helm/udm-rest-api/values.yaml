@@ -43,20 +43,13 @@ ingress:
   enabled: true
   ingressClassName: "nginx"
   annotations:
+    # -- Some responses of the UDM Rest API contain very large response headers
+    nginx.ingress.kubernetes.io/proxy-buffer-size: "64k"
     nginx.ingress.kubernetes.io/configuration-snippet: |
       rewrite ^/univention(/udm/.*)$ $1 break;
-
-      # Some endpoints return very large response headers
-      proxy_busy_buffers_size 128k;
-      proxy_buffers 4 128k;
-      proxy_buffer_size 64k;
+    nginx.org/proxy-buffer-size: "64k"
     nginx.org/location-snippets: |
       rewrite ^/univention(/udm/.*)$ $1 break;
-
-      # Some endpoints return very large response headers
-      proxy_busy_buffers_size 128k;
-      proxy_buffers 4 128k;
-      proxy_buffer_size 64k;
     nginx.org/mergeable-ingress-type: "minion"
   # -- The hostname. This parameter has to be supplied. Example `udm.example.com`.
   host: null

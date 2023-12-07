@@ -156,9 +156,11 @@ helm uninstall udm-rest-api
 			<td><pre lang="json">
 {
   "annotations": {
-    "nginx.ingress.kubernetes.io/configuration-snippet": "rewrite ^/univention(/udm/.*)$ $1 break;\n\n# Some endpoints return very large response headers\nproxy_busy_buffers_size 128k;\nproxy_buffers 4 128k;\nproxy_buffer_size 64k;\n",
-    "nginx.org/location-snippets": "rewrite ^/univention(/udm/.*)$ $1 break;\n\n# Some endpoints return very large response headers\nproxy_busy_buffers_size 128k;\nproxy_buffers 4 128k;\nproxy_buffer_size 64k;\n",
-    "nginx.org/mergeable-ingress-type": "minion"
+    "nginx.ingress.kubernetes.io/configuration-snippet": "rewrite ^/univention(/udm/.*)$ $1 break;\n",
+    "nginx.ingress.kubernetes.io/proxy-buffer-size": "64k",
+    "nginx.org/location-snippets": "rewrite ^/univention(/udm/.*)$ $1 break;\n",
+    "nginx.org/mergeable-ingress-type": "minion",
+    "nginx.org/proxy-buffer-size": "64k"
   },
   "enabled": true,
   "host": null,
@@ -177,6 +179,15 @@ helm uninstall udm-rest-api
 </pre>
 </td>
 			<td>Kubernetes ingress</td>
+		</tr>
+		<tr>
+			<td>ingress.annotations."nginx.ingress.kubernetes.io/proxy-buffer-size"</td>
+			<td>string</td>
+			<td><pre lang="json">
+"64k"
+</pre>
+</td>
+			<td>Some responses of the UDM Rest API contain very large response headers</td>
 		</tr>
 		<tr>
 			<td>ingress.enabled</td>
