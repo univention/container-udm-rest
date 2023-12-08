@@ -130,6 +130,7 @@ ingress:
     nginx.ingress.kubernetes.io/configuration-snippet: |
       rewrite ^/univention(/udm/.*)$ $1 break;
     nginx.org/proxy-buffer-size: "64k"
+    nginx.org/proxy-buffers: "4 128k"
     nginx.org/location-snippets: |
       rewrite ^/univention(/udm/.*)$ $1 break;
     nginx.org/mergeable-ingress-type: "minion"
