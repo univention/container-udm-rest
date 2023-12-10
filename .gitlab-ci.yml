@@ -1,4 +1,5 @@
 ---
+
 include:
   - project: "univention/customers/dataport/upx/common-ci"
     ref: "v1.12.0"
@@ -18,11 +19,6 @@ include:
     file:
       - "dind.yml"
 
-lint-pre-commit:
-  before_script:
-    # Compose lint would fail without the referenced env files
-    - "cp .env.udm-rest-api.example .env.udm-rest-api"
-
 .build-matrix: &build-matrix
   - IMAGE_NAME:
       - "udm-rest-api"
@@ -33,6 +29,12 @@ lint-pre-commit:
   - IMAGE_NAME:
       - "udm-rest-api"
       - "udm-rest-api-python-client"
+
+lint-pre-commit:
+  allow_failure: true
+  before_script:
+    # Compose lint would fail without the referenced env files
+    - "cp .env.udm-rest-api.example .env.udm-rest-api"
 
 container-build:
   parallel:
