@@ -1,0 +1,8 @@
+
+[flake8]
+
+# yapf with 79 sometimes use 80
+# default=79
+max-line-length = 100
+
+max-complexity = 10
