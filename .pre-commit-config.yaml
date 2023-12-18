@@ -1,11 +1,24 @@
+# SPDX-License-Identifier: AGPL-3.0-only
+# SPDX-FileCopyrightText: 2023 Univention GmbH
+
 ---
 
 # See https://pre-commit.com for more information
 # See https://pre-commit.com/hooks.html for more hooks
 
 repos:
+  # "Copy .env.udm-rest-api.example so that docker-compose.yaml can be linted"
+  - repo: "local"
+    hooks:
+      - id: "copy-udm-rest-api"
+        name: "copy-udm-rest-api"
+        entry: "sh -c 'if [ ! -f .env.udm-rest-api ]; then cp .env.udm-rest-api.example .env.udm-rest-api; fi'"
+        language: "system"
+        files: "docker-compose.yaml"
+        pass_filenames: false
+
   - repo: "https://github.com/pre-commit/pre-commit-hooks"
-    rev: "v4.4.0"
+    rev: "v4.5.0"
     hooks:
       # "check for added large files"
       - id: "check-added-large-files"
@@ -27,7 +40,7 @@ repos:
       - id: "trailing-whitespace"
 
   - repo: "https://git.knut.univention.de/univention/dist/pre-commit-ucr"
-    rev: "0.0.9"
+    rev: "0.0.10"
     hooks:
       # "flake8 --select E1,E2 for UCR templates"
       - id: "ucr-flake8"
@@ -41,7 +54,7 @@ repos:
         stages: ["manual"]
 
   - repo: "https://github.com/compilerla/conventional-pre-commit"
-    rev: "v2.1.1"
+    rev: "v3.0.0"
     hooks:
       - id: "conventional-pre-commit"
         stages: ["commit-msg"]
@@ -54,7 +67,7 @@ repos:
 
   # "Python linter"
   - repo: "https://github.com/astral-sh/ruff-pre-commit"
-    rev: "v0.0.275"
+    rev: "v0.1.9"
     hooks:
       - id: "ruff"
         args:
@@ -65,7 +78,7 @@ repos:
 
   # "Python formatter"
   - repo: "https://github.com/psf/black"
-    rev: "23.3.0"
+    rev: "23.12.0"
     hooks:
       - id: "black"
 
@@ -73,7 +86,7 @@ repos:
   # shellcheck doesn't have it's own .pre-commit-hooks.yaml
   # https://github.com/koalaman/shellcheck/pull/1032
   - repo: "https://gitlab.com/univention/pre-commit-hooks/pre-commit-shell"
-    rev: "v1.0.6"
+    rev: "v1.0.6+uv1"
     hooks:
       # "Shell Syntax Check"
       - id: "shell-lint"
@@ -94,28 +107,24 @@ repos:
 
   # "Helm chart linter"
   - repo: https://github.com/gruntwork-io/pre-commit
-    rev: v0.1.21
+    rev: v0.1.23
     hooks:
       - id: helmlint
 
   # "Helm docs linter"
   - repo: https://github.com/norwoodj/helm-docs
-    rev: v1.11.0
+    rev: v1.12.0
     hooks:
     - id: helm-docs
       args:
         - "--chart-search-root=helm"
         - "--template-files=README.md.gotmpl"
+    always_run: true
 
-# Disable temporarily because gitlab-api can not be accessed.
-# "urllib.error.HTTPError: HTTP Error 401: Unauthorized"
-  # - repo: "https://gitlab.com/univention/pre-commit-hooks/gitlab-ci-linter"
-  #   rev: "v1.0.1"
-  #   hooks:
-  #   # ".gitlab-ci.yml linter"
-  #     - id: "gitlab-ci-linter"
-  #       args:
-  #         - "--server"
-  #         - "https://git.knut.univention.de"
+  - repo: "https://git.knut.univention.de/univention/dist/pre-commit-hooks/addlicense"
+    rev: "v1.0.1"
+    hooks:
+      - id: "addlicense"
+        name: "Check or add license headers to files"
 
 ...

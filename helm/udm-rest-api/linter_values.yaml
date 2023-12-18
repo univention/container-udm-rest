@@ -1,3 +1,6 @@
+# SPDX-License-Identifier: AGPL-3.0-only
+# SPDX-FileCopyrightText: 2023 Univention GmbH
+
 ---
 # Dummy values for running the Helm linter on the udm-rest-api.
 # Run it like this: helm lint -f values.yaml -f linter_values.yaml .
