@@ -34,12 +34,16 @@ ARG PORTAL_UDM_EXTENSIONS_TAG=0.4.3
 ARG OX_CONNECTOR_EXTENSIONS_IMAGE=gitregistry.knut.univention.de/univention/open-xchange/provisioning/ox-connector-dependencies
 ARG OX_CONNECTOR_EXTENSIONS_TAG=0.3.4
 
+ARG GUARDIAN_EXTENSIONS_IMAGE=gitregistry.knut.univention.de/univention/components/authorization-engine/guardian/ums-dependencies
+ARG GUARDIAN_EXTENSIONS_TAG=latest
+
 ARG UCS_BASE_IMAGE=gitregistry.knut.univention.de/univention/components/ucs-base-image/ucs-base-505
 ARG UCS_BASE_IMAGE_TAG=v0.7.5
 
 
 FROM ${PORTAL_UDM_EXTENSIONS_IMAGE}:${PORTAL_UDM_EXTENSIONS_TAG} AS portal-udm-extensions
 FROM ${OX_CONNECTOR_EXTENSIONS_IMAGE}:${OX_CONNECTOR_EXTENSIONS_TAG} AS ox-connector-extensions
+FROM ${GUARDIAN_EXTENSIONS_IMAGE}:${GUARDIAN_EXTENSIONS_TAG} AS guardian-extensions
 
 FROM ${UCS_BASE_IMAGE}:${UCS_BASE_IMAGE_TAG} as build
 
@@ -216,6 +220,10 @@ COPY --from=ox-connector-extensions /dependencies/handlers \
 
 COPY --from=ox-connector-extensions /dependencies/hooks.d \
     /usr/lib/python3/dist-packages/univention/admin/hooks.d
+
+COPY --from=guardian-extensions /udm/syntax/guardian_syntax.py \
+     /usr/lib/python3/dist-packages/univention/admin/syntax.d/guardian_syntax.py
+
 
 # UCR
 
