@@ -108,7 +108,7 @@ image:
 probes:
   liveness:
     enabled: true
-    initialDelaySeconds: 120
+    initialDelaySeconds: 10
     timeoutSeconds: 3
     periodSeconds: 30
     failureThreshold: 3
@@ -116,7 +116,7 @@ probes:
 
   readiness:
     enabled: true
-    initialDelaySeconds: 30
+    initialDelaySeconds: 10
     timeoutSeconds: 3
     periodSeconds: 15
     failureThreshold: 30

@@ -375,7 +375,7 @@ true
 			<td>probes.liveness.initialDelaySeconds</td>
 			<td>int</td>
 			<td><pre lang="json">
-120
+10
 </pre>
 </td>
 			<td></td>
@@ -429,7 +429,7 @@ true
 			<td>probes.readiness.initialDelaySeconds</td>
 			<td>int</td>
 			<td><pre lang="json">
-30
+10
 </pre>
 </td>
 			<td></td>
@@ -566,7 +566,9 @@ false
 			<td><pre lang="json">
 {
   "caCertFile": "/var/secrets/ca_cert",
+  "ldapSecret": null,
   "ldapSecretFile": "/var/secrets/ldap_secret",
+  "machineSecret": null,
   "machineSecretFile": "/var/secrets/machine_secret"
 }
 </pre>
@@ -583,6 +585,15 @@ false
 			<td>Path to file with the CA certificate. (Not needed when `tlsReqCert` set to `"never"`.)</td>
 		</tr>
 		<tr>
+			<td>udmRestApi.ldapSecret</td>
+			<td>string</td>
+			<td><pre lang="json">
+null
+</pre>
+</td>
+			<td>Define the ldap secret as a string</td>
+		</tr>
+		<tr>
 			<td>udmRestApi.ldapSecretFile</td>
 			<td>string</td>
 			<td><pre lang="json">
@@ -590,6 +601,15 @@ false
 </pre>
 </td>
 			<td>Path to file with the LDAP secret.</td>
+		</tr>
+		<tr>
+			<td>udmRestApi.machineSecret</td>
+			<td>string</td>
+			<td><pre lang="json">
+null
+</pre>
+</td>
+			<td>Define the machine secret as a string</td>
 		</tr>
 		<tr>
 			<td>udmRestApi.machineSecretFile</td>
