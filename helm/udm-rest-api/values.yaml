@@ -120,14 +120,14 @@ probes:
     successThreshold: 1
 
 
-## Deployment resources
-resources:
-  requests:
-    memory: "512Mi"
-    cpu: "250m"
-  limits:
-    memory: "4Gi"
-    cpu: "4"
+# -- Deployment resources
+resources: {}
+  # requests:
+  #   memory: "512Mi"
+  #   cpu: "250m"
+  # limits:
+  #   memory: "4Gi"
+  #   cpu: "4"
 
 ## Kubernetes Service
 service:
