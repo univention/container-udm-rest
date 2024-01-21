@@ -281,7 +281,6 @@ null
 			<td>Credentials to fetch images from private registry. Ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/  imagePullSecrets:   - "docker-registry"</td>
 		</tr>
 		<tr>
-<<<<<<< HEAD
 			<td>image.tag</td>
 			<td>string</td>
 			<td><pre lang="json">
@@ -292,32 +291,6 @@ null
 		</tr>
 		<tr>
 			<td>ingress</td>
-			<td>object</td>
-			<td><pre lang="json">
-{
-  "annotations": {
-    "nginx.ingress.kubernetes.io/configuration-snippet": "rewrite ^/univention(/udm/.*)$ $1 break;\n",
-    "nginx.ingress.kubernetes.io/proxy-buffer-size": "64k",
-    "nginx.org/location-snippets": "rewrite ^/univention(/udm/.*)$ $1 break;\n",
-    "nginx.org/mergeable-ingress-type": "minion",
-    "nginx.org/proxy-buffer-size": "64k",
-    "nginx.org/proxy-buffers": "4 128k"
-  },
-  "enabled": true,
-  "host": null,
-  "ingressClassName": "nginx",
-  "paths": [
-    {
-      "path": "/univention/udm/",
-      "pathType": "Prefix"
-    }
-  ],
-  "tls": {
-    "enabled": true,
-    "secretName": ""
-  }
-=======
-			<td>ingress.annotations</td>
 			<td>object</td>
 			<td><pre lang="json">
 {
