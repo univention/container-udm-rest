@@ -94,7 +94,7 @@ image:
   # -- Define registry for this image. Uses `global.imageRegistry` as default if not defined.
   registry: ""
   repository: "univention/customers/dataport/upx/container-udm-rest/udm-rest-api"
-  tag: "0.1.0"
+  tag: "latest"
   imagePullPolicy: "Always"
 
   ## Define image sha256 as an alternative to `tag`

@@ -145,7 +145,7 @@ helm uninstall udm-rest-api
 			<td>image.tag</td>
 			<td>string</td>
 			<td><pre lang="json">
-"0.1.0"
+"latest"
 </pre>
 </td>
 			<td></td>
