@@ -30,9 +30,12 @@ global:
 
 # -- Application configuration of the UDM REST API
 udmRestApi:
-  # TODO: This may be unnecessary here.
+  # -- Define the ldap secret as a string
+  ldapSecret: null
   # -- Path to file with the LDAP secret.
   ldapSecretFile: "/var/secrets/ldap_secret"
+  # -- Define the machine secret as a string
+  machineSecret: null
   # -- Path to file with the LDAP machine secret.
   machineSecretFile: "/var/secrets/machine_secret"
   # -- Path to file with the CA certificate.

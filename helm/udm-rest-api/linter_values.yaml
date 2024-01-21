@@ -27,6 +27,8 @@ udmRestApi:
   ldapPort: 7389
   ldapBaseDn: "dc=exampel,dc=org"
   ldapHostDn: "cn=ucs-1234,cn=dc,cn=computers,dc=example,dc=org"
+  ldapSecret: "password"
+  machineSecret: "password"
   tlsReqCert: "never"
   debugLevel: "5"
   authGroups:
