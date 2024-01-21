@@ -49,11 +49,6 @@ istio:
   host: "udm.example.develop.souvap-univention.de"
 
 
-## Docker image
-image:
-  tag: "branch-feature-example"
-
-
 ## Container deployment probes
 probes:
   liveness:
