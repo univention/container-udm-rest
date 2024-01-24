@@ -5,42 +5,11 @@
 # Dummy values for running the Helm linter on the udm-rest-api.
 # Run it like this: helm lint -f values.yaml -f linter_values.yaml .
 
-## Global values
-affinity: {}
-environment: {}
-fullnameOverride: ""
-nameOverride: ""
-nodeSelector: {}
-podAnnotations: {}
-podSecurityContext: {}
-replicaCount: 1
-securityContext: {}
-tolerations: []
-
-
-# -- Application configuration of the UDM REST API
-udmRestApi:
-  domainname: "example.org"
-  hostname: "udm"
-  ldapHost: "my-ldap"
-  ldapHostIp: "192.0.2.1"
-  ldapPort: 7389
-  ldapBaseDn: "dc=exampel,dc=org"
-  ldapHostDn: "cn=ucs-1234,cn=dc,cn=computers,dc=example,dc=org"
-  tlsReqCert: "never"
-  debugLevel: "5"
-  authGroups:
-    dcBackup: "cn=DC Backup Hosts,cn=groups,dc=example,dc=com"
-    dcSlaves: "cn=DC Slave Hosts,cn=groups,dc=example,dc=com"
-    domainAdmins: "cn=Domain Admins,cn=groups,dc=example,dc=com"
-
-
 # -- Kubernetes ingress
 ingress:
   # -- Set this to `true` in order to enable the installation on Ingress related objects.
   enabled: false
   host: "udm.example.develop.souvap-univention.de"
-
 
 ## Istio support
 istio:
@@ -48,18 +17,19 @@ istio:
   enabled: true
   host: "udm.example.develop.souvap-univention.de"
 
+extraSecrets:
+  - name: udm-rest-api-credentials
+    stringData:
+      ldap.secret: "univention"
+      machine.secret: "univention"
 
-## Docker image
-image:
-  tag: "branch-feature-example"
-
-
-## Container deployment probes
-probes:
-  liveness:
-    enabled: false
-
-  readiness:
-    enabled: false
-
+udmRestApi:
+  ldap:
+    uri: "ldap://ldap-master.example.develop.souvap-univention.de"
+    baseDN: "dc=example,dc=com"
+  secretRef: udm-rest-api-credentials
+  image:
+    repository: "univention/customers/dataport/upx/container-udm-rest/udm-rest-api"
+    imagePullPolicy: "IfNotPresent"
+    tag: "0.7.0@sha256:ac18af909d0b32e86b2d058e3081d89ddda340c05cf5e25c13c39c52e3cd0090"
 ...
