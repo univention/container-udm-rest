@@ -1,8 +1,7 @@
 # SPDX-License-Identifier: AGPL-3.0-only
-# SPDX-FileCopyrightText: 2023 Univention GmbH
+# SPDX-FileCopyrightText: 2024 Univention GmbH
 
 ---
-
 apiVersion: "v2"
 type: "application"
 name: "udm-rest-api"
@@ -19,7 +18,5 @@ appVersion: "10.0.6-1"
 
 dependencies:
   - name: "common"
-    repository: "oci://gitregistry.knut.univention.de/univention/customers/dataport/upx/common-helm/helm"
-    version: "^0.6.0"
-
-...
+    version: "^2.x.x"
+    repository: "oci://registry.souvap-univention.de/souvap/tooling/charts/bitnami-charts"
