@@ -1,21 +1,58 @@
 # SPDX-License-Identifier: AGPL-3.0-only
-# SPDX-FileCopyrightText: 2023 Univention GmbH
+# SPDX-FileCopyrightText: 2024 Univention GmbH
 
 ---
-{{ include "common.configMap" (dict "top" . "overrides" "udm-rest-api.configMap") }}
-
-{{- define "udm-rest-api.configMap" }}
-{{- with .top }}
+kind: "ConfigMap"
+apiVersion: "v1"
+metadata:
+  name: "{{ include "common.names.fullname" . }}"
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels:
+    {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.additionalLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.additionalLabels "context" . ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.additionalAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.additionalAnnotations "context" . ) | nindent 4 }}
+  {{- end }}
 data:
   LDAP_SECRET_FILE: "{{ .Values.udmRestApi.ldapSecretFile }}"
   MACHINE_SECRET_FILE: "{{ .Values.udmRestApi.machineSecretFile }}"
-  CA_CERT_FILE: "{{ .Values.udmRestApi.caCertFile }}"
+  {{- if .Values.udmRestApi.tls.enabled }}
+  CA_CERT_FILE: "{{ .Values.udmRestApi.ldap.tls.caCertificateFile }}"
+  {{- end }}
 
   # used by the load-join-data job
   UDM_API_URL: 'http://{{ include "common.names.fullname" . }}/udm/'
   UDM_API_USER: "cn=admin"
   UDM_API_PASSWORD_FILE: "{{ .Values.udmRestApi.ldapSecretFile }}"
 
-{{- end }}
-{{- end }}
+...
+
+---
+kind: "ConfigMap"
+apiVersion: "v1"
+metadata:
+  name: {{ printf "%s-ldap-conf" (include "common.names.fullname" .) }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels:
+    {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.additionalLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.additionalLabels "context" . ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.additionalAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.additionalAnnotations "context" . ) | nindent 4 }}
+  {{- end }}
+data:
+  ldap.conf: |
+    URI {{ required "Either .Values.udmRestApi.ldap.uri or .Values.global.ldap.uri must be set" (coalesce .Values.udmRestApi.ldap.uri .Values.global.ldap.uri) }}
+    BASE {{ required "Either .Values.udmRestApi.ldap.baseDN or .Values.global.ldap.baseDN must be set" (coalesce .Values.udmRestApi.ldap.baseDN .Values.global.ldap.baseDN) }}
+    {{- if .Values.udmRestApi.tls.enabled }}
+    TLS_REQCERT: "demand"
+    TLS_CACERT: {{ .Values.udmRestApi.ldap.tls.caCertificateFile }}
+    TLS_CERT: {{ .Values.udmRestApi.ldap.tls.certificateFile }}
+    TLS_KEY: {{ .Values.udmRestApi.ldap.tls.certificateKeyFile }}
+    {{- else }}
+    TLS_REQCERT: "never"
+    {{- end }}
 ...

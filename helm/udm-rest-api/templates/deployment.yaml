@@ -1,15 +1,328 @@
 # SPDX-License-Identifier: AGPL-3.0-only
-# SPDX-FileCopyrightText: 2023 Univention GmbH
+# SPDX-FileCopyrightText: 2024 Univention GmbH
 
 ---
-{{ include "common.deployment" (dict "top" . "overrides" "udm-rest-api.deployment") }}
-...
-
-{{- define "udm-rest-api.deployment" }}
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+kind: Deployment
+metadata:
+  name: {{ include "common.names.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels:
+    {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.additionalLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.additionalLabels "context" . ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.additionalAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.additionalAnnotations "context" . ) | nindent 4 }}
+  {{- end }}
 spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "common.labels.matchLabels" . | nindent 6 }}
   template:
     metadata:
       annotations:
-        checksum/config: {{ include (print .top.Template.BasePath "/configmap.yaml") .top | sha256sum | quote }}
-        checksum/secret: {{ include (print .top.Template.BasePath "/secret.yaml") .top | sha256sum | quote }}
-{{- end }}
+        checksum/configmap: {{ include (print .Template.BasePath "/configmap.yaml") . | sha256sum }}
+        {{- if .Values.podAnnotations }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.podAnnotations "context" .) | nindent 8 }}
+        {{- end }}
+      labels:
+        {{- include "common.labels.standard" . | nindent 8 }}
+    spec:
+      {{- if or .Values.imagePullSecrets .Values.global.imagePullSecrets  }}
+      imagePullSecrets:
+        {{- range .Values.global.imagePullSecrets }}
+        - name: "{{ . }}"
+        {{- end }}
+        {{- range .Values.imagePullSecrets }}
+        - name: "{{ . }}"
+        {{- end }}
+      {{- end }}
+      {{- if .Values.affinity }}
+      affinity: {{- include "common.tplvalues.render" (dict "value" .Values.affinity "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.tolerations "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.topologySpreadConstraints "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.nodeSelector "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
+      {{- if .Values.serviceAccount.create }}
+      serviceAccountName: {{ include "common.names.fullname" . }}
+      {{- end }}
+      {{- if .Values.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
+      {{- end }}
+      initContainers:
+        - name: "univention-compatibility"
+          {{- if .Values.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          image: "{{ coalesce .Values.udmRestApi.image.registry .Values.global.imageRegistry }}/{{ .Values.udmRestApi.image.repository }}:{{ .Values.udmRestApi.image.tag }}"
+          imagePullPolicy: {{ coalesce .Values.udmRestApi.image.imagePullPolicy .Values.global.imagePullPolicy | quote }}
+          command:
+            - sh
+            - -c
+            - 'cp -a /etc/univention/* /target/etc/univention/; cp -a /usr/lib/python3/* /target/usr/lib/python3/;'
+          volumeMounts:
+            - name: etc-univention-volume
+              mountPath: /target/etc/univention
+            - name: usr-lib-python3-volume
+              mountPath: /target/usr/lib/python3
+          resources:
+            requests:
+              cpu: 10m
+              memory: 10Mi
+            limits:
+              cpu: "1"
+              memory: 32Mi
+        - name: "ucr-commit"
+          {{- if .Values.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          image: "{{ coalesce .Values.udmRestApi.image.registry .Values.global.imageRegistry }}/{{ .Values.udmRestApi.image.repository }}:{{ .Values.udmRestApi.image.tag }}"
+          imagePullPolicy: {{ coalesce .Values.udmRestApi.image.imagePullPolicy .Values.global.imagePullPolicy | quote }}
+          command:
+            - sh
+            - -c
+            - 'ucr commit /etc/univention/directory/reports/config.ini'
+          volumeMounts:
+            - name: etc-univention-volume
+              mountPath: /etc/univention
+            - name: var-cache-univention-config-volume
+              mountPath: /var/cache/univention-config
+          resources:
+            requests:
+              cpu: 10m
+              memory: 10Mi
+            limits:
+              cpu: "1"
+              memory: 32Mi
+      containers:
+        - name: "udm-rest-api"
+          {{- if .Values.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          command:
+            - sh
+            - -c
+            - |
+              python3 \
+              -m "univention.admin.rest.server" \
+              --debug "99" \
+              --port "9979" \
+              --interface "0.0.0.0" \
+              --processes "1"
+          image: "{{ coalesce .Values.udmRestApi.image.registry .Values.global.imageRegistry }}/{{ .Values.udmRestApi.image.repository }}:{{ .Values.udmRestApi.image.tag }}"
+          imagePullPolicy: {{ coalesce .Values.udmRestApi.image.imagePullPolicy .Values.global.imagePullPolicy | quote }}
+          envFrom:
+            - configMapRef:
+                name: {{ include "common.names.fullname" . }}
+          {{- with .Values.extraEnvVars }}
+            {{- . | toYaml | nindent 12 }}
+          {{- end }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.livenessProbe "context" .) | nindent 12 }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.readinessProbe "context" .) | nindent 12 }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.startupProbe "context" .) | nindent 12 }}
+          ports:
+            {{- range $key, $value := .Values.service.ports }}
+            - name: {{ $key }}
+              containerPort: {{ $value.containerPort }}
+              protocol: {{ $value.protocol }}
+            {{- end }}
+          {{- if .Values.resources }}
+          resources: {{- include "common.tplvalues.render" (dict "value" .Values.resources "context" .) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.lifecycleHooks "context" .) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: usr-lib-python3-volume
+              mountPath: /usr/lib/python3
+            - name: var-log-univention-volume
+              mountPath: /var/log/univention
+            - name: tmp-volume
+              mountPath: /tmp
+            - name: var-run-volume
+              mountPath: /var/run
+            - name: etc-ldap-volume
+              mountPath: /etc/ldap
+            - name: etc-univention-volume
+              mountPath: /etc/univention
+            - name: credentials-volume
+              mountPath: {{ .Values.udmRestApi.ldapSecretFile }}
+              subPath: ldap.secret
+            - name: credentials-volume
+              mountPath: {{ .Values.udmRestApi.machineSecretFile }}
+              subPath: machine.secret
+            {{- if .Values.udmRestApi.tls.enabled }}
+            - name: {{ printf "%s-tls-volume" (include "common.names.fullname" .) }}
+              mountPath: /certificates
+            {{- end }}
+            - name: "config-map-ucr-defaults"
+              mountPath: "/etc/univention/base-defaults.conf"
+              subPath: "base.conf"
+            {{- if (and .Values.global .Values.global.configMapUcr) }}
+            - name: "config-map-ucr"
+              mountPath: "/etc/univention/base.conf"
+              subPath: "base.conf"
+            {{- end }}
+            {{- if (and .Values.global .Values.global.configMapUcrForced) }}
+            - name: "config-map-ucr-forced"
+              mountPath: "/etc/univention/base-forced.conf"
+              subPath: "base.conf"
+            {{- end }}
+            {{- if .Values.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" .) | nindent 12 }}
+            {{- end }}
+        - name: "debug-udm-rest-api"
+          securityContext:
+            allowPrivilegeEscalation: true
+            readOnlyRootFilesystem: false
+            runAsGroup: 0
+            runAsNonRoot: false
+            runAsUser: 0
+          command:
+            - sh
+            - -c
+            - |
+              python3 \
+              -m "univention.admin.rest.server" \
+              --debug "99" \
+              --port "19979" \
+              --interface "0.0.0.0" \
+              --processes "1"
+          image: "{{ coalesce .Values.udmRestApi.image.registry .Values.global.imageRegistry }}/{{ .Values.udmRestApi.image.repository }}:{{ .Values.udmRestApi.image.tag }}"
+          imagePullPolicy: {{ coalesce .Values.udmRestApi.image.imagePullPolicy .Values.global.imagePullPolicy | quote }}
+          envFrom:
+            - configMapRef:
+                name: {{ include "common.names.fullname" . }}
+          {{- with .Values.extraEnvVars }}
+            {{- . | toYaml | nindent 12 }}
+          {{- end }}
+          livenessProbe:
+            tcpSocket:
+              port: {{ .Values.service.ports.http.containerPort }}
+            initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
+            failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
+            successThreshold: {{ .Values.livenessProbe.successThreshold }}
+          readinessProbe:
+            tcpSocket:
+              port: {{ .Values.service.ports.http.containerPort }}
+            initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
+            timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
+            failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
+            successThreshold: {{ .Values.readinessProbe.successThreshold }}
+          startupProbe:
+            tcpSocket:
+              port: {{ .Values.service.ports.http.containerPort }}
+            initialDelaySeconds: {{ .Values.startupProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.startupProbe.initialDelaySeconds }}
+            timeoutSeconds: {{ .Values.startupProbe.timeoutSeconds }}
+            failureThreshold: {{ .Values.startupProbe.failureThreshold }}
+            successThreshold: {{ .Values.startupProbe.successThreshold }}
+          ports:
+            {{- range $key, $value := .Values.service.ports }}
+            - name: {{ $key }}
+              containerPort: {{ $value.containerPort }}
+              protocol: {{ $value.protocol }}
+            {{- end }}
+          {{- if .Values.resources }}
+          resources: {{- include "common.tplvalues.render" (dict "value" .Values.resources "context" .) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.lifecycleHooks "context" .) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: usr-lib-python3-volume
+              mountPath: /usr/lib/python3
+            - name: var-log-univention-volume
+              mountPath: /var/log/univention
+            - name: tmp-volume
+              mountPath: /tmp
+            - name: etc-ldap-volume
+              mountPath: /etc/ldap
+            - name: etc-univention-volume
+              mountPath: /etc/univention
+            - name: credentials-volume
+              mountPath: {{ .Values.udmRestApi.ldapSecretFile }}
+              subPath: ldap.secret
+            - name: credentials-volume
+              mountPath: {{ .Values.udmRestApi.machineSecretFile }}
+              subPath: machine.secret
+            {{- if .Values.udmRestApi.tls.enabled }}
+            - name: {{ printf "%s-tls-volume" (include "common.names.fullname" .) }}
+              mountPath: /certificates
+            {{- end }}
+            - name: "config-map-ucr-defaults"
+              mountPath: "/etc/univention/base-defaults.conf"
+              subPath: "base.conf"
+            {{- if (and .Values.global .Values.global.configMapUcr) }}
+            - name: "config-map-ucr"
+              mountPath: "/etc/univention/base.conf"
+              subPath: "base.conf"
+            {{- end }}
+            {{- if (and .Values.global .Values.global.configMapUcrForced) }}
+            - name: "config-map-ucr-forced"
+              mountPath: "/etc/univention/base-forced.conf"
+              subPath: "base.conf"
+            {{- end }}
+            {{- if .Values.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" .) | nindent 12 }}
+            {{- end }}
+      volumes:
+        - name: "usr-lib-python3-volume"
+          emptyDir: {}
+        - name: "etc-ldap-volume"
+          configMap:
+            name: "{{ printf "%s-ldap-conf" (include "common.names.fullname" .) }}"
+        - name: "var-cache-univention-config-volume"
+          emptyDir: {}
+        - name: "tmp-volume"
+          emptyDir: {}
+        - name: "var-run-volume"
+          emptyDir: {}
+        - name: "var-log-univention-volume"
+          emptyDir: {}
+        - name: "etc-univention-volume"
+          emptyDir: {}
+        - name: credentials-volume
+          secret:
+            defaultMode: 420
+            {{- if .Values.udmRestApi.secretRef }}
+            secretName: {{ .Values.udmRestApi.secretRef }}
+            {{- else }}
+            secretName: {{ printf "%s-crendentials" (include "common.names.fullname" .) }}
+            {{- end }}
+        {{- if .Values.udmRestApi.tls.enabled }}
+        - name: {{ printf "%s-tls-volume" (include "common.names.fullname" .) }}
+          secret:
+            defaultMode: 0400
+            secretName: {{ .Values.udmRestApi.tls.certificateSecret | default (printf "%s-tls" (include "common.names.fullname" . )) | quote }}
+        {{- end }}
+        - name: "config-map-ucr-defaults"
+          configMap:
+            name: {{ required "Please provide the name of the UCR ConfigMap in .Values.global.configMapUcrDefaults!" .Values.global.configMapUcrDefaults | quote }}
+        {{- if (and .Values.global .Values.global.configMapUcr) }}
+        - name: "config-map-ucr"
+          configMap:
+            name: "{{ .Values.global.configMapUcr }}"
+        {{- end }}
+        {{- if (and .Values.global .Values.global.configMapUcrForced) }}
+        - name: "config-map-ucr-forced"
+          configMap:
+            name: "{{ .Values.global.configMapUcrForced }}"
+        {{- end }}
+        {{- if .Values.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes  "context" .) | nindent 8 }}
+        {{- end }}
