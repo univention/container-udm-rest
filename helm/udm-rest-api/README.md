@@ -281,16 +281,7 @@ null
 			<td>Credentials to fetch images from private registry. Ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/  imagePullSecrets:   - "docker-registry"</td>
 		</tr>
 		<tr>
-			<td>image.tag</td>
-			<td>string</td>
-			<td><pre lang="json">
-"latest"
-</pre>
-</td>
-			<td></td>
-		</tr>
-		<tr>
-			<td>ingress</td>
+			<td>ingress.annotations</td>
 			<td>object</td>
 			<td><pre lang="json">
 {
@@ -299,7 +290,6 @@ null
   "nginx.org/location-snippets": "rewrite ^/univention(/udm/.*)$ $1 break;\n",
   "nginx.org/mergeable-ingress-type": "minion",
   "nginx.org/proxy-buffer-size": "64k"
->>>>>>> 8010280 (feat(helm)!: BSI-compliant deployment)
 }
 </pre>
 </td>
@@ -501,74 +491,7 @@ true
 			<td>Number of failed executions until container is terminated.</td>
 		</tr>
 		<tr>
-<<<<<<< HEAD
-			<td>probes.liveness.initialDelaySeconds</td>
-			<td>int</td>
-			<td><pre lang="json">
-10
-</pre>
-</td>
-			<td></td>
-		</tr>
-		<tr>
-			<td>probes.liveness.periodSeconds</td>
-			<td>int</td>
-			<td><pre lang="json">
-30
-</pre>
-</td>
-			<td></td>
-		</tr>
-		<tr>
-			<td>probes.liveness.successThreshold</td>
-			<td>int</td>
-			<td><pre lang="json">
-1
-</pre>
-</td>
-			<td></td>
-		</tr>
-		<tr>
-			<td>probes.liveness.timeoutSeconds</td>
-			<td>int</td>
-			<td><pre lang="json">
-3
-</pre>
-</td>
-			<td></td>
-		</tr>
-		<tr>
-			<td>probes.readiness.enabled</td>
-			<td>bool</td>
-			<td><pre lang="json">
-true
-</pre>
-</td>
-			<td></td>
-		</tr>
-		<tr>
-			<td>probes.readiness.failureThreshold</td>
-			<td>int</td>
-			<td><pre lang="json">
-30
-</pre>
-</td>
-			<td></td>
-		</tr>
-		<tr>
-			<td>probes.readiness.initialDelaySeconds</td>
-			<td>int</td>
-			<td><pre lang="json">
-10
-</pre>
-</td>
-			<td></td>
-		</tr>
-		<tr>
-			<td>probes.readiness.periodSeconds</td>
-=======
 			<td>livenessProbe.initialDelaySeconds</td>
->>>>>>> 8010280 (feat(helm)!: BSI-compliant deployment)
 			<td>int</td>
 			<td><pre lang="json">
 15
@@ -595,56 +518,7 @@ true
 			<td>Number of successful executions after failed ones until container is marked healthy.</td>
 		</tr>
 		<tr>
-<<<<<<< HEAD
-			<td>probes.readiness.timeoutSeconds</td>
-			<td>int</td>
-			<td><pre lang="json">
-3
-</pre>
-</td>
-			<td></td>
-		</tr>
-		<tr>
-			<td>replicaCount</td>
-			<td>int</td>
-			<td><pre lang="json">
-1
-</pre>
-</td>
-			<td></td>
-		</tr>
-		<tr>
-			<td>resources</td>
-			<td>object</td>
-			<td><pre lang="json">
-{}
-</pre>
-</td>
-			<td>Deployment resources</td>
-		</tr>
-		<tr>
-			<td>securityContext</td>
-			<td>object</td>
-			<td><pre lang="json">
-{}
-</pre>
-</td>
-			<td></td>
-		</tr>
-		<tr>
-			<td>service.enabled</td>
-			<td>bool</td>
-			<td><pre lang="json">
-true
-</pre>
-</td>
-			<td></td>
-		</tr>
-		<tr>
-			<td>service.ports.http.containerPort</td>
-=======
 			<td>livenessProbe.tcpSocket.port</td>
->>>>>>> 8010280 (feat(helm)!: BSI-compliant deployment)
 			<td>int</td>
 			<td><pre lang="json">
 9979
@@ -1082,13 +956,6 @@ true
 			<td>object</td>
 			<td><pre lang="json">
 {
-<<<<<<< HEAD
-  "caCertFile": "/var/secrets/ca_cert",
-  "ldapSecret": null,
-  "ldapSecretFile": "/var/secrets/ldap_secret",
-  "machineSecret": null,
-  "machineSecretFile": "/var/secrets/machine_secret"
-=======
   "image": {
     "imagePullPolicy": "IfNotPresent",
     "repository": "univention/customers/dataport/upx/container-udm-rest/udm-rest-api",
@@ -1107,7 +974,6 @@ true
     "certificateKeyFile": "/certificates/tls.key",
     "enabled": false
   }
->>>>>>> 8010280 (feat(helm)!: BSI-compliant deployment)
 }
 </pre>
 </td>
@@ -1123,20 +989,7 @@ true
 			<td>Image pull policy. This setting has higher precedence than global.imagePullPolicy.</td>
 		</tr>
 		<tr>
-<<<<<<< HEAD
-			<td>udmRestApi.ldapSecret</td>
-			<td>string</td>
-			<td><pre lang="json">
-null
-</pre>
-</td>
-			<td>Define the ldap secret as a string</td>
-		</tr>
-		<tr>
-			<td>udmRestApi.ldapSecretFile</td>
-=======
 			<td>udmRestApi.image.repository</td>
->>>>>>> 8010280 (feat(helm)!: BSI-compliant deployment)
 			<td>string</td>
 			<td><pre lang="json">
 "univention/customers/dataport/upx/container-udm-rest/udm-rest-api"
@@ -1145,20 +998,7 @@ null
 			<td>Container registry address. This setting has higher precedence than global.registry. registry: ""</td>
 		</tr>
 		<tr>
-<<<<<<< HEAD
-			<td>udmRestApi.machineSecret</td>
-			<td>string</td>
-			<td><pre lang="json">
-null
-</pre>
-</td>
-			<td>Define the machine secret as a string</td>
-		</tr>
-		<tr>
-			<td>udmRestApi.machineSecretFile</td>
-=======
 			<td>udmRestApi.ldap.baseDN</td>
->>>>>>> 8010280 (feat(helm)!: BSI-compliant deployment)
 			<td>string</td>
 			<td><pre lang="json">
 ""

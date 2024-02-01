@@ -5,38 +5,6 @@
 # Dummy values for running the Helm linter on the udm-rest-api.
 # Run it like this: helm lint -f values.yaml -f linter_values.yaml .
 
-## Global values
-affinity: {}
-environment: {}
-fullnameOverride: ""
-nameOverride: ""
-nodeSelector: {}
-podAnnotations: {}
-podSecurityContext: {}
-replicaCount: 1
-securityContext: {}
-tolerations: []
-
-
-# -- Application configuration of the UDM REST API
-udmRestApi:
-  domainname: "example.org"
-  hostname: "udm"
-  ldapHost: "my-ldap"
-  ldapHostIp: "192.0.2.1"
-  ldapPort: 7389
-  ldapBaseDn: "dc=exampel,dc=org"
-  ldapHostDn: "cn=ucs-1234,cn=dc,cn=computers,dc=example,dc=org"
-  ldapSecret: "password"
-  machineSecret: "password"
-  tlsReqCert: "never"
-  debugLevel: "5"
-  authGroups:
-    dcBackup: "cn=DC Backup Hosts,cn=groups,dc=example,dc=com"
-    dcSlaves: "cn=DC Slave Hosts,cn=groups,dc=example,dc=com"
-    domainAdmins: "cn=Domain Admins,cn=groups,dc=example,dc=com"
-
-
 # -- Kubernetes ingress
 ingress:
   # -- Set this to `true` in order to enable the installation on Ingress related objects.
