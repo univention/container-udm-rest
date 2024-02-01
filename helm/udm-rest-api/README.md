@@ -281,16 +281,7 @@ null
 			<td>Credentials to fetch images from private registry. Ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/  imagePullSecrets:   - "docker-registry"</td>
 		</tr>
 		<tr>
-			<td>image.tag</td>
-			<td>string</td>
-			<td><pre lang="json">
-"latest"
-</pre>
-</td>
-			<td></td>
-		</tr>
-		<tr>
-			<td>ingress</td>
+			<td>ingress.annotations</td>
 			<td>object</td>
 			<td><pre lang="json">
 {

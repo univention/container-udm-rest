@@ -130,7 +130,6 @@ ingress:
     nginx.ingress.kubernetes.io/configuration-snippet: |
       rewrite ^/univention(/udm/.*)$ $1 break;
     nginx.org/proxy-buffer-size: "64k"
-    nginx.org/proxy-buffers: "4 128k"
     nginx.org/location-snippets: |
       rewrite ^/univention(/udm/.*)$ $1 break;
     nginx.org/mergeable-ingress-type: "minion"
@@ -224,17 +223,7 @@ persistence:
   # -- Custom PVC data source.
   dataSource: {}
 
-# -- Deployment resources
-resources: {}
-  # requests:
-  #   memory: "512Mi"
-  #   cpu: "250m"
-  # limits:
-  #   memory: "4Gi"
-  #   cpu: "4"
-
-## Kubernetes Service
-service:
+  # -- Enable data persistence (true) or use temporary storage (false).
   enabled: true
 
   # -- Use an already existing claim.

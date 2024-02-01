@@ -128,16 +128,19 @@ RUN chown _apt . && \
 ###############################################################################
 # Apply patches for containerization
 
-WORKDIR /
+WORKDIR /patches
 COPY patch-openapi.patch \
      make_uldap_start-tls_configurable.patch \
-     /
+     read_only_root_fs_logging.patch \
+     ./
 
 RUN \
-  patch -p 1 -i /patch-openapi.patch && \
-    rm /patch-openapi.patch && \
-  patch -p 0 -d / -i /make_uldap_start-tls_configurable.patch && \
-    rm /make_uldap_start-tls_configurable.patch
+  patch -p 1 -d / -i patches/patch-openapi.patch && \
+    rm patch-openapi.patch && \
+  patch -p 0 -d / -i patches/make_uldap_start-tls_configurable.patch && \
+    rm make_uldap_start-tls_configurable.patch && \
+  patch -p 0 -d / -i patches/read_only_root_fs_logging.patch && \
+    rm read_only_root_fs_logging.patch
 
 ###############################################################################
 # Second stage image to get rid of unneeded files
