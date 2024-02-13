@@ -1,7 +1,7 @@
-# UDM Rest API Python Client
+# UDM REST API Python Client
 
 This container contains the needed Python client libraries, so that it is easy
-to run Python scripts against a given UDM Rest API endpoint.
+to run Python scripts against a given UDM REST API endpoint.
 
 There is also a `udm-cli` that can be used to interact directly with the udm client by running:
 
@@ -19,9 +19,9 @@ Then import and use the api client:
 ```python
 from univention.admin.rest.client import *
 
-ldap_base = "dc=univention-organization,dc=intranet"
 uri = 'http://udm-rest-api.default/udm/'
 udm = UDM.http(uri, 'cn=admin', 'your-password')
+ldap_base = udm.get_ldap_base()
 
 container = udm.get("container/cn")
 x = container.get("cn=test," + ldap_base)
@@ -48,4 +48,4 @@ your container by adding the following content into your
 ```
 
 This allows you to easily debug the code if you suspect that there is an issue
-in the Python client of the udm api.
+in the Python client of the UDM API.
