@@ -5,6 +5,7 @@
 Module providing command-line argument parser
 and common fixtures for use in integration tests.
 """
+
 import pytest
 import requests
 
@@ -61,4 +62,4 @@ def session(pytestconfig):
         pytestconfig.getoption("--password"),
     )
     session.headers["accept"] = "application/json"
-    yield session
+    return session
