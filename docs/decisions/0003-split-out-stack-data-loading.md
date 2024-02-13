@@ -17,7 +17,7 @@ which shall be loaded into a stack deployment.
 
 Now we have this repository which deals with two different things:
 
-- Providing the UDM Rest API as a container and a Helm chart for Kubernetes
+- Providing the UDM REST API as a container and a Helm chart for Kubernetes
   deployment.
 
 - Loading of data into a deployment of the UMS Stack.
@@ -29,7 +29,7 @@ We split out the aspect of loading data into the UMS Stack into a separate
 repository.
 
 The main rationale is that this way this repository will stay focused on
-providing the UDM Rest API in a container. The regular expansion in needs of
+providing the UDM REST API in a container. The regular expansion in needs of
 data to be loaded or related tooling to be improved would clutter this
 repository.
 
