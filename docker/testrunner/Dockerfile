@@ -6,6 +6,8 @@ ARG PYTHON_TAG=3.11
 
 FROM ${DOCKER_PROXY}python:${PYTHON_TAG}
 
+# TODO: FROM python3-...-async-client install the modules
+
 WORKDIR /testrunner
 
 COPY Pipfile Pipfile.lock ./

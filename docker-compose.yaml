@@ -35,6 +35,17 @@ services:
     volumes:
       - "./:/src/"
 
+  api-client-async:
+    profiles:
+      - test
+    image: gitregistry.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/udm-rest-api-python-client:${IMAGE_TAG:-latest}
+    build:
+      context: ./docker/udm-rest-api-async-python-client
+    platform: "linux/amd64"
+    working_dir: "/src"
+    volumes:
+      - "./:/src/"
+
   pre-commit:
     profiles:
       - "pre-commit"

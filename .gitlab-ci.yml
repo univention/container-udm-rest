@@ -31,6 +31,7 @@ lint-pre-commit:
 .build-matrix: &build-matrix
   - IMAGE_NAME:
       - "udm-rest-api"
+      - "udm-rest-api-python-async-client"
       - "testrunner"
   - IMAGE_NAME: "udm-rest-api-python-client"
     KANIKO_ARGS: "--target final"
@@ -43,6 +44,7 @@ lint-pre-commit:
   - IMAGE_NAME:
       - "udm-rest-api"
       - "udm-rest-api-python-client"
+      - "udm-rest-api-python-async-client"
 
 container-build:
   parallel:
