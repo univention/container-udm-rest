@@ -40,3 +40,5 @@ RUN apt-get update \
       python3-yaml=3.* \
       python3-jinja2=2.* \
     && rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*
+
+ENTRYPOINT [ "python3", "-m", "univention.admin.rest.client" ]
