@@ -10,7 +10,7 @@
 # The global properties are used to configure multiple charts at once.
 global:
   # -- Container registry address.
-  imageRegistry: "gitregistry.knut.univention.de"
+  imageRegistry: ""
 
   # -- Credentials to fetch images from private registry.
   # Ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -99,9 +99,6 @@ fullnameOverride: ""
 # imagePullSecrets:
 #   - "docker-registry"
 imagePullSecrets: []
-
-# -- Image pull policy. This setting has higher precedence than global.imagePullPolicy.
-imagePullPolicy: "IfNotPresent"
 
 # Define and create Kubernetes Ingress.
 #
@@ -403,7 +400,7 @@ udmRestApi:
     repository: "univention/customers/dataport/upx/container-udm-rest/udm-rest-api"
     # -- Image pull policy. This setting has higher precedence than global.imagePullPolicy.
     imagePullPolicy: "IfNotPresent"
-    tag: "0.7.0@sha256:ac18af909d0b32e86b2d058e3081d89ddda340c05cf5e25c13c39c52e3cd0090"
+    tag: "0.7.2-pre-feat-bsi-compliance@sha256:d19ab865a143955d0e52d42832cb629a7e06ee1bf617d8f9cc38106de6b9cbdb"
   ldap:
     # -- The LDAP URI to connect to.
     # uri: "ldap://my-ldap-server:389"
