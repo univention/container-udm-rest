@@ -142,39 +142,6 @@ ingress:
     # Hint: This secret is not created by this chart and must be provided.
     # secretName: ""
 
-## Istio support
-istio:
-  # -- Set this to `true` in order to enable the installation on Istio related objects.
-  enabled: false
-  # -- The hostname. This parameter has to be supplied. Example `portal.example`.
-  # host: udm-rest.local
-  virtualService:
-    enabled: true
-    annotations: {}
-    # -- Allows to inject deployment specific path configuration which is configured before
-    # the elements from `paths` below. This allows to redirect some paths to other services,
-    # e.g. in order to supply a file `custom.css`.
-    pathOverrides: []
-    # -- The paths configuration. The default only grabs what is known to be
-    # part of the frontend.
-    #
-    # `pathOverrides` is provided as a workaround so that specific sub-paths can
-    # be redirected to other services.
-    paths:
-      - match: "prefix"
-        path: "/univention/udm/"
-        rewrite: "/udm/"
-
-  gateway:
-    enabled: false
-    annotations:
-    selectorIstio: "ingressgateway"
-    externalGatewayName: "swp-istio-gateway"
-    tls:
-      enabled: true
-      httpsRedirect: true
-      secretName: ""
-
 # -- Lifecycle to automate configuration before or after startup.
 lifecycleHooks: {}
 
