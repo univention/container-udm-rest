@@ -32,7 +32,7 @@
 ARG UCS_BASE_IMAGE=gitregistry.knut.univention.de/univention/components/ucs-base-image/ucs-base-506
 ARG UCS_BASE_IMAGE_TAG=0.10.0
 
-FROM ${UCS_BASE_IMAGE}:${UCS_BASE_IMAGE_TAG} as final
+FROM ${UCS_BASE_IMAGE}:${UCS_BASE_IMAGE_TAG} as base
 
 RUN apt-get update \
     && apt-get --assume-yes --verbose-versions --no-install-recommends install \
@@ -41,4 +41,10 @@ RUN apt-get update \
       python3-jinja2=2.* \
     && rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*
 
+FROM base as cli
+
 ENTRYPOINT [ "python3", "-m", "univention.admin.rest.client" ]
+
+FROM base as final
+
+ENTRYPOINT []

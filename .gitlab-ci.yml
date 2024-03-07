@@ -31,8 +31,13 @@ lint-pre-commit:
 .build-matrix: &build-matrix
   - IMAGE_NAME:
       - "udm-rest-api"
-      - "udm-rest-api-python-client"
       - "testrunner"
+  - IMAGE_NAME: "udm-rest-api-python-client"
+    KANIKO_ARGS: "--target final"
+    DOCKERFILE_PATH: "docker/udm-rest-api-python-client/Dockerfile"
+  - IMAGE_NAME: "udm-cli"
+    KANIKO_ARGS: "--target cli"
+    DOCKERFILE_PATH: "docker/udm-rest-api-python-client/Dockerfile"
 
 .publish-matrix: &publish-matrix
   - IMAGE_NAME:

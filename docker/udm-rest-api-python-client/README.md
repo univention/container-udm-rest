@@ -3,8 +3,10 @@
 This container contains the needed Python client libraries, so that it is easy
 to run Python scripts against a given UDM Rest API endpoint.
 
+There is also a `udm-cli` that can be used to interact directly with the udm client by running:
 
-## Example usage
+
+## python client example usage
 
 Start a `python3` interpreter:
 
@@ -23,6 +25,12 @@ udm = UDM.http(uri, 'cn=admin', 'your-password')
 
 container = udm.get("container/cn")
 x = container.get("cn=test," + ldap_base)
+```
+
+## udm-cli example usage
+
+```shell
+docker run gitregistry.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/udm-cli help
 ```
 
 
