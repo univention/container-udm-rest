@@ -73,6 +73,11 @@ services:
       LDAP_BASE_DN: dc=univention-organization,dc=intranet
       LDAP_CN_ADMIN_PW: "univention"
       TLS_MODE: "off"
+    # FIXME: slapd won't work on linux kernel 6.6
+    ulimits:
+      nofile:
+        soft: 1024
+        hard: 1024
     ports:
       - 389:389
     volumes:

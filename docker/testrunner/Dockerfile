@@ -16,4 +16,4 @@ RUN pip install --no-cache-dir pipenv==2023.6.18 \
 
 WORKDIR /app
 
-CMD [ "pytest" ]
+CMD [ "pytest", "tests/integration" ]
