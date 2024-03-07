@@ -254,6 +254,7 @@ RUN \
   mkdir --parents /var/lib/univention-appcenter/attributes/ && \
   echo '{}' > /var/lib/univention-appcenter/attributes/mapping.json
 
+COPY entrypoint.d /entrypoint.d/
 WORKDIR /udm/
 
 # Parameters for UDM
