@@ -61,7 +61,6 @@ container-security-scan:
     matrix: *build-matrix
 
 test-udm-rest:
-  allow_failure: true
   stage: "test"
   extends: .dind
   rules:
