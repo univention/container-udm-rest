@@ -125,6 +125,18 @@ RUN chown _apt . && \
     '/^Package: python3-univention-directory-manager-rest$/{ while(!/^Version: /){getline} print $2 }' \
     /var/lib/dpkg/status > /version
 
+
+###############################################################################
+# Apply patches for containerization
+
+WORKDIR /patches
+
+COPY read_only_root_fs_logging.patch ./
+
+RUN patch -p 0 -d / -i patches/read_only_root_fs_logging.patch && \
+    rm read_only_root_fs_logging.patch
+
+
 ###############################################################################
 # Second stage image to get rid of unneeded files
 
