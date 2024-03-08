@@ -17,6 +17,7 @@ metadata:
   {{- end }}
 spec:
   replicas: {{ .Values.replicaCount }}
+  updateStrategy: {{- include "common.tplvalues.render" (dict "value" .Values.updateStrategy "context" .) | nindent 4 }}
   selector:
     matchLabels:
       {{- include "common.labels.matchLabels" . | nindent 6 }}
