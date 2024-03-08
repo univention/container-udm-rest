@@ -48,11 +48,11 @@ data:
     URI {{ required "Either .Values.udmRestApi.ldap.uri or .Values.global.ldap.uri must be set" (coalesce .Values.udmRestApi.ldap.uri .Values.global.ldap.uri) }}
     BASE {{ required "Either .Values.udmRestApi.ldap.baseDN or .Values.global.ldap.baseDN must be set" (coalesce .Values.udmRestApi.ldap.baseDN .Values.global.ldap.baseDN) }}
     {{- if .Values.udmRestApi.tls.enabled }}
-    TLS_REQCERT: "demand"
-    TLS_CACERT: {{ .Values.udmRestApi.ldap.tls.caCertificateFile }}
-    TLS_CERT: {{ .Values.udmRestApi.ldap.tls.certificateFile }}
-    TLS_KEY: {{ .Values.udmRestApi.ldap.tls.certificateKeyFile }}
+    TLS_REQCERT demand
+    TLS_CACERT {{ .Values.udmRestApi.ldap.tls.caCertificateFile }}
+    TLS_CERT {{ .Values.udmRestApi.ldap.tls.certificateFile }}
+    TLS_KEY {{ .Values.udmRestApi.ldap.tls.certificateKeyFile }}
     {{- else }}
-    TLS_REQCERT: "never"
+    TLS_REQCERT never
     {{- end }}
 ...
