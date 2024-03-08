@@ -84,8 +84,9 @@ test-udm-rest:
     - docker compose config udm-rest-api ldap-server test
     - echo -e "\e[0Ksection_end:`date +%s`:docker_compose_config\r\e[0K"
     - docker compose up --no-build --quiet-pull --wait --wait-timeout 60 udm-rest-api ldap-server
+    - docker ps
   script:
-    - docker compose run --quiet-pull --rm test pytest tests/integration
+    - docker compose run --quiet-pull --rm test pytest tests/integration --capture=no -v
   after_script:
     - docker compose down --volumes
 
