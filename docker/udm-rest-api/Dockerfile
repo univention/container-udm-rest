@@ -269,6 +269,9 @@ RUN \
 COPY entrypoint.d /entrypoint.d/
 WORKDIR /udm/
 
+RUN adduser app
+USER app
+
 # Parameters for UDM
 # --processes 0 means one process per cpu core
 CMD [ \
@@ -297,6 +300,8 @@ LABEL org.opencontainers.image.version="${LABEL_VERSION}"
 
 FROM final as debug
 
+# hadolint ignore=DL3002
+USER root
 SHELL ["/bin/bash", "-c"]
 
 # make this container debugable:
@@ -316,6 +321,8 @@ RUN apt-get --quiet update && \
 
 FROM final as test
 
+# hadolint ignore=DL3002
+USER root
 SHELL ["/bin/bash", "-c"]
 
 # load a UCR config for testing

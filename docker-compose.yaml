@@ -12,7 +12,7 @@ services:
     platform: "linux/amd64"
     build:
       context: ./docker/udm-rest-api
-      target: final
+      target: test
     ports:
       - 9979:9979
     env_file: .env.udm-rest-api
