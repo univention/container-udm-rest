@@ -253,6 +253,9 @@ replicaCount: 1
 # Ref: https://kubernetes.io/docs/user-guide/compute-resources/
 resources: {}
 
+# Configure resource requests and limits for initContainers
+initResources: {}
+
 # Define and create Kubernetes Service.
 #
 # Ref.: https://kubernetes.io/docs/concepts/services-networking/service

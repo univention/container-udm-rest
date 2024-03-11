@@ -348,6 +348,15 @@ true
 			<td>Enable TLS/SSL/HTTPS for Ingress.</td>
 		</tr>
 		<tr>
+			<td>initResources</td>
+			<td>object</td>
+			<td><pre lang="json">
+{}
+</pre>
+</td>
+			<td></td>
+		</tr>
+		<tr>
 			<td>lifecycleHooks</td>
 			<td>object</td>
 			<td><pre lang="json">
