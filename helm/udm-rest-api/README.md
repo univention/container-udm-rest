@@ -122,7 +122,7 @@ true
 			<td>containerSecurityContext.runAsGroup</td>
 			<td>int</td>
 			<td><pre lang="json">
-2000
+1000
 </pre>
 </td>
 			<td>Process group id.</td>
@@ -140,7 +140,7 @@ true
 			<td>containerSecurityContext.runAsUser</td>
 			<td>int</td>
 			<td><pre lang="json">
-2000
+1000
 </pre>
 </td>
 			<td>Process user id.</td>
@@ -551,7 +551,7 @@ true
 			<td>podSecurityContext.fsGroup</td>
 			<td>int</td>
 			<td><pre lang="json">
-2000
+1000
 </pre>
 </td>
 			<td>If specified, all processes of the container are also part of the supplementary group.</td>
