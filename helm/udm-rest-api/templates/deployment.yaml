@@ -77,13 +77,7 @@ spec:
               mountPath: /target/etc/univention
             - name: usr-lib-python3-volume
               mountPath: /target/usr/lib/python3
-          resources:
-            requests:
-              cpu: 10m
-              memory: 10Mi
-            limits:
-              cpu: "1"
-              memory: 32Mi
+          resources: {{- include "common.tplvalues.render" (dict "value" .Values.initResources "context" .) | nindent 12 }}
         - name: "ucr-commit"
           {{- if .Values.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
@@ -99,13 +93,7 @@ spec:
               mountPath: /etc/univention
             - name: var-cache-univention-config-volume
               mountPath: /var/cache/univention-config
-          resources:
-            requests:
-              cpu: 10m
-              memory: 10Mi
-            limits:
-              cpu: "1"
-              memory: 32Mi
+          resources: {{- include "common.tplvalues.render" (dict "value" .Values.initResources "context" .) | nindent 12 }}
       containers:
         - name: "udm-rest-api"
           {{- if .Values.containerSecurityContext.enabled }}
