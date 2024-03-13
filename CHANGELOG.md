@@ -1,5 +1,31 @@
 # Changelog
 
+## [0.9.0](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/compare/v0.8.0...v0.9.0) (2024-03-13)
+
+
+### Features
+
+* **helm:** BSI-compliant deployment ([08b4c97](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/commit/08b4c977986a5bb3ee7e0aaa308b877d477d683e))
+
+
+### Bug Fixes
+
+* apply updateStrategy if configured ([7dc439f](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/commit/7dc439fcea78109652ffa86f204c80f7b3bc5888))
+* attempt to get the pipeline-based test to work ([501b9ef](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/commit/501b9ef7dcfd1934d5599413bb2c3fee1cd3df7f))
+* better logging readonly filesystem patch ([4c2092c](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/commit/4c2092cee2cc9f0893329aba02bd3a8ddc9235ff))
+* cleanup values ([c429464](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/commit/c4294649ddedfd870e3d61c72d59be3613fae2e0))
+* create app user ([72316d9](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/commit/72316d98eb9451eae690134b88f059a4572c27e5))
+* fix ldap.conf syntax ([0d3502d](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/commit/0d3502d06a79532b9b917968bc9d99ce69d2cf9e))
+* **helm:** Avoid setting resources by default. ([475c77b](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/commit/475c77b58102945d997b6b2c0b29e33956da7bbb))
+* **helm:** Consistent handling of secrets and the base64 encoding ([f31099d](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/commit/f31099dec02577cb3e47c5fcea4fecfac56d6949))
+* **helm:** remove udm-rest-api debug sidecar ([5165e37](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/commit/5165e376da93f1409af8d92c194d833f7566f514))
+* **helm:** Use the "latest" image by default ([37f604c](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/commit/37f604c7377f36f1d6b5d91bff0aa25698cb47a9))
+* make resources for init containers adjustable via values ([ef1b0f9](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/commit/ef1b0f9267b0126d58bda579093609af61e5bdea))
+* removed istio and config ([f160e33](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/commit/f160e33e8583eb513483a745baf0ad110497b43b))
+* renamed incorrenct key updateStrategy to strategy ([8f141d1](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/commit/8f141d1d748bf57230fe694da95dabfa157f9918))
+* **udm-rest-api:** logging read only filesystem ([5979281](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/commit/597928156f4b070f8fc8d7ab9c10c62140535f8e))
+* **udm-rest-api:** remove chown calls for /dev/stdout file in preparation for read-only root filesystem ([5a30d0f](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/commit/5a30d0fb07e926588c0356cfa619034ddacff5b3))
+
 ## [0.8.0](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/compare/v0.7.2...v0.8.0) (2024-03-07)
 
 
