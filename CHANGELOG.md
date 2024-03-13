@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.1](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/compare/v1.0.0...v1.0.1) (2024-03-13)
+
+
+### Bug Fixes
+
+* better logging readonly filesystem patch ([e6ce2f3](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/commit/e6ce2f36dd6ceed5f569274770837ae5fae87253))
+
 ## [1.0.0](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/compare/v0.8.0...v1.0.0) (2024-03-11)
 
 
