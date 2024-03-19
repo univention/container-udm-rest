@@ -366,7 +366,7 @@ udmRestApi:
   # Container image section.
   image:
     # -- Container registry address. This setting has higher precedence than global.registry.
-    # registry: ""
+    registry: ""
     repository: "univention/customers/dataport/upx/container-udm-rest/udm-rest-api"
     # -- Image pull policy. This setting has higher precedence than global.imagePullPolicy.
     imagePullPolicy: "IfNotPresent"
