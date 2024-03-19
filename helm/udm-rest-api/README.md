@@ -248,7 +248,7 @@ null
 			<td>global.imageRegistry</td>
 			<td>string</td>
 			<td><pre lang="json">
-""
+"gitregistry.knut.univention.de"
 </pre>
 </td>
 			<td>Container registry address.</td>
@@ -842,6 +842,7 @@ true
 {
   "image": {
     "imagePullPolicy": "IfNotPresent",
+    "registry": "gitregistry.knut.univention.de",
     "repository": "univention/customers/dataport/upx/container-udm-rest/udm-rest-api",
     "tag": "0.7.2-pre-feat-bsi-compliance@sha256:d19ab865a143955d0e52d42832cb629a7e06ee1bf617d8f9cc38106de6b9cbdb"
   },
@@ -873,13 +874,13 @@ true
 			<td>Image pull policy. This setting has higher precedence than global.imagePullPolicy.</td>
 		</tr>
 		<tr>
-			<td>udmRestApi.image.repository</td>
+			<td>udmRestApi.image.registry</td>
 			<td>string</td>
 			<td><pre lang="json">
-"univention/customers/dataport/upx/container-udm-rest/udm-rest-api"
+"gitregistry.knut.univention.de"
 </pre>
 </td>
-			<td>Container registry address. This setting has higher precedence than global.registry. registry: ""</td>
+			<td>Container registry address. This setting has higher precedence than global.registry. TODO: Upcoming change, this value will be empty in the future by default.</td>
 		</tr>
 		<tr>
 			<td>udmRestApi.ldap.baseDN</td>

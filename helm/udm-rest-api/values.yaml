@@ -10,7 +10,7 @@
 # The global properties are used to configure multiple charts at once.
 global:
   # -- Container registry address.
-  imageRegistry: ""
+  imageRegistry: "gitregistry.knut.univention.de"
 
   # -- Credentials to fetch images from private registry.
   # Ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -366,7 +366,8 @@ udmRestApi:
   # Container image section.
   image:
     # -- Container registry address. This setting has higher precedence than global.registry.
-    registry: ""
+    # TODO: Upcoming change, this value will be empty in the future by default.
+    registry: "gitregistry.knut.univention.de"
     repository: "univention/customers/dataport/upx/container-udm-rest/udm-rest-api"
     # -- Image pull policy. This setting has higher precedence than global.imagePullPolicy.
     imagePullPolicy: "IfNotPresent"
