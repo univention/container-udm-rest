@@ -844,7 +844,7 @@ true
     "imagePullPolicy": "IfNotPresent",
     "registry": "gitregistry.knut.univention.de",
     "repository": "univention/customers/dataport/upx/container-udm-rest/udm-rest-api",
-    "tag": "0.7.2-pre-feat-bsi-compliance@sha256:d19ab865a143955d0e52d42832cb629a7e06ee1bf617d8f9cc38106de6b9cbdb"
+    "tag": "latest"
   },
   "ldap": {
     "baseDN": "",

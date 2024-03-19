@@ -371,7 +371,7 @@ udmRestApi:
     repository: "univention/customers/dataport/upx/container-udm-rest/udm-rest-api"
     # -- Image pull policy. This setting has higher precedence than global.imagePullPolicy.
     imagePullPolicy: "IfNotPresent"
-    tag: "0.7.2-pre-feat-bsi-compliance@sha256:d19ab865a143955d0e52d42832cb629a7e06ee1bf617d8f9cc38106de6b9cbdb"
+    tag: "latest"
   ldap:
     # -- The LDAP URI to connect to.
     # uri: "ldap://my-ldap-server:389"
