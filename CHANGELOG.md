@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.9.1](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/compare/v0.9.0...v0.9.1) (2024-03-20)
+
+
+### Bug Fixes
+
+* Set "global.imageRegistry" to correct default value ([55d5f16](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/commit/55d5f1659c78147a4418c7e4de2a0ceb066fb72c))
+* Set default image tag to "latest" ([7d458c2](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/commit/7d458c202f94e065d8d7e3c0b4f22513490cc8b8))
+* Uncomment "registry" to have it captured into the readme ([dfe734b](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/commit/dfe734b82f590c5dac1cec6e9d3f720249799e49))
+
 ## [0.9.0](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/compare/v0.8.0...v0.9.0) (2024-03-13)
 
 
