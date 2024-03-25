@@ -29,16 +29,16 @@
 # <https://www.gnu.org/licenses/>.
 
 ARG PORTAL_UDM_EXTENSIONS_IMAGE=gitregistry.knut.univention.de/univention/components/univention-portal/portal-udm-extensions
-ARG PORTAL_UDM_EXTENSIONS_TAG=0.4.3
+ARG PORTAL_UDM_EXTENSIONS_TAG=0.20.1
 
 ARG OX_CONNECTOR_EXTENSIONS_IMAGE=gitregistry.knut.univention.de/univention/open-xchange/provisioning/ox-connector-dependencies
-ARG OX_CONNECTOR_EXTENSIONS_TAG=0.3.4
+ARG OX_CONNECTOR_EXTENSIONS_TAG=0.7.1
 
 ARG GUARDIAN_EXTENSIONS_IMAGE=gitregistry.knut.univention.de/univention/components/authorization-engine/guardian/ums-dependencies
 ARG GUARDIAN_EXTENSIONS_TAG=latest
 
 ARG UCS_BASE_IMAGE=gitregistry.knut.univention.de/univention/components/ucs-base-image/ucs-base-506
-ARG UCS_BASE_IMAGE_TAG=0.10.0
+ARG UCS_BASE_IMAGE_TAG=0.11.3
 
 
 FROM ${PORTAL_UDM_EXTENSIONS_IMAGE}:${PORTAL_UDM_EXTENSIONS_TAG} AS portal-udm-extensions
