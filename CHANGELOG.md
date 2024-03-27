@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.9.2](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/compare/v0.9.1...v0.9.2) (2024-03-27)
+
+
+### Bug Fixes
+
+* **ci:** update common-ci from v1.16.2 to v1.25.0 ([e00c842](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/commit/e00c8421831da18bfd008f5123091c7623ec1e3d))
+
 ## [0.9.1](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/compare/v0.9.0...v0.9.1) (2024-03-20)
 
 
