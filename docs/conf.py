@@ -16,7 +16,6 @@ import sys  # noqa: I001
 # sys.path.insert(0, os.path.abspath('.'))
 from sphinx.locale import _
 
-
 # -- Project information -----------------------------------------------------
 
 project = "UDM-REST API Container"
@@ -25,7 +24,6 @@ author = "Team SouvAP Dev"
 
 # The full version, including alpha/beta/rc tags
 release = "0.1.0"
-
 
 # -- General configuration ---------------------------------------------------
 
@@ -62,7 +60,6 @@ templates_path = ["_templates"]
 # This pattern also affects html_static_path and html_extra_path.
 exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 
-
 # -- Options for HTML output -------------------------------------------------
 
 html_title = f"{project} Documentation"
@@ -72,7 +69,6 @@ html_title = f"{project} Documentation"
 #
 # See https://git.knut.univention.de/univention/documentation/univention_sphinx_book_theme
 html_theme = "univention_sphinx_book_theme"
-
 
 # The following parts are inspired from the dev-onboarding document.
 # See https://git.knut.univention.de/univention/internal/dev-onboarding
@@ -107,7 +103,8 @@ if "spelling" in sys.argv:
 tls_cacerts = {}
 
 linkcheck_allowed_redirects = {
-    r"https://git\.knut\.univention\.de/.*": r"https://git\.knut\.univention\.de/users/sign_in",
+    r"https://git\.knut\.univention\.de/.*":
+    r"https://git\.knut\.univention\.de/users/sign_in",
 }
 
 linkcheck_ignore = []
@@ -124,7 +121,8 @@ html_theme_options = {
     "path_to_docs": "docs/",
     "repository_branch": "main",
     "repository_provider": "gitlab",
-    "repository_url": "https://git.knut.univention.de/univention/customers/dataport/upx/common-ci",
+    "repository_url":
+    "https://git.knut.univention.de/univention/customers/dataport/upx/common-ci",
     "use_edit_page_button": True,
     "use_repository_button": True,
 }
@@ -132,7 +130,8 @@ html_theme_options = {
 latex_engine = "lualatex"
 latex_show_pagerefs = True
 latex_show_urls = "footnote"
-latex_documents = [(root_doc, f"{pdf_doc_base}.tex", project, author, "manual", False)]
+latex_documents = [(root_doc, f"{pdf_doc_base}.tex", project, author, "manual",
+                    False)]
 latex_elements = {
     "papersize": "a4paper",
 }

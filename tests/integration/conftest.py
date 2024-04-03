@@ -1,6 +1,5 @@
 # SPDX-License-Identifier: AGPL-3.0-only
 # SPDX-FileCopyrightText: 2023 Univention GmbH
-
 """
 Module providing command-line argument parser
 and common fixtures for use in integration tests.

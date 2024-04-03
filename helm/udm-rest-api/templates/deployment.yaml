@@ -105,8 +105,8 @@ spec:
             - |
               python3 \
               -m "univention.admin.rest.server" \
-              --debug "99" \
-              --port "9979" \
+              --debug "{{ .Values.udmRestApi.debug }}" \
+              --port "{{ .Values.service.ports.http.containerPort }}" \
               --interface "0.0.0.0" \
               --processes "1"
           image: "{{ coalesce .Values.udmRestApi.image.registry .Values.global.imageRegistry }}/{{ .Values.udmRestApi.image.repository }}:{{ .Values.udmRestApi.image.tag }}"
@@ -158,12 +158,12 @@ spec:
             - name: "config-map-ucr-defaults"
               mountPath: "/etc/univention/base-defaults.conf"
               subPath: "base.conf"
-            {{- if (and .Values.global .Values.global.configMapUcr) }}
+            {{- if (include "udm-rest-api.configMapUcr" .) }}
             - name: "config-map-ucr"
               mountPath: "/etc/univention/base.conf"
               subPath: "base.conf"
             {{- end }}
-            {{- if (and .Values.global .Values.global.configMapUcrForced) }}
+            {{- if (include "udm-rest-api.configMapUcrForced" .) }}
             - name: "config-map-ucr-forced"
               mountPath: "/etc/univention/base-forced.conf"
               subPath: "base.conf"
@@ -203,16 +203,16 @@ spec:
         {{- end }}
         - name: "config-map-ucr-defaults"
           configMap:
-            name: {{ required "Please provide the name of the UCR ConfigMap in .Values.global.configMapUcrDefaults!" .Values.global.configMapUcrDefaults | quote }}
-        {{- if (and .Values.global .Values.global.configMapUcr) }}
+            name: {{ include "udm-rest-api.configMapUcrDefaults" . | quote }}
+        {{- if (include "udm-rest-api.configMapUcr" .) }}
         - name: "config-map-ucr"
           configMap:
-            name: "{{ .Values.global.configMapUcr }}"
+            name: {{ include "udm-rest-api.configMapUcr" . | quote }}
         {{- end }}
-        {{- if (and .Values.global .Values.global.configMapUcrForced) }}
+        {{- if (include "udm-rest-api.configMapUcrForced" .) }}
         - name: "config-map-ucr-forced"
           configMap:
-            name: "{{ .Values.global.configMapUcrForced }}"
+            name: {{ include "udm-rest-api.configMapUcrForced" . | quote }}
         {{- end }}
         {{- if .Values.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes  "context" .) | nindent 8 }}

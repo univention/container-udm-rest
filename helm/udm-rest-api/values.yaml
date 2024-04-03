@@ -9,6 +9,8 @@
 ## Global values
 # The global properties are used to configure multiple charts at once.
 global:
+  # -- Indicates wether this chart is part of a Nubus deployment.
+  nubusDeployment: false
   # -- Container registry address.
   imageRegistry: "gitregistry.knut.univention.de"
 
@@ -32,12 +34,14 @@ global:
   #            kubelet attempts to start the container; otherwise, startup fails.
   imagePullPolicy: "IfNotPresent"
 
-  configMapUcrDefaults: "stack-data-ums-ucr"
-  configMapUcr: "stack-data-swp-ucr"
-  configMapUcrForced: null
-
   # -- Global ldap configuration
-  ldap: {}
+  ldap:
+    # -- The LDAP URI to connect to.
+    # Example: "ldap://example-ldap-server:389"
+    uri: ""
+    # -- The LDAP base DN to use when connecting.
+    # Example: "dc=univention-organization,dc=intranet"
+    baseDn: ""
 
 # -- Additional custom annotations to add to all deployed objects.
 additionalAnnotations: {}
@@ -377,8 +381,8 @@ udmRestApi:
     # uri: "ldap://my-ldap-server:389"
     uri: ""
     # -- The LDAP base DN to use when connecting.
-    # baseDN: "dc=univention-organization,dc=intranet"
-    baseDN: ""
+    # baseDn: "dc=univention-organization,dc=intranet"
+    baseDn: ""
   tls:
     # -- Enable TLS for LDAP connection.
     enabled: false
@@ -393,5 +397,9 @@ udmRestApi:
   # -- The reference to the secret containing the LDAP and machine secret.
   # secretRef: "udm-rest-api-credentials"
   secretRef: ""
+  # -- The LDAP secret file. Used for authentication against the configured LDAP service.
   ldapSecretFile: /etc/ldap.secret
+  # -- The machine secret file. Used for a client authentication with the service.
   machineSecretFile: /etc/machine.secret
+  # -- The LDAP admin password.
+  debug: "99"

@@ -21,9 +21,9 @@ data:
   {{- if .Values.udmRestApi.tls.enabled }}
   CA_CERT_FILE: "{{ .Values.udmRestApi.ldap.tls.caCertificateFile }}"
   {{- end }}
-
   # used by the load-join-data job
   UDM_API_URL: 'http://{{ include "common.names.fullname" . }}/udm/'
+  # This is hard-coded to be cn=admin in UCS
   UDM_API_USER: "cn=admin"
   UDM_API_PASSWORD_FILE: "{{ .Values.udmRestApi.ldapSecretFile }}"
 
@@ -45,8 +45,8 @@ metadata:
   {{- end }}
 data:
   ldap.conf: |
-    URI {{ required "Either .Values.udmRestApi.ldap.uri or .Values.global.ldap.uri must be set" (coalesce .Values.udmRestApi.ldap.uri .Values.global.ldap.uri) }}
-    BASE {{ required "Either .Values.udmRestApi.ldap.baseDN or .Values.global.ldap.baseDN must be set" (coalesce .Values.udmRestApi.ldap.baseDN .Values.global.ldap.baseDN) }}
+    URI {{ include "templates.ldapUri" . }}
+    BASE {{ required "Either .Values.udmRestApi.ldap.baseDn or .Values.global.ldap.baseDn must be set" (coalesce .Values.udmRestApi.ldap.baseDn .Values.global.ldap.baseDn) }}
     {{- if .Values.udmRestApi.tls.enabled }}
     TLS_REQCERT demand
     TLS_CACERT {{ .Values.udmRestApi.ldap.tls.caCertificateFile }}
