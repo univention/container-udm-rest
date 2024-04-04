@@ -11,6 +11,12 @@
 global:
   # -- Indicates wether this chart is part of a Nubus deployment.
   nubusDeployment: false
+  # -- ConfigMap name to read default UCR values from.
+  configMapUcrDefaults: null
+  # -- ConfigMap name to read UCR values from.
+  configMapUcr: null
+  # -- ConfigMap name to read forced UCR values from.
+  configMapUcrForced: null
   # -- Container registry address.
   imageRegistry: "gitregistry.knut.univention.de"
 
