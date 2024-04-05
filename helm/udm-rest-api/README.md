@@ -716,7 +716,7 @@ true
 			<td>service.sessionAffinity</td>
 			<td>string</td>
 			<td><pre lang="json">
-"None"
+""
 </pre>
 </td>
 			<td></td>

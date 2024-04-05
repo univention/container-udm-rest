@@ -141,7 +141,15 @@ RUN patch -p 0 -d / -i patches/read_only_root_fs_logging.patch && \
 
 
 FROM ${UCS_BASE_IMAGE}:${UCS_BASE_IMAGE_TAG} as final
-
+LABEL org.opencontainers.image.created="${LABEL_CREATED}"
+LABEL org.opencontainers.image.description="REST service for UCS Directory Manager"
+LABEL org.opencontainers.image.licenses="AGPL-3.0-or-later"
+LABEL org.opencontainers.image.revision=$LABEL_REVISION
+LABEL org.opencontainers.image.source="${LABEL_SOURCE}"
+LABEL org.opencontainers.image.title="udm-rest"
+LABEL org.opencontainers.image.url="https://docs.software-univention.de/developer-reference/5.0/en/udm/rest-api.html"
+LABEL org.opencontainers.image.vendor="Univention GmbH"
+LABEL org.opencontainers.image.version="${LABEL_VERSION}"
 ARG LABEL_CREATED=undefined
 ARG LABEL_REVISION=undefined
 ARG LABEL_SOURCE=undefined
@@ -281,16 +289,6 @@ CMD [ \
 ]
 
 EXPOSE 9979
-LABEL org.opencontainers.image.created="${LABEL_CREATED}"
-LABEL org.opencontainers.image.description="REST service for UCS Directory Manager"
-LABEL org.opencontainers.image.licenses="AGPL-3.0-or-later"
-LABEL org.opencontainers.image.revision=$LABEL_REVISION
-LABEL org.opencontainers.image.source="${LABEL_SOURCE}"
-LABEL org.opencontainers.image.title="udm-rest"
-LABEL org.opencontainers.image.url="https://docs.software-univention.de/developer-reference/5.0/en/udm/rest-api.html"
-LABEL org.opencontainers.image.vendor="Univention GmbH"
-LABEL org.opencontainers.image.version="${LABEL_VERSION}"
-
 
 ############################################################
 # Third stage to create a debug image

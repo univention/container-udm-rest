@@ -45,7 +45,7 @@ metadata:
   {{- end }}
 data:
   ldap.conf: |
-    URI {{ include "templates.ldapUri" . }}
+    URI {{ include "udm-rest-api.ldapUri" . }}
     BASE {{ required "Either .Values.udmRestApi.ldap.baseDn or .Values.global.ldap.baseDn must be set" (coalesce .Values.udmRestApi.ldap.baseDn .Values.global.ldap.baseDn) }}
     {{- if .Values.udmRestApi.tls.enabled }}
     TLS_REQCERT demand

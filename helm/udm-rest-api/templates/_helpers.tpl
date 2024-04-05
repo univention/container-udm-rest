@@ -7,7 +7,7 @@ These template definitions relate to the use of this Helm chart as a sub-chart o
 Templates defined in other Helm sub-charts are imported to be used to configure this chart.
 If the value .Values.global.nubusDeployment equates to true, the defined templates are imported.
 */}}
-{{- define "templates.ldapUri" -}}
+{{- define "udm-rest-api.ldapUri" -}}
 {{- if .Values.global.nubusDeployment -}}
 {{- $protocol := include "nubusTemplates.ldap.protocol" . -}}
 {{- $serviceName := include "nubusTemplates.ldap.serviceName" . | default (printf "%s-ldap-server" .Release.Name) -}}
