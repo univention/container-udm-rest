@@ -1,0 +1,36 @@
+# dockpin apt lock file v1
+base-image=base-v1
+
+'https://updates.software-univention.de/pool/main/p/python3.7/libpython3.7-minimal_3.7.3-2+deb10u7_amd64.deb' libpython3.7-minimal_3.7.3-2+deb10u7_amd64.deb 590360 MD5Sum:27f95096d5d43b631296e8495fcae915
+'https://updates.software-univention.de/pool/main/e/expat/libexpat1_2.2.6-2+deb10u6_amd64.deb' libexpat1_2.2.6-2+deb10u6_amd64.deb 108352 MD5Sum:3bd1c52df7df3aa42885d8941eb57cf3
+'https://updates.software-univention.de/pool/main/p/python3.7/python3.7-minimal_3.7.3-2+deb10u7_amd64.deb' python3.7-minimal_3.7.3-2+deb10u7_amd64.deb 1735088 MD5Sum:b19461678eb05e9e009d1839ee165afa
+'https://updates.software-univention.de/pool/main/p/python3-defaults/python3-minimal_3.7.3-1_amd64.deb' python3-minimal_3.7.3-1_amd64.deb 36600 MD5Sum:6660f92d223ceb0148c1569c89d04065
+'https://updates.software-univention.de/pool/main/m/mime-support/mime-support_3.62_all.deb' mime-support_3.62_all.deb 37228 MD5Sum:2afe5c74c9df28398663f1be782de6c3
+'https://updates.software-univention.de/pool/main/m/mpdecimal/libmpdec2_2.4.2-2_amd64.deb' libmpdec2_2.4.2-2_amd64.deb 87156 MD5Sum:24a92d6650e1f4e308fb273595e09861
+'https://updates.software-univention.de/pool/main/r/readline/readline-common_7.0-5_all.deb' readline-common_7.0-5_all.deb 70572 MD5Sum:9029400671685a94dee31d91c1c080b9
+'https://updates.software-univention.de/pool/main/r/readline/libreadline7_7.0-5_amd64.deb' libreadline7_7.0-5_amd64.deb 151036 MD5Sum:1864f9810fbbf7c7bec9ed5ce9459e64
+'https://updates.software-univention.de/pool/main/s/sqlite3/libsqlite3-0_3.27.2-3+deb10u2_amd64.deb' libsqlite3-0_3.27.2-3+deb10u2_amd64.deb 641344 MD5Sum:c57f3d8cab4db3c264d9852f6b8389d5
+'https://updates.software-univention.de/pool/main/p/python3.7/libpython3.7-stdlib_3.7.3-2+deb10u7_amd64.deb' libpython3.7-stdlib_3.7.3-2+deb10u7_amd64.deb 1732672 MD5Sum:8e74551e2eeff8d20c0f1445e0a1c6c7
+'https://updates.software-univention.de/pool/main/p/python3.7/python3.7_3.7.3-2+deb10u7_amd64.deb' python3.7_3.7.3-2+deb10u7_amd64.deb 330752 MD5Sum:bb571928177ca8f0775ba571b70c253c
+'https://updates.software-univention.de/pool/main/p/python3-defaults/libpython3-stdlib_3.7.3-1_amd64.deb' libpython3-stdlib_3.7.3-1_amd64.deb 20040 MD5Sum:5819ee55fd3cd4d4eaed6435f0668710
+'https://updates.software-univention.de/pool/main/p/python3-defaults/python3_3.7.3-1_amd64.deb' python3_3.7.3-1_amd64.deb 61508 MD5Sum:56ba1594876e580d1d5551dc4e6fa037
+'https://updates.software-univention.de/pool/main/c/cyrus-sasl2/libsasl2-modules-db_2.1.27+dfsg-1+deb10u2_amd64.deb' libsasl2-modules-db_2.1.27+dfsg-1+deb10u2_amd64.deb 69200 MD5Sum:108334cfcfd6225b8cfd6d113ec71a17
+'https://updates.software-univention.de/pool/main/c/cyrus-sasl2/libsasl2-2_2.1.27+dfsg-1+deb10u2_amd64.deb' libsasl2-2_2.1.27+dfsg-1+deb10u2_amd64.deb 106236 MD5Sum:275d9dfd12cf5b7c7a9ee17ed6a087e6
+'https://updates.software-univention.de/pool/main/o/openldap/libldap-common_2.4.47+dfsg-3+deb10u7A~5.0.1.202205211909_all.deb' libldap-common_2.4.47+dfsg-3+deb10u7A~5.0.1.202205211909_all.deb 90624 MD5Sum:30e24b2ef2921e8c6314dacd89c38343
+'https://updates.software-univention.de/pool/main/o/openldap/libldap-2.4-2_2.4.47+dfsg-3+deb10u7A~5.0.1.202205211909_amd64.deb' libldap-2.4-2_2.4.47+dfsg-3+deb10u7A~5.0.1.202205211909_amd64.deb 226592 MD5Sum:5fb8b12cb1b23375db6a4e29da858795
+'https://updates.software-univention.de/pool/main/liby/libyaml/libyaml-0-2_0.2.1-1_amd64.deb' libyaml-0-2_0.2.1-1_amd64.deb 47232 MD5Sum:fef6641987a490e08bbdb626b96e7d3f
+'https://updates.software-univention.de/pool/main/p/python-certifi/python3-certifi_2018.8.24-1_all.deb' python3-certifi_2018.8.24-1_all.deb 140000 MD5Sum:2da333f26e1286db3649ffa2daadffad
+'https://updates.software-univention.de/pool/main/p/python-setuptools/python3-pkg-resources_40.8.0-1_all.deb' python3-pkg-resources_40.8.0-1_all.deb 152600 MD5Sum:c56b54e765988046756187d2e732c64f
+'https://updates.software-univention.de/pool/main/c/chardet/python3-chardet_3.0.4-3_all.deb' python3-chardet_3.0.4-3_all.deb 80464 MD5Sum:e179dfbe7f67683fb2d8d21ed86458ea
+'https://updates.software-univention.de/pool/main/p/python-idna/python3-idna_2.6-1_all.deb' python3-idna_2.6-1_all.deb 34308 MD5Sum:a0143d8edba2822ba22a79fc8967a0dd
+'https://updates.software-univention.de/pool/main/m/markupsafe/python3-markupsafe_1.1.0-1_amd64.deb' python3-markupsafe_1.1.0-1_amd64.deb 14824 MD5Sum:4abb068eaca7bbd5d812041abc638cf3
+'https://updates.software-univention.de/pool/main/j/jinja2/python3-jinja2_2.10-2+deb10u1_all.deb' python3-jinja2_2.10-2+deb10u1_all.deb 106888 MD5Sum:0e1b57bd38996b74ef560ddd450a5c4f
+'https://updates.software-univention.de/pool/main/p/pyasn1/python3-pyasn1_0.4.2-3_all.deb' python3-pyasn1_0.4.2-3_all.deb 57680 MD5Sum:eac25b01ad48b6f4d5aee477bfcac9ea
+'https://updates.software-univention.de/pool/main/p/python-pyasn1-modules/python3-pyasn1-modules_0.2.1-0.2_all.deb' python3-pyasn1-modules_0.2.1-0.2_all.deb 34500 MD5Sum:4cd11d566a14a0d41edb559be4206c5b
+'https://updates.software-univention.de/pool/main/p/python-ldap/python3-ldap_3.1.0-2A~5.0.0.202212160954_amd64.deb' python3-ldap_3.1.0-2A~5.0.0.202212160954_amd64.deb 110048 MD5Sum:f8e882b7c50123c37678e7b01b1bca54
+'https://updates.software-univention.de/pool/main/s/six/python3-six_1.12.0-1_all.deb' python3-six_1.12.0-1_all.deb 15732 MD5Sum:75af07221e0fa0539032c01a5bc0f423
+'https://updates.software-univention.de/pool/main/p/python-urllib3/python3-urllib3_1.24.1-1+deb10u2_all.deb' python3-urllib3_1.24.1-1+deb10u2_all.deb 98372 MD5Sum:84d50aea7853bf0d6ea1ce253b4fd930
+'https://updates.software-univention.de/pool/main/r/requests/python3-requests_2.21.0-1+deb10u1_all.deb' python3-requests_2.21.0-1+deb10u1_all.deb 67352 MD5Sum:05788d8b280472bd6c1f9826d11412d6
+'https://updates.software-univention.de/pool/main/p/python-uritemplate/python3-uritemplate_0.6-3_all.deb' python3-uritemplate_0.6-3_all.deb 5208 MD5Sum:2844aaf576f26452e3e7195a50450f90
+'https://updates.software-univention.de/pool/main/u/univention-directory-manager-rest/python3-univention-directory-manager-rest-client_10.0.7-11_all.deb' python3-univention-directory-manager-rest-client_10.0.7-11_all.deb 21060 MD5Sum:79518bb4ac1e9a9b1ac970405de4e0e4
+'https://updates.software-univention.de/pool/main/p/pyyaml/python3-yaml_3.13-2_amd64.deb' python3-yaml_3.13-2_amd64.deb 120980 MD5Sum:ecd645430d0f742c55409cbde6508728
