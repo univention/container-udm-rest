@@ -9,9 +9,7 @@ If the value .Values.global.nubusDeployment equates to true, the defined templat
 */}}
 {{- define "udm-rest-api.ldapUri" -}}
 {{- if .Values.global.nubusDeployment -}}
-{{- $protocol := include "nubusTemplates.ldap.protocol" . -}}
-{{- $serviceName := include "nubusTemplates.ldap.serviceName" . | default (printf "%s-ldap-server" .Release.Name) -}}
-{{- printf "%s://%s" $protocol $serviceName -}}
+{{- include "nubusTemplates.ldapServer.ldap.connection.uri" . -}}
 {{- else -}}
 {{ required "Either .Values.udmRestApi.ldap.uri or .Values.global.ldap.uri must be set" (coalesce .Values.udmRestApi.ldap.uri .Values.global.ldap.uri) }}
 {{- end -}}
