@@ -30,7 +30,7 @@ These template definitions are only used in this chart and do not relate to temp
 {{- end -}}
 
 {{- define "udm-rest-api.configMapUcrForced" -}}
-{{- coalesce .Values.configMapUcrForced .Values.global.configMapUcrForced "null" -}}
+{{- coalesce .Values.configMapUcrForced .Values.global.configMapUcrForced | default ""  -}}
 {{- end -}}
 
 {{- define "udm-rest-api.secretRef" -}}
