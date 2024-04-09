@@ -11,6 +11,12 @@ This image is serving an experiment.
 If it should be intended for usage then it must be moved into a more appropriate
 place like the repository of the ucs based image.
 
+## Known issues
+
+* Our base image does log to `stdout` currently. This leads to `dockpin` failing.
+  There is a change which makes it work in this MR:
+  <https://git.knut.univention.de/univention/components/ucs-base-image/-/merge_requests/53>
+
 ## Usage
 
 The main idea is to allow to use `dockpin` together with the Univention sources
