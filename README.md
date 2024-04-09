@@ -1,3 +1,19 @@
+# BRANCH content - Spike
+
+This branch does contain experiments from a Spike around reproducible builds
+using the tool `dockpin`.
+
+It is not intended to be merged into the mainline without further modification.
+
+Pointers:
+
+- Spike
+  <https://git.knut.univention.de/univention/customers/dataport/team-souvap/-/issues/661>
+
+- `dockpin` utility
+  <https://github.com/Jille/dockpin>
+
+
 # Disclaimer - Work in progress
 
 The repository you are looking into is work in progress.
