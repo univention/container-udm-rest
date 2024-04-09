@@ -35,6 +35,15 @@ services:
     volumes:
       - "./:/src/"
 
+  dockpin:
+    profiles:
+      - utility
+    build:
+      context: ./docker/dockpin
+    platform: "linux/amd64"
+    volumes:
+      - "./:/src/"
+
   pre-commit:
     profiles:
       - "pre-commit"
