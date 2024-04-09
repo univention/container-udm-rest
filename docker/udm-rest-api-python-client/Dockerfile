@@ -32,14 +32,23 @@
 ARG UCS_BASE_IMAGE=gitregistry.knut.univention.de/univention/components/ucs-base-image/ucs-base-506
 ARG UCS_BASE_IMAGE_TAG=0.10.0
 
+FROM ghcr.io/jille/dockpin:v0.3.0 AS dockpin
 FROM ${UCS_BASE_IMAGE}:${UCS_BASE_IMAGE_TAG} as base
 
-RUN apt-get update \
-    && apt-get --assume-yes --verbose-versions --no-install-recommends install \
-      python3-univention-directory-manager-rest-client=10.* \
-      python3-yaml=3.* \
-      python3-jinja2=2.* \
-    && rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*
+# TODO: This would become part of our base image if we would use this tool
+COPY --from=dockpin /bin/dockpin /usr/local/sbin/dockpin
+
+# TODO: Workaround, it seems that our base image does not have ssl certificates
+# installed
+RUN mkdir -p /var/cache/apt/archives/partial \
+    && apt-get update \
+    && apt-get install --no-install-recommends --yes ca-certificates \
+    # TODO: Workaround for missing "Pre-Depends" support in "dockpin"
+    # See: https://github.com/Jille/dockpin/issues/18
+    && apt-get install --no-install-recommends --yes python3
+
+COPY dockpin-apt.lock /tmp
+RUN /usr/local/sbin/dockpin apt install -p /tmp/dockpin-apt.lock
 
 FROM base as cli
 
