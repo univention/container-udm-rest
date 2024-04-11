@@ -45,7 +45,11 @@ FROM ${PORTAL_UDM_EXTENSIONS_IMAGE}:${PORTAL_UDM_EXTENSIONS_TAG} AS portal-udm-e
 FROM ${OX_CONNECTOR_EXTENSIONS_IMAGE}:${OX_CONNECTOR_EXTENSIONS_TAG} AS ox-connector-extensions
 FROM ${GUARDIAN_EXTENSIONS_IMAGE}:${GUARDIAN_EXTENSIONS_TAG} AS guardian-extensions
 
+FROM ghcr.io/jille/dockpin:v0.3.0 AS dockpin
 FROM ${UCS_BASE_IMAGE}:${UCS_BASE_IMAGE_TAG} as build
+
+# TODO: This would become part of our base image if we would use this tool
+COPY --from=dockpin /bin/dockpin /usr/local/sbin/dockpin
 
 ###############################################################################
 # Install UDM REST API
@@ -64,54 +68,31 @@ COPY fake.sh /usr/local/bin/invoke-rc.d
 COPY fake.sh /usr/sbin/univention-management-console-acls
 COPY fake-uv-lib.sh /usr/local/bin/fake-uv-lib.sh
 
+# TODO: Workaround, it seems that our base image does not have ssl certificates
+# installed
+RUN mkdir -p /var/cache/apt/archives/partial \
+    && apt-get update \
+    && apt-get install --no-install-recommends --yes ca-certificates \
+    # TODO: Workaround for missing "Pre-Depends" support in "dockpin"
+    # See: https://github.com/Jille/dockpin/issues/18
+    && apt-get install --no-install-recommends --yes \
+      python3 \
+      python \
+      univention-management-console-web-server-fix \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY dockpin-apt.lock /tmp
+RUN /usr/local/sbin/dockpin apt install -p /tmp/dockpin-apt.lock
+
 WORKDIR /apt
 
 RUN chown _apt . && \
   apt-get --quiet update && \
-  # install Univention bash helper functions dependency
-  DEBIAN_FRONTEND=noninteractive \
-    apt-get --assume-yes --verbose-versions --no-install-recommends install \
-      shell-univention-lib=9.* \
-      patch=2.7.* \
-      && \
   # we do not need the many bash helper-functions here
   cp /usr/local/bin/fake-uv-lib.sh /usr/share/univention-lib/all.sh && \
   cp /usr/local/bin/fake-uv-lib.sh /usr/share/univention-lib/join.sh && \
   cp /usr/local/bin/fake-uv-lib.sh /usr/share/univention-lib/umc.sh && \
   mkdir --parents /var/www/univention-directory-reports && \
-  # install unlisted dependencies
-  DEBIAN_FRONTEND=noninteractive \
-    apt-get --assume-yes --verbose-versions --no-install-recommends install \
-      python3=3.7.* \
-      python3-distutils=3.7.* \
-      && \
-  DEBIAN_FRONTEND=noninteractive \
-    apt-get --assume-yes --verbose-versions --no-install-recommends install \
-      python3-univention-directory-manager-rest=10.* \
-      libunivention-debug1=12.* \
-      python3-ldap=3.* \
-      python3-univention-config-registry=15.* \
-      python3-univention-debhelper=2.* \
-      python3-six=1.* \
-      # dependencies of univention-management-console-module-udm
-      python-notifier=0.* \
-      univention-directory-manager-tools=15.* \
-      univention-directory-reports=12.* \
-      univention-management-console-server=12.* \
-      univention-config=15.* \
-      univention-join=12.* \
-      # dependencies of python3-univention-directory-manager-rest
-      python3-genshi=0.* \
-      python3-mimeparse=0.* \
-      python3-pycurl=7.* \
-      python3-tornado=5.* \
-      python3-univention-directory-manager=15.* \
-      python3-univention-directory-reports=12.* \
-      python3-univention-management-console=12.* \
-      python3-uritemplate=0.* \
-      univention-management-console-module-udm=10.* \
-      univention-saml-schema=7.* \
-      && \
   # static www content, stylesheet, js, etc. without all dependencies
   apt-get download univention-directory-manager-rest && \
   dpkg --force-depends --install univention-directory-manager-rest_10.*.deb && \

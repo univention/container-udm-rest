@@ -333,6 +333,7 @@ base-image=base-v1
 'https://updates.software-univention.de/pool/main/p/python-tornado/python3-tornado_5.1.1-4A~5.0.0.202306081314_amd64.deb' python3-tornado_5.1.1-4A~5.0.0.202306081314_amd64.deb 354636 MD5Sum:be030c6d0ed2ce29e087334a8d9e61dd
 'https://updates.software-univention.de/pool/main/u/univention-management-console/python3-univention-management-console_12.0.32-20_all.deb' python3-univention-management-console_12.0.32-20_all.deb 127372 MD5Sum:ab88891ad452780e20e7a0c4706eff6a
 'https://updates.software-univention.de/pool/main/u/univention-management-console/univention-management-console-server_12.0.32-20_all.deb' univention-management-console-server_12.0.32-20_all.deb 83752 MD5Sum:58d9fc0c6d20a8f5c053a0077502c9d9
+'https://updates.software-univention.de/pool/main/p/patch/patch_2.7.6-3+deb10u1_amd64.deb' patch_2.7.6-3+deb10u1_amd64.deb 126380 MD5Sum:55ae21a868ceb91b4c84727f7acc76de
 'https://updates.software-univention.de/pool/main/g/genshi/python3-genshi_0.7.1-5_all.deb' python3-genshi_0.7.1-5_all.deb 132468 MD5Sum:ed92ab930fddb7b8ff131992da64e86e
 'https://updates.software-univention.de/pool/main/p/python-mimeparse/python3-mimeparse_0.1.4-3.1_all.deb' python3-mimeparse_0.1.4-3.1_all.deb 6204 MD5Sum:4b7fd39f26aee6bf2ca48659051bb365
 'https://updates.software-univention.de/pool/main/p/python-reportlab/python3-reportlab-accel_3.5.13-1+deb10u2_amd64.deb' python3-reportlab-accel_3.5.13-1+deb10u2_amd64.deb 35420 MD5Sum:a9bd4c53f8e08f5e7a892257c226cfb5
