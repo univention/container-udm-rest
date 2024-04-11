@@ -112,10 +112,6 @@ RUN chown _apt . && \
       univention-management-console-module-udm=10.* \
       univention-saml-schema=7.* \
       && \
-  # univention-portal module:
-  # /usr/lib/python3/dist-packages/univention/udm/modules/portal.py
-  apt-get download univention-portal && \
-  dpkg --force-depends --install univention-portal_4.*.deb && \
   # static www content, stylesheet, js, etc. without all dependencies
   apt-get download univention-directory-manager-rest && \
   dpkg --force-depends --install univention-directory-manager-rest_10.*.deb && \
