@@ -20,7 +20,11 @@ place like the repository of the ucs based image.
 ## Usage
 
 The main idea is to allow to use `dockpin` together with the Univention sources
-in an easy way.
+in an easy way:
+
+```sh
+~/go/bin/dockpin apt pin --base-image gitregistry.knut.univention.de/univention/components/ucs-base-image/ucs-base-506
+```
 
 Compare the README of `dockpin` itself:
 <https://github.com/Jille/dockpin/blob/master/README.md>
