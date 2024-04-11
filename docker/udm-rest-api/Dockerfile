@@ -144,17 +144,6 @@ RUN mkdir -p /var/cache/apt/archives/partial \
 COPY dockpin-apt-final.lock /tmp
 RUN /usr/local/sbin/dockpin apt install -p /tmp/dockpin-apt-final.lock
 
-RUN chown _apt . && \
-  apt-get --quiet update && \
-  apt-get download \
-   libunivention-config0=15.* \
-   libunivention-debug1=12.* \
-   libunivention-license0=11.* \
-   libunivention-policy0=11.* \
-   && \
-  dpkg --install --force-depends /apt/* && \
-  rm -rf /apt /var/lib/apt/lists/*
-
 WORKDIR /
 
 # Copy python3 dependencies

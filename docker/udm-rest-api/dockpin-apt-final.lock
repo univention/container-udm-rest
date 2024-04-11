@@ -62,6 +62,10 @@ base-image=base-v1
 'https://updates.software-univention.de/pool/main/p/python3.7/libpython3.7_3.7.3-2+deb10u7_amd64.deb' libpython3.7_3.7.3-2+deb10u7_amd64.deb 1499104 MD5Sum:66410e37735345eb09d4786716f964d2
 'https://updates.software-univention.de/pool/main/libw/libwebp/libwebp6_0.6.1-2+deb10u3_amd64.deb' libwebp6_0.6.1-2+deb10u3_amd64.deb 262832 MD5Sum:7f1c4f4ec64cf5f78ce425d60f87a917
 'https://updates.software-univention.de/pool/main/t/tiff/libtiff5_4.1.0+git191117-2~deb10u9_amd64.deb' libtiff5_4.1.0+git191117-2~deb10u9_amd64.deb 273316 MD5Sum:0e851109ed227b14dfb121238e36eec6
+'https://updates.software-univention.de/pool/main/u/univention-debug/libunivention-debug1_12.0.2-1A~5.0.0.202302031912_amd64.deb' libunivention-debug1_12.0.2-1A~5.0.0.202302031912_amd64.deb 9088 MD5Sum:13bfadca8f1fcd40a9d13979defdb2ad
+'https://updates.software-univention.de/pool/main/u/univention-config-registry/libunivention-config0_15.0.11-1_amd64.deb' libunivention-config0_15.0.11-1_amd64.deb 31756 MD5Sum:1a961d250a2fa03f6d6f167c9236c13c
+'https://updates.software-univention.de/pool/main/u/univention-policy/libunivention-policy0_11.0.2-1A~5.0.0.202302031934_amd64.deb' libunivention-policy0_11.0.2-1A~5.0.0.202302031934_amd64.deb 13296 MD5Sum:f48c6836ec87df7132d748d48d2c430d
+'https://updates.software-univention.de/pool/main/u/univention-licence/libunivention-license0_11.0.0-2_amd64.deb' libunivention-license0_11.0.0-2_amd64.deb 17792 MD5Sum:c7365b322293aaffc893c39483a30fd8
 'https://updates.software-univention.de/pool/main/s/samba/libwbclient0_4.18.3-1A~5.0.0.202403051313_amd64.deb' libwbclient0_2%3a4.18.3-1A~5.0.0.202403051313_amd64.deb 149500 MD5Sum:f21e1acf97f0b55a171df27564fa64a9
 'https://updates.software-univention.de/pool/main/libw/libwebp/libwebpdemux2_0.6.1-2+deb10u3_amd64.deb' libwebpdemux2_0.6.1-2+deb10u3_amd64.deb 87864 MD5Sum:bfdb88f7902c5fb89b83810eb3589bd8
 'https://updates.software-univention.de/pool/main/libw/libwebp/libwebpmux3_0.6.1-2+deb10u3_amd64.deb' libwebpmux3_0.6.1-2+deb10u3_amd64.deb 98072 MD5Sum:36708e2aab2f5b5897cbfce9dc8b62fc
