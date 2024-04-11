@@ -5,18 +5,18 @@
 
 include:
   - project: "univention/customers/dataport/upx/common-ci"
-    ref: "v1.25.0"
+    ref: "v1.27.0"
     file:
       # TODO: Sphinx docs inherits a stage definition from upstream,
       # has to be included before our default stages to avoid trouble.
       - "jobs/sphinx-docs.yaml"
       - "defaults/stages.yaml"
-      - "defaults/souvap-workflow.yaml"
+      - "defaults/nubus-workflow.yaml"
       - "jobs/lint-pre-commit-legacy.yaml"
       - "jobs/lint-commit-messages.yaml"
       - "jobs/semantic-release-env.yaml"
-      - "jobs/container-build-souvap.yaml"
-      - "jobs/package-and-publish-helm-charts-souvap.yaml"
+      - "jobs/container-build-external.yaml"
+      - "jobs/package-and-publish-helm-charts-external.yaml"
       - "jobs/check-debian-updates.yaml"
 
   - project: "univention/dist/docker-services"
@@ -85,11 +85,11 @@ test-udm-rest:
   after_script:
     - docker compose down --volumes
 
-push-image-souvap:
+push-image-external:
   parallel:
     matrix: *publish-matrix
 
-container-sign-souvap:
+container-sign-external:
   parallel:
     matrix: *publish-matrix
 
