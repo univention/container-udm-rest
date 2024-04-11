@@ -125,24 +125,27 @@ ARG LABEL_REVISION=undefined
 ARG LABEL_SOURCE=undefined
 ARG LABEL_VERSION=undefined
 
+# TODO: This would become part of our base image if we would use this tool
+COPY --from=dockpin /bin/dockpin /usr/local/sbin/dockpin
+
 WORKDIR /apt
+
+# TODO: Workaround, it seems that our base image does not have ssl certificates
+# installed
+RUN mkdir -p /var/cache/apt/archives/partial \
+    && apt-get update \
+    && apt-get install --no-install-recommends --yes ca-certificates \
+    # TODO: Workaround for missing "Pre-Depends" support in "dockpin"
+    # See: https://github.com/Jille/dockpin/issues/18
+    && apt-get install --no-install-recommends --yes \
+      python3 \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY dockpin-apt-final.lock /tmp
+RUN /usr/local/sbin/dockpin apt install -p /tmp/dockpin-apt-final.lock
 
 RUN chown _apt . && \
   apt-get --quiet update && \
-  DEBIAN_FRONTEND=noninteractive \
-    apt-get --assume-yes --verbose-versions --no-install-recommends install \
-      libc-bin=2.* \
-      libcurl3-gnutls=7.* \
-      locales=2.* \
-      python3=3.7.* \
-      python3-ldap=3.* \
-      python3-six=1.* \
-      python3-pil=5.* \
-      python3-magic=2:0.* \
-      python3-samba=2:4.* \
-      python3-cracklib=2.* \
-      python3-univention-heimdal=10.* \
-      && \
   apt-get download \
    libunivention-config0=15.* \
    libunivention-debug1=12.* \
