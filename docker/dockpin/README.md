@@ -19,6 +19,10 @@ place like the repository of the ucs based image.
   There is a change which makes it work in this MR:
   <https://git.knut.univention.de/univention/components/ucs-base-image/-/merge_requests/53>
 
+* `dockpin` itself wants to run `apt` via `docker`, this means it is difficult
+  to run `dockpin` itself inside of a container.
+
+
 ## Usage
 
 The main idea is to allow to use `dockpin` together with the Univention sources
