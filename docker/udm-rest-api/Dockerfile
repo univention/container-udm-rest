@@ -51,8 +51,8 @@ FROM ghcr.io/jille/dockpin:v0.3.0 AS dockpin
 # scenario
 FROM nixpkgs/nix-flakes AS nix-builder
 
-COPY . /tmp/build
 WORKDIR /tmp/build
+COPY flake.* /tmp/build/
 
 # TODO: This does download way to many things and it does not have any sort of
 # caching set up
@@ -98,15 +98,6 @@ COPY dockpin-apt.lock /tmp
 RUN /usr/local/sbin/dockpin apt install -p /tmp/dockpin-apt.lock
 
 WORKDIR /tmp
-
-# TODO: Worst case scenario using curl to download a package without its dependencies.
-# Using curl is a drawback here, it would require content validation and also
-# an update mechanism.
-# The correct fix would be to build a package containing only the frontend.
-RUN curl https://updates.software-univention.de/pool/main/u/univention-directory-manager-rest/univention-directory-manager-rest_10.0.7-11_all.deb -O \
-  && ls -la \
-  && dpkg --force-depends --install /tmp/univention-directory-manager-rest*.deb \
-  && rm /tmp/*.deb
 
 
 ###############################################################################
@@ -168,9 +159,10 @@ COPY --from=ox-connector-extensions /dependencies/icons/ \
 COPY --from=build \
   /etc/univention/directory/reports/ \
   /etc/univention/directory/reports/
+
 # static web, e.g. stylesheets and js
-COPY --from=build \
-  /var/www/univention/udm/ \
+COPY --from=nix-builder \
+  /tmp/build/result/var/www/univention/udm/ \
   /var/www/univention/udm/
 
 # Inject UDM Modules
