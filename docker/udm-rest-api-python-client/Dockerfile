@@ -45,7 +45,8 @@ RUN mkdir -p /var/cache/apt/archives/partial \
     && apt-get install --no-install-recommends --yes ca-certificates \
     # TODO: Workaround for missing "Pre-Depends" support in "dockpin"
     # See: https://github.com/Jille/dockpin/issues/18
-    && apt-get install --no-install-recommends --yes python3
+    && apt-get install --no-install-recommends --yes python3 \
+    && rm -rf /var/lib/apt/lists/*
 
 COPY dockpin-apt.lock /tmp
 RUN /usr/local/sbin/dockpin apt install -p /tmp/dockpin-apt.lock
