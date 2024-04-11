@@ -84,23 +84,16 @@ RUN mkdir -p /var/cache/apt/archives/partial \
 COPY dockpin-apt.lock /tmp
 RUN /usr/local/sbin/dockpin apt install -p /tmp/dockpin-apt.lock
 
-WORKDIR /apt
+WORKDIR /tmp
 
-RUN chown _apt . && \
-  apt-get --quiet update && \
-  # we do not need the many bash helper-functions here
-  cp /usr/local/bin/fake-uv-lib.sh /usr/share/univention-lib/all.sh && \
-  cp /usr/local/bin/fake-uv-lib.sh /usr/share/univention-lib/join.sh && \
-  cp /usr/local/bin/fake-uv-lib.sh /usr/share/univention-lib/umc.sh && \
-  mkdir --parents /var/www/univention-directory-reports && \
-  # static www content, stylesheet, js, etc. without all dependencies
-  apt-get download univention-directory-manager-rest && \
-  dpkg --force-depends --install univention-directory-manager-rest_10.*.deb && \
-  rm univention-directory-manager-rest_10.*.deb \
-  rm -rf /apt /var/lib/apt/lists/* /var/cache/apt/archives/* && \
-  awk \
-    '/^Package: python3-univention-directory-manager-rest$/{ while(!/^Version: /){getline} print $2 }' \
-    /var/lib/dpkg/status > /version
+# TODO: Worst case scenario using curl to download a package without its dependencies.
+# Using curl is a drawback here, it would require content validation and also
+# an update mechanism.
+# The correct fix would be to build a package containing only the frontend.
+RUN curl https://updates.software-univention.de/pool/main/u/univention-directory-manager-rest/univention-directory-manager-rest_10.0.7-11_all.deb -O \
+  && ls -la \
+  && dpkg --force-depends --install /tmp/univention-directory-manager-rest*.deb \
+  && rm /tmp/*.deb
 
 
 ###############################################################################
@@ -204,10 +197,6 @@ COPY --from=build \
 COPY --from=build \
   /etc/univention/templates \
   /etc/univention/templates
-
-COPY --from=build \
-  /version \
-  /version
 
 RUN \
   echo > /usr/lib/python3/dist-packages/univention/lib/package_manager.py && \
