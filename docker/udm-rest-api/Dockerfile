@@ -46,6 +46,19 @@ FROM ${OX_CONNECTOR_EXTENSIONS_IMAGE}:${OX_CONNECTOR_EXTENSIONS_TAG} AS ox-conne
 FROM ${GUARDIAN_EXTENSIONS_IMAGE}:${GUARDIAN_EXTENSIONS_TAG} AS guardian-extensions
 
 FROM ghcr.io/jille/dockpin:v0.3.0 AS dockpin
+
+# TODO: Pinning to a specific version would be required in a real world usage
+# scenario
+FROM nixpkgs/nix-flakes AS nix-builder
+
+COPY . /tmp/build
+WORKDIR /tmp/build
+
+# TODO: This does download way to many things and it does not have any sort of
+# caching set up
+RUN nix build .#udm-rest-web-assets
+
+
 FROM ${UCS_BASE_IMAGE}:${UCS_BASE_IMAGE_TAG} as build
 
 # TODO: This would become part of our base image if we would use this tool
