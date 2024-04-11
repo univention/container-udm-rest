@@ -23,17 +23,15 @@
     flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = nixpkgs.legacyPackages.${system};
-        stdenv = pkgs.stdenv;
       in {
         packages = rec {
-          udm-rest-web-assets = stdenv.mkDerivation {
+          udm-rest-web-assets = pkgs.stdenvNoCC.mkDerivation {
             pname = "udm-rest-web-assets";
             version = "0.0.1";
             src = ucs-sources;
             # NOTE: The web assets are not really built, copying the wanted
             # files into the output directory is enough to package it.
-            dontUnpack = true;
-            dontBuild = true;
+            phases = [ "installPhase" ];
             installPhase = ''
               mkdir -p $out
               cp -av $src/management/univention-directory-manager-rest/var $out
