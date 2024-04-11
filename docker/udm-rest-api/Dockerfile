@@ -37,8 +37,9 @@ ARG OX_CONNECTOR_EXTENSIONS_TAG=0.3.4
 ARG GUARDIAN_EXTENSIONS_IMAGE=gitregistry.knut.univention.de/univention/components/authorization-engine/guardian/ums-dependencies
 ARG GUARDIAN_EXTENSIONS_TAG=latest
 
-ARG UCS_BASE_IMAGE=gitregistry.knut.univention.de/univention/components/ucs-base-image/ucs-base-506
-ARG UCS_BASE_IMAGE_TAG=0.10.0
+# TODO: This assumes that the image has been built locally with a matching name
+ARG UCS_BASE_IMAGE=ucs-base-with-packages
+ARG UCS_BASE_IMAGE_TAG=latest
 
 
 FROM ${PORTAL_UDM_EXTENSIONS_IMAGE}:${PORTAL_UDM_EXTENSIONS_TAG} AS portal-udm-extensions
@@ -67,7 +68,6 @@ COPY fake-uv-lib.sh /usr/local/bin/fake-uv-lib.sh
 WORKDIR /apt
 
 RUN chown _apt . && \
-  apt-get --quiet update && \
   # install Univention bash helper functions dependency
   DEBIAN_FRONTEND=noninteractive \
     apt-get --assume-yes --verbose-versions --no-install-recommends install \
@@ -119,8 +119,7 @@ RUN chown _apt . && \
   # static www content, stylesheet, js, etc. without all dependencies
   apt-get download univention-directory-manager-rest && \
   dpkg --force-depends --install univention-directory-manager-rest_10.*.deb && \
-  rm univention-directory-manager-rest_10.*.deb \
-  rm -rf /apt /var/lib/apt/lists/* /var/cache/apt/archives/* && \
+  rm -rf /apt && \
   awk \
     '/^Package: python3-univention-directory-manager-rest$/{ while(!/^Version: /){getline} print $2 }' \
     /var/lib/dpkg/status > /version
@@ -151,7 +150,6 @@ ARG LABEL_VERSION=undefined
 WORKDIR /apt
 
 RUN chown _apt . && \
-  apt-get --quiet update && \
   DEBIAN_FRONTEND=noninteractive \
     apt-get --assume-yes --verbose-versions --no-install-recommends install \
       libc-bin=2.* \
@@ -173,7 +171,7 @@ RUN chown _apt . && \
    libunivention-policy0=11.* \
    && \
   dpkg --install --force-depends /apt/* && \
-  rm -rf /apt /var/lib/apt/lists/*
+  rm -rf /apt
 
 WORKDIR /
 
@@ -305,15 +303,12 @@ USER root
 SHELL ["/bin/bash", "-c"]
 
 # make this container debugable:
-RUN apt-get --quiet update && \
-  DEBIAN_FRONTEND=noninteractive \
+RUN DEBIAN_FRONTEND=noninteractive \
     apt-get --assume-yes --verbose-versions --no-install-recommends install \
       vim=2:8.* \
       curl=7.* \
       netcat=1.* \
-      iproute2=4.* \
-      && \
-  rm -rf /var/lib/apt/lists/*
+      iproute2=4.*
 
 
 ############################################################
