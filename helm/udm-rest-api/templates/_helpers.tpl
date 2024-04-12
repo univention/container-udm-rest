@@ -4,6 +4,15 @@ SPDX-License-Identifier: AGPL-3.0-only
 */}}
 {{- /*
 These template definitions relate to the use of this Helm chart as a sub-chart of the Nubus Umbrella Chart.
+They are defined so other sub-charts can read information that otherwise would be solely known to this Helm chart.
+If compatible Helm charts set .Values.global.nubusDeployment to true, the templates defined here will be imported.
+*/}}
+{{- define "nubusTemplates.udmRestApi.uri" -}}
+{{- printf "http://%s-udm-rest-api/udm/" .Release.Name }}
+{{- end -}}
+
+{{- /*
+These template definitions relate to the use of this Helm chart as a sub-chart of the Nubus Umbrella Chart.
 Templates defined in other Helm sub-charts are imported to be used to configure this chart.
 If the value .Values.global.nubusDeployment equates to true, the defined templates are imported.
 */}}
