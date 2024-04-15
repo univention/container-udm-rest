@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.9.3](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/compare/v0.9.2...v0.9.3) (2024-04-15)
+
+
+### Bug Fixes
+
+* update openDesk pointer ([e0ea5db](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/commit/e0ea5dbf9645c8e1f23a0832f3ad16e33ad9279d))
+
 ## [0.9.2](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/compare/v0.9.1...v0.9.2) (2024-03-27)
 
 
