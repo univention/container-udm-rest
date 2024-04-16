@@ -11,6 +11,14 @@ If compatible Helm charts set .Values.global.nubusDeployment to true, the templa
 {{- printf "http://%s-udm-rest-api/udm/" .Release.Name }}
 {{- end -}}
 
+{{- define "nubusTemplates.udmRestApi.host" -}}
+{{- printf "%s-udm-rest-api" .Release.Name }}
+{{- end -}}
+
+{{- define "nubusTemplates.udmRestApi.port" -}}
+80
+{{- end -}}
+
 {{- /*
 These template definitions relate to the use of this Helm chart as a sub-chart of the Nubus Umbrella Chart.
 Templates defined in other Helm sub-charts are imported to be used to configure this chart.
