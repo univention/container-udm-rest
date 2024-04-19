@@ -67,7 +67,6 @@ COPY fake-uv-lib.sh /usr/local/bin/fake-uv-lib.sh
 WORKDIR /apt
 
 RUN chown _apt . && \
-  apt-get --quiet update && \
   # install Univention bash helper functions dependency
   DEBIAN_FRONTEND=noninteractive \
     apt-get --assume-yes --verbose-versions --no-install-recommends install \
@@ -120,7 +119,6 @@ RUN chown _apt . && \
   apt-get download univention-directory-manager-rest && \
   dpkg --force-depends --install univention-directory-manager-rest_10.*.deb && \
   rm univention-directory-manager-rest_10.*.deb \
-  rm -rf /apt /var/lib/apt/lists/* /var/cache/apt/archives/* && \
   awk \
     '/^Package: python3-univention-directory-manager-rest$/{ while(!/^Version: /){getline} print $2 }' \
     /var/lib/dpkg/status > /version
