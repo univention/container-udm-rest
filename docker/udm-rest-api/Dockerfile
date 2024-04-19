@@ -66,6 +66,7 @@ COPY fake-uv-lib.sh /usr/local/bin/fake-uv-lib.sh
 
 WORKDIR /apt
 
+# hadolint ignore=SC2016
 RUN chown _apt . && \
   # install Univention bash helper functions dependency
   DEBIAN_FRONTEND=noninteractive \
