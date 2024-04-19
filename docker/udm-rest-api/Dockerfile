@@ -149,7 +149,6 @@ ARG LABEL_VERSION=undefined
 WORKDIR /apt
 
 RUN chown _apt . && \
-  apt-get --quiet update && \
   DEBIAN_FRONTEND=noninteractive \
     apt-get --assume-yes --verbose-versions --no-install-recommends install \
       libc-bin=2.* \
@@ -170,8 +169,7 @@ RUN chown _apt . && \
    libunivention-license0=11.* \
    libunivention-policy0=11.* \
    && \
-  dpkg --install --force-depends /apt/* && \
-  rm -rf /apt /var/lib/apt/lists/*
+  dpkg --install --force-depends /apt/*
 
 WORKDIR /
 
@@ -303,15 +301,13 @@ USER root
 SHELL ["/bin/bash", "-c"]
 
 # make this container debugable:
-RUN apt-get --quiet update && \
+RUN \
   DEBIAN_FRONTEND=noninteractive \
     apt-get --assume-yes --verbose-versions --no-install-recommends install \
       vim=2:8.* \
       curl=7.* \
       netcat=1.* \
-      iproute2=4.* \
-      && \
-  rm -rf /var/lib/apt/lists/*
+      iproute2=4.*
 
 
 ############################################################
