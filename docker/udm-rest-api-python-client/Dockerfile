@@ -30,16 +30,15 @@
 
 
 ARG UCS_BASE_IMAGE=gitregistry.knut.univention.de/univention/components/ucs-base-image/ucs-base-506
-ARG UCS_BASE_IMAGE_TAG=0.10.0
+ARG UCS_BASE_IMAGE_TAG=0.12.0-build-2024-04-18
 
 FROM ${UCS_BASE_IMAGE}:${UCS_BASE_IMAGE_TAG} as base
 
-RUN apt-get update \
-    && apt-get --assume-yes --verbose-versions --no-install-recommends install \
+RUN \
+    apt-get --assume-yes --verbose-versions --no-install-recommends install \
       python3-univention-directory-manager-rest-client=10.* \
       python3-yaml=3.* \
-      python3-jinja2=2.* \
-    && rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*
+      python3-jinja2=2.*
 
 FROM base as cli
 
