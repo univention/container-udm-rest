@@ -119,7 +119,7 @@ RUN chown _apt . && \
   # static www content, stylesheet, js, etc. without all dependencies
   apt-get download univention-directory-manager-rest && \
   dpkg --force-depends --install univention-directory-manager-rest_10.*.deb && \
-  rm univention-directory-manager-rest_10.*.deb \
+  rm univention-directory-manager-rest_10.*.deb && \
   awk \
     '/^Package: python3-univention-directory-manager-rest$/{ while(!/^Version: /){getline} print $2 }' \
     /var/lib/dpkg/status > /version
