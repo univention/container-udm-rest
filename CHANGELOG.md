@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.10.0](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/compare/v0.9.3...v0.10.0) (2024-04-19)
+
+
+### Features
+
+* Avoid calling "apt-get update" in the build stage ([a0887fb](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/commit/a0887fb50d53c8e64c4065a5ae5c670b5b995c7d))
+* Avoid calls to "apt-get update" in final stage and debug builds ([a48c75f](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/commit/a48c75f7c74700a654c4e76eab82ee32199a8181))
+* Build client image based on fixed packages set ([e44093e](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/commit/e44093ee88d8257ffa87dfc7632c9b01d0e5084c))
+* fixup ([1b0ebb9](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/commit/1b0ebb9ebcacfbe9ea42abf7539f8a7ed26b0878))
+* Use a date based tag of the base image ([4d9400b](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/commit/4d9400bd80fd13eeab69ae205ae0e94f7f382464))
+
 ## [0.9.3](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/compare/v0.9.2...v0.9.3) (2024-04-15)
 
 
