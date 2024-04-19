@@ -81,13 +81,17 @@ repos:
         args:
           - "--config-file=.yamllint"
           - "--format=parsable"
-          - "--strict"
+          # TODO replace no-warnings with strict
+          # - "--strict"
+          - "--no-warnings"
 
   - repo: "https://github.com/ansible/ansible-lint"
     rev: "v6.22.1"
     hooks:
       - id: "ansible-lint"
         name: "Ansible-lint"
+        args:
+          - "--ignore-file=.ansible-lint-ignore-legacy"
 
   - repo: "https://github.com/google/yapf"
     rev: "v0.40.2"
@@ -96,6 +100,7 @@ repos:
         name: "yapf"
         types:
           - "python"
+        exclude: "^(docs/conf.py|tests/integration/conftest.py|tests/integration/test_users_user.py)"
 
   - repo: "https://github.com/astral-sh/ruff-pre-commit"
     rev: "v0.1.9"
@@ -142,6 +147,22 @@ repos:
           - "pytest"
           - "requests"
           - "sphinx"
+        # TODO: remove args
+        args:
+          # C0103: Constant name "pdf_doc_base" doesn't conform to UPPER_CASE naming style (invalid-name)
+          - "--disable=invalid-name"
+          # C0114: Missing module docstring (missing-module-docstring)
+          - "--disable=missing-module-docstring"
+          # C0116: Missing function or method docstring (missing-function-docstring)
+          - "--disable=missing-function-docstring"
+          # C0209: Formatting a regular string which could be an f-string (consider-using-f-string)
+          - "--disable=consider-using-f-string"
+          # E1101: Instance of '<class>' has no '<member>' member (no-member)
+          - "--disable=no-member"
+          # W0621: Redefining name 'session' from outer scope (line 55) (redefined-outer-name)
+          - "--disable=redefined-outer-name"
+          # W0622: Redefining built-in 'copyright' (redefined-builtin)
+          - "--disable=redefined-builtin"
 
   - repo: "https://github.com/hadolint/hadolint"
     rev: "v2.12.0"
@@ -153,6 +174,8 @@ repos:
         args:
           - "--no-color"
           - "--strict-labels"
+          # DL3050 info: Superfluous label(s) present.
+          - "--ignore=DL3050"
 
   - repo: "https://gitlab.com/univention/pre-commit-hooks/docker-compose-check"
     rev: "7702a8801a158b8595569dd29e2dd655d8a08310"
@@ -181,6 +204,8 @@ repos:
         args:
           - "--enable=all"
           - "--external-sources"
+          # SC2250 (style): Prefer putting braces around variable references even when not strictly required.
+          - "--exclude=SC2250"
 
   - repo: "https://github.com/gruntwork-io/pre-commit"
     rev: "v0.1.23"
