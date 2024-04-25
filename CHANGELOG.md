@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.11.0](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/compare/v0.10.0...v0.11.0) (2024-04-25)
+
+
+### Features
+
+* add nubusTemplates.udmRestApi.uri ([8280ddf](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/commit/8280ddfaceab25598028e8d99fa7727f7854984d))
+* changes to support the refactored umbrella values in a nubus deployment ([3ccc01e](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/commit/3ccc01efa079a52aba773ff7fe3bdd04a86f5212))
+* export nubusTemplates.udmRestApi.host and nubusTemplates.udmRestApi.port ([09c0c99](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/commit/09c0c997f00804d921b4d18a4c81b383bbc52b27))
+
+
+### Bug Fixes
+
+* configMapForced default value ([d3acf62](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/commit/d3acf62a2a373c701ab3bfb50cf27e699ed952c3))
+* re-adding configmap checksum, fixing some linter complaints ([a3cfc58](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/commit/a3cfc584c62461f972d0ef8b3c32a92c78ead40b))
+
 ## [0.10.0](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/compare/v0.9.3...v0.10.0) (2024-04-19)
 
 
