@@ -248,7 +248,7 @@ null
 			<td>global.imageRegistry</td>
 			<td>string</td>
 			<td><pre lang="json">
-"gitregistry.knut.univention.de"
+"artifacts.software-univention.de"
 </pre>
 </td>
 			<td>Container registry address.</td>
@@ -873,8 +873,8 @@ true
   "debug": "99",
   "image": {
     "imagePullPolicy": "IfNotPresent",
-    "registry": "gitregistry.knut.univention.de",
-    "repository": "univention/customers/dataport/upx/container-udm-rest/udm-rest-api",
+    "registry": "artifacts.software-univention.de",
+    "repository": "nubus-dev/images/udm-rest-api",
     "tag": "latest"
   },
   "ldap": {
@@ -917,7 +917,7 @@ true
 			<td>udmRestApi.image.registry</td>
 			<td>string</td>
 			<td><pre lang="json">
-"gitregistry.knut.univention.de"
+"artifacts.software-univention.de"
 </pre>
 </td>
 			<td>Container registry address. This setting has higher precedence than global.registry. TODO: Upcoming change, this value will be empty in the future by default.</td>

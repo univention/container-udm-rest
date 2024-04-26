@@ -18,7 +18,7 @@ global:
   # -- ConfigMap name to read forced UCR values from.
   configMapUcrForced: null
   # -- Container registry address.
-  imageRegistry: "gitregistry.knut.univention.de"
+  imageRegistry: "artifacts.software-univention.de"
 
   # -- Credentials to fetch images from private registry.
   # Ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -377,8 +377,8 @@ udmRestApi:
   image:
     # -- Container registry address. This setting has higher precedence than global.registry.
     # TODO: Upcoming change, this value will be empty in the future by default.
-    registry: "gitregistry.knut.univention.de"
-    repository: "univention/customers/dataport/upx/container-udm-rest/udm-rest-api"
+    registry: "artifacts.software-univention.de"
+    repository: "nubus-dev/images/udm-rest-api"
     # -- Image pull policy. This setting has higher precedence than global.imagePullPolicy.
     imagePullPolicy: "IfNotPresent"
     tag: "latest"
