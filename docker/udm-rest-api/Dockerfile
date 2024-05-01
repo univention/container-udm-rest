@@ -37,8 +37,8 @@ ARG OX_CONNECTOR_EXTENSIONS_TAG=0.3.4
 ARG GUARDIAN_EXTENSIONS_IMAGE=gitregistry.knut.univention.de/univention/components/authorization-engine/guardian/ums-dependencies
 ARG GUARDIAN_EXTENSIONS_TAG=latest
 
-ARG UCS_BASE_IMAGE=gitregistry.knut.univention.de/univention/components/ucs-base-image/ucs-base-506
-ARG UCS_BASE_IMAGE_TAG=0.12.0-build-2024-04-18
+ARG UCS_BASE_IMAGE=gitregistry.knut.univention.de/univention/components/ucs-base-image/ucs-base-507
+ARG UCS_BASE_IMAGE_TAG=0.12.0-build-2024-04-25
 
 
 FROM ${PORTAL_UDM_EXTENSIONS_IMAGE}:${PORTAL_UDM_EXTENSIONS_TAG} AS portal-udm-extensions
