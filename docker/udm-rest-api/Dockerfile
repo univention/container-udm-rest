@@ -72,7 +72,6 @@ RUN chown _apt . && \
   DEBIAN_FRONTEND=noninteractive \
     apt-get --assume-yes --verbose-versions --no-install-recommends install \
       shell-univention-lib=9.* \
-      patch=2.7.* \
       && \
   # we do not need the many bash helper-functions here
   cp /usr/local/bin/fake-uv-lib.sh /usr/share/univention-lib/all.sh && \
@@ -123,17 +122,6 @@ RUN chown _apt . && \
   awk \
     '/^Package: python3-univention-directory-manager-rest$/{ while(!/^Version: /){getline} print $2 }' \
     /var/lib/dpkg/status > /version
-
-
-###############################################################################
-# Apply patches for containerization
-
-WORKDIR /patches
-
-COPY read_only_root_fs_logging.patch ./
-
-RUN patch -p 0 -d / -i patches/read_only_root_fs_logging.patch && \
-    rm read_only_root_fs_logging.patch
 
 
 ###############################################################################
