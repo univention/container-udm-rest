@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.11.1](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/compare/v0.11.0...v0.11.1) (2024-05-06)
+
+
+### Bug Fixes
+
+* drop trivy container security scanning ([72c2160](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/commit/72c21603ceb512efa124deca9038243a7b6da50b))
+
 ## [0.11.0](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/compare/v0.10.0...v0.11.0) (2024-04-25)
 
 
