@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.12.0](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/compare/v0.11.2...v0.12.0) (2024-05-07)
+
+
+### Features
+
+* Update base image to be based on 5.0-7 ([c3f3179](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/commit/c3f3179771e79a385957f8f1d61a8b8bef10db23))
+
+
+### Bug Fixes
+
+* Drop logging related patch after upstream integration ([3787224](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/commit/3787224ec5cdb971d3d20547601a667f314482ae))
+
 ## [0.11.2](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/compare/v0.11.1...v0.11.2) (2024-05-07)
 
 
