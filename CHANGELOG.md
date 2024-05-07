@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.11.2](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/compare/v0.11.1...v0.11.2) (2024-05-07)
+
+
+### Bug Fixes
+
+* **ci:** harbor helm value substitution ([a0de33b](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/commit/a0de33b95e541ef64ff0271e56a64fae4bfd9914))
+
 ## [0.11.1](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/compare/v0.11.0...v0.11.1) (2024-05-06)
 
 
