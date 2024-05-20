@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.13.0](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/compare/v0.12.0...v0.13.0) (2024-05-20)
+
+
+### Features
+
+* support for templating of global.configMapUcr ([0dafd78](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/commit/0dafd78944792ef83f4fa38adb6b8c9093e85904))
+
 ## [0.12.0](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/compare/v0.11.2...v0.12.0) (2024-05-07)
 
 
