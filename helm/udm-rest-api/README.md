@@ -873,7 +873,7 @@ true
   "debug": "99",
   "image": {
     "imagePullPolicy": "IfNotPresent",
-    "registry": "artifacts.software-univention.de",
+    "registry": "",
     "repository": "nubus-dev/images/udm-rest-api",
     "tag": "latest"
   },
@@ -917,10 +917,10 @@ true
 			<td>udmRestApi.image.registry</td>
 			<td>string</td>
 			<td><pre lang="json">
-"artifacts.software-univention.de"
+""
 </pre>
 </td>
-			<td>Container registry address. This setting has higher precedence than global.registry. TODO: Upcoming change, this value will be empty in the future by default.</td>
+			<td>Container registry address. This setting has higher precedence than global.registry.</td>
 		</tr>
 		<tr>
 			<td>udmRestApi.ldap.baseDn</td>
