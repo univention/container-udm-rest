@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.13.1](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/compare/v0.13.0...v0.13.1) (2024-05-23)
+
+
+### Bug Fixes
+
+* use global registry ([c878f4f](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/commit/c878f4f8a94567114152ee1fbab182e75b36b721))
+
 ## [0.13.0](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/compare/v0.12.0...v0.13.0) (2024-05-20)
 
 
