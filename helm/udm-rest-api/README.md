@@ -920,7 +920,7 @@ true
 ""
 </pre>
 </td>
-			<td>Container registry address. This setting has higher precedence than global.registry. TODO: Upcoming change, this value will be empty in the future by default.</td>
+			<td>Container registry address. This setting has higher precedence than global.registry.</td>
 		</tr>
 		<tr>
 			<td>udmRestApi.ldap.baseDn</td>
