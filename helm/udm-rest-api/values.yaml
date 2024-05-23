@@ -377,7 +377,7 @@ udmRestApi:
   image:
     # -- Container registry address. This setting has higher precedence than global.registry.
     # TODO: Upcoming change, this value will be empty in the future by default.
-    registry: "artifacts.software-univention.de"
+    registry: ""
     repository: "nubus-dev/images/udm-rest-api"
     # -- Image pull policy. This setting has higher precedence than global.imagePullPolicy.
     imagePullPolicy: "IfNotPresent"
