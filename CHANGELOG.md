@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.13.2](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/compare/v0.13.1...v0.13.2) (2024-05-28)
+
+
+### Bug Fixes
+
+* Add additional Ingress annotation for nginx-ingress ([f572303](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/commit/f572303c237fd67860d1ea86e7f687f83b3e2b22))
+
 ## [0.13.1](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/compare/v0.13.0...v0.13.1) (2024-05-23)
 
 
