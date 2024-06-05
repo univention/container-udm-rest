@@ -94,6 +94,23 @@ spec:
             - name: var-cache-univention-config-volume
               mountPath: /var/cache/univention-config
           resources: {{- include "common.tplvalues.render" (dict "value" .Values.initResources "context" .) | nindent 12 }}
+        - name: "load-internal-plugins"
+          {{- if .Values.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          image: "{{ coalesce .Values.udmRestApi.image.registry .Values.global.imageRegistry }}/{{ .Values.udmRestApi.image.repository }}:{{ .Values.udmRestApi.image.tag }}"
+          imagePullPolicy: {{ coalesce .Values.udmRestApi.image.imagePullPolicy .Values.global.imagePullPolicy | quote }}
+          command:
+            - sh
+            - -c
+            - |
+              cp -av /usr/lib/python3/dist-packages/univention/udm/modules /target/udm-modules
+              cp -av /usr/lib/python3/dist-packages/univention/admin/syntax.d /target/admin-syntax.d
+              cp -av /usr/lib/python3/dist-packages/univention/admin/handlers /target/admin-handlers
+          volumeMounts:
+            - name: plugin-targets
+              mountPath: /target
+          resources: {{- include "common.tplvalues.render" (dict "value" .Values.initResources "context" .) | nindent 12 }}
         - name: "load-portal-plugin"
           {{- if .Values.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
@@ -161,6 +178,18 @@ spec:
             - name: credentials-volume
               mountPath: {{ .Values.udmRestApi.machineSecretFile }}
               subPath: machine.secret
+            # Debugging
+            # - name: plugin-targets
+            #   mountPath: /plugin-targets
+            - name: plugin-targets
+              mountPath: /usr/lib/python3/dist-packages/univention/udm/modules
+              subPath: udm-modules
+            - name: plugin-targets
+              mountPath: /usr/lib/python3/dist-packages/univention/admin/syntax.d
+              subPath: admin-syntax.d
+            - name: plugin-targets
+              mountPath: /usr/lib/python3/dist-packages/univention/admin/handlers
+              subPath: admin-handlers
             {{- if .Values.udmRestApi.tls.enabled }}
             - name: {{ printf "%s-tls-volume" (include "common.names.fullname" .) }}
               mountPath: /certificates
