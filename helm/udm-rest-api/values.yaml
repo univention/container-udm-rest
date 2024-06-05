@@ -372,6 +372,14 @@ updateStrategy:
   # are destroyed first.
   type: "RollingUpdate"
 
+portalPlugin:
+  image:
+    registry: ""
+    repository: "nubus-dev/images/portal-udm-extensions"
+    imagePullPolicy: "IfNotPresent"
+    tag: "latest"
+
+
 # -- Application configuration of the UDM REST API
 udmRestApi:
   # Container image section.
