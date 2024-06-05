@@ -28,14 +28,9 @@
 # /usr/share/common-licenses/AGPL-3; if not, see
 # <https://www.gnu.org/licenses/>.
 
-ARG GUARDIAN_EXTENSIONS_IMAGE=gitregistry.knut.univention.de/univention/components/authorization-engine/guardian/ums-dependencies
-ARG GUARDIAN_EXTENSIONS_TAG=latest
-
 ARG UCS_BASE_IMAGE=gitregistry.knut.univention.de/univention/components/ucs-base-image/ucs-base-507
 ARG UCS_BASE_IMAGE_TAG=0.12.0-build-2024-04-25
 
-
-FROM ${GUARDIAN_EXTENSIONS_IMAGE}:${GUARDIAN_EXTENSIONS_TAG} AS guardian-extensions
 
 FROM ${UCS_BASE_IMAGE}:${UCS_BASE_IMAGE_TAG} as build
 
@@ -180,12 +175,6 @@ COPY --from=build \
 COPY --from=build \
   /var/www/univention/udm/ \
   /var/www/univention/udm/
-
-# Inject UDM Modules
-
-COPY --from=guardian-extensions /udm/syntax/guardian_syntax.py \
-     /usr/lib/python3/dist-packages/univention/admin/syntax.d/guardian_syntax.py
-
 
 # UCR
 
