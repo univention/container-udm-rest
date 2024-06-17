@@ -193,14 +193,14 @@ COPY --from=build \
 
 # Inject UDM Modules
 
-COPY --from=portal-extension /udm/api/portal.py \
-    /usr/lib/python3/dist-packages/univention/udm/modules/portal.py
+COPY --from=portal-extension /plugins/udm-modules/ \
+    /usr/lib/python3/dist-packages/univention/udm/modules/
 
-COPY --from=portal-extension /udm/syntax/univention-portal.py \
-    /usr/lib/python3/dist-packages/univention/admin/syntax.d/univention-portal.py
+COPY --from=portal-extension /plugins/udm-syntax.d/ \
+    /usr/lib/python3/dist-packages/univention/admin/syntax.d/
 
-COPY --from=portal-extension /udm/handlers \
-    /usr/lib/python3/dist-packages/univention/admin/handlers/portals
+COPY --from=portal-extension /plugins/udm-handlers/ \
+    /usr/lib/python3/dist-packages/univention/admin/handlers/
 
 COPY --from=ox-connector-extensions /dependencies/syntax.d/50_ox.py \
     /usr/lib/python3/dist-packages/univention/admin/syntax.d/50_ox.py
