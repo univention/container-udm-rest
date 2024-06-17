@@ -29,7 +29,7 @@
 # <https://www.gnu.org/licenses/>.
 
 ARG PORTAL_EXTENSION_IMAGE=gitregistry.knut.univention.de/univention/components/univention-portal/portal-extension
-ARG PORTAL_EXTENSION_TAG=0.4.3
+ARG PORTAL_EXTENSION_TAG=0.26.0
 
 ARG OX_CONNECTOR_EXTENSIONS_IMAGE=gitregistry.knut.univention.de/univention/open-xchange/provisioning/ox-connector-dependencies
 ARG OX_CONNECTOR_EXTENSIONS_TAG=0.3.4
