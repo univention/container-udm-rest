@@ -29,8 +29,8 @@
 # <https://www.gnu.org/licenses/>.
 
 
-ARG UCS_BASE_IMAGE=gitregistry.knut.univention.de/univention/components/ucs-base-image/ucs-base-507
-ARG UCS_BASE_IMAGE_TAG=0.12.0-build-2024-04-25
+ARG UCS_BASE_IMAGE_TAG=0.13.0-build-2024-06-18
+ARG UCS_BASE_IMAGE=gitregistry.knut.univention.de/univention/components/ucs-base-image/ucs-base-508
 
 FROM ${UCS_BASE_IMAGE}:${UCS_BASE_IMAGE_TAG} as base
 
