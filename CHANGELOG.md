@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.14.0](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/compare/v0.13.2...v0.14.0) (2024-06-19)
+
+
+### Features
+
+* Adjust to refactored image name "portal-extension" from "protal-udm-extensions" ([d037686](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/commit/d037686df848d9cc6c48dbc7bdc136b444c2bf16))
+* Adjust to refactored structure of "portal-extension" ([4519815](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/commit/45198154bac0b7c82c8f1fe46020fc1eb841041e))
+* Update the portal-extensions version to 0.26.0 ([db63e82](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/commit/db63e82e97f7e7582e6e5135c2e98c917b004667))
+
 ## [0.13.2](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/compare/v0.13.1...v0.13.2) (2024-05-28)
 
 
