@@ -31,8 +31,8 @@
 ARG PORTAL_EXTENSION_IMAGE=gitregistry.knut.univention.de/univention/components/univention-portal/portal-extension
 ARG PORTAL_EXTENSION_TAG=0.26.0
 
-ARG OX_CONNECTOR_EXTENSIONS_IMAGE=gitregistry.knut.univention.de/univention/open-xchange/provisioning/ox-connector-dependencies
-ARG OX_CONNECTOR_EXTENSIONS_TAG=0.3.4
+ARG OX_EXTENSION_IMAGE=gitregistry.knut.univention.de/univention/open-xchange/provisioning/ox-extension
+ARG OX_EXTENSION_TAG=0.9.0
 
 ARG GUARDIAN_EXTENSIONS_IMAGE=gitregistry.knut.univention.de/univention/components/authorization-engine/guardian/ums-dependencies
 ARG GUARDIAN_EXTENSIONS_TAG=latest
@@ -42,7 +42,7 @@ ARG UCS_BASE_IMAGE_TAG=0.13.0
 
 
 FROM ${PORTAL_EXTENSION_IMAGE}:${PORTAL_EXTENSION_TAG} AS portal-extension
-FROM ${OX_CONNECTOR_EXTENSIONS_IMAGE}:${OX_CONNECTOR_EXTENSIONS_TAG} AS ox-connector-extensions
+FROM ${OX_EXTENSION_IMAGE}:${OX_EXTENSION_TAG} AS ox-extension
 FROM ${GUARDIAN_EXTENSIONS_IMAGE}:${GUARDIAN_EXTENSIONS_TAG} AS guardian-extensions
 
 FROM ${UCS_BASE_IMAGE}:${UCS_BASE_IMAGE_TAG} as build
@@ -174,7 +174,7 @@ COPY --from=build \
 COPY --from=build \
   /usr/share/univention-management-console-frontend/js/dijit/themes/umc/icons/ \
   /usr/share/univention-management-console-frontend/js/dijit/themes/umc/icons/
-COPY --from=ox-connector-extensions /dependencies/icons/ \
+COPY --from=ox-extension /plugins/umc-icons/ \
     /usr/share/univention-management-console-frontend/js/dijit/themes/umc/icons/
 
 # available reports
@@ -197,14 +197,14 @@ COPY --from=portal-extension /plugins/udm-syntax.d/ \
 COPY --from=portal-extension /plugins/udm-handlers/ \
     /usr/lib/python3/dist-packages/univention/admin/handlers/
 
-COPY --from=ox-connector-extensions /dependencies/syntax.d/50_ox.py \
+COPY --from=ox-extension /plugins/udm-syntax.d/50_ox.py \
     /usr/lib/python3/dist-packages/univention/admin/syntax.d/50_ox.py
 
 # oxmail and oxresources
-COPY --from=ox-connector-extensions /dependencies/handlers \
+COPY --from=ox-extension /plugins/udm-handlers/ \
     /usr/lib/python3/dist-packages/univention/admin/handlers
 
-COPY --from=ox-connector-extensions /dependencies/hooks.d \
+COPY --from=ox-extension /plugins/udm-hooks.d/ \
     /usr/lib/python3/dist-packages/univention/admin/hooks.d
 
 COPY --from=guardian-extensions /udm/syntax/guardian_syntax.py \
