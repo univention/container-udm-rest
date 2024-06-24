@@ -19,7 +19,7 @@ from sphinx.locale import _
 # -- Project information -----------------------------------------------------
 
 project = "UDM-REST API Container"
-copyright = "2023, Univention GmbH"
+copyright = "2023-2024, Univention GmbH"
 author = "Team SouvAP Dev"
 
 # The full version, including alpha/beta/rc tags
