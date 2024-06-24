@@ -37,8 +37,8 @@ ARG OX_CONNECTOR_EXTENSIONS_TAG=0.3.4
 ARG GUARDIAN_EXTENSIONS_IMAGE=gitregistry.knut.univention.de/univention/components/authorization-engine/guardian/ums-dependencies
 ARG GUARDIAN_EXTENSIONS_TAG=latest
 
-ARG UCS_BASE_IMAGE=gitregistry.knut.univention.de/univention/components/ucs-base-image/ucs-base-508
-ARG UCS_BASE_IMAGE_TAG=0.13.0-build-2024-06-18
+ARG UCS_BASE_IMAGE=gitregistry.knut.univention.de/univention/components/ucs-base-image/ucs-base-520
+ARG UCS_BASE_IMAGE_TAG=0.13.0
 
 
 FROM ${PORTAL_EXTENSION_IMAGE}:${PORTAL_EXTENSION_TAG} AS portal-extension
@@ -71,7 +71,7 @@ RUN chown _apt . && \
   # install Univention bash helper functions dependency
   DEBIAN_FRONTEND=noninteractive \
     apt-get --assume-yes --verbose-versions --no-install-recommends install \
-      shell-univention-lib=9.* \
+      shell-univention-lib=11.* \
       && \
   # we do not need the many bash helper-functions here
   cp /usr/local/bin/fake-uv-lib.sh /usr/share/univention-lib/all.sh && \
@@ -81,47 +81,43 @@ RUN chown _apt . && \
   # install unlisted dependencies
   DEBIAN_FRONTEND=noninteractive \
     apt-get --assume-yes --verbose-versions --no-install-recommends install \
-      python3=3.7.* \
-      python3-distutils=3.7.* \
+      python3=3.11.* \
+      python3-distutils=3.11.* \
       && \
   DEBIAN_FRONTEND=noninteractive \
     apt-get --assume-yes --verbose-versions --no-install-recommends install \
-      python3-univention-directory-manager-rest=10.* \
-      libunivention-debug1=12.* \
+      python3-univention-directory-manager-rest=12.* \
+      libunivention-debug1=14.* \
       python3-ldap=3.* \
-      python3-univention-config-registry=15.* \
-      python3-univention-debhelper=2.* \
-      python3-six=1.* \
+      python3-univention-config-registry=17.* \
+      python3-univention-debhelper=4.* \
       # dependencies of univention-management-console-module-udm
-      python-notifier=0.* \
-      univention-directory-manager-tools=15.* \
-      univention-directory-reports=12.* \
-      univention-management-console-server=12.* \
-      univention-config=15.* \
-      univention-join=12.* \
+      univention-directory-manager-tools=17.* \
+      univention-directory-reports=14.* \
+      univention-management-console-server=14.* \
+      univention-config=17.* \
+      univention-join=14.* \
       # dependencies of python3-univention-directory-manager-rest
       python3-genshi=0.* \
-      python3-mimeparse=0.* \
+      python3-mimeparse=1.6.* \
       python3-pycurl=7.* \
-      python3-tornado=5.* \
-      python3-univention-directory-manager=15.* \
-      python3-univention-directory-reports=12.* \
-      python3-univention-management-console=12.* \
-      python3-uritemplate=0.* \
-      univention-management-console-module-udm=10.* \
-      univention-saml-schema=7.* \
+      python3-tornado=6.* \
+      python3-univention-directory-manager=17.* \
+      python3-univention-directory-reports=14.* \
+      python3-univention-management-console=14.* \
+      python3-uritemplate=4.* \
+      univention-management-console-module-udm=12.* \
+      univention-saml-schema=9.* \
       && \
   # univention-portal module:
   # /usr/lib/python3/dist-packages/univention/udm/modules/portal.py
   apt-get download univention-portal && \
-  dpkg --force-depends --install univention-portal_4.*.deb && \
+  dpkg --force-depends --install univention-portal_6.*.deb && \
   # static www content, stylesheet, js, etc. without all dependencies
   apt-get download univention-directory-manager-rest && \
-  dpkg --force-depends --install univention-directory-manager-rest_10.*.deb && \
-  rm univention-directory-manager-rest_10.*.deb && \
-  awk \
-    '/^Package: python3-univention-directory-manager-rest$/{ while(!/^Version: /){getline} print $2 }' \
-    /var/lib/dpkg/status > /version
+  dpkg --force-depends --install univention-directory-manager-rest_12.*.deb && \
+  rm univention-directory-manager-rest_12.*.deb && \
+  dpkg-query -f '${Version}' -W python3-univention-directory-manager-rest > /version
 
 
 ###############################################################################
@@ -151,20 +147,19 @@ RUN chown _apt . && \
       libc-bin=2.* \
       libcurl3-gnutls=7.* \
       locales=2.* \
-      python3=3.7.* \
+      python3=3.11.* \
       python3-ldap=3.* \
-      python3-six=1.* \
-      python3-pil=5.* \
+      python3-pil=9.* \
       python3-magic=2:0.* \
       python3-samba=2:4.* \
       python3-cracklib=2.* \
-      python3-univention-heimdal=10.* \
+      python3-univention-heimdal=12.* \
       && \
   apt-get download \
-   libunivention-config0=15.* \
-   libunivention-debug1=12.* \
-   libunivention-license0=11.* \
-   libunivention-policy0=11.* \
+   libunivention-config0=17.* \
+   libunivention-debug1=14.* \
+   libunivention-license0=13.* \
+   libunivention-policy0=13.* \
    && \
   dpkg --install --force-depends /apt/*
 
@@ -291,10 +286,10 @@ SHELL ["/bin/bash", "-c"]
 RUN \
   DEBIAN_FRONTEND=noninteractive \
     apt-get --assume-yes --verbose-versions --no-install-recommends install \
-      vim=2:8.* \
+      vim=2:9.* \
       curl=7.* \
-      netcat=1.* \
-      iproute2=4.*
+      netcat-traditional=1.* \
+      iproute2=6.*
 
 
 ############################################################

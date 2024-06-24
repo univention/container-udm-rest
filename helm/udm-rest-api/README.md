@@ -4,7 +4,7 @@ A Helm chart for the UDM REST API
 
 - **Version**: 0.1.0
 - **Type**: application
-- **AppVersion**: 10.0.6-1
+- **AppVersion**: 12.0.7
 - **Homepage:** <https://www.univention.de/>
 
 ## TL;DR

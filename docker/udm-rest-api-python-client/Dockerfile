@@ -29,16 +29,16 @@
 # <https://www.gnu.org/licenses/>.
 
 
-ARG UCS_BASE_IMAGE_TAG=0.13.0-build-2024-06-18
-ARG UCS_BASE_IMAGE=gitregistry.knut.univention.de/univention/components/ucs-base-image/ucs-base-508
+ARG UCS_BASE_IMAGE=gitregistry.knut.univention.de/univention/components/ucs-base-image/ucs-base-520
+ARG UCS_BASE_IMAGE_TAG=0.13.0
 
 FROM ${UCS_BASE_IMAGE}:${UCS_BASE_IMAGE_TAG} as base
 
 RUN \
     apt-get --assume-yes --verbose-versions --no-install-recommends install \
-      python3-univention-directory-manager-rest-client=10.* \
-      python3-yaml=3.* \
-      python3-jinja2=2.*
+      python3-univention-directory-manager-rest-client=12.* \
+      python3-yaml=6.* \
+      python3-jinja2=3.*
 
 FROM base as cli
 
