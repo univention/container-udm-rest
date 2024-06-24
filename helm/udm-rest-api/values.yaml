@@ -372,6 +372,19 @@ updateStrategy:
   # are destroyed first.
   type: "RollingUpdate"
 
+oxPlugin:
+  image:
+    registry: ""
+    repository: "nubus/images/ox-extension"
+    imagePullPolicy: "IfNotPresent"
+    tag: "0.9.1"
+portalPlugin:
+  image:
+    registry: ""
+    repository: "nubus/images/portal-extension"
+    imagePullPolicy: "IfNotPresent"
+    tag: "0.26.3"
+
 # -- Application configuration of the UDM REST API
 udmRestApi:
   # Container image section.

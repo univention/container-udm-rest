@@ -94,6 +94,45 @@ spec:
             - name: var-cache-univention-config-volume
               mountPath: /var/cache/univention-config
           resources: {{- include "common.tplvalues.render" (dict "value" .Values.initResources "context" .) | nindent 12 }}
+        - name: "load-internal-plugins"
+          {{- if .Values.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          image: "{{ coalesce .Values.udmRestApi.image.registry .Values.global.imageRegistry }}/{{ .Values.udmRestApi.image.repository }}:{{ .Values.udmRestApi.image.tag }}"
+          imagePullPolicy: {{ coalesce .Values.udmRestApi.image.imagePullPolicy .Values.global.imagePullPolicy | quote }}
+          command:
+            - sh
+            - -c
+            - |
+              cp -av /usr/lib/python3/dist-packages/univention/udm/modules /target/udm-modules
+              cp -av /usr/lib/python3/dist-packages/univention/admin/hooks.d /target/udm-hooks.d
+              cp -av /usr/lib/python3/dist-packages/univention/admin/syntax.d /target/udm-syntax.d
+              cp -av /usr/lib/python3/dist-packages/univention/admin/handlers /target/udm-handlers
+              cp -av /usr/share/univention-management-console-frontend/js/dijit/themes/umc/icons /target/umc-icons
+          volumeMounts:
+            - name: plugin-targets
+              mountPath: /target
+          resources: {{- include "common.tplvalues.render" (dict "value" .Values.initResources "context" .) | nindent 12 }}
+        - name: "load-portal-plugin"
+          {{- if .Values.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          image: "{{ coalesce .Values.portalPlugin.image.registry .Values.global.imageRegistry }}/{{ .Values.portalPlugin.image.repository }}:{{ .Values.portalPlugin.image.tag }}"
+          imagePullPolicy: {{ coalesce .Values.portalPlugin.image.imagePullPolicy .Values.global.imagePullPolicy | quote }}
+          volumeMounts:
+            - name: plugin-targets
+              mountPath: /target
+          resources: {{- include "common.tplvalues.render" (dict "value" .Values.initResources "context" .) | nindent 12 }}
+        - name: "load-ox-plugin"
+          {{- if .Values.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          image: "{{ coalesce .Values.oxPlugin.image.registry .Values.global.imageRegistry }}/{{ .Values.oxPlugin.image.repository }}:{{ .Values.oxPlugin.image.tag }}"
+          imagePullPolicy: {{ coalesce .Values.portalPlugin.image.imagePullPolicy .Values.global.imagePullPolicy | quote }}
+          volumeMounts:
+            - name: plugin-targets
+              mountPath: /target
+          resources: {{- include "common.tplvalues.render" (dict "value" .Values.initResources "context" .) | nindent 12 }}
       containers:
         - name: "udm-rest-api"
           {{- if .Values.containerSecurityContext.enabled }}
@@ -151,6 +190,21 @@ spec:
             - name: credentials-volume
               mountPath: {{ .Values.udmRestApi.machineSecretFile }}
               subPath: machine.secret
+            - name: plugin-targets
+              mountPath: /usr/lib/python3/dist-packages/univention/udm/modules
+              subPath: udm-modules
+            - name: plugin-targets
+              mountPath: /usr/lib/python3/dist-packages/univention/admin/hooks.d
+              subPath: udm-hooks.d
+            - name: plugin-targets
+              mountPath: /usr/lib/python3/dist-packages/univention/admin/syntax.d
+              subPath: udm-syntax.d
+            - name: plugin-targets
+              mountPath: /usr/lib/python3/dist-packages/univention/admin/handlers
+              subPath: udm-handlers
+            - name: plugin-targets
+              mountPath: /usr/share/univention-management-console-frontend/js/dijit/themes/umc/icons/
+              subPath: umc-icons
             {{- if .Values.udmRestApi.tls.enabled }}
             - name: {{ printf "%s-tls-volume" (include "common.names.fullname" .) }}
               mountPath: /certificates
@@ -186,6 +240,8 @@ spec:
         - name: "var-log-univention-volume"
           emptyDir: {}
         - name: "etc-univention-volume"
+          emptyDir: {}
+        - name: plugin-targets
           emptyDir: {}
         - name: credentials-volume
           secret:

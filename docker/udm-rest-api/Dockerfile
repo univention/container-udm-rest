@@ -28,22 +28,9 @@
 # /usr/share/common-licenses/AGPL-3; if not, see
 # <https://www.gnu.org/licenses/>.
 
-ARG PORTAL_EXTENSION_IMAGE=gitregistry.knut.univention.de/univention/components/univention-portal/portal-extension
-ARG PORTAL_EXTENSION_TAG=0.26.0
-
-ARG OX_EXTENSION_IMAGE=gitregistry.knut.univention.de/univention/open-xchange/provisioning/ox-extension
-ARG OX_EXTENSION_TAG=0.9.0
-
-ARG GUARDIAN_EXTENSIONS_IMAGE=gitregistry.knut.univention.de/univention/components/authorization-engine/guardian/ums-dependencies
-ARG GUARDIAN_EXTENSIONS_TAG=latest
-
 ARG UCS_BASE_IMAGE=gitregistry.knut.univention.de/univention/components/ucs-base-image/ucs-base-520
 ARG UCS_BASE_IMAGE_TAG=0.13.0
 
-
-FROM ${PORTAL_EXTENSION_IMAGE}:${PORTAL_EXTENSION_TAG} AS portal-extension
-FROM ${OX_EXTENSION_IMAGE}:${OX_EXTENSION_TAG} AS ox-extension
-FROM ${GUARDIAN_EXTENSIONS_IMAGE}:${GUARDIAN_EXTENSIONS_TAG} AS guardian-extensions
 
 FROM ${UCS_BASE_IMAGE}:${UCS_BASE_IMAGE_TAG} as build
 
@@ -174,8 +161,6 @@ COPY --from=build \
 COPY --from=build \
   /usr/share/univention-management-console-frontend/js/dijit/themes/umc/icons/ \
   /usr/share/univention-management-console-frontend/js/dijit/themes/umc/icons/
-COPY --from=ox-extension /plugins/umc-icons/ \
-    /usr/share/univention-management-console-frontend/js/dijit/themes/umc/icons/
 
 # available reports
 COPY --from=build \
@@ -185,31 +170,6 @@ COPY --from=build \
 COPY --from=build \
   /var/www/univention/udm/ \
   /var/www/univention/udm/
-
-# Inject UDM Modules
-
-COPY --from=portal-extension /plugins/udm-modules/ \
-    /usr/lib/python3/dist-packages/univention/udm/modules/
-
-COPY --from=portal-extension /plugins/udm-syntax.d/ \
-    /usr/lib/python3/dist-packages/univention/admin/syntax.d/
-
-COPY --from=portal-extension /plugins/udm-handlers/ \
-    /usr/lib/python3/dist-packages/univention/admin/handlers/
-
-COPY --from=ox-extension /plugins/udm-syntax.d/50_ox.py \
-    /usr/lib/python3/dist-packages/univention/admin/syntax.d/50_ox.py
-
-# oxmail and oxresources
-COPY --from=ox-extension /plugins/udm-handlers/ \
-    /usr/lib/python3/dist-packages/univention/admin/handlers
-
-COPY --from=ox-extension /plugins/udm-hooks.d/ \
-    /usr/lib/python3/dist-packages/univention/admin/hooks.d
-
-COPY --from=guardian-extensions /udm/syntax/guardian_syntax.py \
-     /usr/lib/python3/dist-packages/univention/admin/syntax.d/guardian_syntax.py
-
 
 # UCR
 
