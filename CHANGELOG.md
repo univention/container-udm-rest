@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.14.1](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/compare/v0.14.0...v0.14.1) (2024-06-25)
+
+
+### Bug Fixes
+
+* activate ldap controls in uldap.py in the test ucr conf ([9e11fbf](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/commit/9e11fbf2195028ea725e6360e451ef6b66da28df))
+* bump ucs-base to 5.0-8 ([530f649](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/commit/530f649bd0b9c94ad07e8a1212703a55faaa7cee))
+
 ## [0.14.0](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/compare/v0.13.2...v0.14.0) (2024-06-19)
 
 
