@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.15.0](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/compare/v0.14.1...v0.15.0) (2024-06-25)
+
+
+### Features
+
+* Update base image to be based on 5.2-0 ([8d6b865](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/commit/8d6b865e4523f17701444bf37c66deb625c55878))
+
 ## [0.14.1](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/compare/v0.14.0...v0.14.1) (2024-06-25)
 
 
