@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.16.0](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/compare/v0.15.0...v0.16.0) (2024-06-27)
+
+
+### Features
+
+* Update ox-connector extensions ([36176da](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/commit/36176daca2430f3cf7883d08d99b3d8c282a8967))
+
 ## [0.15.0](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/compare/v0.14.1...v0.15.0) (2024-06-25)
 
 
