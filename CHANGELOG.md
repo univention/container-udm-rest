@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.17.0](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/compare/v0.16.0...v0.17.0) (2024-06-28)
+
+
+### Features
+
+* load extensions into udm-rest-api ([d2f90a6](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/commit/d2f90a69756c881db9aa853c3ef1388bdfac1bfe))
+
 ## [0.16.0](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/compare/v0.15.0...v0.16.0) (2024-06-27)
 
 
