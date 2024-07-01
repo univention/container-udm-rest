@@ -420,6 +420,8 @@ udmRestApi:
   ldapSecretFile: /etc/ldap.secret
   # -- The machine secret file. Used for a client authentication with the service.
   machineSecretFile: /etc/machine.secret
-  # -- The LDAP admin password.
-  debug: "99"
+  # -- The verbosity of log messages.
+  # Possible values: 0-4/99 (0: Error, 1: Warn, 2: Info, 3: Debug, 4: Trace,
+  # 99: sensitive data like cleartext passwords is logged as well).
+  debug: "2"
 ...

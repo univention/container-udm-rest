@@ -222,10 +222,12 @@ USER app
 
 # Parameters for UDM
 # --processes 0 means one process per cpu core
+# When deployed using Helm, CMD will be overwritten with values from
+# container-udm-rest/helm/udm-rest-api/templates/deployment.yaml.
 CMD [ \
   "python3", \
   "-m", "univention.admin.rest.server", \
-  "--debug", "4", \
+  "--debug", "2", \
   "--port", "9979", \
   "--interface", "0.0.0.0", \
   "--processes", "1" \

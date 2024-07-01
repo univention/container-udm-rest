@@ -943,7 +943,7 @@ true
 			<td>object</td>
 			<td><pre lang="json">
 {
-  "debug": "99",
+  "debug": "2",
   "image": {
     "imagePullPolicy": "IfNotPresent",
     "registry": "",
@@ -972,10 +972,10 @@ true
 			<td>udmRestApi.debug</td>
 			<td>string</td>
 			<td><pre lang="json">
-"99"
+"2"
 </pre>
 </td>
-			<td>The LDAP admin password.</td>
+			<td>The verbosity of log messages. Possible values: 0-4/99 (0: Error, 1: Warn, 2: Info, 3: Debug, 4: Trace, 99: sensitive data like cleartext passwords is logged as well).</td>
 		</tr>
 		<tr>
 			<td>udmRestApi.image.imagePullPolicy</td>
