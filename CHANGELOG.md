@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.17.1](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/compare/v0.17.0...v0.17.1) (2024-07-01)
+
+
+### Bug Fixes
+
+* update common-ci to handle external images in chart ([22b1e95](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/commit/22b1e954c025c27a5971f88ec49d088927311e1d))
+
 ## [0.17.0](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/compare/v0.16.0...v0.17.0) (2024-06-28)
 
 
