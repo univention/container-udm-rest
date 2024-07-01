@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.17.2](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/compare/v0.17.1...v0.17.2) (2024-07-01)
+
+
+### Bug Fixes
+
+* set log level to INFO ([4f27cf8](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/commit/4f27cf8157765a558cc3cb9ac8c96d73c4415d6c))
+
 ## [0.17.1](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/compare/v0.17.0...v0.17.1) (2024-07-01)
 
 
