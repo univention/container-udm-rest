@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.17.3](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/compare/v0.17.2...v0.17.3) (2024-07-02)
+
+
+### Bug Fixes
+
+* typo (oxPlugin imagePullPolicy) ([88b4edc](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/commit/88b4edc6fa36ee867e1e923de5c9bb191c2135e0))
+
 ## [0.17.2](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/compare/v0.17.1...v0.17.2) (2024-07-01)
 
 
