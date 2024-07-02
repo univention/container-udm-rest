@@ -128,7 +128,7 @@ spec:
           securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
           image: "{{ coalesce .Values.oxPlugin.image.registry .Values.global.imageRegistry }}/{{ .Values.oxPlugin.image.repository }}:{{ .Values.oxPlugin.image.tag }}"
-          imagePullPolicy: {{ coalesce .Values.portalPlugin.image.imagePullPolicy .Values.global.imagePullPolicy | quote }}
+          imagePullPolicy: {{ coalesce .Values.oxPlugin.image.imagePullPolicy .Values.global.imagePullPolicy | quote }}
           volumeMounts:
             - name: plugin-targets
               mountPath: /target
