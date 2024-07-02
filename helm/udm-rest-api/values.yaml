@@ -17,6 +17,12 @@ global:
   configMapUcr: null
   # -- ConfigMap name to read forced UCR values from.
   configMapUcrForced: null
+
+  # -- Allows to configure extensions globally.
+  extensions: []
+  # -- Allows to configure system extensions globally.
+  systemExtensions: []
+
   # -- Container registry address.
   imageRegistry: "artifacts.software-univention.de"
 
@@ -83,6 +89,10 @@ containerSecurityContext:
   readOnlyRootFilesystem: true
   # -- Run container as a user.
   runAsNonRoot: true
+
+# -- Extensions to load. This will override the configuration in
+# `global.extensions`.
+extensions: []
 
 # -- Array with extra environment variables to add to containers.
 #
@@ -340,6 +350,11 @@ startupProbe:
   tcpSocket:
     port: 9979
 
+# -- Allows to configure the system extensions to load. This is intended for
+# internal usage, prefer to use `extensions` for user configured extensions.
+# This value will override the configuration in `global.systemExtensions`.
+systemExtensions: []
+
 # -- In seconds, time the given to the pod needs to terminate gracefully.
 # Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
 terminationGracePeriodSeconds: ""
@@ -371,19 +386,6 @@ updateStrategy:
   # -- Set to Recreate if you use persistent volume that cannot be mounted by more than one pods to make sure the pods
   # are destroyed first.
   type: "RollingUpdate"
-
-oxPlugin:
-  image:
-    registry: ""
-    repository: "nubus/images/ox-extension"
-    imagePullPolicy: "IfNotPresent"
-    tag: "0.9.1"
-portalPlugin:
-  image:
-    registry: ""
-    repository: "nubus/images/portal-extension"
-    imagePullPolicy: "IfNotPresent"
-    tag: "0.26.3"
 
 # -- Application configuration of the UDM REST API
 udmRestApi:
