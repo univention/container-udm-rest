@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.17.4](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/compare/v0.17.3...v0.17.4) (2024-07-04)
+
+
+### Bug Fixes
+
+* remove LDAP index for App Center attribute ([7d5db71](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/commit/7d5db71977f46de894e04dc10be2200784cc07d6))
+
 ## [0.17.3](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/compare/v0.17.2...v0.17.3) (2024-07-02)
 
 
