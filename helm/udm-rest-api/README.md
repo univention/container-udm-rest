@@ -333,12 +333,10 @@ false
 			<td>object</td>
 			<td><pre lang="json">
 {
-  "nginx.ingress.kubernetes.io/configuration-snippet": "rewrite ^/univention(/udm/.*)$ $1 break;\n",
+  "nginx.ingress.kubernetes.io/configuration-snippet-disabled": "rewrite ^/univention(/udm/.*)$ $1 break;\n",
   "nginx.ingress.kubernetes.io/proxy-buffer-size": "64k",
-  "nginx.org/location-snippets": "rewrite ^/univention(/udm/.*)$ $1 break;\n",
-  "nginx.org/mergeable-ingress-type": "minion",
-  "nginx.org/proxy-buffer-size": "64k",
-  "nginx.org/proxy-buffers": "4 128k"
+  "nginx.ingress.kubernetes.io/rewrite-target": "/$2$3",
+  "nginx.ingress.kubernetes.io/use-regex": "true"
 }
 </pre>
 </td>
@@ -357,16 +355,25 @@ false
 			<td>ingress.enabled</td>
 			<td>bool</td>
 			<td><pre lang="json">
-false
+true
 </pre>
 </td>
 			<td>Enable creation of Ingress.</td>
 		</tr>
 		<tr>
+			<td>ingress.host</td>
+			<td>string</td>
+			<td><pre lang="json">
+""
+</pre>
+</td>
+			<td>Define the Fully Qualified Domain Name (FQDN) where application should be reachable.</td>
+		</tr>
+		<tr>
 			<td>ingress.ingressClassName</td>
 			<td>string</td>
 			<td><pre lang="json">
-"nginx"
+""
 </pre>
 </td>
 			<td>The Ingress controller class name.</td>
@@ -377,8 +384,8 @@ false
 			<td><pre lang="json">
 [
   {
-    "path": "/univention/udm/",
-    "pathType": "Prefix"
+    "path": "/(univention/)(udm/.*)",
+    "pathType": "ImplementationSpecific"
   }
 ]
 </pre>
@@ -390,7 +397,8 @@ false
 			<td>object</td>
 			<td><pre lang="json">
 {
-  "enabled": true
+  "enabled": true,
+  "secretName": ""
 }
 </pre>
 </td>
@@ -404,6 +412,15 @@ true
 </pre>
 </td>
 			<td>Enable TLS/SSL/HTTPS for Ingress.</td>
+		</tr>
+		<tr>
+			<td>ingress.tls.secretName</td>
+			<td>string</td>
+			<td><pre lang="json">
+""
+</pre>
+</td>
+			<td>The name of the kubernetes secret which contains a TLS private key and certificate. Hint: This secret is not created by this chart and must be provided.</td>
 		</tr>
 		<tr>
 			<td>initResources</td>

@@ -7,29 +7,27 @@ apiVersion: {{ include "common.capabilities.ingress.apiVersion" . }}
 kind: Ingress
 metadata:
   name: {{ include "common.names.fullname" . }}
-  labels:
-    {{- include "common.labels.standard" . | nindent 4 }}
-  {{- with .Values.ingress.annotations }}
-  annotations:
-    {{- toYaml . | nindent 4 }}
+  namespace: {{ include "common.names.namespace" . }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.additionalLabels "context" . ) | nindent 4 }}
+  {{- if or .Values.ingress.annotations .Values.additionalAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.ingress.annotations .Values.additionalAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
-  {{- if .Values.ingress.ingressClassName }}
-  ingressClassName: {{ .Values.ingress.ingressClassName }}
-  {{- end }}
+  ingressClassName: {{ required ".Values.ingress.ingressClassName or .Values.global.ingressClass must be defined." ( coalesce .Values.ingress.ingressClassName .Values.global.ingressClass ) | quote }}
   {{- if .Values.ingress.tls.enabled }}
   tls:
     - hosts:
-        - {{ .Values.ingress.host | quote }}
-      secretName: "{{ .Values.ingress.tls.secretName }}"
+        - {{ tpl .Values.ingress.host . | quote }}
+      secretName: {{ include "udm-rest-api.ingress.tls.secretName" . | quote }}
   {{- end }}
   rules:
-    - host: {{ required "The hostname has to be set in \"ingress.host\"." .Values.ingress.host | quote }}
+    - host: {{ required "The hostname has to be set in \"ingress.host\"." (tpl .Values.ingress.host .) | quote }}
       http:
         paths:
           {{- range .Values.ingress.paths }}
           - pathType: {{ .pathType }}
-            path: {{ .path }}
+            path: {{ tpl .path $ }}
             backend: {{- include "common.ingress.backend" (dict "serviceName" (include "common.names.fullname" $) "servicePort" "http" "context" $) | nindent 14 }}
           {{- end }}
 

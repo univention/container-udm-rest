@@ -125,18 +125,18 @@ imagePullSecrets: []
 # Ref.: https://kubernetes.io/docs/concepts/services-networking/ingress/
 ingress:
   # -- Enable creation of Ingress.
-  enabled: false
+  enabled: true
 
   # -- Define the Fully Qualified Domain Name (FQDN) where application should be reachable.
-  # host: portal.example.com
+  host: ""
 
   # -- Define the Ingress paths.
   paths:
-    - pathType: "Prefix"
-      path: "/univention/udm/"
+    - path: /(univention/)(udm/.*)
+      pathType: ImplementationSpecific
 
   # -- The Ingress controller class name.
-  ingressClassName: "nginx"
+  ingressClassName: ""
 
   # -- Define custom ingress annotations.
   # annotations:
@@ -144,13 +144,11 @@ ingress:
   annotations:
     # -- Some responses of the UDM Rest API contain very large response headers
     nginx.ingress.kubernetes.io/proxy-buffer-size: "64k"
-    nginx.ingress.kubernetes.io/configuration-snippet: |
+    nginx.ingress.kubernetes.io/configuration-snippet-disabled: |
       rewrite ^/univention(/udm/.*)$ $1 break;
-    nginx.org/proxy-buffer-size: "64k"
-    nginx.org/proxy-buffers: "4 128k"
-    nginx.org/location-snippets: |
-      rewrite ^/univention(/udm/.*)$ $1 break;
-    nginx.org/mergeable-ingress-type: "minion"
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/rewrite-target: "/$2$3"
+
 
   # -- Secure an Ingress by specifying a Secret that contains a TLS private key and certificate.
   #
@@ -161,7 +159,7 @@ ingress:
 
     # -- The name of the kubernetes secret which contains a TLS private key and certificate.
     # Hint: This secret is not created by this chart and must be provided.
-    # secretName: ""
+    secretName: ""
 
 # -- Lifecycle to automate configuration before or after startup.
 lifecycleHooks: {}

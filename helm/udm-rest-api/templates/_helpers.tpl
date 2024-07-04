@@ -59,3 +59,13 @@ secretName: {{ printf "%s-udm-rest-api-credentials" .Release.Name | quote }}
 {{- required ".Values.udmRestApi.secretRef must be defined." .Values.udmRestApi.secretRef -}}
 {{- end -}}
 {{- end -}}
+
+{{- define "udm-rest-api.ingress.tls.secretName" -}}
+{{- if .Values.ingress.tls.secretName -}}
+{{- tpl .Values.ingress.tls.secretName . -}}
+{{- else if .Values.global.nubusDeployment -}}
+{{- printf "%s-portal-tls" .Release.Name -}}
+{{- else -}}
+{{- required ".Values.ingress.tls.secretName must be defined" .Values.ingress.tls.secretName -}}
+{{- end -}}
+{{- end -}}

@@ -90,7 +90,8 @@ def main_domain(session: requests.Session, udm_url: str) -> str:
 
 
 @pytest.fixture(scope="session")
-def delete_obj_after_test(session: requests.Session, udm_url: str) -> Callable[[str, str], None]:
+def delete_obj_after_test(session: requests.Session,
+                          udm_url: str) -> Callable[[str, str], None]:
     udm_objects: List[Tuple[str, str]] = []
 
     def _delete_obj_after_test(udm_module: str, dn: str):
@@ -113,13 +114,18 @@ def delete_obj_after_test(session: requests.Session, udm_url: str) -> Callable[[
 def random_user_properties(main_domain) -> Callable[[], Dict[str, Any]]:
 
     def _random_user_properties() -> Dict[str, Any]:
-        postfix = "{:08X}".format(random.getrandbits(2 ** 5)).lower()
+        postfix = "{:08X}".format(random.getrandbits(2**5)).lower()
         return {
-            "username": f"username-{postfix}",
-            "firstname": f"firstname-{postfix}",
-            "lastname": f"lastname-{postfix}",
-            "mailPrimaryAddress": f"email-{postfix}@{main_domain}" if main_domain else None,
-            "password": "univention",
+            "username":
+            f"username-{postfix}",
+            "firstname":
+            f"firstname-{postfix}",
+            "lastname":
+            f"lastname-{postfix}",
+            "mailPrimaryAddress":
+            f"email-{postfix}@{main_domain}" if main_domain else None,
+            "password":
+            "univention",
         }
 
     return _random_user_properties
@@ -127,14 +133,18 @@ def random_user_properties(main_domain) -> Callable[[], Dict[str, Any]]:
 
 @pytest.fixture(scope="session")
 def create_user(
-    session: requests.Session, udm_url: str, base_dn: str, delete_obj_after_test,
+    session: requests.Session,
+    udm_url: str,
+    base_dn: str,
+    delete_obj_after_test,
     random_user_properties,
 ) -> Callable[[], Dict[str, Any]]:
     url_users = urllib.parse.urljoin(udm_url, "users/user/")
 
     def _create_user() -> Dict[str, Any]:
         properties = random_user_properties()
-        delete_obj_after_test("users/user", f"uid={properties['username']},cn=users,{base_dn}")
+        delete_obj_after_test(
+            "users/user", f"uid={properties['username']},cn=users,{base_dn}")
         conn = session.post(url_users, json={"properties": properties})
         assert conn.status_code == requests.codes.created, repr(conn.__dict__)
         return properties

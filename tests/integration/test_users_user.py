@@ -8,7 +8,8 @@ import urllib.parse
 import requests
 
 
-def test_users_user_get(session: requests.Session, udm_url: str, base_dn: str, create_user):
+def test_users_user_get(session: requests.Session, udm_url: str, base_dn: str,
+                        create_user):
     properties = create_user()
 
     dn = f"uid={properties['username']},cn=users,{base_dn}"
@@ -26,7 +27,10 @@ def test_users_user_get(session: requests.Session, udm_url: str, base_dn: str, c
 
 
 def test_users_user_post(
-    session: requests.Session, udm_url: str, base_dn: str, delete_obj_after_test,
+    session: requests.Session,
+    udm_url: str,
+    base_dn: str,
+    delete_obj_after_test,
     random_user_properties,
 ):
     url_users = urllib.parse.urljoin(udm_url, "users/user/")
@@ -53,7 +57,11 @@ def test_users_user_post(
 
 
 def test_users_user_patch(
-    session: requests.Session, udm_url: str, base_dn: str, create_user, random_user_properties,
+    session: requests.Session,
+    udm_url: str,
+    base_dn: str,
+    create_user,
+    random_user_properties,
 ):
     properties = create_user()
 
@@ -79,7 +87,11 @@ def test_users_user_patch(
 
 
 def test_users_user_put(
-    session: requests.Session, udm_url: str, base_dn: str, create_user, random_user_properties,
+    session: requests.Session,
+    udm_url: str,
+    base_dn: str,
+    create_user,
+    random_user_properties,
 ):
     properties = create_user()
 
@@ -107,7 +119,8 @@ def test_users_user_put(
         assert result["properties"][k] == v
 
 
-def test_users_user_delete(session: requests.Session, udm_url: str, base_dn: str, create_user):
+def test_users_user_delete(session: requests.Session, udm_url: str,
+                           base_dn: str, create_user):
     properties = create_user()
 
     dn = f"uid={properties['username']},cn=users,{base_dn}"
