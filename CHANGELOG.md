@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.18.0](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/compare/v0.17.4...v0.18.0) (2024-07-05)
+
+
+### Features
+
+* Configure extensions through values ([d040180](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/commit/d04018075177f61856207a57a6175e9a055240f6))
+
 ## [0.17.4](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/compare/v0.17.3...v0.17.4) (2024-07-04)
 
 
