@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.19.0](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/compare/v0.18.0...v0.19.0) (2024-07-09)
+
+
+### Features
+
+* adjust ingress configuration to support Nubus deployment without stack-gateway or centralized ingress configuration ([0ba6901](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/commit/0ba69010bd736aa223732c8cb6c4bf6c80572018))
+
 ## [0.18.0](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/compare/v0.17.4...v0.18.0) (2024-07-05)
 
 
