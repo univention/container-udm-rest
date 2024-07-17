@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.20.0](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/compare/v0.19.0...v0.20.0) (2024-07-17)
+
+
+### Features
+
+* Remove packages "python3-yaml" and "python3-jinja2" ([46c2760](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/commit/46c2760b3505dfaacd5900cf700034114a39df9d))
+* Update base image to version 0.13.1-build-2024-07-04 ([f2573c7](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/commit/f2573c75df8518addf6860ffd5db728a4e3086b5))
+
 ## [0.19.0](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/compare/v0.18.0...v0.19.0) (2024-07-09)
 
 
