@@ -9,9 +9,7 @@ global:
   ldap:
     uri: "ldap://example-ldap-server:389"
     baseDn: ""
-  configMapUcrDefaults: "stack-data-ums-ucr"
-  configMapUcr: "stack-data-swp-ucr"
-  configMapUcrForced: null
+  configMapUcr: "stack-data-ums-ucr"
 # -- Kubernetes ingress
 ingress:
   # -- Set this to `true` in order to enable the installation on Ingress related objects.

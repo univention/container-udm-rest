@@ -203,19 +203,9 @@ spec:
             - name: {{ printf "%s-tls-volume" (include "common.names.fullname" .) }}
               mountPath: /certificates
             {{- end }}
-            - name: "config-map-ucr-defaults"
-              mountPath: "/etc/univention/base-defaults.conf"
-              subPath: "base.conf"
-            {{- if (include "udm-rest-api.configMapUcr" .) }}
             - name: "config-map-ucr"
               mountPath: "/etc/univention/base.conf"
               subPath: "base.conf"
-            {{- end }}
-            {{- if (include "udm-rest-api.configMapUcrForced" .) }}
-            - name: "config-map-ucr-forced"
-              mountPath: "/etc/univention/base-forced.conf"
-              subPath: "base.conf"
-            {{- end }}
             {{- if .Values.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" .) | nindent 12 }}
             {{- end }}
@@ -247,19 +237,9 @@ spec:
             defaultMode: 0400
             secretName: {{ .Values.udmRestApi.tls.certificateSecret | default (printf "%s-tls" (include "common.names.fullname" . )) | quote }}
         {{- end }}
-        - name: "config-map-ucr-defaults"
-          configMap:
-            name: {{ include "udm-rest-api.configMapUcrDefaults" . | quote }}
-        {{- if (include "udm-rest-api.configMapUcr" .) }}
         - name: "config-map-ucr"
           configMap:
             name: {{ include "udm-rest-api.configMapUcr" . | quote }}
-        {{- end }}
-        {{- if (include "udm-rest-api.configMapUcrForced" .) }}
-        - name: "config-map-ucr-forced"
-          configMap:
-            name: {{ include "udm-rest-api.configMapUcrForced" . | quote }}
-        {{- end }}
         {{- if .Values.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes  "context" .) | nindent 8 }}
         {{- end }}
