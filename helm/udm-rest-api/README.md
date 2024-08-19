@@ -352,6 +352,33 @@ false
 			<td>Some responses of the UDM Rest API contain very large response headers</td>
 		</tr>
 		<tr>
+			<td>ingress.certManager.enabled</td>
+			<td>bool</td>
+			<td><pre lang="json">
+true
+</pre>
+</td>
+			<td>Enable cert-manager.io annotaion.</td>
+		</tr>
+		<tr>
+			<td>ingress.certManager.issuerRef.kind</td>
+			<td>string</td>
+			<td><pre lang="json">
+"ClusterIssuer"
+</pre>
+</td>
+			<td>Type of Issuer, f.e. "Issuer" or "ClusterIssuer".</td>
+		</tr>
+		<tr>
+			<td>ingress.certManager.issuerRef.name</td>
+			<td>string</td>
+			<td><pre lang="json">
+""
+</pre>
+</td>
+			<td>Name of cert-manager.io Issuer resource.</td>
+		</tr>
+		<tr>
 			<td>ingress.enabled</td>
 			<td>bool</td>
 			<td><pre lang="json">

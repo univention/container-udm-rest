@@ -130,6 +130,18 @@ ingress:
   # -- Define the Fully Qualified Domain Name (FQDN) where application should be reachable.
   host: ""
 
+  # Request certificates via cert-manager.io annotation
+  certManager:
+    # -- Enable cert-manager.io annotaion.
+    enabled: true
+
+    # Issuer reference.
+    issuerRef:
+      # -- Name of cert-manager.io Issuer resource.
+      name: ""
+      # -- Type of Issuer, f.e. "Issuer" or "ClusterIssuer".
+      kind: "ClusterIssuer"
+
   # -- Define the Ingress paths.
   paths:
     - path: /(univention/)(udm/.*)

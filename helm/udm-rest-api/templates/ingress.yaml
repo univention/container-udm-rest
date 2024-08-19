@@ -9,10 +9,14 @@ metadata:
   name: {{ include "common.names.fullname" . }}
   namespace: {{ include "common.names.namespace" . }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.additionalLabels "context" . ) | nindent 4 }}
-  {{- if or .Values.ingress.annotations .Values.additionalAnnotations }}
-  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.ingress.annotations .Values.additionalAnnotations ) "context" . ) }}
-  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
-  {{- end }}
+  annotations:
+    {{- if or .Values.ingress.annotations .Values.additionalAnnotations }}
+    {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.ingress.annotations .Values.additionalAnnotations ) "context" . ) }}
+    {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.ingress.certManager.enabled }}
+    cert-manager.io/{{ .Values.ingress.certManager.issuerRef.kind | kebabcase }}: "{{ coalesce .Values.global.certManagerIssuer .Values.ingress.certManager.issuerRef.name }}"
+    {{- end }}
 spec:
   ingressClassName: {{ required ".Values.ingress.ingressClassName or .Values.global.ingressClass must be defined." ( coalesce .Values.ingress.ingressClassName .Values.global.ingressClass ) | quote }}
   {{- if .Values.ingress.tls.enabled }}
