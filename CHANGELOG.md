@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.21.0](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/compare/v0.20.0...v0.21.0) (2024-08-21)
+
+
+### Features
+
+* **udm-rest-api:** Add certManager template for ingress ([119abd6](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/commit/119abd609dec861dca8a77d30b0eee8c5bee84bb))
+
 ## [0.20.0](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/compare/v0.19.0...v0.20.0) (2024-07-17)
 
 
