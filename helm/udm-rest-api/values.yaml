@@ -312,7 +312,7 @@ service:
   ports:
     http:
       # -- Accessible port.
-      port: 80
+      port: 9979
       # -- Internal port.
       containerPort: 9979
       # -- service protocol.
