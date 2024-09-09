@@ -302,6 +302,9 @@ service:
   # Ref.: https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types
   # -- Choose the kind of Service, one of "ClusterIP", "NodePort" or "LoadBalancer".
   type: "ClusterIP"
+  # This creates a headless service. Instead of load balancing, it creates a
+  # DNS A record for each pod.
+  clusterIP: "None"
 
   # Define the ports of Service.
   # You can set the port value to an arbitrary value, it will map the container port by name.

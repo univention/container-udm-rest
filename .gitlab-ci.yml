@@ -24,6 +24,10 @@ include:
     file:
       - "dind.yml"
 
+lint-pre-commit-legacy:
+  before_script:
+    - "helm repo add bitnami https://charts.bitnami.com/bitnami"
+
 .build-matrix: &build-matrix
   - IMAGE_NAME:
       - "udm-rest-api"

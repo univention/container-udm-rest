@@ -39,7 +39,7 @@ helm uninstall udm-rest-api
 
 | Repository | Name | Version |
 |------------|------|---------|
-| oci://registry.souvap-univention.de/souvap/tooling/charts/bitnami-charts | common | ^2.x.x |
+| https://charts.bitnami.com/bitnami | common | ^2.x.x |
 
 ## Values
 
@@ -729,6 +729,15 @@ true
 </pre>
 </td>
 			<td>Additional custom annotations.</td>
+		</tr>
+		<tr>
+			<td>service.clusterIP</td>
+			<td>string</td>
+			<td><pre lang="json">
+"None"
+</pre>
+</td>
+			<td></td>
 		</tr>
 		<tr>
 			<td>service.enabled</td>

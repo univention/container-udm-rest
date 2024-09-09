@@ -18,6 +18,6 @@ appVersion: "12.0.7"
 
 dependencies:
   - name: "common"
+    repository: "https://charts.bitnami.com/bitnami"
     version: "^2.x.x"
-    repository: "oci://registry.souvap-univention.de/souvap/tooling/charts/bitnami-charts"
 ...
