@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.23.0](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/compare/v0.22.0...v0.23.0) (2024-09-11)
+
+
+### Features
+
+* **udm-rest-api:** Headless service ([28334b7](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/commit/28334b7872bec161a5094388696ac11b557bbaeb))
+
+
+### Bug Fixes
+
+* **udm-rest-api:** Set port to 9979 ([9def8ff](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/commit/9def8ffceb7bc632618cf94bb411304ce6c81b68))
+
 ## [0.22.0](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/compare/v0.21.0...v0.22.0) (2024-08-28)
 
 
