@@ -140,7 +140,7 @@ ingress:
 
   # -- Define the Ingress paths.
   paths:
-    - path: /(univention/)(udm/.*)
+    - path: /(univention/)(udm/.*)$
       pathType: ImplementationSpecific
 
   # -- The Ingress controller class name.

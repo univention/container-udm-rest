@@ -393,7 +393,7 @@ true
 			<td><pre lang="json">
 [
   {
-    "path": "/(univention/)(udm/.*)",
+    "path": "/(univention/)(udm/.*)$",
     "pathType": "ImplementationSpecific"
   }
 ]
