@@ -126,6 +126,9 @@ spec:
             - name: plugin-targets
               mountPath: /target
           resources: {{- include "common.tplvalues.render" (dict "value" $.Values.initResources "context" $) | nindent 12 }}
+        {{- $systemExtensions := default (list) (coalesce .Values.systemExtensions .Values.global.systemExtensions) -}}
+        {{- $extensions := default (list) (coalesce .Values.extensions .Values.global.extensions) -}}
+        {{- range (concat $systemExtensions $extensions) }}
         {{- end }}
       containers:
         - name: "udm-rest-api"
