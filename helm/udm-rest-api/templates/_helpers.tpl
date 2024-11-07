@@ -41,16 +41,6 @@ These template definitions are only used in this chart and do not relate to temp
 {{- tpl (coalesce .Values.configMapUcr .Values.global.configMapUcr $nubusConfigMapUcr) . -}}
 {{- end -}}
 
-{{- define "udm-rest-api.secretRef" -}}
-{{- if .Values.udmRestApi.secretRef -}}
-secretName: {{ .Values.udmRestApi.secretRef | quote }}
-{{- else if .Values.global.nubusDeployment -}}
-secretName: {{ printf "%s-udm-rest-api-credentials" .Release.Name | quote }}
-{{- else -}}
-{{- required ".Values.udmRestApi.secretRef must be defined." .Values.udmRestApi.secretRef -}}
-{{- end -}}
-{{- end -}}
-
 {{- define "udm-rest-api.ingress.tls.secretName" -}}
 {{- if .Values.ingress.tls.secretName -}}
 {{- tpl .Values.ingress.tls.secretName . -}}

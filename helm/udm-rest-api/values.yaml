@@ -33,7 +33,7 @@ global:
   #
   # Ref.: https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy
   #
-  # "IfNotPresent" => The image is pulled only if it is not already present locally.
+  # "IfNotPresent" => The image is pulled only if it is not already present locally.udm-rest-api.secretRef
   # "Always" => Every time the kubelet launches a container, the kubelet queries the container image registry to
   #             resolve the name to an image digest. If the kubelet has a container image with that exact digest cached
   #             locally, the kubelet uses its cached image; otherwise, the kubelet pulls the image with the resolved
@@ -413,6 +413,11 @@ udmRestApi:
     # -- The LDAP base DN to use when connecting.
     # baseDn: "dc=univention-organization,dc=intranet"
     baseDn: ""
+    auth:
+      existingSecret:
+        name: null
+        keyMapping:
+          password: null
   tls:
     # -- Enable TLS for LDAP connection.
     enabled: false
@@ -424,13 +429,6 @@ udmRestApi:
     certificateFile: "/certificates/tls.crt"
     # -- Path the servers private-key file
     certificateKeyFile: "/certificates/tls.key"
-  # -- The reference to the secret containing the LDAP and machine secret.
-  # secretRef: "udm-rest-api-credentials"
-  secretRef: ""
-  # -- The LDAP secret file. Used for authentication against the configured LDAP service.
-  ldapSecretFile: /etc/ldap.secret
-  # -- The machine secret file. Used for a client authentication with the service.
-  machineSecretFile: /etc/machine.secret
   # -- The verbosity of log messages.
   # Possible values: 0-4/99 (0: Error, 1: Warn, 2: Info, 3: Debug, 4: Trace,
   # 99: sensitive data like cleartext passwords is logged as well).

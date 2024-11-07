@@ -179,11 +179,11 @@ spec:
             - name: etc-univention-volume
               mountPath: /etc/univention
             - name: credentials-volume
-              mountPath: {{ .Values.udmRestApi.ldapSecretFile }}
-              subPath: ldap.secret
+              mountPath: /etc/ldap.secret
+              subPath: {{ include "common.secrets.key" (dict "existingSecret" .Values.udmRestApi.ldap.auth.existingSecret "key" "password") }}
             - name: credentials-volume
-              mountPath: {{ .Values.udmRestApi.machineSecretFile }}
-              subPath: machine.secret
+              mountPath: /etc/machine.secret
+              subPath: {{ include "common.secrets.key" (dict "existingSecret" .Values.udmRestApi.ldap.auth.existingSecret "key" "password") }}
             - name: plugin-targets
               mountPath: /usr/lib/python3/dist-packages/univention/udm/modules
               subPath: udm-modules
@@ -233,7 +233,7 @@ spec:
         - name: credentials-volume
           secret:
             defaultMode: 420
-            {{- include ("udm-rest-api.secretRef") . | nindent 12 }}
+            secretName: {{ tpl .Values.udmRestApi.ldap.auth.existingSecret.name . }}
         {{- if .Values.udmRestApi.tls.enabled }}
         - name: {{ printf "%s-tls-volume" (include "common.names.fullname" .) }}
           secret:

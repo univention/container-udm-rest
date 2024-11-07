@@ -233,7 +233,7 @@ null
 "IfNotPresent"
 </pre>
 </td>
-			<td>Define an ImagePullPolicy.  Ref.: https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy  "IfNotPresent" => The image is pulled only if it is not already present locally. "Always" => Every time the kubelet launches a container, the kubelet queries the container image registry to             resolve the name to an image digest. If the kubelet has a container image with that exact digest cached             locally, the kubelet uses its cached image; otherwise, the kubelet pulls the image with the resolved             digest, and uses that image to launch the container. "Never" => The kubelet does not try fetching the image. If the image is somehow already present locally, the            kubelet attempts to start the container; otherwise, startup fails.</td>
+			<td>Define an ImagePullPolicy.  Ref.: https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy  "IfNotPresent" => The image is pulled only if it is not already present locally.udm-rest-api.secretRef "Always" => Every time the kubelet launches a container, the kubelet queries the container image registry to             resolve the name to an image digest. If the kubelet has a container image with that exact digest cached             locally, the kubelet uses its cached image; otherwise, the kubelet pulls the image with the resolved             digest, and uses that image to launch the container. "Never" => The kubelet does not try fetching the image. If the image is somehow already present locally, the            kubelet attempts to start the container; otherwise, startup fails.</td>
 		</tr>
 		<tr>
 			<td>global.imagePullSecrets</td>
@@ -950,12 +950,17 @@ true
     "tag": "latest"
   },
   "ldap": {
+    "auth": {
+      "existingSecret": {
+        "keyMapping": {
+          "password": null
+        },
+        "name": null
+      }
+    },
     "baseDn": "",
     "uri": ""
   },
-  "ldapSecretFile": "/etc/ldap.secret",
-  "machineSecretFile": "/etc/machine.secret",
-  "secretRef": "",
   "tls": {
     "caCertificateFile": "/certificates/ca.crt",
     "certificateFile": "/certificates/tls.crt",
@@ -1011,33 +1016,6 @@ true
 </pre>
 </td>
 			<td>The LDAP URI to connect to. uri: "ldap://my-ldap-server:389"</td>
-		</tr>
-		<tr>
-			<td>udmRestApi.ldapSecretFile</td>
-			<td>string</td>
-			<td><pre lang="json">
-"/etc/ldap.secret"
-</pre>
-</td>
-			<td>The LDAP secret file. Used for authentication against the configured LDAP service.</td>
-		</tr>
-		<tr>
-			<td>udmRestApi.machineSecretFile</td>
-			<td>string</td>
-			<td><pre lang="json">
-"/etc/machine.secret"
-</pre>
-</td>
-			<td>The machine secret file. Used for a client authentication with the service.</td>
-		</tr>
-		<tr>
-			<td>udmRestApi.secretRef</td>
-			<td>string</td>
-			<td><pre lang="json">
-""
-</pre>
-</td>
-			<td>The reference to the secret containing the LDAP and machine secret. secretRef: "udm-rest-api-credentials"</td>
 		</tr>
 		<tr>
 			<td>udmRestApi.tls.caCertificateFile</td>
