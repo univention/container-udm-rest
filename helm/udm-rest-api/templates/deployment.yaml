@@ -180,10 +180,10 @@ spec:
               mountPath: /etc/univention
             - name: credentials-volume
               mountPath: /etc/ldap.secret
-              subPath: {{ include "common.secrets.key" (dict "existingSecret" .Values.udmRestApi.ldap.auth.existingSecret "key" "password") }}
+              subPath: {{ tpl (include "common.secrets.key" (dict "existingSecret" .Values.udmRestApi.ldap.auth.existingSecret "key" "password")) . }}
             - name: credentials-volume
               mountPath: /etc/machine.secret
-              subPath: {{ include "common.secrets.key" (dict "existingSecret" .Values.udmRestApi.ldap.auth.existingSecret "key" "password") }}
+              subPath: {{ tpl (include "common.secrets.key" (dict "existingSecret" .Values.udmRestApi.ldap.auth.existingSecret "key" "password")) . }}
             - name: plugin-targets
               mountPath: /usr/lib/python3/dist-packages/univention/udm/modules
               subPath: udm-modules
