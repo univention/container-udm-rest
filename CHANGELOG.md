@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.26.0](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/compare/v0.25.1...v0.26.0) (2024-11-14)
+
+
+### Features
+
+* migrate secrets ([c230028](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/commit/c23002894816b36c2107151c7c702a463372d3b5))
+
+
+### Bug Fixes
+
+* support indirection in secrets to enable deduplication in the umbrella chart ([876f4ac](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/commit/876f4acf4fbd27d2aa1113749a9cd38fbb9614a5))
+
 ## [0.25.1](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/compare/v0.25.0...v0.25.1) (2024-10-09)
 
 
