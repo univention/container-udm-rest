@@ -207,4 +207,9 @@ repos:
         stages:
           - "manual"
 
+  - repo: "https://git.knut.univention.de/univention/customers/dataport/upx/kyverno-test-pre-commit"
+    rev: "v0.1.0"
+    hooks:
+      - id: "kyverno-test"
+
 ...
