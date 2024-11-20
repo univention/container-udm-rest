@@ -10,6 +10,12 @@ global:
     uri: "ldap://example-ldap-server:389"
     baseDn: ""
   configMapUcr: "stack-data-ums-ucr"
+  systemExtensions:
+    - name: "portal"
+      image:
+        repository: "nubus/images/portal-extension"
+        tag: "0.44.3@sha256:734efc0adda680526dde09387db964612f9e0ab020382580984488cc993c68f0"
+
 # -- Kubernetes ingress
 ingress:
   # -- Set this to `true` in order to enable the installation on Ingress related objects.
