@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.26.1](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/compare/v0.26.0...v0.26.1) (2024-11-24)
+
+
+### Bug Fixes
+
+* add a systemExtension to the linter_values.yaml file ([de9223a](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/commit/de9223a4a233606d5d052b916f5f0018a99571f7))
+
 ## [0.26.0](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/compare/v0.25.1...v0.26.0) (2024-11-14)
 
 
