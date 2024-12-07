@@ -952,9 +952,6 @@ true
   "ldap": {
     "auth": {
       "existingSecret": {
-        "keyMapping": {
-          "password": null
-        },
         "name": null
       }
     },
