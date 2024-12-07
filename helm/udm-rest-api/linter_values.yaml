@@ -23,7 +23,7 @@ ingress:
   host: "nubus.example.com"
 
 extraSecrets:
-  - name: nubus-rest-api-credentials
+  - name: "nubus-rest-api-credentials"
     stringData:
       ldap.secret: "univention"
       machine.secret: "univention"
