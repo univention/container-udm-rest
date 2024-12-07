@@ -416,8 +416,8 @@ udmRestApi:
     auth:
       existingSecret:
         name: null
-        keyMapping:
-          password: null
+        # keyMapping:
+        #   password: null
   tls:
     # -- Enable TLS for LDAP connection.
     enabled: false
