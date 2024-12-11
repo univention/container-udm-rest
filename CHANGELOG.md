@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.27.0](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/compare/v0.26.1...v0.27.0) (2024-12-11)
+
+
+### Features
+
+* Adjust to changes in ldap-server version 0.29.0 ([7b5ed6d](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/commit/7b5ed6d2b5aa983991db95d8f02b2c131a5ded33))
+* Update base image to version 0.13.3-build-2024-12-05 ([2923396](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/commit/2923396bdeb35fbf13201d0098559e021e7281e1))
+
+
+### Bug Fixes
+
+* Comment out "ldap.auth.existingSecret.keyMapping" in default values ([6de0dd2](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/commit/6de0dd25c451ac5ca6545a3f703e006b48877564))
+
 ## [0.26.1](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/compare/v0.26.0...v0.26.1) (2024-11-24)
 
 
