@@ -36,7 +36,7 @@ FROM ${UCS_BASE_IMAGE}:${UCS_BASE_IMAGE_TAG} as base
 
 RUN \
     apt-get --assume-yes --verbose-versions --no-install-recommends install \
-      python3-univention-directory-manager-rest-client=12.*
+      python3-univention-directory-manager-rest-client
 
 FROM base as cli
 
