@@ -153,6 +153,7 @@ repos:
         args:
           - "--no-color"
           - "--strict-labels"
+          - "--ignore=DL3008"
 
   - repo: "https://gitlab.com/univention/pre-commit-hooks/docker-compose-check"
     rev: "7702a8801a158b8595569dd29e2dd655d8a08310"

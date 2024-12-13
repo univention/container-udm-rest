@@ -29,7 +29,7 @@
 # <https://www.gnu.org/licenses/>.
 
 ARG UCS_BASE_IMAGE=gitregistry.knut.univention.de/univention/components/ucs-base-image/ucs-base-520
-ARG UCS_BASE_IMAGE_TAG=0.13.3-build-2024-12-05
+ARG UCS_BASE_IMAGE_TAG=0.14.0-build-2024-12-12
 
 
 FROM ${UCS_BASE_IMAGE}:${UCS_BASE_IMAGE_TAG} as build
@@ -58,7 +58,7 @@ RUN chown _apt . && \
   # install Univention bash helper functions dependency
   DEBIAN_FRONTEND=noninteractive \
     apt-get --assume-yes --verbose-versions --no-install-recommends install \
-      shell-univention-lib=11.* \
+      shell-univention-lib \
       && \
   # we do not need the many bash helper-functions here
   cp /usr/local/bin/fake-uv-lib.sh /usr/share/univention-lib/all.sh && \
@@ -68,33 +68,33 @@ RUN chown _apt . && \
   # install unlisted dependencies
   DEBIAN_FRONTEND=noninteractive \
     apt-get --assume-yes --verbose-versions --no-install-recommends install \
-      python3=3.11.* \
-      python3-distutils=3.11.* \
+      python3 \
+      python3-distutils \
       && \
   DEBIAN_FRONTEND=noninteractive \
     apt-get --assume-yes --verbose-versions --no-install-recommends install \
-      python3-univention-directory-manager-rest=12.* \
-      libunivention-debug1=14.* \
-      python3-ldap=3.* \
-      python3-univention-config-registry=17.* \
-      python3-univention-debhelper=4.* \
+      python3-univention-directory-manager-rest \
+      libunivention-debug1 \
+      python3-ldap \
+      python3-univention-config-registry \
+      python3-univention-debhelper \
       # dependencies of univention-management-console-module-udm
-      univention-directory-manager-tools=17.* \
-      univention-directory-reports=14.* \
-      univention-management-console-server=14.* \
-      univention-config=17.* \
-      univention-join=14.* \
+      univention-directory-manager-tools \
+      univention-directory-reports \
+      univention-management-console-server \
+      univention-config \
+      univention-join \
       # dependencies of python3-univention-directory-manager-rest
-      python3-genshi=0.* \
-      python3-mimeparse=1.6.* \
-      python3-pycurl=7.* \
-      python3-tornado=6.* \
-      python3-univention-directory-manager=17.* \
-      python3-univention-directory-reports=14.* \
-      python3-univention-management-console=14.* \
-      python3-uritemplate=4.* \
-      univention-management-console-module-udm=12.* \
-      univention-saml-schema=9.* \
+      python3-genshi \
+      python3-mimeparse \
+      python3-pycurl \
+      python3-tornado \
+      python3-univention-directory-manager \
+      python3-univention-directory-reports \
+      python3-univention-management-console \
+      python3-uritemplate \
+      univention-management-console-module-udm \
+      univention-saml-schema \
       && \
   # univention-portal module:
   # /usr/lib/python3/dist-packages/univention/udm/modules/portal.py
@@ -131,22 +131,22 @@ WORKDIR /apt
 RUN chown _apt . && \
   DEBIAN_FRONTEND=noninteractive \
     apt-get --assume-yes --verbose-versions --no-install-recommends install \
-      libc-bin=2.* \
-      libcurl3-gnutls=7.* \
-      locales=2.* \
-      python3=3.11.* \
-      python3-ldap=3.* \
-      python3-pil=9.* \
-      python3-magic=2:0.* \
-      python3-samba=2:4.* \
-      python3-cracklib=2.* \
-      python3-univention-heimdal=12.* \
+      libc-bin \
+      libcurl3-gnutls \
+      locales \
+      python3 \
+      python3-ldap \
+      python3-pil \
+      python3-magic \
+      python3-samba \
+      python3-cracklib \
+      python3-univention-heimdal \
       && \
   apt-get download \
-   libunivention-config0=17.* \
-   libunivention-debug1=14.* \
-   libunivention-license0=13.* \
-   libunivention-policy0=13.* \
+   libunivention-config0 \
+   libunivention-debug1 \
+   libunivention-license0 \
+   libunivention-policy0 \
    && \
   dpkg --install --force-depends /apt/*
 
@@ -248,9 +248,9 @@ SHELL ["/bin/bash", "-c"]
 RUN \
   DEBIAN_FRONTEND=noninteractive \
     apt-get --assume-yes --verbose-versions --no-install-recommends install \
-      vim=2:9.* \
-      curl=7.* \
-      netcat-traditional=1.* \
+      vim \
+      curl \
+      netcat-traditional \
       iproute2=6.*
 
 
