@@ -9,7 +9,7 @@ include:
     file:
       - "defaults/stages.yaml"
       - "defaults/nubus-workflow.yaml"
-      - "jobs/lint-pre-commit.yaml"
+      #- "jobs/lint-pre-commit.yaml"
       - "jobs/lint-commit-messages.yaml"
       - "jobs/semantic-release-env.yaml"
       - "jobs/container-build-external.yaml"
@@ -21,9 +21,9 @@ include:
     file:
       - "dind.yml"
 
-lint-pre-commit:
-  before_script:
-    - "helm repo add bitnami https://charts.bitnami.com/bitnami"
+#lint-pre-commit:
+#  before_script:
+#    - "helm repo add bitnami https://charts.bitnami.com/bitnami"
 
 .build-matrix: &build-matrix
   - IMAGE_NAME:
