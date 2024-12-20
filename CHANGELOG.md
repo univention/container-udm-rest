@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.28.0](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/compare/v0.27.0...v0.28.0) (2024-12-20)
+
+
+### Features
+
+* upgrade UCS base image to 2024-12-12 ([1abe348](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/commit/1abe348254994f8da2cec4b105b6126516029cfb))
+
 ## [0.27.0](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/compare/v0.26.1...v0.27.0) (2024-12-11)
 
 
