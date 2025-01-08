@@ -85,14 +85,6 @@ repos:
           # - "--strict"
           - "--no-warnings"
 
-  - repo: "https://github.com/ansible/ansible-lint"
-    rev: "v6.22.1"
-    hooks:
-      - id: "ansible-lint"
-        name: "Ansible-lint"
-        args:
-          - "--ignore-file=.ansible-lint-ignore-legacy"
-
   - repo: "https://github.com/google/yapf"
     rev: "v0.40.2"
     hooks:
@@ -176,6 +168,7 @@ repos:
           - "--strict-labels"
           # DL3050 info: Superfluous label(s) present.
           - "--ignore=DL3050"
+          - "--ignore=DL3008"
 
   - repo: "https://gitlab.com/univention/pre-commit-hooks/docker-compose-check"
     rev: "7702a8801a158b8595569dd29e2dd655d8a08310"
@@ -231,5 +224,10 @@ repos:
         name: ".gitlab-ci.yml linter"
         stages:
           - "manual"
+
+  - repo: "https://git.knut.univention.de/univention/customers/dataport/upx/kyverno-test-pre-commit"
+    rev: "v0.3.0"
+    hooks:
+      - id: "kyverno-test"
 
 ...

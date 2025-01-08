@@ -3,8 +3,6 @@
 
 ---
 
-name: "dev-local"
-
 services:
   udm-rest-api:
     image: gitregistry.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/udm-rest-api:${IMAGE_TAG:-latest}
