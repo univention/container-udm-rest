@@ -187,18 +187,23 @@ spec:
             - name: plugin-targets
               mountPath: /usr/lib/python3/dist-packages/univention/udm/modules
               subPath: udm-modules
+              readOnly: true
             - name: plugin-targets
               mountPath: /usr/lib/python3/dist-packages/univention/admin/hooks.d
               subPath: udm-hooks.d
+              readOnly: true
             - name: plugin-targets
               mountPath: /usr/lib/python3/dist-packages/univention/admin/syntax.d
               subPath: udm-syntax.d
+              readOnly: true
             - name: plugin-targets
               mountPath: /usr/lib/python3/dist-packages/univention/admin/handlers
               subPath: udm-handlers
+              readOnly: true
             - name: plugin-targets
               mountPath: /usr/share/univention-management-console-frontend/js/dijit/themes/umc/icons/
               subPath: umc-icons
+              readOnly: true
             {{- if .Values.udmRestApi.tls.enabled }}
             - name: {{ printf "%s-tls-volume" (include "common.names.fullname" .) }}
               mountPath: /certificates
