@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.28.1](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/compare/v0.28.0...v0.28.1) (2025-02-10)
+
+
+### Bug Fixes
+
+* add .kyverno to helmignore ([f88167b](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/commit/f88167b0ded23798756d17cfb6b3888a8f974d8e))
+
 ## [0.28.0](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/compare/v0.27.0...v0.28.0) (2024-12-20)
 
 
