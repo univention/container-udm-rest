@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.28.2](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/compare/v0.28.1...v0.28.2) (2025-02-10)
+
+
+### Bug Fixes
+
+* set plugin mounts to read-only ([46ab263](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/commit/46ab26348064c4cd547836a1bf383ea288dd1da3))
+
 ## [0.28.1](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/compare/v0.28.0...v0.28.1) (2025-02-10)
 
 
