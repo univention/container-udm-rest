@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.29.0](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/compare/v0.28.2...v0.29.0) (2025-02-26)
+
+
+### Features
+
+* Bump ucs-base-image to use released apt sources ([b138fa2](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/commit/b138fa24800de2a944fcfcca2f61f115c442e596))
+
 ## [0.28.2](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/compare/v0.28.1...v0.28.2) (2025-02-10)
 
 
