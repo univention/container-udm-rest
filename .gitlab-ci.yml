@@ -64,7 +64,7 @@ test-udm-rest:
     - if: '$CI_PIPELINE_SOURCE == "schedule"'
       when: "never"
     - when: "on_success"
-  image: "${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/docker:24.0.7"
+  image: "${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/docker:28.0.1@sha256:9a651b22672c7151b5d8ca820ed2290b3fe4d4922e9b3f37ab14c8876da6613d"
   before_script:
     # Allow that the Docker API version is negotiated between client and server
     - unset DOCKER_API_VERSION
