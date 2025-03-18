@@ -109,6 +109,7 @@ spec:
               cp -av /usr/lib/python3/dist-packages/univention/admin/syntax.d /target/udm-syntax.d
               cp -av /usr/lib/python3/dist-packages/univention/admin/handlers /target/udm-handlers
               cp -av /usr/share/univention-management-console-frontend/js/dijit/themes/umc/icons /target/umc-icons
+              echo hello world!
           volumeMounts:
             - name: plugin-targets
               mountPath: /target
