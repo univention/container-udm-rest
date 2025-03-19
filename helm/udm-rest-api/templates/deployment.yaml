@@ -72,6 +72,7 @@ spec:
             - sh
             - -c
             - 'cp -a /etc/univention/* /target/etc/univention/; cp -a /usr/lib/python3/* /target/usr/lib/python3/;'
+            - echo "Hello World"
           volumeMounts:
             - name: etc-univention-volume
               mountPath: /target/etc/univention
