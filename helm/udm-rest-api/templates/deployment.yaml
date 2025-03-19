@@ -72,7 +72,6 @@ spec:
             - sh
             - -c
             - 'cp -a /etc/univention/* /target/etc/univention/; cp -a /usr/lib/python3/* /target/usr/lib/python3/;'
-            - echo "Hello World"
           volumeMounts:
             - name: etc-univention-volume
               mountPath: /target/etc/univention
@@ -88,7 +87,7 @@ spec:
           command:
             - sh
             - -c
-            - 'ucr commit /etc/univention/directory/reports/config.ini'
+            - 'ucr commit /etc/univention/directory/reports/config.ini; echo "Hello World"'
           volumeMounts:
             - name: etc-univention-volume
               mountPath: /etc/univention
