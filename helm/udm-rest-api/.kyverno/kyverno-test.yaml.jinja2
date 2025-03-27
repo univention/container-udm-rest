@@ -26,7 +26,8 @@ policies:
 resources:
   - "manifest.yaml"
 results:
-  - "release-name-udm-rest-api"
+  - resources:
+      - "release-name-udm-rest-api"
     policy: "disallow-default-serviceaccount"
     kind: "Deployment"
     rule: "disallow-default-serviceAccountName"
