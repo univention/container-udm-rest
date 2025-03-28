@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.29.1](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/compare/v0.29.0...v0.29.1) (2025-03-28)
+
+
+### Bug Fixes
+
+* kyverno ([381481a](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/commit/381481a73be4681db613f0dadb2823641c848a15))
+
 ## [0.29.0](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/compare/v0.28.2...v0.29.0) (2025-02-26)
 
 
