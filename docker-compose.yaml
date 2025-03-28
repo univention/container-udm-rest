@@ -90,7 +90,7 @@ services:
 
   # Environment to build the documentation
   docs:
-    image: docker-registry.knut.univention.de/sphinx:latest
+    image: docker-registry.knut.univention.de/sphinx:latest@sha256:bd2b67f65aec9681e583379363a9ffb34037e636e79dcf62f5353c4769f228ed
     working_dir: /src/docs
     volumes:
       - ".:/src"
