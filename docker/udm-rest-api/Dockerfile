@@ -49,6 +49,7 @@ RUN chown _apt . && \
   DEBIAN_FRONTEND=noninteractive \
   apt-get --assume-yes --verbose-versions --no-install-recommends install \
   python3-univention-directory-manager-rest \
+  libsasl2-modules-oauthbearer \
   libunivention-debug1 \
   python3-ldap \
   python3-univention-authorization \
@@ -109,6 +110,8 @@ RUN chown _apt . && \
   apt-get --assume-yes --verbose-versions --no-install-recommends install \
   libc-bin \
   libcurl3-gnutls \
+  libjansson4 \
+  librhonabwy1.1 \
   locales \
   python3 \
   python3-ldap \
@@ -163,6 +166,18 @@ COPY --from=build \
 COPY --from=build \
   /version \
   /version
+
+# OAUTHBEARER
+COPY --from=build \
+  /usr/lib/x86_64-linux-gnu/sasl2/liboauthbearer.so.0.2.0 \
+  /usr/lib/x86_64-linux-gnu/sasl2/
+
+RUN \
+  ln -s /usr/lib/x86_64-linux-gnu/sasl2/liboauthbearer.so.0.2.0 \
+  /usr/lib/x86_64-linux-gnu/sasl2/liboauthbearer.so.0 \
+  \
+  && ln -s /usr/lib/x86_64-linux-gnu/sasl2/liboauthbearer.so.0.2.0 \
+  /usr/lib/x86_64-linux-gnu/sasl2/liboauthbearer.so
 
 RUN \
   echo > /usr/lib/python3/dist-packages/univention/lib/package_manager.py && \
