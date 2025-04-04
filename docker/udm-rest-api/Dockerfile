@@ -29,7 +29,7 @@
 # <https://www.gnu.org/licenses/>.
 
 ARG UCS_BASE_IMAGE=gitregistry.knut.univention.de/univention/components/ucs-base-image/ucs-base-520
-ARG UCS_BASE_IMAGE_TAG=0.16.1-build-2025-02-20
+ARG UCS_BASE_IMAGE_TAG=0.16.2-build-2025-04-03@sha256:9009838392da6379ba071354e983017bc9b91babc45a309c9e3e2c3636c98188
 
 
 FROM ${UCS_BASE_IMAGE}:${UCS_BASE_IMAGE_TAG} as build
