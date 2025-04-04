@@ -28,6 +28,22 @@ set -euxo pipefail
 # /usr/share/common-licenses/AGPL-3; if not, see
 # <https://www.gnu.org/licenses/>.
 
+setup_sasl_config() {
+  echo 'mech_list: GSSAPI SAML OAUTHBEARER EXTERNAL' > /etc/ldap/sasl2/slapd.conf
+  printf -v filter_string '%s' \
+   's/import sys/import os/;' \
+   '/sys.path.insert/,+1d;' \
+   '/service_providers =/,+3d;' \
+   's#univention-management-console/##;' \
+   '/if identity_provider/i ' \
+   'service_providers = configRegistry.get("ldap/saml/service-providers", "").split(",")'
+
+  sed -e "${filter_string}" \
+    /etc/univention/templates/files/etc/ldap/sasl2/slapd.conf \
+    | ucr-light-filter > /etc/ldap/sasl2/slapd.conf
+}
+setup_sasl_config
+
 ############################################################
 # Prepare LDAP TLS certificates and settings
 UDM_STARTTLS="$(ucr get uldap/start-tls)"
