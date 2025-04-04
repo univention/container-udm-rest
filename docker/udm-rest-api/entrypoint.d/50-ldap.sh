@@ -72,18 +72,30 @@ fi
 LDAP_HOST="$(ucr get ldap/server/name)"
 LDAP_PORT="$(ucr get ldap/server/port)"
 LDAP_BASE_DN="$(ucr get ldap/base)"
-mkdir -pv /etc/ldap
-cat <<EOF > /etc/ldap/ldap.conf
-# This file should be world readable but not world writable.
 
-${CA_DIR:+TLS_CACERT /etc/univention/ssl/ucsCA/CAcert.pem}
-TLS_REQCERT ${TLS_REQCERT:-demand}
+setup_sasl_config() {
+  SERVICE_PROVIDERS=$(echo -n -e '@%@ldap/saml/service-providers@%@' | ucr-light-filter || true)
 
-URI ldap://${LDAP_HOST}:${LDAP_PORT}
+  if [[ -n "${SERVICE_PROVIDERS:-}" ]]; then
+    # We have to modify the template since the hardcoded univention/saml/metadata
+    # URL endpoint is not necessarily valid for future service providers.
+    # Therefore we expect a comma-separated list of URLs in SERVICE_PROVIDERS.
+    # And since our Identitiy Providers are not UMC anymore but Keycloak or Gluu,
+    # we put the metadata XMLs into a vendor neutral location.
+    # The sp library is not quite usable nor desired in this context so that
+    # and its dependency sys are removed.
 
-BASE ${LDAP_BASE_DN}
-EOF
-chmod 0644 /etc/ldap/ldap.conf
+    printf -v filter_string '%s' \
+     '/service_providers =/,+3d;' \
+     '/if identity_provider/i ' \
+     'service_providers = configRegistry.get("ldap/saml/service-providers", "").split(",")'
+
+    sed -e "${filter_string}" \
+      /etc/univention/templates/files/etc/ldap/sasl2/slapd.conf \
+      | ucr-light-filter > /etc/ldap/sasl2/slapd.conf
+  fi
+}
+setup_sasl_config
 
 # TODO: Does this container really need to know this secret?
 LDAP_SECRET_FILE=${LDAP_SECRET_FILE:-/run/secrets/ldap_secret}

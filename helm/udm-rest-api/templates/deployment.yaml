@@ -176,6 +176,8 @@ spec:
               mountPath: /var/run
             - name: etc-ldap-volume
               mountPath: /etc/ldap
+            - name: etc-ldap-sasl-volume
+              mountPath: /etc/ldap/sasl2/
             - name: etc-univention-volume
               mountPath: /etc/univention
             - name: credentials-volume
@@ -219,6 +221,8 @@ spec:
             {{- end }}
       volumes:
         - name: "usr-lib-python3-volume"
+          emptyDir: {}
+        - name: "etc-ldap-sasl-volume"
           emptyDir: {}
         - name: "etc-ldap-volume"
           configMap:

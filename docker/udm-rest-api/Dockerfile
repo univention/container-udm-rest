@@ -74,6 +74,13 @@ RUN chown _apt . && \
   DEBIAN_FRONTEND=noninteractive \
     apt-get --assume-yes --verbose-versions --no-install-recommends install \
       python3-univention-directory-manager-rest \
+      libsasl2-2 \
+      libsasl2-modules \
+      libsasl2-modules-db \
+      libsasl2-modules-gssapi-heimdal \
+      libsasl2-modules-oauthbearer \
+      libjansson4 \
+      librhonabwy1.1 \
       libunivention-debug1 \
       python3-ldap \
       python3-univention-config-registry \
@@ -217,6 +224,9 @@ RUN \
 COPY entrypoint.d /entrypoint.d/
 WORKDIR /udm/
 
+COPY ucr-light-filter /usr/sbin/
+RUN mkdir --parents /usr/share/univention-management-console/saml/
+RUN echo 'CONFIG = {"entityid":""}' > '/usr/share/univention-management-console/saml/sp.py'
 RUN adduser app
 USER app
 
