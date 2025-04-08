@@ -71,6 +71,7 @@ RUN chown _apt . && \
       python3 \
       python3-distutils \
       && \
+  echo  'deb [trusted=yes] http://192.168.0.10/build2/git/fbest-nubus-oidc-openldap/ git main' >>/etc/apt/sources.list.d/ucs-unreleased.list && apt-get update -o Dir::Etc::sourcelist="sources.list.d/ucs-unreleased.list"  -o Dir::Etc::sourceparts="-" -o APT::Get::List-Cleanup="0" && \
   DEBIAN_FRONTEND=noninteractive \
     apt-get --assume-yes --verbose-versions --no-install-recommends install \
       python3-univention-directory-manager-rest \
