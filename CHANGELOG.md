@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.29.2](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/compare/v0.29.1...v0.29.2) (2025-04-10)
+
+
+### Bug Fixes
+
+* make copy calls in container init more robust ([8e84bc1](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/commit/8e84bc162f42ae16162d533c6eb5bad7d1c4a589)), closes [univention/dev/internal/team-nubus#1079](https://git.knut.univention.de/univention/dev/internal/team-nubus/issues/1079)
+
 ## [0.29.1](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/compare/v0.29.0...v0.29.1) (2025-03-28)
 
 
