@@ -192,6 +192,7 @@ RUN \
 
 COPY entrypoint.d /entrypoint.d/
 COPY udm/admin usr/lib/python3/dist-packages/univention/admin
+COPY udm-umc usr/lib/python3/dist-packages/univention/management/console/modules/udm
 WORKDIR /udm/
 
 RUN adduser app

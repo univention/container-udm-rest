@@ -38,6 +38,7 @@ import copy
 import os
 import re
 import time
+import uuid
 import warnings
 from collections.abc import Iterable, Sequence  # noqa: F401
 from datetime import datetime
@@ -577,6 +578,7 @@ property_descriptions = dict({
     'univentionObjectIdentifier': univention.admin.property(
         short_description=_('Immutable Object Identifier'),
         long_description=_('Immutable attribute to track the identity of an object in UDM'),
+        # TODO: Add a propper syntax class for UUID4 univentionObjectIdentifier
         syntax=univention.admin.syntax.string,
         may_change=False,
         dontsearch=True,
@@ -1086,6 +1088,7 @@ mapping.register('jpegPhoto', 'jpegPhoto', univention.admin.mapping.mapBase64, u
 mapping.register('umcProperty', 'univentionUMCProperty', mapKeyAndValue, unmapKeyAndValue)
 mapping.register('lockedTime', 'sambaBadPasswordTime', mapWindowsFiletime, unmapWindowsFiletime)
 mapping.register('accountActivationDate', 'krb5ValidStart', mapDateTimeTimezoneTupleToUTCDateTimeString, unmapUTCDateTimeToLocaltime, encoding='ASCII')
+# TODO: What does this mean?
 mapping.register('univentionObjectIdentifier', 'univentionObjectIdentifier', None, univention.admin.mapping.ListToString)
 mapping.register('univentionSourceIAM', 'univentionSourceIAM', None, univention.admin.mapping.ListToString)
 
@@ -1417,11 +1420,6 @@ class object(univention.admin.handlers.simpleLdap, PKIIntegration, GuardianBase)
             self.alloc.append(('uidNumber', self['uidNumber'], False))
         else:
             self['uidNumber'] = self.request_lock('uidNumber')
-
-        if self['univentionObjectIdentifier']:
-            univention.admin.allocators.acquireUnique(self.lo, self.position, 'univentionObjectIdentifier', self['univentionObjectIdentifier'], 'univentionObjectIdentifier', scope='base')
-            # "False" ==> do not update univentionLastUsedValue in LDAP if a specific value has been specified
-            self.alloc.append(('univentionObjectIdentifier', self['univentionObjectIdentifier'], False))
 
         self._check_uid_gid_uniqueness()
 
