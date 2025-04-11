@@ -215,6 +215,7 @@ RUN \
   echo '{}' > /var/lib/univention-appcenter/attributes/mapping.json
 
 COPY entrypoint.d /entrypoint.d/
+COPY udm/admin usr/lib/python3/dist-packages/univention/admin
 WORKDIR /udm/
 
 RUN adduser app
