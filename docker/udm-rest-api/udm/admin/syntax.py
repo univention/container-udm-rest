@@ -44,6 +44,8 @@ import shlex
 import sys
 import time
 import traceback
+import uuid
+from types import ClassMethodDescriptorType
 import zlib
 from collections.abc import Callable, Iterator, Sequence  # noqa: F401
 from io import BytesIO
@@ -1061,6 +1063,17 @@ class string64(simple):
         if len(text) > self.max_length:
             raise univention.admin.uexceptions.valueError(_('The value must not be longer than %d characters.') % self.max_length)
         return text
+
+
+class UUID4(string):
+
+    type_class = univention.admin.types.UUID
+    @classmethod
+    def parse(cls, text):
+        try:
+            return str(uuid.UUID(text, version=4))
+        except ValueError:
+            raise univention.admin.uexceptions.valueError(_('The value must be a valid UUID 4 string.'))
 
 
 class OneThirdString(string):

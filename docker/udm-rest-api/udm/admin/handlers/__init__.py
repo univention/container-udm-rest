@@ -47,6 +47,7 @@ import inspect
 import re
 import sys
 import time
+import uuid
 from collections.abc import Iterable
 from ipaddress import IPv4Address, IPv6Address, ip_address, ip_network
 from logging import getLogger
@@ -240,6 +241,8 @@ class simpleLdap:
         m = univention.admin.modules._get(self.module)
         if not hasattr(self, 'mapping'):
             self.mapping: univention.admin.mapping.mapping | None = getattr(m, 'mapping', None)
+
+        self.__add_univention_object_identifier_property()
 
         self.oldattr: _Attributes = {}
         if attributes:
@@ -1197,6 +1200,22 @@ class simpleLdap:
             return all(self[pname] in ('TRUE', '1', 'OK') for pname, prop in self.descriptions.items() if name in prop.options and prop.syntax.name in ('AppActivatedBoolean', 'AppActivatedTrue', 'AppActivatedOK'))
         return True
 
+    def __add_univention_object_identifier_property(self):
+        if self.has_property('univentionObjectIdentifier'):
+            return
+
+        self.mapping.register('univentionObjectIdentifier', 'univentionObjectIdentifier', None, univention.admin.mapping.ListToString)
+        self.descriptions.update({
+            'univentionObjectIdentifier': univention.admin.property(
+                short_description=_('Immutable Object Identifier'),
+                long_description=_('Immutable attribute to track the identity of an object in UDM'),
+                # TODO: Add a propper syntax class for UUID4 univentionObjectIdentifier
+                syntax=univention.admin.syntax.string,
+                may_change=False,
+                dontsearch=True,
+            ),
+        })
+
     def description(self) -> str:
         """
         Return a descriptive string for the object.
@@ -1291,6 +1310,19 @@ class simpleLdap:
         # ensure univentionObject is set
         al.append(('objectClass', [b'univentionObject']))
         al.append(('univentionObjectType', [self.module.encode('utf-8')]))
+
+        # ensure univentionObjectIdentifier is set
+        obj_identifier = self['univentionObjectIdentifier'] if self.has_property('univentionObjectIdentifier') else None
+        if not obj_identifier and configRegistry.is_true('directory/manager/object-identifier-autogeneration'):
+             obj_identifier = str(uuid.uuid4())
+
+        if obj_identifier:
+            univention.admin.allocators.acquireUnique(self.lo, self.position, 'univentionObjectIdentifier', obj_identifier, 'univentionObjectIdentifier', scope='base')
+            # "False" ==> do not update univentionLastUsedValue in LDAP if a specific value has been specified
+            self.alloc.append(('univentionObjectIdentifier', obj_identifier, False))
+        if obj_identifier:
+            al.append(('univentionObjectIdentifier', [obj_identifier.encode('ascii')]))
+
 
         log.debug("create object with dn: %s", self.dn)
         log.log(1, 'Create dn=%r;\naddlist=%r;', self.dn, al)

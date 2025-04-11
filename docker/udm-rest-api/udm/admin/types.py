@@ -341,6 +341,10 @@ class Base64Type(StringType):
     _openapi_format = 'byte'
 
 
+class UUID(StringType):
+    _openapi_format = 'uuid'
+
+
 class PasswordType(StringType):
     _openapi_format = 'password'
     _openapi_example = 'univention'  # :-D
