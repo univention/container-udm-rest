@@ -1,0 +1,94 @@
+#
+# Like what you see? Join us!
+# https://www.univention.com/about-us/careers/vacancies/
+#
+# Copyright 2024 Univention GmbH
+#
+# https://www.univention.de/
+#
+# All rights reserved.
+#
+# The source code of this program is made available
+# under the terms of the GNU Affero General Public License version 3
+# (GNU AGPL V3) as published by the Free Software Foundation.
+#
+# Binary versions of this program provided by Univention to you as
+# well as other copyrighted, protected or trademarked materials like
+# Logos, graphics, fonts, specific documentations and configurations,
+# cryptographic keys etc. are subject to a license agreement between
+# you and Univention and not subject to the GNU AGPL V3.
+#
+# In the case you use this program under the terms of the GNU AGPL V3,
+# the program is provided in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public
+# License with the Debian GNU/Linux or Univention distribution in file
+# /usr/share/common-licenses/AGPL-3; if not, see
+# <https://www.gnu.org/licenses/>.
+
+"""|UDM| module for all |blocklist| objects"""
+
+from typing import TYPE_CHECKING, Any  # noqa: F401
+
+import univention.admin
+import univention.admin.blocklist
+import univention.admin.filter
+import univention.admin.handlers
+import univention.admin.localization
+import univention.admin.uldap
+from univention.admin.layout import Tab
+
+
+translation = univention.admin.localization.translation('univention.admin.handlers.blocklists')
+_ = translation.translate
+
+
+module = 'blocklists/all'
+
+childs = False
+short_description = _('All blocklist objects')
+object_name = _('Blocklist')
+object_name_plural = _('Blocklists')
+long_description = _('Manage the blocklists')
+operations = ['search']
+childmodules = ['blocklists/list']
+virtual = True
+options = {}  # type: dict[str, univention.admin.option]
+property_descriptions = {
+    'name': univention.admin.property(
+        short_description=_('Name'),
+        long_description='',
+        syntax=univention.admin.syntax.dnsName,
+        include_in_default_search=True,
+        required=True,
+        identifies=True,
+    ),
+}
+layout = [Tab(_('General'), _('Basic settings'), layout=["name"])]
+mapping = univention.admin.mapping.mapping()
+
+
+class object(univention.admin.handlers.simpleLdap):
+    module = module
+    ldap_base = univention.admin.blocklist.BLOCKLIST_BASE
+
+
+def lookup(co, lo, filter_s, base='', superordinate=None, scope='sub', unique=False, required=False, timeout=-1, sizelimit=0):
+    # type: (None, univention.admin.uldap.access, str, str, univention.admin.handlers.simpleLdap | None, str, bool, bool, int, int) -> list[univention.admin.handlers.simpleLdap]
+    if not superordinate:
+        filter_s = ""
+        base = univention.admin.blocklist.BLOCKLIST_BASE
+    sup = univention.admin.modules._get(superordinate.module) if superordinate else None
+    res = []  # type: list[univention.admin.handlers.simpleLdap]
+    for childmodule in (sup.childmodules if sup else childmodules):
+        mod = univention.admin.modules._get(childmodule)
+        res += mod.lookup(co, lo, filter_s, base, superordinate, scope, unique, required, timeout, sizelimit)
+    return res
+
+
+def identify(dn, attr, canonical=False):
+    # type: (str, univention.admin.handlers._Attributes, bool) -> None
+    pass
