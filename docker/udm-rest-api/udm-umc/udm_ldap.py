@@ -6,7 +6,7 @@
 # Like what you see? Join us!
 # https://www.univention.com/about-us/careers/vacancies/
 #
-# Copyright 2011-2024 Univention GmbH
+# Copyright 2011-2025 Univention GmbH
 #
 # https://www.univention.de/
 #
@@ -72,6 +72,11 @@ __bind_function = None
 __bind_hash = None
 _licenseCheck = 0
 
+# code from components/authorization-engine/guardian/authorization-api/guardian_authorization_api/adapters/persistence.py
+re_split_roles_and_contexts = re.compile(
+    r"^((?P<role_app>[a-z0-9-_]+):(?P<role_namespace>[a-z0-9-_]+):(?P<role_name>[a-z0-9-_]+))(&(?P<context_app>[a-z0-9-_]+):(?P<context_namespace>[a-z0-9-_]+):(?P<context_name>[a-z0-9-_=,]+))?$",
+)  # FIXME: Why doesn't this allow at least "=" and "," at least in "context_name"? Basically it should allow everything valid in an LDAP DN!? I.e.  case insensitive UTF-8 see https://ldapwiki.com/wiki/Wiki.jsp?page=Distinguished%20Name%20Case%20Sensitivity and https://ldapwiki.com/wiki/Wiki.jsp?page=Ou
+
 
 def calculate_bind_hash(request):
     return hash((request.username, request.password, request.auth_type))
@@ -93,6 +98,35 @@ def set_bind_function(connection_getter):
 
 def get_bind_function():
     return __bind_function
+
+
+def set_user_roles(user_dn: str) -> None:
+    global __user_roles
+    # FIXME: This is a workaround to get the roles of the user
+    # ldap_connection, _po = get_user_connection(bind=get_bind_function(), bindhash=get_bind_hash())
+    from univention.udm import UDM
+    udm = UDM.admin().version(2)
+    obj = udm.obj_by_dn(user_dn)
+    role_set = {}
+    if hasattr(obj._orig_udm_object, 'open_guardian'):
+        obj._orig_udm_object.open_guardian()
+        role_set = set(obj._orig_udm_object.get("guardianInheritedRoles", []) + obj._orig_udm_object.get("guardianRoles", []))
+
+    __user_roles = {}
+    # simulating guardian_authorization_api.adapters.persistence.UDMPersistenceAdapter._to_policy_role()
+    for role in role_set:
+        if role.startswith("umc:udm:"):
+            res = re.search(re_split_roles_and_contexts, role)
+            if res:
+                res.groupdict()
+                __user_roles.setdefault(res["role_name"], [])
+                if res["context_name"]:
+                    __user_roles[res["role_name"]].append(res["context_name"])
+    MODULE.info('Setting user roles to %s' % __user_roles)
+
+
+def get_user_roles():
+    return __user_roles
 
 
 def LDAP_Connection(func):
@@ -416,13 +450,16 @@ class UDM_Module:
             AppAttributes._cache = None
 
     def get_ldap_connection(self, base=None):
-        if get_bind_function():
+        if ucr.is_true("umc/udm/delegation"):
+            from univention.management.console.ldap import get_admin_connection
+            self.ldap_connection, _po = get_admin_connection()
+        elif get_bind_function():
             try:
                 self.ldap_connection, _po = get_user_connection(bind=get_bind_function(), write=True, bindhash=get_bind_hash())
             except (LDAPError, udm_errors.ldapError):
                 self.ldap_connection, _po = get_user_connection(bind=get_bind_function(), write=True, bindhash=get_bind_hash())
             self.ldap_position = udm.uldap.position(self.ldap_connection.base)
-        return self.ldap_connection, udm.uldap.position(base if base else self.ldap_connection.base)
+        return self.ldap_connection, udm.uldap.position(base or self.ldap_connection.base)
 
     def load(self, module=None, template_object=None, force_reload=False):
         """
@@ -682,7 +719,9 @@ class UDM_Module:
                     if simple_attrs is not None:
                         result = ldap_connection.search(filter=str(lookup_filter), base=container, scope=scope, sizelimit=sizelimit, attr=simple_attrs, serverctrls=serverctrls, response=response)
                     else:
-                        result = ldap_connection.searchDn(filter=str(lookup_filter), base=container, scope=scope, sizelimit=sizelimit, serverctrls=serverctrls, response=response)
+                        # result = ldap_connection.searchDn(filter=str(lookup_filter), base=container, scope=scope, sizelimit=sizelimit, serverctrls=serverctrls, response=response)
+                        result = ldap_connection.search(filter=str(lookup_filter), base=container, scope=scope, sizelimit=sizelimit, attr=['univentionObjectType'], serverctrls=serverctrls, response=response)
+                        result = [{'id': x[0], "module_name": x[1]["univentionObjectType"][0].decode("utf8")} for x in result]
             else:
                 if self.module:
                     kwargs = {}
@@ -712,7 +751,6 @@ class UDM_Module:
         # process to use too much memory
         MODULE.info('Triggering garbage collection')
         gc.collect()
-
         return result
 
     def get(self, ldap_dn=None, superordinate=None, attributes=[]):
@@ -738,7 +776,9 @@ class UDM_Module:
 
     def get_property(self, property_name):
         """Returns details for a given property"""
-        return getattr(self.module, 'property_descriptions', {}).get(property_name, None)
+        ldap_connection, ldap_position = self.get_ldap_connection()
+        return getattr(self.module.object(None, ldap_connection, ldap_position), 'descriptions', {}).get(property_name, None)
+
 
     @property
     def help_link(self):
@@ -938,7 +978,7 @@ class UDM_Module:
         """All properties of the UDM module"""
         ldap_connection, ldap_position = self.get_ldap_connection()
         props = [{'id': '$dn$', 'type': 'HiddenInput', 'label': '', 'searchable': False}]
-        for key, prop in list(getattr(self.module, 'property_descriptions', {}).items()):
+        for key, prop in list(getattr(self.module.object(None, ldap_connection, ldap_position), 'descriptions', {}).items()):
             if key == 'filler':
                 continue  # FIXME: should be removed from all UDM modules
             if key in AppAttributes.options_for_module(self.name):
@@ -1072,7 +1112,10 @@ class UDM_Module:
     def get_default_containers(self):
         """List of LDAP DNs of default containers"""
         ldap_connection, _ldap_position = self.get_ldap_connection()
-        return self.module.object.get_default_containers(ldap_connection)
+        containers = self.module.object.get_default_containers(ldap_connection)
+        containers = [{'id': x, 'module_name': self.module.module, 'position': x} for x in containers]
+        containers = [x['id'] for x in containers]
+        return containers
 
     @property
     def superordinate_names(self):
@@ -1377,7 +1420,18 @@ def read_syntax_choices(syn, options=None, ldap_connection=None, ldap_position=N
                 choices.append(choice)
         else:
             choices = syn.get_choices(ldap_connection, options)
-            choices = [{'id': x[0], 'label': x[1]} for x in choices]
+            # TODO: how to filter syntax choices for delegative administration?
+            if hasattr(syn, 'udm_module'):
+                module_name = syn.udm_module
+            elif hasattr(syn, 'udm_modules') and len(syn.udm_modules) == 1:
+                module_name = syn.udm_modules[0]
+            else:
+                module_name = None
+                MODULE.info('Can not filter choices for delegative administration, because syntax for multiple udm modules: %r' % syn)
+            if module_name:
+                choices = [{'id': x[0], 'label': x[1], 'module_name': module_name} for x in choices]
+            else:
+                choices = [{'id': x[0], 'label': x[1]} for x in choices]
     except udm_errors.ldapTimeout:
         raise SearchTimeoutError()
     except udm_errors.ldapSizelimitExceeded:
@@ -1390,7 +1444,6 @@ def read_syntax_choices(syn, options=None, ldap_connection=None, ldap_position=N
             if container and not ldap_connection.get(container):
                 raise ObjectDoesNotExist(container)
         UDM_Error(e).reraise()
-
     return choices
 
 

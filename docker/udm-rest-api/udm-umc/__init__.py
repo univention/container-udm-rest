@@ -6,7 +6,7 @@
 # Like what you see? Join us!
 # https://www.univention.com/about-us/careers/vacancies/
 #
-# Copyright 2011-2024 Univention GmbH
+# Copyright 2011-2025 Univention GmbH
 #
 # https://www.univention.de/
 #
@@ -76,7 +76,7 @@ from .udm_ldap import (
     LDAP_AuthenticationFailed, LDAP_Connection, NoIpLeft, ObjectDoesNotExist, SuperordinateDoesNotExist, UDM_Error,
     UDM_Module, UserWithoutDN, _get_syntax, calculate_bind_hash, container_modules, get_bind_hash, get_module,
     get_obj_module, info_syntax_choices, ldap_dn2path, list_objects, read_syntax_choices, search_syntax_choices_by_key,
-    set_bind_function, set_bind_hash,
+    set_bind_function, set_bind_hash, set_user_roles,
 )
 
 
@@ -212,6 +212,9 @@ class Instance(Base, ProgressMixin, metaclass=UDMModuleMeta):
 
         set_bind_function(bind_user_connection)
         set_bind_hash(calculate_bind_hash(request))
+
+        if ucr.is_true("umc/udm/delegation"):
+            set_user_roles(request.user_dn)
 
         # read user settings and initial UDR
         self.reports_cfg = udr.Config()
@@ -522,7 +525,6 @@ class Instance(Base, ProgressMixin, metaclass=UDMModuleMeta):
         return: [ { '$dn$' : <LDAP DN>, <object properties> }, ... ]
         """
         MODULE.info('Starting thread for udm/get request')
-
         return self._get(request)
 
     @threaded
