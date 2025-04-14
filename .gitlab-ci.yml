@@ -5,11 +5,11 @@
 
 include:
   - project: "univention/customers/dataport/upx/common-ci"
-    ref: "v1.35.0"
+    ref: "v1.36.3"
     file:
       - "defaults/stages.yaml"
       - "defaults/nubus-workflow.yaml"
-      - "jobs/lint-pre-commit-legacy.yaml"
+      - "jobs/lint-pre-commit.yaml"
       - "jobs/lint-commit-messages.yaml"
       - "jobs/semantic-release-env.yaml"
       - "jobs/container-build-external.yaml"
@@ -20,14 +20,6 @@ include:
     ref: "master"
     file:
       - "dind.yml"
-
-lint-pre-commit-full:
-  rules:
-    - when: never
-
-lint-pre-commit-legacy:
-  before_script:
-    - helm repo add bitnami "https://charts.bitnami.com/bitnami"
 
 .build-matrix: &build-matrix
   - IMAGE_NAME:
