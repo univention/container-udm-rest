@@ -98,7 +98,8 @@ extensions: []
 #     value: "bar"
 extraEnvVars: []
 
-# -- Optionally specify a secret to create (primarily intended to be used in development environments to provide custom certificates)
+# -- Optionally specify a secret to create (primarily intended to be used in
+# development environments to provide custom certificates)
 extraSecrets: []
 
 # -- Optionally specify an extra list of additional volumes.
@@ -141,8 +142,8 @@ ingress:
 
   # -- Define the Ingress paths.
   paths:
-    - path: /(univention/)(udm/.*)$
-      pathType: ImplementationSpecific
+    - path: "/(univention/)(udm/.*)$"
+      pathType: "ImplementationSpecific"
 
   # -- The Ingress controller class name.
   ingressClassName: ""
@@ -339,7 +340,8 @@ serviceAccount:
   # The name of the service account to use.
   # If not set and create is true, a name is generated using the fullname template
   name: ""
-  ## @param serviceAccount.automountServiceAccountToken Allows auto mount of ServiceAccountToken on the serviceAccount created
+  ## @param serviceAccount.automountServiceAccountToken Allows auto mount of
+  # ServiceAccountToken on the serviceAccount created
   ## Can be set to false if pods using this serviceAccount do not need to use K8s API
   ##
   automountServiceAccountToken: false
@@ -406,7 +408,7 @@ udmRestApi:
     registry: ""
     repository: "nubus-dev/images/udm-rest-api"
     # -- Image pull policy. This setting has higher precedence than global.imagePullPolicy.
-    imagePullPolicy: "IfNotPresent"
+    imagePullPolicy: null
     tag: "latest"
   ldap:
     # -- The LDAP URI to connect to.
@@ -450,5 +452,17 @@ ldapUpdateUniventionObjectIdentifier:
     # -- Container registry address. This setting has higher precedence than global.registry.
     registry: null
     repository: "nubus-dev/images/ldap-update-univention-object-identifier"
+    tag: "latest"
+
+# -- Settings to configure the UDM blocklist cleanup job
+blocklistCleanup:
+  enabled: true
+  schedule: "0 4 * * *"
+  image:
+    # -- Container registry address. This setting has higher precedence than global.registry.
+    registry: ""
+    repository: "nubus-dev/images/blocklist-cleanup"
+    # -- Image pull policy. This setting has higher precedence than global.imagePullPolicy.
+    imagePullPolicy: null
     tag: "latest"
 ...

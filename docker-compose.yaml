@@ -33,6 +33,14 @@ services:
     volumes:
       - "./:/src/"
 
+  blocklist-cleanup:
+    image: gitregistry.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/blocklist-cleanup:${IMAGE_TAG:-latest}
+    build:
+      context: ./docker/blocklist-cleanup
+    secrets:
+      - machine_secret
+    platform: "linux/amd64"
+
   pre-commit:
     profiles:
       - "pre-commit"

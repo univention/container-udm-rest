@@ -33,12 +33,15 @@ include:
     DOCKERFILE_PATH: "docker/udm-rest-api-python-client/Dockerfile"
   - IMAGE_NAME: "ldap-update-univention-object-identifier"
     KANIKO_BUILD_CONTEXT: "$CI_PROJECT_DIR/docker/ldap-update-univention-object-identifier"
+  - IMAGE_NAME: "blocklist-cleanup"
+    DOCKERFILE_PATH: "docker/blocklist-cleanup/Dockerfile"
 
 .publish-matrix: &publish-matrix
   - IMAGE_NAME:
       - "udm-rest-api"
       - "udm-rest-api-python-client"
       - "ldap-update-univention-object-identifier"
+      - "blocklist-cleanup"
 
 container-build:
   parallel:
