@@ -49,7 +49,7 @@ LDAP_HOST="$(ucr get ldap/server/name)"
 LDAP_PORT="$(ucr get ldap/server/port)"
 LDAP_BASE_DN="$(ucr get ldap/base)"
 mkdir -pv /etc/ldap
-cat <<EOF > /etc/ldap/ldap.conf
+[[ -w /etc/ldap/ldap.conf ]] && cat <<EOF > /etc/ldap/ldap.conf
 # This file should be world readable but not world writable.
 
 ${CA_DIR:+TLS_CACERT /etc/univention/ssl/ucsCA/CAcert.pem}
@@ -59,7 +59,7 @@ URI ldap://${LDAP_HOST}:${LDAP_PORT}
 
 BASE ${LDAP_BASE_DN}
 EOF
-chmod 0644 /etc/ldap/ldap.conf
+[[ -w /etc/ldap/ldap.conf ]] && chmod 0644 /etc/ldap/ldap.conf
 
 # TODO: Does this container really need to know this secret?
 LDAP_SECRET_FILE=${LDAP_SECRET_FILE:-/run/secrets/ldap_secret}
