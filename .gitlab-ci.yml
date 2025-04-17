@@ -31,11 +31,14 @@ include:
   - IMAGE_NAME: "udm-cli"
     KANIKO_ARGS: "--target cli"
     DOCKERFILE_PATH: "docker/udm-rest-api-python-client/Dockerfile"
+  - IMAGE_NAME: "blocklist-cleanup"
+    DOCKERFILE_PATH: "docker/blocklist-cleanup/Dockerfile"
 
 .publish-matrix: &publish-matrix
   - IMAGE_NAME:
       - "udm-rest-api"
       - "udm-rest-api-python-client"
+      - "blocklist-cleanup"
 
 container-build:
   parallel:
