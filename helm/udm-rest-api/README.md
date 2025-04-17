@@ -79,13 +79,22 @@ helm uninstall udm-rest-api
 			<td>Affinity for pod assignment. Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity Note: podAffinityPreset, podAntiAffinityPreset, and nodeAffinityPreset will be ignored when it's set.</td>
 		</tr>
 		<tr>
-			<td>blocklistCleanup.enabled</td>
-			<td>bool</td>
+			<td>blocklistCleanup</td>
+			<td>object</td>
 			<td><pre lang="json">
-true
+{
+  "enabled": true,
+  "image": {
+    "imagePullPolicy": null,
+    "registry": "",
+    "repository": "nubus-dev/images/udm-rest-api-client",
+    "tag": "latest"
+  },
+  "schedule": "0 4 * * *"
+}
 </pre>
 </td>
-			<td></td>
+			<td>Settings to configure the UDM blocklist cleanup job</td>
 		</tr>
 		<tr>
 			<td>blocklistCleanup.image.imagePullPolicy</td>
@@ -104,33 +113,6 @@ null
 </pre>
 </td>
 			<td>Container registry address. This setting has higher precedence than global.registry.</td>
-		</tr>
-		<tr>
-			<td>blocklistCleanup.image.repository</td>
-			<td>string</td>
-			<td><pre lang="json">
-"nubus-dev/images/udm-rest-api-client"
-</pre>
-</td>
-			<td></td>
-		</tr>
-		<tr>
-			<td>blocklistCleanup.image.tag</td>
-			<td>string</td>
-			<td><pre lang="json">
-"latest"
-</pre>
-</td>
-			<td></td>
-		</tr>
-		<tr>
-			<td>blocklistCleanup.schedule</td>
-			<td>string</td>
-			<td><pre lang="json">
-"0 4 * * *"
-</pre>
-</td>
-			<td></td>
 		</tr>
 		<tr>
 			<td>containerSecurityContext.allowPrivilegeEscalation</td>

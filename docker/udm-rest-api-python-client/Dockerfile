@@ -14,10 +14,6 @@ RUN \
     apt-get --assume-yes --verbose-versions --no-install-recommends install \
       python3-univention-directory-manager-rest-client
 
-FROM base as cli
+COPY blocklist_clean_expired.py /bin/
 
-ENTRYPOINT [ "python3", "-m", "univention.admin.rest.client" ]
-
-FROM base as final
-
-ENTRYPOINT []
+CMD ["/bin/blocklist_clean_expired.py"]

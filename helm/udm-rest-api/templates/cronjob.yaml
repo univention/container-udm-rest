@@ -1,0 +1,77 @@
+{{/*
+# SPDX-FileCopyrightText: 2025 Univention GmbH
+# SPDX-License-Identifier: AGPL-3.0-only
+*/}}
+
+{{- if .Values.blocklistCleanup.enabled }}
+---
+apiVersion: "batch/v1"
+kind: "CronJob"
+metadata:
+  name: {{ include "nubus-common.names.fullnameWithRevision" . | quote }}
+  labels:
+    {{- include "common.labels.standard" . | nindent 4 }}
+  {{- if .Values.additionalAnnotations }}
+  annotations:
+    {{ toYaml .Values.additionalAnnotations | quote | nindent 4 }}
+  {{- end }}
+spec:
+  schedule: "{{ .Values.blocklistCleanup.schedule }}"
+  concurrencyPolicy: "Forbid"
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          name: {{ include "common.names.name" . | quote }}
+          labels:
+            {{- include "common.labels.standard" . | nindent 12 }}
+          {{- if .Values.additionalAnnotations }}
+          annotations:
+            {{ toYaml .Values.additionalAnnotations | quote | nindent 12 }}
+          {{- end }}
+        spec:
+          restartPolicy: "Never"
+          {{- if or .Values.pullSecrets .Values.global.imagePullSecrets }}
+          imagePullSecrets:
+            {{- range .Values.global.imagePullSecrets }}
+            - name: {{ . | quote }}
+            {{- end }}
+            {{- range .Values.pullSecrets }}
+            - name: {{ . | quote }}
+            {{- end }}
+          {{- end }}
+          {{- if .Values.podSecurityContext.enabled }}
+          securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          {{- if .Values.serviceAccount.create }}
+          serviceAccountName: {{ include "common.names.fullname" . | quote }}
+          {{- end }}
+          containers:
+            - name: "blocklist-cleanup"
+              {{- if $.Values.containerSecurityContext.enabled }}
+              securityContext: {{- omit $.Values.containerSecurityContext "enabled" | toYaml | nindent 16 }}
+              {{- end }}
+              image: "{{ coalesce .Values.blocklistCleanup.image.registry .Values.global.imageRegistry }}/{{ .Values.blocklistCleanup.image.repository }}:{{ .Values.blocklistCleanup.image.tag }}"
+              imagePullPolicy: {{ coalesce .Values.blocklistCleanup.image.imagePullPolicy .Values.global.imagePullPolicy | quote }}
+
+              envFrom:
+                - configMapRef:
+                    name: {{ include "common.names.fullname" . | quote }}
+              env:
+                - name: SET_STATUS_FLAG
+                  value: "true"
+              volumeMounts:
+                - name: credentials-volume
+                  mountPath: /etc/ldap.secret
+                  subPath: {{ tpl (include "common.secrets.key" (dict "existingSecret" .Values.udmRestApi.ldap.auth.existingSecret "key" "password")) . }}
+
+              resources:
+                {{- toYaml .Values.resources | nindent 16 }}
+          volumes:
+            - name: credentials-volume
+              secret:
+                defaultMode: 420
+                secretName: {{ tpl .Values.udmRestApi.ldap.auth.existingSecret.name . }}
+
+...
+{{- end }}
