@@ -87,7 +87,7 @@ helm uninstall udm-rest-api
   "image": {
     "imagePullPolicy": null,
     "registry": "",
-    "repository": "nubus-dev/images/udm-rest-api-client",
+    "repository": "nubus-dev/images/blocklist-cleanup",
     "tag": "latest"
   },
   "schedule": "0 4 * * *"

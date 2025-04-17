@@ -444,7 +444,7 @@ blocklistCleanup:
   image:
     # -- Container registry address. This setting has higher precedence than global.registry.
     registry: ""
-    repository: "nubus-dev/images/udm-rest-api-client"
+    repository: "nubus-dev/images/blocklist-cleanup"
     # -- Image pull policy. This setting has higher precedence than global.imagePullPolicy.
     imagePullPolicy: null
     tag: "latest"
