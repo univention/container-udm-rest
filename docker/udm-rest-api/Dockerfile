@@ -4,11 +4,11 @@
 # SPDX-License-Identifier: AGPL-3.0-only
 # SPDX-FileCopyrightText: 2021-2025 Univention GmbH
 
-ARG UCS_BASE_IMAGE=gitregistry.knut.univention.de/univention/dev/projects/ucs-base-image/ucs-base-521
-ARG UCS_BASE_IMAGE_TAG=0.17.3-build-2025-05-11
+ARG UCS_BASE_IMAGE=gitregistry.knut.univention.de/univention/dev/projects/ucs-base-image/ucs-base-python-521
+ARG UCS_BASE_IMAGE_TAG=0.18.1-build-2025-05-15
 
 
-FROM ${UCS_BASE_IMAGE}:${UCS_BASE_IMAGE_TAG} as build
+FROM ${UCS_BASE_IMAGE}:${UCS_BASE_IMAGE_TAG} AS build
 
 ###############################################################################
 # Install UDM REST API
@@ -44,7 +44,6 @@ RUN chown _apt . && \
   # install unlisted dependencies
   DEBIAN_FRONTEND=noninteractive \
     apt-get --assume-yes --verbose-versions --no-install-recommends install \
-      python3 \
       python3-distutils \
       && \
   DEBIAN_FRONTEND=noninteractive \
@@ -87,7 +86,7 @@ RUN chown _apt . && \
 # Second stage image to get rid of unneeded files
 
 
-FROM ${UCS_BASE_IMAGE}:${UCS_BASE_IMAGE_TAG} as final
+FROM ${UCS_BASE_IMAGE}:${UCS_BASE_IMAGE_TAG} AS final
 LABEL org.opencontainers.image.created="${LABEL_CREATED}"
 LABEL org.opencontainers.image.description="REST service for UCS Directory Manager"
 LABEL org.opencontainers.image.licenses="AGPL-3.0-or-later"
@@ -214,7 +213,7 @@ EXPOSE 9979
 ############################################################
 # Third stage to create a debug image
 
-FROM final as debug
+FROM final AS debug
 
 # hadolint ignore=DL3002
 USER root
@@ -233,7 +232,7 @@ RUN \
 ############################################################
 # Fourth stage to create an image for running tests
 
-FROM final as test
+FROM final AS test
 
 # hadolint ignore=DL3002
 USER root
