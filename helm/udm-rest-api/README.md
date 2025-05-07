@@ -450,6 +450,70 @@ true
 			<td></td>
 		</tr>
 		<tr>
+			<td>ldapUpdateUniventionObjectIdentifier</td>
+			<td>object</td>
+			<td><pre lang="json">
+{
+  "enabled": true,
+  "image": {
+    "pullPolicy": "IfNotPresent",
+    "registry": null,
+    "repository": "nubus-dev/images/ldap-update-univention-object-identifier",
+    "tag": "latest"
+  },
+  "pythonLogLevel": "INFO",
+  "suspend": true
+}
+</pre>
+</td>
+			<td>Job configuration for updating the univentionObjectIdentifier</td>
+		</tr>
+		<tr>
+			<td>ldapUpdateUniventionObjectIdentifier.enabled</td>
+			<td>bool</td>
+			<td><pre lang="json">
+true
+</pre>
+</td>
+			<td>Enables the job creation</td>
+		</tr>
+		<tr>
+			<td>ldapUpdateUniventionObjectIdentifier.image.pullPolicy</td>
+			<td>string</td>
+			<td><pre lang="json">
+"IfNotPresent"
+</pre>
+</td>
+			<td>Image pull policy. This setting has higher precedence than global.imagePullPolicy.</td>
+		</tr>
+		<tr>
+			<td>ldapUpdateUniventionObjectIdentifier.image.registry</td>
+			<td>string</td>
+			<td><pre lang="json">
+null
+</pre>
+</td>
+			<td>Container registry address. This setting has higher precedence than global.registry.</td>
+		</tr>
+		<tr>
+			<td>ldapUpdateUniventionObjectIdentifier.pythonLogLevel</td>
+			<td>string</td>
+			<td><pre lang="json">
+"INFO"
+</pre>
+</td>
+			<td>Log Level for the Python script</td>
+		</tr>
+		<tr>
+			<td>ldapUpdateUniventionObjectIdentifier.suspend</td>
+			<td>bool</td>
+			<td><pre lang="json">
+true
+</pre>
+</td>
+			<td>Switch to suspend the job</td>
+		</tr>
+		<tr>
 			<td>lifecycleHooks</td>
 			<td>object</td>
 			<td><pre lang="json">
@@ -961,6 +1025,9 @@ true
   "ldap": {
     "auth": {
       "existingSecret": {
+        "keyMapping": {
+          "password": null
+        },
         "name": null
       }
     },

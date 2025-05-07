@@ -1,0 +1,75 @@
+# SPDX-License-Identifier: AGPL-3.0-only
+# SPDX-FileCopyrightText: 2023-2025 Univention GmbH
+
+{{- if .Values.ldapUpdateUniventionObjectIdentifier.enabled }}
+---
+apiVersion: "batch/v1"
+kind: "Job"
+metadata:
+  name: {{ printf "%s-%d" "update-univention-object-identifier" .Release.Revision }}
+  labels:
+    {{- include "common.labels.standard" . | nindent 4 }}
+  {{- if .Values.additionalAnnotations }}
+  annotations:
+    {{ toYaml .Values.additionalAnnotations | nindent 4 }}
+  {{- end }}
+spec:
+  backoffLimit: 6
+  suspend: {{ .Values.ldapUpdateUniventionObjectIdentifier.suspend }}
+  template:
+    metadata:
+      name: {{ include "common.names.name" . }}
+      labels:
+        {{- include "common.labels.standard" . | nindent 8 }}
+      annotations:
+        {{- if .Values.additionalAnnotations }}
+        {{ toYaml .Values.additionalAnnotations | nindent 8 }}
+        {{- end }}
+    spec:
+      restartPolicy: Never
+      {{- if or .Values.pullSecrets .Values.global.imagePullSecrets }}
+      imagePullSecrets:
+        {{- range .Values.global.imagePullSecrets }}
+        - name: "{{ . }}"
+        {{- end }}
+        {{- range .Values.pullSecrets }}
+        - name: "{{ . }}"
+        {{- end }}
+      {{- end }}
+      {{- if .Values.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
+      {{- if .Values.serviceAccount.create }}
+      serviceAccountName: {{ include "common.names.fullname" . }}
+      {{- end }}
+
+      containers:
+      - name: "ldap-update-univention-object-identifier"
+        {{- if $.Values.containerSecurityContext.enabled }}
+        securityContext: {{- omit $.Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+        {{- end }}
+        image: "{{ coalesce .Values.ldapUpdateUniventionObjectIdentifier.image.registry .Values.global.imageRegistry }}/{{ .Values.ldapUpdateUniventionObjectIdentifier.image.repository }}:{{ .Values.ldapUpdateUniventionObjectIdentifier.image.tag }}"
+        imagePullPolicy: {{ coalesce .imagePullPolicy $.Values.global.imagePullPolicy | quote }}
+        envFrom:
+          - configMapRef:
+              name: {{ include "common.names.fullname" . }}
+        env:
+          - name: LDAP_URI
+            value: {{ include "udm-rest-api.ldapUri" . }}
+          - name: LDAP_ADMIN_USER
+            value: "cn=admin,{{ required "Either .Values.udmRestApi.ldap.baseDn or .Values.global.ldap.baseDn must be set" (coalesce .Values.udmRestApi.ldap.baseDn .Values.global.ldap.baseDn) }}"
+          - name: LDAP_ADMIN_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: {{ include "nubus-common.secrets.name" (dict "existingSecret" .Values.udmRestApi.ldap.auth.existingSecret "defaultNameSuffix" "credentials" "context" .) | quote }}
+                {{- /* FIXME Workaround because of bug in nubus-common.secrets.key. Function needs a tpl call like nubus-common.secrets.name! */}}
+                key: {{ tpl (include "nubus-common.secrets.key" (dict "existingSecret" .Values.udmRestApi.ldap.auth.existingSecret "key" "password")) . }}
+          - name: LDAP_BASE_DN
+            value: {{ required "Either .Values.udmRestApi.ldap.baseDn or .Values.global.ldap.baseDn must be set" (coalesce .Values.udmRestApi.ldap.baseDn .Values.global.ldap.baseDn) }}
+          - name: PYTHON_LOG_LEVEL
+            value: "{{ .Values.ldapUpdateUniventionObjectIdentifier.pythonLogLevel }}"
+        resources:
+          {{- toYaml .Values.resources | nindent 10 }}
+
+...
+{{- end }}
