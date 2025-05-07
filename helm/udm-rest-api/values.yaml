@@ -417,8 +417,8 @@ udmRestApi:
     auth:
       existingSecret:
         name: null
-        # keyMapping:
-        #   password: null
+        keyMapping:
+          password: null
   tls:
     # -- Enable TLS for LDAP connection.
     enabled: false
@@ -434,4 +434,20 @@ udmRestApi:
   # Possible values: 0-4/99 (0: Error, 1: Warn, 2: Info, 3: Debug, 4: Trace,
   # 99: sensitive data like cleartext passwords is logged as well).
   debug: "2"
+
+# -- Job configuration for updating the univentionObjectIdentifier
+ldapUpdateUniventionObjectIdentifier:
+  # -- Enables the job creation
+  enabled: true
+  # -- Switch to suspend the job
+  suspend: true
+  # -- Log Level for the Python script
+  pythonLogLevel: "INFO"
+  image:
+    # -- Image pull policy. This setting has higher precedence than global.imagePullPolicy.
+    pullPolicy: "IfNotPresent"
+    # -- Container registry address. This setting has higher precedence than global.registry.
+    registry: null
+    repository: "nubus-dev/images/ldap-update-univention-object-identifier"
+    tag: "latest"
 ...

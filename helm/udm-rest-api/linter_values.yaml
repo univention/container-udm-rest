@@ -34,6 +34,8 @@ udmRestApi:
     auth:
       existingSecret:
         name: "udm-rest-api-ldap-credentials"
+        keyMapping:
+          password: null
   image:
     repository: "univention/customers/dataport/upx/container-udm-rest/udm-rest-api"
     imagePullPolicy: "IfNotPresent"
