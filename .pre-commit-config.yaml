@@ -85,17 +85,8 @@ repos:
           # - "--strict"
           - "--no-warnings"
 
-  - repo: "https://github.com/google/yapf"
-    rev: "v0.40.2"
-    hooks:
-      - id: "yapf"
-        name: "yapf"
-        types:
-          - "python"
-        exclude: "^(docs/conf.py|tests/integration/conftest.py|tests/integration/test_users_user.py)"
-
   - repo: "https://github.com/astral-sh/ruff-pre-commit"
-    rev: "v0.1.9"
+    rev: "v0.11.8"
     hooks:
       - id: "ruff"
         name: "ruff"
@@ -103,30 +94,9 @@ repos:
           - "python"
         args:
           - "--fix"
-          - "--show-source"
+          - "--output-format=full"
           - "--exit-non-zero-on-fix"
           - "--extend-select=COM"
-
-  - repo: "https://github.com/hhatto/autopep8"
-    rev: "v2.0.4"
-    hooks:
-      - id: "autopep8"
-        name: "autopep8"
-        types:
-          - "python"
-        args:
-          - "--in-place"
-          - "--aggressive"
-          - "--aggressive"
-          - "--experimental"
-
-  - repo: "https://github.com/PyCQA/flake8"
-    rev: "6.1.0"
-    hooks:
-      - id: "flake8"
-        name: "flake8"
-        types:
-          - "python"
 
   - repo: "https://github.com/hadolint/hadolint"
     rev: "v2.12.0"
