@@ -52,35 +52,18 @@ def setup_logging(level: str | int):
     logger = logging.getLogger(__name__)
 
 
-def ldap_connect(ldap_uri: str, ldap_admin_user: str, ldap_admin_password: str,
-                 ldap_base_dn: str):
-    global logger
+def ldap_connect(ldap_uri: str, ldap_admin_user: str, ldap_admin_password: str, ldap_base_dn: str):
+    logger.debug("Try connect to %s (%s) with %s", ldap_uri, ldap_base_dn, ldap_admin_user)
 
-    logger.debug("Try connect to %s (%s) with %s", ldap_uri, ldap_base_dn,
-                 ldap_admin_user)
+    ldap_connection = ldap.initialize(ldap_uri)
+    ldap_connection.simple_bind_s(ldap_admin_user, ldap_admin_password)
 
-    try:
-        ldap_connection = ldap.initialize(ldap_uri)
-    except ldap.SERVER_DOWN:
-        logger.error("LDAP server down")
-        exit(1)
-
-    try:
-        ldap_connection.simple_bind_s(ldap_admin_user, ldap_admin_password)
-    except ldap.INVALID_CREDENTIALS:
-        logger.error("Invalid LDAP credentials")
-        exit(1)
-
-    logger.debug("Connected to %s (%s) with %s", ldap_uri, ldap_base_dn,
-                 ldap_admin_user)
+    logger.debug("Connected to %s (%s) with %s", ldap_uri, ldap_base_dn, ldap_admin_user)
 
     return ldap_connection
 
 
-def update_univention_object_identifier(ldap_connection: ldap.ldapobject,
-                                        ldap_base_dn: str):
-    global logger
-
+def update_univention_object_identifier(ldap_connection: ldap.ldapobject, ldap_base_dn: str):
     result = ldap_connection.search_s(
         f"{ldap_base_dn}",
         ldap.SCOPE_SUBTREE,
@@ -88,13 +71,13 @@ def update_univention_object_identifier(ldap_connection: ldap.ldapobject,
         ["univentionObjectIdentifier", "entryUUID"],
     )
 
-    cnt = 0
+    updated_count = 0
+    failed_count = 0
     for entry in result:
         logger.debug("Processing %s", entry[0])
         logger.debug("Values:\n%s", pformat(entry[1], indent=4))
 
-        if entry[1].get(
-                "univentionObjectIdentifier") or not entry[1].get("entryUUID"):
+        if entry[1].get("univentionObjectIdentifier") or not entry[1].get("entryUUID"):
             logger.warning(
                 "Wrong ldap search condition! univentionObjectIdentifier: %s entryUUID: %s",
                 entry[1].get("univentionObjectIdentifier"),
@@ -105,36 +88,45 @@ def update_univention_object_identifier(ldap_connection: ldap.ldapobject,
         try:
             ldap_connection.modify_s(
                 entry[0],
-                [(
-                    ldap.MOD_REPLACE,
-                    "univentionObjectIdentifier",
-                    entry[1].get("entryUUID"),
-                )],
+                [
+                    (
+                        ldap.MOD_REPLACE,
+                        "univentionObjectIdentifier",
+                        entry[1].get("entryUUID"),
+                    )
+                ],
             )
         except Exception as e:
             logger.error(e)
+            failed_count += 1
+            continue
 
-        cnt += 1
+        updated_count += 1
 
-    logger.info("Updated %s records.", cnt)
+    logger.info("Updated %s records. Failed to update %s records.", updated_count, failed_count)
 
 
 def main(config: Config):
     setup_logging(config.log_level)
-    global logger
+
     logger.info("Updating univentionObjectIdentifier with entryUUID values.")
-    logger.debug("Loaded config:\n%s", pformat(dict(config._asdict()),
-                                               indent=4))
+    logger.debug("Loaded config:\n%s", pformat(dict(config._asdict()), indent=4))
 
-    ldap_connection = ldap_connect(
-        ldap_uri=config.ldap_uri,
-        ldap_admin_user=config.ldap_admin_user,
-        ldap_admin_password=config.ldap_admin_password,
-        ldap_base_dn=config.ldap_base_dn,
-    )
+    try:
+        ldap_connection = ldap_connect(
+            ldap_uri=config.ldap_uri,
+            ldap_admin_user=config.ldap_admin_user,
+            ldap_admin_password=config.ldap_admin_password,
+            ldap_base_dn=config.ldap_base_dn,
+        )
+    except ldap.SERVER_DOWN:
+        logger.error("LDAP server down")
+        exit(1)
+    except ldap.INVALID_CREDENTIALS:
+        logger.error("Invalid LDAP credentials")
+        exit(1)
 
-    update_univention_object_identifier(ldap_connection=ldap_connection,
-                                        ldap_base_dn=config.ldap_base_dn)
+    update_univention_object_identifier(ldap_connection=ldap_connection, ldap_base_dn=config.ldap_base_dn)
 
 
 # ###########################################################################

@@ -6,7 +6,7 @@
 apiVersion: "batch/v1"
 kind: "Job"
 metadata:
-  name: {{ printf "%s-%d" "update-univention-object-identifier" .Release.Revision }}
+  name: {{ printf "%s-update-univention-object-identifier" (include "nubus-common.names.fullnameWithRevision" .) }}
   labels:
     {{- include "common.labels.standard" . | nindent 4 }}
   {{- if .Values.additionalAnnotations }}

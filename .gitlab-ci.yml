@@ -32,9 +32,7 @@ include:
     KANIKO_ARGS: "--target cli"
     DOCKERFILE_PATH: "docker/udm-rest-api-python-client/Dockerfile"
   - IMAGE_NAME: "ldap-update-univention-object-identifier"
-    DOCKERFILE_PATH: "./docker/ldap-update-univention-object-identifier/Dockerfile"
     KANIKO_BUILD_CONTEXT: "$CI_PROJECT_DIR/docker/ldap-update-univention-object-identifier"
-    KANIKO_CACHE_ARGS: "--cache=false"
 
 .publish-matrix: &publish-matrix
   - IMAGE_NAME:
@@ -77,7 +75,7 @@ test-udm-rest:
     - echo -e "\e[0Ksection_start:`date +%s`:docker_compose_config[collapsed=true]\r\e[0KDocker Compose configuration"
     - docker compose config udm-rest-api ldap-server test
     - echo -e "\e[0Ksection_end:`date +%s`:docker_compose_config\r\e[0K"
-    - docker compose --verbose up --no-build --quiet-pull --wait --wait-timeout 60 udm-rest-api ldap-server
+    - docker compose up --no-build --quiet-pull --wait --wait-timeout 60 udm-rest-api ldap-server
   script:
     - docker compose run --quiet-pull --rm test pytest -lvv tests/integration
   after_script:
