@@ -75,6 +75,7 @@ services:
       PYTHON_LOG_LEVEL: "DEBUG"
       LDAP_CN_ADMIN_PW: "univention"
       TLS_MODE: "off"
+      UPDATE_INDEX_ON_STARTUP: "true"
     # FIXME: slapd won't work on linux kernel 6.6
     ulimits:
       nofile:
