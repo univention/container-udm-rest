@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.30.1](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/compare/v0.30.0...v0.30.1) (2025-05-10)
+
+
+### Bug Fixes
+
+* add missing env to ldap-server in docker-compose.yaml ([1dcf535](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/commit/1dcf535ab2ccf242b16452d757442cd58dcb04df))
+* move addlicense pre-commit hook ([db2482a](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/commit/db2482aa454bd1700368cbff428d400e36bec641))
+* move docker-services ([3ca1f79](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/commit/3ca1f793f2b66ff5b4f461b675e4cd4a99c7d88d))
+* update common-ci to main ([2b35e7d](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/commit/2b35e7df25e6e4f77aab5e22f7e4be159000fd10))
+
 ## [0.30.0](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/compare/v0.29.2...v0.30.0) (2025-04-29)
 
 
