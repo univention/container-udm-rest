@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.31.0](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/compare/v0.30.1...v0.31.0) (2025-05-11)
+
+
+### Features
+
+* move and upgrade ucs-base-image to 0.17.3-build-2025-05-11 ([74a82d7](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/commit/74a82d7edee2171abe41cede56e81a636a8c1fa1))
+
 ## [0.30.1](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/compare/v0.30.0...v0.30.1) (2025-05-10)
 
 
