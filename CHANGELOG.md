@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.32.0](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/compare/v0.31.0...v0.32.0) (2025-05-12)
+
+
+### Features
+
+* Generate univentionObjectIdentifier for existing objects ([ed2f95a](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/commit/ed2f95a68170d7f0eb672f40309bd29b4f78d991)), closes [univention/dev/internal/team-nubus#1157](https://git.knut.univention.de/univention/dev/internal/team-nubus/issues/1157)
+
+
+### Bug Fixes
+
+* Apply review suggestions from Johannes L. ([b35f7be](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/commit/b35f7be1185fcb971eb590bd469a83fed13b60fc)), closes [univention/dev/internal/team-nubus#1157](https://git.knut.univention.de/univention/dev/internal/team-nubus/issues/1157)
+* **pre-commit:** Removed old formatters, upgraded Ruff to v0.11.8 ([6e0b3f2](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/commit/6e0b3f2a5e9f7c7d896169f6e906d62f69bf0da9)), closes [univention/dev/internal/team-nubus#1157](https://git.knut.univention.de/univention/dev/internal/team-nubus/issues/1157)
+
 ## [0.31.0](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/compare/v0.30.1...v0.31.0) (2025-05-11)
 
 
