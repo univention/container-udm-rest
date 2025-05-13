@@ -90,12 +90,7 @@ docker compose run --rm pre-commit
 
 ## Tests
 
-The test suite requires an LDAP server along with the UDM REST API.
-You can run it as follows:
-```bash
-docker compose up --detach ldap-server udm-rest-api
-docker compose run --rm test
-```
+[See the `tests` README for instructions on how to run the tests](./tests/README.md)
 
 ## Implementation Status
 

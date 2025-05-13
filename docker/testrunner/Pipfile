@@ -6,6 +6,7 @@ name = "pypi"
 [packages]
 requests = "*"
 pytest = "*"
+udm-rest-api-client = "*"
 
 [dev-packages]
 

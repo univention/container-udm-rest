@@ -90,7 +90,7 @@ helm uninstall udm-rest-api
     "repository": "nubus-dev/images/blocklist-cleanup",
     "tag": "latest"
   },
-  "schedule": "0 4 * * *"
+  "schedule": "0 8 * * *"
 }
 </pre>
 </td>

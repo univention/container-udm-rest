@@ -22,10 +22,10 @@ data:
   CA_CERT_FILE: "{{ .Values.udmRestApi.ldap.tls.caCertificateFile }}"
   {{- end }}
   # used by the load-join-data job
-  UDM_API_URL: 'http://{{ include "common.names.fullname" . }}/udm/'
+  UDM_API_URL: 'http://{{ include "common.names.fullname" . }}:{{ .Values.service.ports.http.port }}/udm/'
   # This is hard-coded to be cn=admin in UCS
   UDM_API_USER: "cn=admin"
-  UDM_API_PASSWORD_FILE: "{{ .Values.udmRestApi.ldapSecretFile }}"
+  UDM_API_PASSWORD_FILE: "/etc/ldap.secret"
 
 ...
 

@@ -2,23 +2,35 @@
 
 ## TL;DR: Run the tests
 
-In a container:
+The test suite requires an LDAP server along with the UDM REST API.
+You can run it as follows:
 
-```shell
-docker compose run --build test
+```bash
+cp .env.udm-rest-api.example .env.udm-rest-api
+mkdir secret
+echo -n univention > secret/ldap.secret
+echo -n univention > secret/machine.secret
+docker compose up --detach ldap-server udm-rest-api
 ```
 
-Locally:
+Then execute the tests:
 
-```shell
+- In a container:
+
+```bash
+docker compose run --build --rm test
+```
+
+- Locally:
+
+```bash
 # Use "pipenv" to have the right environment
+pushd docker/testrunner
 pipenv sync -d
-pipenv run pytest
-
-# Get a shell
 pipenv shell
+popd
+pytest run tests/integration
 ```
-
 
 ## Target structure
 

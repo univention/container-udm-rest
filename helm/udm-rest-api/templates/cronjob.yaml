@@ -8,7 +8,7 @@
 apiVersion: "batch/v1"
 kind: "CronJob"
 metadata:
-  name: {{ include "nubus-common.names.fullnameWithRevision" . | quote }}
+  name: {{ printf "%s-blocklist-cleanup" (include "nubus-common.names.fullnameWithRevision" .) }}
   labels:
     {{- include "common.labels.standard" . | nindent 4 }}
   {{- if .Values.additionalAnnotations }}
@@ -57,13 +57,10 @@ spec:
               envFrom:
                 - configMapRef:
                     name: {{ include "common.names.fullname" . | quote }}
-              env:
-                - name: SET_STATUS_FLAG
-                  value: "true"
               volumeMounts:
                 - name: credentials-volume
                   mountPath: /etc/ldap.secret
-                  subPath: {{ tpl (include "common.secrets.key" (dict "existingSecret" .Values.udmRestApi.ldap.auth.existingSecret "key" "password")) . }}
+                  subPath: {{ tpl (include "nubus-common.secrets.key" (dict "existingSecret" .Values.udmRestApi.ldap.auth.existingSecret "key" "password")) . }}
 
               resources:
                 {{- toYaml .Values.resources | nindent 16 }}
@@ -71,7 +68,7 @@ spec:
             - name: credentials-volume
               secret:
                 defaultMode: 420
-                secretName: {{ tpl .Values.udmRestApi.ldap.auth.existingSecret.name . }}
+                secretName: {{ include "nubus-common.secrets.name" (dict "existingSecret" .Values.udmRestApi.ldap.auth.existingSecret "defaultNameSuffix" "credentials" "context" .) }}
 
 ...
 {{- end }}

@@ -457,7 +457,7 @@ ldapUpdateUniventionObjectIdentifier:
 # -- Settings to configure the UDM blocklist cleanup job
 blocklistCleanup:
   enabled: true
-  schedule: "0 4 * * *"
+  schedule: "0 8 * * *"
   image:
     # -- Container registry address. This setting has higher precedence than global.registry.
     registry: ""

@@ -8,6 +8,7 @@ and common fixtures for use in integration tests.
 import random
 from typing import Any, Callable, Dict, List, Tuple
 import urllib.parse
+from univention.admin.rest.client import UDM
 
 import pytest
 import requests
@@ -141,12 +142,25 @@ def create_user(
 ) -> Callable[[], Dict[str, Any]]:
     url_users = urllib.parse.urljoin(udm_url, "users/user/")
 
-    def _create_user() -> Dict[str, Any]:
+    def _create_user(with_univentionObjectIdentifier: bool = False) -> Dict[str, Any]:
         properties = random_user_properties()
         delete_obj_after_test(
             "users/user", f"uid={properties['username']},cn=users,{base_dn}")
         conn = session.post(url_users, json={"properties": properties})
         assert conn.status_code == requests.codes.created, repr(conn.__dict__)
+        if with_univentionObjectIdentifier:
+            user_uuid = conn.json().get('uuid')
+            properties['uuid'] = user_uuid
         return properties
 
     return _create_user
+
+
+@pytest.fixture(scope="session")
+def udm_rest_api_client(udm_url: str, pytestconfig):
+    username = pytestconfig.getoption("--username")
+    password = pytestconfig.getoption("--password")
+    udm = UDM.http(udm_url, username, password)
+    assert udm.get_ldap_base()
+
+    return udm
