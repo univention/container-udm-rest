@@ -156,6 +156,7 @@ ingress:
     nginx.ingress.kubernetes.io/configuration-snippet-disabled: |
       rewrite ^/univention(/udm/.*)$ $1 break;
     nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/affinity: "none"
     nginx.ingress.kubernetes.io/rewrite-target: "/$2$3"
 
 
