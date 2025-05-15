@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.33.0](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/compare/v0.32.1...v0.33.0) (2025-05-15)
+
+
+### Features
+
+* add blocklist_clean_expired to UDM rest api client ([c4815d4](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/commit/c4815d42890093fd2f21ba91298743f6523e450e))
+* refactor blocklist cleanup job ([99aff4e](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/commit/99aff4edfde9dbce307e65d5727f0f5ca77e1d55))
+
 ## [0.32.1](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/compare/v0.32.0...v0.32.1) (2025-05-15)
 
 
