@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.32.1](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/compare/v0.32.0...v0.32.1) (2025-05-15)
+
+
+### Bug Fixes
+
+* disable ingress affinity ([02a601b](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/commit/02a601bcf075031f70b0896479a1a7acddd0edce)), closes [univention/dev/internal/team-nubus#1121](https://git.knut.univention.de/univention/dev/internal/team-nubus/issues/1121)
+
 ## [0.32.0](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/compare/v0.31.0...v0.32.0) (2025-05-12)
 
 
