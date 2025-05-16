@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.34.0](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/compare/v0.33.0...v0.34.0) (2025-05-16)
+
+
+### Features
+
+* Update base image to include univentionObjectIdentifier changes from upstream ([f2af7d9](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/commit/f2af7d97ac8ec5e331174fde52e99e83a8551193)), closes [univention/dev/internal/team-nubus#1143](https://git.knut.univention.de/univention/dev/internal/team-nubus/issues/1143)
+
 ## [0.33.0](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/compare/v0.32.1...v0.33.0) (2025-05-15)
 
 
