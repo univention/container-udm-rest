@@ -39,7 +39,7 @@ helm uninstall udm-rest-api
 
 | Repository | Name | Version |
 |------------|------|---------|
-| oci://artifacts.software-univention.de/nubus/charts | nubus-common | ^0.8.x |
+| oci://artifacts.software-univention.de/nubus/charts | nubus-common | 0.21.0 |
 
 ## Values
 
