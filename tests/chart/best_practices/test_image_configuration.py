@@ -1,33 +1,31 @@
 # SPDX-License-Identifier: AGPL-3.0-only
 # SPDX-FileCopyrightText: 2025 Univention GmbH
 
-import pytest
-
 from univention.testing.helm.best_practice.image_configuration import ImageConfiguration
+from univention.testing.helm.utils import apply_mapping
 
 
 class TestImageConfiguration(ImageConfiguration):
 
-    @pytest.mark.skip(reason="TODO: Allow to configure the local key per container")
-    def test_image_registry_overrides_global_default_registry():
-        pass
+    def adjust_values(self, values: dict):
+        mapping = {
+            "udmRestApi.image": "image",
+            "ldapUpdateUniventionObjectIdentifier.image": "image",
+            "blocklistCleanup.image": "image",
+        }
+        apply_mapping(values, mapping, copy=True)
+        image_configuration = values.pop("image", {})
 
-    @pytest.mark.skip(reason="TODO: Allow to configure the local key per container")
-    def test_image_pull_policy_overrides_global_value():
-        pass
+        # NOTE: Extensions are dynamic in nature, configure one stub extension
+        # so that the generated init container will be checked as well.
+        stub_extension = {
+            "name": "stub-extension",
+            "image": {
+                "repository": "stub-path/stub-image",
+                "tag": "stub-tag",
+            } | image_configuration,
+        }
+        global_ = values.setdefault("global", {})
+        global_["systemExtensions"] = [stub_extension]
 
-    @pytest.mark.skip(reason="TODO: Allow to configure the local key per container")
-    def test_image_pull_secrets_can_be_provided():
-        pass
-
-    @pytest.mark.skip(reason="TODO: Allow to configure the local key per container")
-    def test_image_repository_can_be_configured():
-        pass
-
-    @pytest.mark.skip(reason="TODO: Allow to configure the local key per container")
-    def test_image_tag_can_be_configured():
-        pass
-
-    @pytest.mark.skip(reason="TODO: Allow to configure the local key per container")
-    def test_all_image_values_are_configured():
-        pass
+        return values
