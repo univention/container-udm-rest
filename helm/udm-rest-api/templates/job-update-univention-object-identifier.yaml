@@ -8,11 +8,11 @@ kind: "Job"
 metadata:
   name: {{ printf "%s-update-univention-object-identifier" (include "nubus-common.names.fullnameWithRevision" .) }}
   labels:
-    {{- include "common.labels.standard" . | nindent 4 }}
-  {{- if .Values.additionalAnnotations }}
-  annotations:
-    {{ toYaml .Values.additionalAnnotations | nindent 4 }}
-  {{- end }}
+    {{- include "common.labels.standard" ( dict "customLabels" .Values.additionalLabels "context" . ) | nindent 4 }}
+  {{- include "nubus-common.annotations.render" ( dict
+    "values" ( list .Values.additionalAnnotations )
+    "context" . )
+    | nindent 2 }}
 spec:
   backoffLimit: 6
   suspend: {{ .Values.ldapUpdateUniventionObjectIdentifier.suspend }}
