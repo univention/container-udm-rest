@@ -18,6 +18,8 @@ appVersion: "12.0.7"
 
 dependencies:
   - name: "nubus-common"
-    version: "^0.8.x"
-    repository: "oci://artifacts.software-univention.de/nubus/charts"
-...
+    # TODO: Replace with released version
+    version: "0.18.0-pre-jbornhold-secrets-refactoring-tweaks-4"
+    repository: "oci://artifacts.software-univention.de/nubus-dev/charts"
+    # version: "^0.8.x"
+    # repository: "oci://artifacts.software-univention.de/nubus/charts"
