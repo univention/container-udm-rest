@@ -27,12 +27,12 @@ spec:
         {{- end }}
     spec:
       restartPolicy: Never
-      {{- if or .Values.pullSecrets .Values.global.imagePullSecrets }}
+      {{- if or .Values.imagePullSecrets .Values.global.imagePullSecrets }}
       imagePullSecrets:
         {{- range .Values.global.imagePullSecrets }}
         - name: "{{ . }}"
         {{- end }}
-        {{- range .Values.pullSecrets }}
+        {{- range .Values.imagePullSecrets }}
         - name: "{{ . }}"
         {{- end }}
       {{- end }}

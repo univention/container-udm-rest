@@ -86,7 +86,7 @@ helm uninstall udm-rest-api
   "enabled": true,
   "image": {
     "imagePullPolicy": null,
-    "registry": "",
+    "registry": null,
     "repository": "nubus-dev/images/blocklist-cleanup",
     "tag": "latest"
   },
@@ -109,7 +109,7 @@ null
 			<td>blocklistCleanup.image.registry</td>
 			<td>string</td>
 			<td><pre lang="json">
-""
+null
 </pre>
 </td>
 			<td>Container registry address. This setting has higher precedence than global.registry.</td>
@@ -493,7 +493,7 @@ true
 {
   "enabled": true,
   "image": {
-    "pullPolicy": "IfNotPresent",
+    "imagePullPolicy": null,
     "registry": null,
     "repository": "nubus-dev/images/ldap-update-univention-object-identifier",
     "tag": "latest"
@@ -515,10 +515,10 @@ true
 			<td>Enables the job creation</td>
 		</tr>
 		<tr>
-			<td>ldapUpdateUniventionObjectIdentifier.image.pullPolicy</td>
+			<td>ldapUpdateUniventionObjectIdentifier.image.imagePullPolicy</td>
 			<td>string</td>
 			<td><pre lang="json">
-"IfNotPresent"
+null
 </pre>
 </td>
 			<td>Image pull policy. This setting has higher precedence than global.imagePullPolicy.</td>
