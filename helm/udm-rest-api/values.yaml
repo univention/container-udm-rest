@@ -2,12 +2,7 @@
 # SPDX-FileCopyrightText: 2024-2025 Univention GmbH
 
 ---
-# Default values for udm-rest-api.
-# This is a YAML-formatted file.
-# Declare variables to be passed into your templates.
 
-## Global values
-# The global properties are used to configure multiple charts at once.
 global:
   # -- Indicates wether this chart is part of a Nubus deployment.
   nubusDeployment: false
@@ -197,7 +192,7 @@ nameOverride: ""
 # Ref: https://kubernetes.io/docs/user-guide/node-selection/
 nodeSelector: {}
 
-# Database persistence settings.
+# Volume persistence settings.
 persistence:
   # -- The volume access modes, some of "ReadWriteOnce", "ReadOnlyMany", "ReadWriteMany", "ReadWriteOncePod".
   #
@@ -465,4 +460,3 @@ blocklistCleanup:
     # -- Image pull policy. This setting has higher precedence than global.imagePullPolicy.
     imagePullPolicy: null
     tag: "latest"
-...
