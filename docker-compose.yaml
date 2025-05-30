@@ -99,6 +99,15 @@ services:
         read_only: true
       - ./tests/init-internal-database.sh:/entrypoint.d/91-init-internal-database.sh
 
+  test-chart-udm-rest-api:
+    image: gitregistry.knut.univention.de/univention/dev/nubus-for-k8s/common-helm/testrunner:0.21.0
+    command: pytest tests/chart
+    profiles:
+      - test
+    volumes:
+      - "helm/udm-rest-api/:/app/helm/udm-rest-api"
+      - "tests/chart:/app/tests/chart"
+
   # Environment to build the documentation
   docs:
     image: docker-registry.knut.univention.de/sphinx:latest
