@@ -448,7 +448,7 @@ ldapUpdateUniventionObjectIdentifier:
   pythonLogLevel: "INFO"
   image:
     # -- Image pull policy. This setting has higher precedence than global.imagePullPolicy.
-    pullPolicy: "IfNotPresent"
+    imagePullPolicy: null
     # -- Container registry address. This setting has higher precedence than global.registry.
     registry: null
     repository: "nubus-dev/images/ldap-update-univention-object-identifier"
@@ -460,7 +460,7 @@ blocklistCleanup:
   schedule: "0 8 * * *"
   image:
     # -- Container registry address. This setting has higher precedence than global.registry.
-    registry: ""
+    registry: null
     repository: "nubus-dev/images/blocklist-cleanup"
     # -- Image pull policy. This setting has higher precedence than global.imagePullPolicy.
     imagePullPolicy: null
