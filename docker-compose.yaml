@@ -105,8 +105,8 @@ services:
     profiles:
       - test
     volumes:
-      - "helm/udm-rest-api/:/app/helm/udm-rest-api"
-      - "tests/chart:/app/tests/chart"
+      - "./helm/udm-rest-api/:/app/helm/udm-rest-api"
+      - "./tests/chart:/app/tests/chart"
 
   # Environment to build the documentation
   docs:
