@@ -13,7 +13,7 @@ metadata:
     {{- include "common.labels.standard" . | nindent 4 }}
   {{- if .Values.additionalAnnotations }}
   annotations:
-    {{ toYaml .Values.additionalAnnotations | quote | nindent 4 }}
+    {{ toYaml .Values.additionalAnnotations | nindent 4 }}
   {{- end }}
 spec:
   schedule: "{{ .Values.blocklistCleanup.schedule }}"
@@ -27,7 +27,7 @@ spec:
             {{- include "common.labels.standard" . | nindent 12 }}
           {{- if .Values.additionalAnnotations }}
           annotations:
-            {{ toYaml .Values.additionalAnnotations | quote | nindent 12 }}
+            {{ toYaml .Values.additionalAnnotations | nindent 12 }}
           {{- end }}
         spec:
           restartPolicy: "Never"
