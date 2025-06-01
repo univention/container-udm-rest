@@ -24,31 +24,3 @@ data:
   # This is hard-coded to be cn=admin in UCS
   UDM_API_USER: "cn=admin"
   UDM_API_PASSWORD_FILE: "/etc/ldap.secret"
-
-...
-
----
-kind: "ConfigMap"
-apiVersion: "v1"
-metadata:
-  name: {{ printf "%s-ldap-conf" (include "common.names.fullname" .) }}
-  namespace: {{ include "common.names.namespace" . | quote }}
-  labels:
-    {{- include "common.labels.standard" ( dict "customLabels" .Values.additionalLabels "context" . ) | nindent 4 }}
-  {{- include "nubus-common.annotations.render" ( dict
-    "values" ( list .Values.additionalAnnotations )
-    "context" . )
-    | nindent 2 }}
-data:
-  ldap.conf: |
-    URI {{ include "udm-rest-api.ldapUri" . }}
-    BASE {{ required "Either .Values.udmRestApi.ldap.baseDn or .Values.global.ldap.baseDn must be set" (coalesce .Values.udmRestApi.ldap.baseDn .Values.global.ldap.baseDn) }}
-    {{- if .Values.udmRestApi.tls.enabled }}
-    TLS_REQCERT demand
-    TLS_CACERT {{ .Values.udmRestApi.ldap.tls.caCertificateFile }}
-    TLS_CERT {{ .Values.udmRestApi.ldap.tls.certificateFile }}
-    TLS_KEY {{ .Values.udmRestApi.ldap.tls.certificateKeyFile }}
-    {{- else }}
-    TLS_REQCERT never
-    {{- end }}
-...
