@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.34.1](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/compare/v0.34.0...v0.34.1) (2025-06-02)
+
+
+### Bug Fixes
+
+* additional annotations should not be quoted ([b37ad94](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/commit/b37ad944c3d2dc5337e362cba456c425b4cc024d)), closes [univention/dev/internal/team-nubus#1170](https://git.knut.univention.de/univention/dev/internal/team-nubus/issues/1170)
+
 ## [0.34.0](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/compare/v0.33.0...v0.34.0) (2025-05-16)
 
 
