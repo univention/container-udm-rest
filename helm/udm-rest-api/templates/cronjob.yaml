@@ -11,9 +11,11 @@ metadata:
   name: {{ printf "%s-blocklist-cleanup" (include "nubus-common.names.fullnameWithRevision" .) }}
   labels:
     {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.additionalLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.additionalLabels "context" . ) | nindent 4 }}
+    {{- end }}
   {{- if .Values.additionalAnnotations }}
-  annotations:
-    {{ toYaml .Values.additionalAnnotations | quote | nindent 4 }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.additionalAnnotations "context" . ) | nindent 4 }}
   {{- end }}
 spec:
   schedule: "{{ .Values.blocklistCleanup.schedule }}"
@@ -25,9 +27,8 @@ spec:
           name: {{ include "common.names.name" . | quote }}
           labels:
             {{- include "common.labels.standard" . | nindent 12 }}
-          {{- if .Values.additionalAnnotations }}
-          annotations:
-            {{ toYaml .Values.additionalAnnotations | quote | nindent 12 }}
+          {{- if .Values.podAnnotations }}
+          annotations: {{- include "common.tplvalues.render" (dict "value" .Values.podAnnotations "context" .) | nindent 12 }}
           {{- end }}
         spec:
           restartPolicy: "Never"
