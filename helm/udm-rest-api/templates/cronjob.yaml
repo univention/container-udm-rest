@@ -59,7 +59,7 @@ spec:
               volumeMounts:
                 - name: credentials-volume
                   mountPath: /etc/ldap.secret
-                  subPath: {{ tpl (include "nubus-common.secrets.key" (dict "existingSecret" .Values.udmRestApi.ldap.auth.existingSecret "key" "password")) . }}
+                  subPath: {{ tpl (include "nubus-common.secrets.key" (dict "existingSecret" .Values.ldap.auth.existingSecret "key" "password")) . }}
 
               resources:
                 {{- toYaml .Values.resources | nindent 16 }}
@@ -67,7 +67,7 @@ spec:
             - name: credentials-volume
               secret:
                 defaultMode: 420
-                secretName: {{ include "nubus-common.secrets.name" (dict "existingSecret" .Values.udmRestApi.ldap.auth.existingSecret "defaultNameSuffix" "credentials" "context" .) }}
+                secretName: {{ include "nubus-common.secrets.name" (dict "existingSecret" .Values.ldap.auth.existingSecret "defaultNameSuffix" "ldap" "context" .) }}
 
 ...
 {{- end }}
