@@ -180,12 +180,12 @@ spec:
               mountPath: /etc/ldap
             - name: etc-univention-volume
               mountPath: /etc/univention
-            - name: credentials-volume
+            - name: secret-ldap
               mountPath: /etc/ldap.secret
-              subPath: {{ tpl (include "common.secrets.key" (dict "existingSecret" .Values.udmRestApi.ldap.auth.existingSecret "key" "password")) . }}
-            - name: credentials-volume
+              subPath: {{ include "nubus-common.secrets.key" (dict "existingSecret" .Values.ldap.auth.existingSecret "key" "password") | quote }}
+            - name: secret-ldap
               mountPath: /etc/machine.secret
-              subPath: {{ tpl (include "common.secrets.key" (dict "existingSecret" .Values.udmRestApi.ldap.auth.existingSecret "key" "password")) . }}
+              subPath: {{ include "nubus-common.secrets.key" (dict "existingSecret" .Values.ldap.auth.existingSecret "key" "password") | quote }}
             - name: plugin-targets
               mountPath: /usr/lib/python3/dist-packages/univention/udm/modules
               subPath: udm-modules
@@ -237,10 +237,10 @@ spec:
           emptyDir: {}
         - name: plugin-targets
           emptyDir: {}
-        - name: credentials-volume
+        - name: secret-ldap
           secret:
             defaultMode: 420
-            secretName: {{ tpl .Values.udmRestApi.ldap.auth.existingSecret.name . }}
+            secretName: {{ include "nubus-common.secrets.name" (dict "existingSecret" .Values.ldap.auth.existingSecret "defaultNameSuffix" "ldap" "context" .) | quote }}
         {{- if .Values.udmRestApi.tls.enabled }}
         - name: {{ printf "%s-tls-volume" (include "common.names.fullname" .) }}
           secret:

@@ -303,8 +303,10 @@ null
 			<td>object</td>
 			<td><pre lang="json">
 {
-  "baseDn": "",
-  "uri": ""
+  "baseDn": null,
+  "connection": {
+    "uri": null
+  }
 }
 </pre>
 </td>
@@ -314,16 +316,16 @@ null
 			<td>global.ldap.baseDn</td>
 			<td>string</td>
 			<td><pre lang="json">
-""
+null
 </pre>
 </td>
 			<td>The LDAP base DN to use when connecting. Example: "dc=univention-organization,dc=intranet"</td>
 		</tr>
 		<tr>
-			<td>global.ldap.uri</td>
+			<td>global.ldap.connection.uri</td>
 			<td>string</td>
 			<td><pre lang="json">
-""
+null
 </pre>
 </td>
 			<td>The LDAP URI to connect to. Example: "ldap://example-ldap-server:389"</td>
@@ -485,6 +487,60 @@ true
 </pre>
 </td>
 			<td></td>
+		</tr>
+		<tr>
+			<td>ldap.auth.bindDn</td>
+			<td>string</td>
+			<td><pre lang="json">
+"cn=admin,dc=univention-organization,dc=intranet"
+</pre>
+</td>
+			<td></td>
+		</tr>
+		<tr>
+			<td>ldap.auth.existingSecret.keyMapping.password</td>
+			<td>string</td>
+			<td><pre lang="json">
+null
+</pre>
+</td>
+			<td></td>
+		</tr>
+		<tr>
+			<td>ldap.auth.existingSecret.name</td>
+			<td>string</td>
+			<td><pre lang="json">
+null
+</pre>
+</td>
+			<td></td>
+		</tr>
+		<tr>
+			<td>ldap.auth.password</td>
+			<td>string</td>
+			<td><pre lang="json">
+null
+</pre>
+</td>
+			<td></td>
+		</tr>
+		<tr>
+			<td>ldap.baseDn</td>
+			<td>string</td>
+			<td><pre lang="json">
+""
+</pre>
+</td>
+			<td>The LDAP base DN to use when connecting. baseDn: "dc=univention-organization,dc=intranet"</td>
+		</tr>
+		<tr>
+			<td>ldap.connection.uri</td>
+			<td>string</td>
+			<td><pre lang="json">
+""
+</pre>
+</td>
+			<td>The LDAP URI to connect to. uri: "ldap://my-ldap-server:389"</td>
 		</tr>
 		<tr>
 			<td>ldapUpdateUniventionObjectIdentifier</td>
@@ -1059,18 +1115,6 @@ true
     "repository": "nubus-dev/images/udm-rest-api",
     "tag": "latest"
   },
-  "ldap": {
-    "auth": {
-      "existingSecret": {
-        "keyMapping": {
-          "password": null
-        },
-        "name": null
-      }
-    },
-    "baseDn": "",
-    "uri": ""
-  },
   "tls": {
     "caCertificateFile": "/certificates/ca.crt",
     "certificateFile": "/certificates/tls.crt",
@@ -1108,24 +1152,6 @@ null
 </pre>
 </td>
 			<td>Container registry address. This setting has higher precedence than global.registry.</td>
-		</tr>
-		<tr>
-			<td>udmRestApi.ldap.baseDn</td>
-			<td>string</td>
-			<td><pre lang="json">
-""
-</pre>
-</td>
-			<td>The LDAP base DN to use when connecting. baseDn: "dc=univention-organization,dc=intranet"</td>
-		</tr>
-		<tr>
-			<td>udmRestApi.ldap.uri</td>
-			<td>string</td>
-			<td><pre lang="json">
-""
-</pre>
-</td>
-			<td>The LDAP URI to connect to. uri: "ldap://my-ldap-server:389"</td>
 		</tr>
 		<tr>
 			<td>udmRestApi.tls.caCertificateFile</td>

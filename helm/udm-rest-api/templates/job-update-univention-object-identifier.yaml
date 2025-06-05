@@ -57,15 +57,15 @@ spec:
           - name: LDAP_URI
             value: {{ include "udm-rest-api.ldapUri" . }}
           - name: LDAP_ADMIN_USER
-            value: "cn=admin,{{ required "Either .Values.udmRestApi.ldap.baseDn or .Values.global.ldap.baseDn must be set" (coalesce .Values.udmRestApi.ldap.baseDn .Values.global.ldap.baseDn) }}"
+            value: {{ tpl ( required "The parameter \"ldap.auth.bindDn\" is required." .Values.ldap.auth.bindDn ) . | quote }}
           - name: LDAP_ADMIN_PASSWORD
             valueFrom:
               secretKeyRef:
-                name: {{ include "nubus-common.secrets.name" (dict "existingSecret" .Values.udmRestApi.ldap.auth.existingSecret "defaultNameSuffix" "credentials" "context" .) | quote }}
+                name: {{ include "nubus-common.secrets.name" (dict "existingSecret" .Values.ldap.auth.existingSecret "defaultNameSuffix" "ldap" "context" .) | quote }}
                 {{- /* FIXME Workaround because of bug in nubus-common.secrets.key. Function needs a tpl call like nubus-common.secrets.name! */}}
-                key: {{ tpl (include "nubus-common.secrets.key" (dict "existingSecret" .Values.udmRestApi.ldap.auth.existingSecret "key" "password")) . }}
+                key: {{ tpl (include "nubus-common.secrets.key" (dict "existingSecret" .Values.ldap.auth.existingSecret "key" "password")) . }}
           - name: LDAP_BASE_DN
-            value: {{ required "Either .Values.udmRestApi.ldap.baseDn or .Values.global.ldap.baseDn must be set" (coalesce .Values.udmRestApi.ldap.baseDn .Values.global.ldap.baseDn) }}
+            value: {{ required "Either .Values.ldap.baseDn or .Values.global.ldap.baseDn must be set" (coalesce .Values.ldap.baseDn .Values.global.ldap.baseDn) }}
           - name: PYTHON_LOG_LEVEL
             value: "{{ .Values.ldapUpdateUniventionObjectIdentifier.pythonLogLevel }}"
         resources:
