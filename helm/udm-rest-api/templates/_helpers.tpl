@@ -28,7 +28,10 @@ If the value .Values.global.nubusDeployment equates to true, the defined templat
 {{- if .Values.global.nubusDeployment -}}
 {{- include "nubusTemplates.ldapServer.ldap.connection.uri" . -}}
 {{- else -}}
-{{ required "Either .Values.udmRestApi.ldap.uri or .Values.global.ldap.uri must be set" (coalesce .Values.udmRestApi.ldap.uri .Values.global.ldap.uri) }}
+{{ tpl ( required
+  "The LDAP connection has to be configured, see ldap.connection.uri or global.ldap.connection.uri."
+  (coalesce .Values.ldap.connection.uri .Values.global.ldap.connection.uri) ) .
+}}
 {{- end -}}
 {{- end -}}
 

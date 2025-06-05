@@ -39,12 +39,13 @@ global:
 
   # -- Global ldap configuration
   ldap:
-    # -- The LDAP URI to connect to.
-    # Example: "ldap://example-ldap-server:389"
-    uri: ""
     # -- The LDAP base DN to use when connecting.
     # Example: "dc=univention-organization,dc=intranet"
-    baseDn: ""
+    baseDn: null
+    connection:
+      # -- The LDAP URI to connect to.
+      # Example: "ldap://example-ldap-server:389"
+      uri: null
 
 # -- Additional custom annotations to add to all deployed objects.
 additionalAnnotations: {}
@@ -405,18 +406,6 @@ udmRestApi:
     # -- Image pull policy. This setting has higher precedence than global.imagePullPolicy.
     imagePullPolicy: null
     tag: "latest"
-  ldap:
-    # -- The LDAP URI to connect to.
-    # uri: "ldap://my-ldap-server:389"
-    uri: ""
-    # -- The LDAP base DN to use when connecting.
-    # baseDn: "dc=univention-organization,dc=intranet"
-    baseDn: ""
-    auth:
-      existingSecret:
-        name: null
-        keyMapping:
-          password: null
   tls:
     # -- Enable TLS for LDAP connection.
     enabled: false
@@ -460,3 +449,20 @@ blocklistCleanup:
     # -- Image pull policy. This setting has higher precedence than global.imagePullPolicy.
     imagePullPolicy: null
     tag: "latest"
+
+# LDAP Client configuration
+ldap:
+  # -- The LDAP base DN to use when connecting.
+  # baseDn: "dc=univention-organization,dc=intranet"
+  baseDn: ""
+  connection:
+    # -- The LDAP URI to connect to.
+    # uri: "ldap://my-ldap-server:389"
+    uri: ""
+  auth:
+    bindDn: "cn=admin,dc=univention-organization,dc=intranet"
+    password: null
+    existingSecret:
+      name: null
+      keyMapping:
+        password: null
