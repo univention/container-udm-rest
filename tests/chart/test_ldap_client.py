@@ -3,10 +3,10 @@
 
 import pytest
 
-from univention.testing.helm.client.ldap import Ldap
+from univention.testing.helm.client.ldap import Ldap, LdapUsageViaEnv, LdapConnectionUri
 
 
-class TestLdapClient(Ldap):
+class TestLdapClientUdmRestApiDeployment(Ldap):
 
     config_map_name = "release-name-udm-rest-api"
     secret_name = "release-name-udm-rest-api-ldap"
@@ -15,34 +15,27 @@ class TestLdapClient(Ldap):
 
     path_ldap_bind_dn = "data.LDAP_ADMIN_USER"
 
-    @pytest.mark.skip(reason="TODO: connection.host vs connection.uri")
-    def test_connection_host_is_required():
+    @pytest.mark.skip(reason="The UDM Rest API discovers the bind dn via UCR")
+    def test_auth_bind_dn_is_required():
         pass
 
-    @pytest.mark.skip(reason="TODO: connection.host vs connection.uri")
-    def test_connection_host_is_templated():
+    @pytest.mark.skip(reason="The UDM Rest API discovers the bind dn via UCR")
+    def test_auth_bind_dn_has_default():
         pass
 
-    @pytest.mark.skip(reason="TODO: connection.host vs connection.uri")
-    def test_connection_host_supports_global_default():
+    @pytest.mark.skip(reason="The UDM Rest API discovers the bind dn via UCR")
+    def test_auth_plain_values_bind_dn_is_templated():
         pass
 
-    @pytest.mark.skip(reason="TODO: connection.host vs connection.uri")
-    def test_connection_host_local_overrides_global():
+    @pytest.mark.skip(reason="The UDM Rest API discovers the bind dn via UCR")
+    def test_auth_plain_values_provide_bind_dn():
         pass
 
-    @pytest.mark.skip(reason="TODO: connection.host vs connection.uri")
-    def test_connection_port_has_default():
-        pass
 
-    @pytest.mark.skip(reason="TODO: connection.host vs connection.uri")
-    def test_connection_port_is_templated():
-        pass
+class TestLdapAuthJob(LdapConnectionUri, LdapUsageViaEnv, Ldap):
 
-    @pytest.mark.skip(reason="TODO: connection.host vs connection.uri")
-    def test_connection_port_supports_global_default():
-        pass
+    config_map_name = "release-name-udm-rest-api"
+    secret_name = "release-name-udm-rest-api-ldap"
+    workload_resource_kind = "Job"
 
-    @pytest.mark.skip(reason="TODO: connection.host vs connection.uri")
-    def test_connection_port_local_overrides_global():
-        pass
+    path_ldap_bind_dn = "data.LDAP_ADMIN_USER"
