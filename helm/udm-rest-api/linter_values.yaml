@@ -2,8 +2,6 @@
 # SPDX-FileCopyrightText: 2023-2025 Univention GmbH
 
 ---
-# Dummy values for running the Helm linter on the udm-rest-api.
-# Run it like this: helm lint -f values.yaml -f linter_values.yaml .
 global:
   nubusDeployment: false
   ldap:
@@ -22,9 +20,7 @@ additionalAnnotations:
 podAnnotations:
   "pod-annotation": "pod-stub-value"
 
-# -- Kubernetes ingress
 ingress:
-  # -- Set this to `true` in order to enable the installation on Ingress related objects.
   enabled: false
   host: "nubus.example.com"
 
