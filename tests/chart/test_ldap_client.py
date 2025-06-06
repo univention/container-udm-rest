@@ -11,8 +11,6 @@ class TestLdapClientUdmRestApiDeployment(LdapAuth):
     config_map_name = "release-name-udm-rest-api"
     secret_name = "release-name-udm-rest-api-ldap"
 
-    path_main_container = "spec.template.spec.containers[?@.name=='udm-rest-api']"
-
     path_ldap_bind_dn = "data.LDAP_ADMIN_USER"
 
     @pytest.mark.skip(reason="The UDM Rest API discovers the bind dn via UCR")
