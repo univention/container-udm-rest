@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.34.2](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/compare/v0.34.1...v0.34.2) (2025-06-06)
+
+
+### Bug Fixes
+
+* Correct defaults for image registry and pull policy in value file ([6b1619c](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/commit/6b1619cc076015d99191d481d4170b8dd51bf144)), closes [univention/dev/internal/team-nubus#892](https://git.knut.univention.de/univention/dev/internal/team-nubus/issues/892)
+* Correct handling of parameter imagePullSecrets ([ff2efaf](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/commit/ff2efaf702c77942ee08d0bb0eed236fc0f68558)), closes [univention/dev/internal/team-nubus#892](https://git.knut.univention.de/univention/dev/internal/team-nubus/issues/892)
+* Use correct value for image pull policy in job for object identifier update ([949f514](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/commit/949f5148482f853f05269f4c8acba08bd154a124)), closes [univention/dev/internal/team-nubus#892](https://git.knut.univention.de/univention/dev/internal/team-nubus/issues/892)
+
 ## [0.34.1](https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/compare/v0.34.0...v0.34.1) (2025-06-02)
 
 
