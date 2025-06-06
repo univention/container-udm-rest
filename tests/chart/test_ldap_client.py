@@ -32,10 +32,15 @@ class TestLdapClientUdmRestApiDeployment(Ldap):
         pass
 
 
-class TestLdapAuthJob(LdapConnectionUri, LdapUsageViaEnv, Ldap):
+class TestLdapAuthJob(LdapUsageViaEnv, Ldap):
 
     config_map_name = "release-name-udm-rest-api"
     secret_name = "release-name-udm-rest-api-ldap"
     workload_resource_kind = "Job"
 
     path_ldap_bind_dn = "data.LDAP_ADMIN_USER"
+
+
+class TestLdapConnection(LdapConnectionUri):
+
+    workload_resource_kind = "Job"
