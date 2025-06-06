@@ -3,10 +3,10 @@
 
 import pytest
 
-from univention.testing.helm.client.ldap import Ldap, LdapUsageViaEnv, LdapConnectionUri
+from univention.testing.helm.client.ldap import LdapAuth, LdapAuthUsageViaEnv, LdapConnectionUri
 
 
-class TestLdapClientUdmRestApiDeployment(Ldap):
+class TestLdapClientUdmRestApiDeployment(LdapAuth):
 
     config_map_name = "release-name-udm-rest-api"
     secret_name = "release-name-udm-rest-api-ldap"
@@ -32,7 +32,7 @@ class TestLdapClientUdmRestApiDeployment(Ldap):
         pass
 
 
-class TestLdapAuthJob(LdapUsageViaEnv, Ldap):
+class TestLdapAuthJob(LdapAuthUsageViaEnv, LdapAuth):
 
     config_map_name = "release-name-udm-rest-api"
     secret_name = "release-name-udm-rest-api-ldap"
