@@ -18,11 +18,11 @@ from univention.testing.helm.client.ldap import (
 class TestLdapAuth(LdapAuthUsageViaEnv, LdapAuth):
     config_map_name = "release-name-udm-rest-api"
     secret_name = "release-name-udm-rest-api-ldap"
-    workload_resource_kind = "Job"
+    workload_kind = "Job"
 
     path_ldap_bind_dn = "data.LDAP_ADMIN_USER"
 
 
 class TestLdapConnectionJob(LdapConnectionUri):
 
-    workload_resource_kind = "Job"
+    workload_kind = "Job"
