@@ -57,14 +57,14 @@ spec:
                 - configMapRef:
                     name: {{ include "common.names.fullname" . | quote }}
               volumeMounts:
-                - name: credentials-volume
+                - name: secret-ldap
                   mountPath: /etc/ldap.secret
                   subPath: {{ tpl (include "nubus-common.secrets.key" (dict "existingSecret" .Values.ldap.auth.existingSecret "key" "password")) . }}
 
               resources:
                 {{- toYaml .Values.resources | nindent 16 }}
           volumes:
-            - name: credentials-volume
+            - name: secret-ldap
               secret:
                 defaultMode: 420
                 secretName: {{ include "nubus-common.secrets.name" (dict "existingSecret" .Values.ldap.auth.existingSecret "defaultNameSuffix" "ldap" "context" .) }}
