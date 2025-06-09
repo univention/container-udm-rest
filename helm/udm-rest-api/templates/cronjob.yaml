@@ -46,7 +46,7 @@ spec:
           serviceAccountName: {{ include "common.names.fullname" . | quote }}
           {{- end }}
           containers:
-            - name: "blocklist-cleanup"
+            - name: "main"
               {{- if $.Values.containerSecurityContext.enabled }}
               securityContext: {{- omit $.Values.containerSecurityContext "enabled" | toYaml | nindent 16 }}
               {{- end }}
