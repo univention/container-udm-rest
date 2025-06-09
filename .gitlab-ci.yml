@@ -90,7 +90,7 @@ test-chart-udm-rest-api:
   image: "gitregistry.knut.univention.de/univention/dev/nubus-for-k8s/common-helm/testrunner:0.21.0"
   script:
     - helm dep build helm/udm-rest-api
-    - pytest tests/chart
+    - pytest -W error tests/chart
 
 push-image-external:
   parallel:
