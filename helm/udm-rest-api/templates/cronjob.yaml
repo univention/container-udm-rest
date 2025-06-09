@@ -8,7 +8,7 @@
 apiVersion: "batch/v1"
 kind: "CronJob"
 metadata:
-  name: {{ printf "%s-blocklist-cleanup" (include "nubus-common.names.fullnameWithRevision" .) }}
+  name: {{ printf "%s-blocklist-cleanup" (include "common.names.fullname" .) }}
   labels:
     {{- include "common.labels.standard" ( dict "customLabels" .Values.additionalLabels "context" . ) | nindent 4 }}
   {{- include "nubus-common.annotations.render" ( dict
