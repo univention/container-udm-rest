@@ -51,8 +51,7 @@ spec:
               securityContext: {{- omit $.Values.containerSecurityContext "enabled" | toYaml | nindent 16 }}
               {{- end }}
               image: "{{ coalesce .Values.blocklistCleanup.image.registry .Values.global.imageRegistry }}/{{ .Values.blocklistCleanup.image.repository }}:{{ .Values.blocklistCleanup.image.tag }}"
-              imagePullPolicy: {{ coalesce .Values.blocklistCleanup.image.imagePullPolicy .Values.global.imagePullPolicy | quote }}
-
+              imagePullPolicy: {{ coalesce .Values.blocklistCleanup.image.pullPolicy .Values.global.imagePullPolicy | quote }}
               envFrom:
                 - configMapRef:
                     name: {{ include "common.names.fullname" . | quote }}

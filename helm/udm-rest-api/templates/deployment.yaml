@@ -65,7 +65,7 @@ spec:
           securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
           image: "{{ coalesce .Values.udmRestApi.image.registry .Values.global.imageRegistry }}/{{ .Values.udmRestApi.image.repository }}:{{ .Values.udmRestApi.image.tag }}"
-          imagePullPolicy: {{ coalesce .Values.udmRestApi.image.imagePullPolicy .Values.global.imagePullPolicy | quote }}
+          imagePullPolicy: {{ coalesce .Values.udmRestApi.image.pullPolicy .Values.global.imagePullPolicy | quote }}
           command:
             - sh
             - -c
@@ -84,7 +84,7 @@ spec:
           securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
           image: "{{ coalesce .Values.udmRestApi.image.registry .Values.global.imageRegistry }}/{{ .Values.udmRestApi.image.repository }}:{{ .Values.udmRestApi.image.tag }}"
-          imagePullPolicy: {{ coalesce .Values.udmRestApi.image.imagePullPolicy .Values.global.imagePullPolicy | quote }}
+          imagePullPolicy: {{ coalesce .Values.udmRestApi.image.pullPolicy .Values.global.imagePullPolicy | quote }}
           command:
             - sh
             - -c
@@ -100,7 +100,7 @@ spec:
           securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
           image: "{{ coalesce .Values.udmRestApi.image.registry .Values.global.imageRegistry }}/{{ .Values.udmRestApi.image.repository }}:{{ .Values.udmRestApi.image.tag }}"
-          imagePullPolicy: {{ coalesce .Values.udmRestApi.image.imagePullPolicy .Values.global.imagePullPolicy | quote }}
+          imagePullPolicy: {{ coalesce .Values.udmRestApi.image.pullPolicy .Values.global.imagePullPolicy | quote }}
           command:
             - sh
             - -c
@@ -123,7 +123,7 @@ spec:
           securityContext: {{- omit $.Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
           image: "{{ coalesce .image.registry $.Values.global.imageRegistry }}/{{ .image.repository }}:{{ .image.tag }}"
-          imagePullPolicy: {{ coalesce .image.imagePullPolicy $.Values.global.imagePullPolicy | quote }}
+          imagePullPolicy: {{ coalesce .image.pullPolicy $.Values.global.imagePullPolicy | quote }}
           volumeMounts:
             - name: plugin-targets
               mountPath: /target
@@ -145,7 +145,7 @@ spec:
               --interface "0.0.0.0" \
               --processes "1"
           image: "{{ coalesce .Values.udmRestApi.image.registry .Values.global.imageRegistry }}/{{ .Values.udmRestApi.image.repository }}:{{ .Values.udmRestApi.image.tag }}"
-          imagePullPolicy: {{ coalesce .Values.udmRestApi.image.imagePullPolicy .Values.global.imagePullPolicy | quote }}
+          imagePullPolicy: {{ coalesce .Values.udmRestApi.image.pullPolicy .Values.global.imagePullPolicy | quote }}
           envFrom:
             - configMapRef:
                 name: {{ include "common.names.fullname" . }}

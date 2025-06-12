@@ -49,7 +49,7 @@ spec:
         securityContext: {{- omit $.Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
         {{- end }}
         image: "{{ coalesce .Values.ldapUpdateUniventionObjectIdentifier.image.registry .Values.global.imageRegistry }}/{{ .Values.ldapUpdateUniventionObjectIdentifier.image.repository }}:{{ .Values.ldapUpdateUniventionObjectIdentifier.image.tag }}"
-        imagePullPolicy: {{ coalesce .Values.ldapUpdateUniventionObjectIdentifier.image.imagePullPolicy .Values.global.imagePullPolicy | quote }}
+        imagePullPolicy: {{ coalesce .Values.ldapUpdateUniventionObjectIdentifier.image.pullPolicy .Values.global.imagePullPolicy | quote }}
         envFrom:
           - configMapRef:
               name: {{ include "common.names.fullname" . }}
