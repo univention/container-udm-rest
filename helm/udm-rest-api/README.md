@@ -85,7 +85,7 @@ helm uninstall udm-rest-api
 {
   "enabled": true,
   "image": {
-    "imagePullPolicy": null,
+    "pullPolicy": null,
     "registry": null,
     "repository": "nubus-dev/images/blocklist-cleanup",
     "tag": "latest"
@@ -97,7 +97,7 @@ helm uninstall udm-rest-api
 			<td>Settings to configure the UDM blocklist cleanup job</td>
 		</tr>
 		<tr>
-			<td>blocklistCleanup.image.imagePullPolicy</td>
+			<td>blocklistCleanup.image.pullPolicy</td>
 			<td>string</td>
 			<td><pre lang="json">
 null
@@ -549,7 +549,7 @@ null
 {
   "enabled": true,
   "image": {
-    "imagePullPolicy": null,
+    "pullPolicy": null,
     "registry": null,
     "repository": "nubus-dev/images/ldap-update-univention-object-identifier",
     "tag": "latest"
@@ -571,7 +571,7 @@ true
 			<td>Enables the job creation</td>
 		</tr>
 		<tr>
-			<td>ldapUpdateUniventionObjectIdentifier.image.imagePullPolicy</td>
+			<td>ldapUpdateUniventionObjectIdentifier.image.pullPolicy</td>
 			<td>string</td>
 			<td><pre lang="json">
 null
@@ -1110,7 +1110,7 @@ true
 {
   "debug": "2",
   "image": {
-    "imagePullPolicy": null,
+    "pullPolicy": null,
     "registry": "",
     "repository": "nubus-dev/images/udm-rest-api",
     "tag": "latest"
@@ -1136,7 +1136,7 @@ true
 			<td>The verbosity of log messages. Possible values: 0-4/99 (0: Error, 1: Warn, 2: Info, 3: Debug, 4: Trace, 99: sensitive data like cleartext passwords is logged as well).</td>
 		</tr>
 		<tr>
-			<td>udmRestApi.image.imagePullPolicy</td>
+			<td>udmRestApi.image.pullPolicy</td>
 			<td>string</td>
 			<td><pre lang="json">
 null

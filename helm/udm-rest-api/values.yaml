@@ -404,7 +404,7 @@ udmRestApi:
     registry: ""
     repository: "nubus-dev/images/udm-rest-api"
     # -- Image pull policy. This setting has higher precedence than global.imagePullPolicy.
-    imagePullPolicy: null
+    pullPolicy: null
     tag: "latest"
   tls:
     # -- Enable TLS for LDAP connection.
@@ -432,7 +432,7 @@ ldapUpdateUniventionObjectIdentifier:
   pythonLogLevel: "INFO"
   image:
     # -- Image pull policy. This setting has higher precedence than global.imagePullPolicy.
-    imagePullPolicy: null
+    pullPolicy: null
     # -- Container registry address. This setting has higher precedence than global.registry.
     registry: null
     repository: "nubus-dev/images/ldap-update-univention-object-identifier"
@@ -447,7 +447,7 @@ blocklistCleanup:
     registry: null
     repository: "nubus-dev/images/blocklist-cleanup"
     # -- Image pull policy. This setting has higher precedence than global.imagePullPolicy.
-    imagePullPolicy: null
+    pullPolicy: null
     tag: "latest"
 
 # LDAP Client configuration
