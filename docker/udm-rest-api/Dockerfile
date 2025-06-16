@@ -185,7 +185,7 @@ RUN \
   mkdir /udm/ && \
   #
   # create stub for AppCenter attributes mapping
-  # See: https://git.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/-/issues/1
+  # See: https://git.knut.univention.de/univention/dev/nubus-for-k8s/ldap/-/issues/1
   mkdir --parents /var/lib/univention-appcenter/attributes/ && \
   echo '{}' > /var/lib/univention-appcenter/attributes/mapping.json
 

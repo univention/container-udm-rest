@@ -5,7 +5,7 @@
 
 services:
   udm-rest-api:
-    image: gitregistry.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/udm-rest-api:${IMAGE_TAG:-latest}
+    image: gitregistry.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/udm-rest-api:${IMAGE_TAG:-latest}
     # FIXME: remove once arm64 packages are available at updates.software-univention.de
     platform: "linux/amd64"
     build:
@@ -25,7 +25,7 @@ services:
   api-client:
     profiles:
       - test
-    image: gitregistry.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/udm-rest-api-python-client:${IMAGE_TAG:-latest}
+    image: gitregistry.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/udm-rest-api-python-client:${IMAGE_TAG:-latest}
     build:
       context: ./docker/udm-rest-api-python-client
     platform: "linux/amd64"
@@ -34,7 +34,7 @@ services:
       - "./:/src/"
 
   blocklist-cleanup:
-    image: gitregistry.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/blocklist-cleanup:${IMAGE_TAG:-latest}
+    image: gitregistry.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/blocklist-cleanup:${IMAGE_TAG:-latest}
     build:
       context: ./docker/blocklist-cleanup
     secrets:
@@ -44,7 +44,7 @@ services:
   pre-commit:
     profiles:
       - "pre-commit"
-    image: gitregistry.knut.univention.de/univention/customers/dataport/upx/container-pre-commit/upx-pre-commit:${IMAGE_TAG:-latest}
+    image: gitregistry.knut.univention.de/univention/dev/tooling/pre-commit/upx-pre-commit:${IMAGE_TAG:-latest}
     volumes:
       - type: bind
         source: .
@@ -59,7 +59,7 @@ services:
     profiles:
       - "test"
     platform: "linux/amd64"
-    image: gitregistry.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/testrunner:${IMAGE_TAG:-latest}
+    image: gitregistry.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/testrunner:${IMAGE_TAG:-latest}
     build:
       context: docker/testrunner
     environment:
@@ -73,7 +73,7 @@ services:
     profiles:
       - "test"
     platform: linux/amd64
-    image: gitregistry.knut.univention.de/univention/customers/dataport/upx/container-ldap/ldap-server:latest
+    image: gitregistry.knut.univention.de/univention/dev/nubus-for-k8s/ldap/ldap-server:latest
     build:
       context: ../container-ldap/docker/ldap-server
       target: final

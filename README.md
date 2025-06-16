@@ -12,7 +12,7 @@ The repository's content provides you with first insights into the containerized
 
 ### BYOL: Bring Your Own LDAP
 
-Check out the [LDAP container](https://git.knut.univention.de/univention/customers/dataport/upx/container-ldap) in a separate folder.
+Check out the [LDAP container](https://git.knut.univention.de/univention/dev/nubus-for-k8s/ldap) in a separate folder.
 Follow the instructions from the LDAP repository to initialize the server.
 
 Then copy the provided `.env.udm-rest-api.example` to `.env.udm-rest-api`

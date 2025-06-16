@@ -10,7 +10,7 @@ A Helm chart for the UDM REST API
 ## TL;DR
 
 ```console
-helm upgrade --install udm-rest-api oci://gitregistry.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/helm/udm-rest-api
+helm upgrade --install udm-rest-api oci://gitregistry.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/helm/udm-rest-api
 ```
 
 ## Introduction
@@ -24,7 +24,7 @@ The server provides an abstraction layer for interacting with the LDAP.
 To install the chart with the release name `udm-rest-api`:
 
 ```console
-helm upgrade --install udm-rest-api oci://gitregistry.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/helm/udm-rest-api
+helm upgrade --install udm-rest-api oci://gitregistry.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/helm/udm-rest-api
 ```
 
 ## Uninstalling

@@ -30,7 +30,7 @@ x = container.get("cn=test," + ldap_base)
 ## udm-cli example usage
 
 ```shell
-docker run gitregistry.knut.univention.de/univention/customers/dataport/upx/container-udm-rest/udm-cli help
+docker run gitregistry.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/udm-cli help
 ```
 
 
