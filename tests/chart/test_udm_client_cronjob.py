@@ -14,14 +14,14 @@ are only verifying the correct usage of the values.
 
 import pytest
 
-from univention.testing.helm.client.ldap import LdapAuth
+from univention.testing.helm.client.ldap import Auth
 
 
 not_supported = pytest.mark.skip(
     reason="The CronJob does not allow to configure the UDM Rest API user")
 
 
-class TestUdmAuth(LdapAuth):
+class TestUdmAuth(Auth):
     """
     The CronJob configuration for UDM is using the LDAP client.
 

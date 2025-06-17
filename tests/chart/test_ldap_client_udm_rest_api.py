@@ -16,13 +16,13 @@ import re
 import pytest
 
 from univention.testing.helm.client.ldap import (
-    LdapAuth,
-    LdapConnectionUri,
-    LdapConnectionUriViaConfigMap,
+    Auth,
+    ConnectionUri,
+    ConnectionUriViaConfigMap,
 )
 
 
-class TestLdapAuth(LdapAuth):
+class TestAuth(Auth):
     config_map_name = "release-name-udm-rest-api"
     secret_name = "release-name-udm-rest-api-ldap"
 
@@ -45,7 +45,7 @@ class TestLdapAuth(LdapAuth):
         pass
 
 
-class TestLdapConnectionLdapConf(LdapConnectionUriViaConfigMap, LdapConnectionUri):
+class TestLdapConnectionLdapConf(ConnectionUriViaConfigMap, ConnectionUri):
     """
     Verify the regular ldap client configuration in `/etc/ldap/ldap.conf`
     """
