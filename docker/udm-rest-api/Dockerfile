@@ -4,8 +4,8 @@
 # SPDX-License-Identifier: AGPL-3.0-only
 # SPDX-FileCopyrightText: 2021-2025 Univention GmbH
 
-ARG UCS_BASE_IMAGE=gitregistry.knut.univention.de/univention/dev/projects/ucs-base-image/ucs-base-python-521
-ARG UCS_BASE_IMAGE_TAG=0.18.1-build-2025-05-29
+ARG UCS_BASE_IMAGE=gitregistry.knut.univention.de/univention/dev/projects/ucs-base-image/ucs-base-522
+ARG UCS_BASE_IMAGE_TAG=0.18.2-build-2025-06-12
 
 
 FROM ${UCS_BASE_IMAGE}:${UCS_BASE_IMAGE_TAG} AS build
@@ -33,9 +33,9 @@ WORKDIR /apt
 RUN chown _apt . && \
   # install Univention bash helper functions dependency
   DEBIAN_FRONTEND=noninteractive \
-    apt-get --assume-yes --verbose-versions --no-install-recommends install \
-      shell-univention-lib \
-      && \
+  apt-get --assume-yes --verbose-versions --no-install-recommends install \
+  shell-univention-lib \
+  && \
   # we do not need the many bash helper-functions here
   cp /usr/local/bin/fake-uv-lib.sh /usr/share/univention-lib/all.sh && \
   cp /usr/local/bin/fake-uv-lib.sh /usr/share/univention-lib/join.sh && \
@@ -43,34 +43,34 @@ RUN chown _apt . && \
   mkdir --parents /var/www/univention-directory-reports && \
   # install unlisted dependencies
   DEBIAN_FRONTEND=noninteractive \
-    apt-get --assume-yes --verbose-versions --no-install-recommends install \
-      python3-distutils \
-      && \
+  apt-get --assume-yes --verbose-versions --no-install-recommends install \
+  python3-distutils \
+  && \
   DEBIAN_FRONTEND=noninteractive \
-    apt-get --assume-yes --verbose-versions --no-install-recommends install \
-      python3-univention-directory-manager-rest \
-      libunivention-debug1 \
-      python3-ldap \
-      python3-univention-config-registry \
-      python3-univention-debhelper \
-      # dependencies of univention-management-console-module-udm
-      univention-directory-manager-tools \
-      univention-directory-reports \
-      univention-management-console-server \
-      univention-config \
-      univention-join \
-      # dependencies of python3-univention-directory-manager-rest
-      python3-genshi \
-      python3-mimeparse \
-      python3-pycurl \
-      python3-tornado \
-      python3-univention-directory-manager \
-      python3-univention-directory-reports \
-      python3-univention-management-console \
-      python3-uritemplate \
-      univention-management-console-module-udm \
-      univention-saml-schema \
-      && \
+  apt-get --assume-yes --verbose-versions --no-install-recommends install \
+  python3-univention-directory-manager-rest \
+  libunivention-debug1 \
+  python3-ldap \
+  python3-univention-config-registry \
+  python3-univention-debhelper \
+  # dependencies of univention-management-console-module-udm
+  univention-directory-manager-tools \
+  univention-directory-reports \
+  univention-management-console-server \
+  univention-config \
+  univention-join \
+  # dependencies of python3-univention-directory-manager-rest
+  python3-genshi \
+  python3-mimeparse \
+  python3-pycurl \
+  python3-tornado \
+  python3-univention-directory-manager \
+  python3-univention-directory-reports \
+  python3-univention-management-console \
+  python3-uritemplate \
+  univention-management-console-module-udm \
+  univention-saml-schema \
+  && \
   # univention-portal module:
   # /usr/lib/python3/dist-packages/univention/udm/modules/portal.py
   apt-get download univention-portal && \
@@ -105,24 +105,24 @@ WORKDIR /apt
 
 RUN chown _apt . && \
   DEBIAN_FRONTEND=noninteractive \
-    apt-get --assume-yes --verbose-versions --no-install-recommends install \
-      libc-bin \
-      libcurl3-gnutls \
-      locales \
-      python3 \
-      python3-ldap \
-      python3-pil \
-      python3-magic \
-      python3-samba \
-      python3-cracklib \
-      python3-univention-heimdal \
-      && \
+  apt-get --assume-yes --verbose-versions --no-install-recommends install \
+  libc-bin \
+  libcurl3-gnutls \
+  locales \
+  python3 \
+  python3-ldap \
+  python3-pil \
+  python3-magic \
+  python3-samba \
+  python3-cracklib \
+  python3-univention-heimdal \
+  && \
   apt-get download \
-   libunivention-config0 \
-   libunivention-debug1 \
-   libunivention-license0 \
-   libunivention-policy0 \
-   && \
+  libunivention-config0 \
+  libunivention-debug1 \
+  libunivention-license0 \
+  libunivention-policy0 \
+  && \
   dpkg --install --force-depends /apt/*
 
 WORKDIR /
@@ -168,16 +168,16 @@ RUN \
   #
   # build all locales
   printf 'en_US.UTF-8 UTF-8\nde_DE.UTF-8 UTF-8\n' >> /etc/locale.gen && \
-    localedef -i de_DE -c -f UTF-8 -A /usr/share/locale/locale.alias de_DE.UTF-8 && \
-    localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8 && \
+  localedef -i de_DE -c -f UTF-8 -A /usr/share/locale/locale.alias de_DE.UTF-8 && \
+  localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8 && \
   #
   # for base.conf:
   mkdir --parents /etc/univention/ && \
   #
   # for UCR:
   mkdir --parents \
-    /var/cache/univention-config/ \
-    /var/log/univention/ && \
+  /var/cache/univention-config/ \
+  /var/log/univention/ && \
   #
   # for CAcert.pem
   mkdir --parents /etc/univention/ssl/ucsCA/ && \
@@ -206,7 +206,7 @@ CMD [ \
   "--port", "9979", \
   "--interface", "0.0.0.0", \
   "--processes", "1" \
-]
+  ]
 
 EXPOSE 9979
 
@@ -222,11 +222,11 @@ SHELL ["/bin/bash", "-c"]
 # make this container debugable:
 RUN \
   DEBIAN_FRONTEND=noninteractive \
-    apt-get --assume-yes --verbose-versions --no-install-recommends install \
-      vim \
-      curl \
-      netcat-traditional \
-      iproute2=6.*
+  apt-get --assume-yes --verbose-versions --no-install-recommends install \
+  vim \
+  curl \
+  netcat-traditional \
+  iproute2=6.*
 
 
 ############################################################
