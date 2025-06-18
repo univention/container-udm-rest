@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.35.2](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/compare/v0.35.1...v0.35.2) (2025-06-18)
+
+
+### Bug Fixes
+
+* bump umc-base-image version ([3f1f5ce](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/commit/3f1f5ced984dd8ce67c8e1c0a4ec9677a37789a2)), closes [univention/dev/internal/team-nubus#1263](https://git.knut.univention.de/univention/dev/internal/team-nubus/issues/1263)
+
 ## [0.35.1](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/compare/v0.35.0...v0.35.1) (2025-06-18)
 
 
