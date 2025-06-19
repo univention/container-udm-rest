@@ -14,14 +14,14 @@ are only verifying the correct usage of the values.
 
 import pytest
 
-from univention.testing.helm.client.ldap import Auth
+from univention.testing.helm.client.ldap import AuthPassword, SecretViaVolume
 
 
 not_supported = pytest.mark.skip(
     reason="The CronJob does not allow to configure the UDM Rest API user")
 
 
-class TestUdmAuth(Auth):
+class TestUdmAuth(SecretViaVolume, AuthPassword):
     """
     The CronJob configuration for UDM is using the LDAP client.
 
@@ -37,22 +37,10 @@ class TestUdmAuth(Auth):
     secret_name = "release-name-udm-rest-api-ldap"
     workload_kind = "CronJob"
 
-    path_udm_username = "data.UDM_API_USER"
-
-    @not_supported
-    def test_auth_plain_values_provide_bind_dn():
-        pass
-
-    @not_supported
-    def test_auth_plain_values_bind_dn_is_templated():
-        pass
-
-    @not_supported
-    def test_auth_bind_dn_has_default():
-        pass
+    path_username = "data.UDM_API_USER"
 
     def test_username_is_fixed(self, chart):
         result = chart.helm_template()
         config_map = result.get_resource(kind="ConfigMap", name=self.config_map_name)
-        username = config_map.findone(self.path_udm_username)
+        username = config_map.findone(self.path_username)
         assert username == "cn=admin"
