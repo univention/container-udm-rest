@@ -13,36 +13,19 @@ ldap clients.
 
 import re
 
-import pytest
-
 from univention.testing.helm.client.ldap import (
-    Auth,
+    AuthPassword,
     ConnectionUri,
     ConnectionUriViaConfigMap,
+    SecretViaVolume,
 )
 
 
-class TestAuth(Auth):
+class TestAuth(SecretViaVolume, AuthPassword):
     config_map_name = "release-name-udm-rest-api"
     secret_name = "release-name-udm-rest-api-ldap"
 
     path_ldap_bind_dn = "data.LDAP_ADMIN_USER"
-
-    @pytest.mark.skip(reason="The UDM Rest API discovers the bind dn via UCR")
-    def test_auth_bind_dn_is_required():
-        pass
-
-    @pytest.mark.skip(reason="The UDM Rest API discovers the bind dn via UCR")
-    def test_auth_bind_dn_has_default():
-        pass
-
-    @pytest.mark.skip(reason="The UDM Rest API discovers the bind dn via UCR")
-    def test_auth_plain_values_bind_dn_is_templated():
-        pass
-
-    @pytest.mark.skip(reason="The UDM Rest API discovers the bind dn via UCR")
-    def test_auth_plain_values_provide_bind_dn():
-        pass
 
 
 class TestLdapConnectionLdapConf(ConnectionUriViaConfigMap, ConnectionUri):
