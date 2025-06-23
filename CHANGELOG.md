@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.35.3](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/compare/v0.35.2...v0.35.3) (2025-06-23)
+
+
+### Bug Fixes
+
+* use default cluster ingress class if not defined ([39cbd7a](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/commit/39cbd7a8d0546f2d91ea12d59508c066d8449627)), closes [univention/dev/internal/team-nubus#1134](https://git.knut.univention.de/univention/dev/internal/team-nubus/issues/1134)
+
 ## [0.35.2](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/compare/v0.35.1...v0.35.2) (2025-06-18)
 
 
