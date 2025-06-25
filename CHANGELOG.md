@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.35.4](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/compare/v0.35.3...v0.35.4) (2025-06-25)
+
+
+### Bug Fixes
+
+* removed obsolete test-connection ([79c1cea](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/commit/79c1cea79e5122f666e40ffd033d8c5be718822f)), closes [univention/dev/internal/team-nubus#1246](https://git.knut.univention.de/univention/dev/internal/team-nubus/issues/1246)
+
 ## [0.35.3](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/compare/v0.35.2...v0.35.3) (2025-06-23)
 
 
