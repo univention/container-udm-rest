@@ -460,7 +460,7 @@ ldap:
     # uri: "ldap://my-ldap-server:389"
     uri: ""
   auth:
-    bindDn: "cn=admin,dc=univention-organization,dc=intranet"
+    bindDn: 'cn=admin,{{ default "dc=univention-organization,dc=intranet" .Values.global.ldap.baseDn }}'
     password: null
     existingSecret:
       name: null
