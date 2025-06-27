@@ -12,6 +12,7 @@ class TestImageConfiguration(ImageConfiguration):
             "udmRestApi.image": "image",
             "ldapUpdateUniventionObjectIdentifier.image": "image",
             "blocklistCleanup.image": "image",
+            "waitForDependency.image": "image",
         }
         apply_mapping(values, mapping, copy=True)
         image_configuration = values.pop("image", {})

@@ -466,3 +466,20 @@ ldap:
       name: null
       keyMapping:
         password: null
+
+waitForDependency:
+  image:
+    registry: null
+    pullPolicy: null
+    repository: "nubus/images/wait-for-dependency"
+    tag: "0.32.1@sha256:44d45067e1d4e7a00d3b651e56df5177087e3206368a45cd1816d78ba7b21347"
+
+  # -- Array with extra environment variables to add to containers.
+  extraEnvVars: []
+
+  # -- Optionally specify an extra list of additional volumes.
+  extraVolumes: []
+
+  # -- Optionally specify an extra list of additional volumeMounts.
+  extraVolumeMounts: []
+...

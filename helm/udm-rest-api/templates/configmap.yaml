@@ -24,3 +24,13 @@ data:
   # This is hard-coded to be cn=admin in UCS
   UDM_API_USER: "cn=admin"
   UDM_API_PASSWORD_FILE: "/etc/ldap.secret"
+  wait-for-ldap.sh: |
+    #!/bin/bash
+    set -euxo pipefail
+
+    while ! ldapsearch -H $LDAP_URI -D $LDAP_ADMIN_USER -y $LDAP_ADMIN_PASSWORD -b "" -s base -LLL; do
+      echo "Checking if LDAP Server can be reached..."
+      sleep 2
+    done
+
+    echo "Success, the LDAP Server is available"

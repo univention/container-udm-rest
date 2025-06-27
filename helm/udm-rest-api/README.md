@@ -1198,6 +1198,69 @@ false
 </td>
 			<td>Set to Recreate if you use persistent volume that cannot be mounted by more than one pods to make sure the pods are destroyed first.</td>
 		</tr>
+		<tr>
+			<td>waitForDependency.extraEnvVars</td>
+			<td>list</td>
+			<td><pre lang="json">
+[]
+</pre>
+</td>
+			<td>Array with extra environment variables to add to containers.</td>
+		</tr>
+		<tr>
+			<td>waitForDependency.extraVolumeMounts</td>
+			<td>list</td>
+			<td><pre lang="json">
+[]
+</pre>
+</td>
+			<td>Optionally specify an extra list of additional volumeMounts.</td>
+		</tr>
+		<tr>
+			<td>waitForDependency.extraVolumes</td>
+			<td>list</td>
+			<td><pre lang="json">
+[]
+</pre>
+</td>
+			<td>Optionally specify an extra list of additional volumes.</td>
+		</tr>
+		<tr>
+			<td>waitForDependency.image.pullPolicy</td>
+			<td>string</td>
+			<td><pre lang="json">
+null
+</pre>
+</td>
+			<td></td>
+		</tr>
+		<tr>
+			<td>waitForDependency.image.registry</td>
+			<td>string</td>
+			<td><pre lang="json">
+null
+</pre>
+</td>
+			<td></td>
+		</tr>
+		<tr>
+			<td>waitForDependency.image.repository</td>
+			<td>string</td>
+			<td><pre lang="json">
+"nubus/images/wait-for-dependency"
+</pre>
+</td>
+			<td></td>
+		</tr>
+		<tr>
+			<td>waitForDependency.image.tag</td>
+			<td>string</td>
+			<td><pre lang="json">
+"0.32.1@sha256:44d45067e1d4e7a00d3b651e56df5177087e3206368a45cd1816d78ba7b21347"
+</pre>
+</td>
+			<td></td>
+		</tr>
 	</tbody>
 </table>
 
