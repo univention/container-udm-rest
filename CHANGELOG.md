@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.36.0](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/compare/v0.35.4...v0.36.0) (2025-06-27)
+
+
+### Features
+
+* Change values structure to match the ldap client structure ([b0dd835](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/commit/b0dd83547c9f7dbe0ad86e4c187061744f4ba468)), closes [univention/dev/internal/team-nubus#892](https://git.knut.univention.de/univention/dev/internal/team-nubus/issues/892)
+
+
+### Bug Fixes
+
+* Avoid setting a value for imagePullPolicy by default ([9d8f125](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/commit/9d8f12597ed763ed92f0842f7f6e68c41df2106e)), closes [univention/dev/internal/team-nubus#892](https://git.knut.univention.de/univention/dev/internal/team-nubus/issues/892)
+* Handling of annotations and labels in udm-rest-api chart ([99286d2](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/commit/99286d2f8512b4335ec39a1fe7354078de0bb6f1)), closes [univention/dev/internal/team-nubus#892](https://git.knut.univention.de/univention/dev/internal/team-nubus/issues/892)
+* Remove comments from linter values ([b3b9d5d](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/commit/b3b9d5d476fc82c287cfe67da8495107be487b38)), closes [univention/dev/internal/team-nubus#892](https://git.knut.univention.de/univention/dev/internal/team-nubus/issues/892)
+* Use ldap base dn in default of "ldap.bindDn" ([3bfe76b](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/commit/3bfe76b4062beb0085cf1721ba46e7d40a2e7e22)), closes [univention/dev/internal/team-nubus#892](https://git.knut.univention.de/univention/dev/internal/team-nubus/issues/892)
+
 ## [0.35.4](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/compare/v0.35.3...v0.35.4) (2025-06-25)
 
 
