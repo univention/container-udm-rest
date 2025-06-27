@@ -42,7 +42,31 @@ spec:
       {{- if .Values.serviceAccount.create }}
       serviceAccountName: {{ include "common.names.fullname" . }}
       {{- end }}
-
+      initContainers:
+      - name: "wait-for-ldap"
+        {{- if $.Values.containerSecurityContext.enabled }}
+        securityContext: {{- omit $.Values.containerSecurityContext "enabled" | toYaml | nindent 10 }}
+        {{- end }}
+        command: ["wait-for-ldap.sh"]
+        image: "{{ coalesce .Values.waitForDependency.image.registry .Values.global.imageRegistry }}/{{ .Values.waitForDependency.image.repository }}:{{ .Values.waitForDependency.image.tag }}"
+        imagePullPolicy: {{ coalesce .Values.waitForDependency.image.pullPolicy .Values.global.imagePullPolicy | quote }}
+        env:
+          - name: LDAP_URI
+            value: {{ include "udm-rest-api.ldapUri" . }}
+          - name: LDAP_ADMIN_USER
+            value: {{ tpl ( required "The parameter \"ldap.auth.bindDn\" is required." .Values.ldap.auth.bindDn ) . | quote }}
+          - name: LDAP_ADMIN_PASSWORD_FILE
+            value: "/var/secrets/ldap_password"
+          {{- with .Values.waitForDependency.extraEnvVars }}
+          {{- . | toYaml | nindent 10 }}
+          {{- end }}
+        volumeMounts:
+          - name: secret-ldap
+            mountPath: /var/secrets/ldap_password
+            subPath: {{ tpl (include "nubus-common.secrets.key" (dict "existingSecret" .Values.ldap.auth.existingSecret "key" "password")) . }}
+          {{- if .Values.waitForDependency.extraVolumeMounts }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.waitForDependency.extraVolumeMounts "context" .) | nindent 10 }}
+          {{- end }}
       containers:
       - name: main
         {{- if $.Values.containerSecurityContext.enabled }}
@@ -70,6 +94,13 @@ spec:
             value: "{{ .Values.ldapUpdateUniventionObjectIdentifier.pythonLogLevel }}"
         resources:
           {{- toYaml .Values.resources | nindent 10 }}
-
+      volumes:
+        - name: secret-ldap
+          secret:
+            defaultMode: 0400
+            secretName: {{ include "nubus-common.secrets.name" (dict "existingSecret" .Values.ldap.auth.existingSecret "defaultNameSuffix" "ldap" "context" .) | quote }}
+        {{- if .Values.waitForDependency.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.waitForDependency.extraVolumes  "context" .) | nindent 8 }}
+        {{- end }}
 ...
 {{- end }}
