@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.37.0](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/compare/v0.36.0...v0.37.0) (2025-06-30)
+
+
+### Features
+
+* add wait-for-ldap initContainer to uoid job ([ba31455](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/commit/ba3145579b8c1981406eb8d318f0627e3338947a)), closes [univention/dev/internal/team-nubus#1303](https://git.knut.univention.de/univention/dev/internal/team-nubus/issues/1303)
+
 ## [0.36.0](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/compare/v0.35.4...v0.36.0) (2025-06-27)
 
 
