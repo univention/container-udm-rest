@@ -67,6 +67,7 @@ spec:
           {{- if .Values.waitForDependency.extraVolumeMounts }}
           {{- include "common.tplvalues.render" (dict "value" .Values.waitForDependency.extraVolumeMounts "context" .) | nindent 10 }}
           {{- end }}
+        resources: {{- include "common.tplvalues.render" (dict "value" .Values.initResources "context" .) | nindent 10 }}
       containers:
       - name: main
         {{- if $.Values.containerSecurityContext.enabled }}
