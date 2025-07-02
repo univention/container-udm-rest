@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.37.1](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/compare/v0.37.0...v0.37.1) (2025-07-02)
+
+
+### Bug Fixes
+
+* Configure resources in wait-for-ldap init container ([464f528](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/commit/464f52889ac042818e2d40af4131ccec4fc85aa3)), closes [univention/dev/internal/team-nubus#1303](https://git.knut.univention.de/univention/dev/internal/team-nubus/issues/1303)
+
 ## [0.37.0](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/compare/v0.36.0...v0.37.0) (2025-06-30)
 
 
