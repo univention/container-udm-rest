@@ -100,7 +100,7 @@ services:
       - ./tests/init-internal-database.sh:/entrypoint.d/91-init-internal-database.sh
 
   test-chart-udm-rest-api:
-    image: gitregistry.knut.univention.de/univention/dev/nubus-for-k8s/common-helm/testrunner:0.21.0
+    image: gitregistry.knut.univention.de/univention/dev/nubus-for-k8s/common-helm/testrunner:0.22.0@sha256:996a59443d9442b1f0913eba87e13e953e9c4e19fea6cf93ae25f3ee74f71c57
     command: pytest tests/chart
     profiles:
       - test
