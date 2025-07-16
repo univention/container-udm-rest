@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.38.0](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/compare/v0.37.1...v0.38.0) (2025-07-16)
+
+
+### Features
+
+* update ucs-base to 5.2.2-build.20250714 ([584ef94](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/commit/584ef945bcddbb69009aa206e32befc5494bc3c0)), closes [univention/dev/internal/team-nubus#1320](https://git.knut.univention.de/univention/dev/internal/team-nubus/issues/1320)
+
 ## [0.37.1](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/compare/v0.37.0...v0.37.1) (2025-07-02)
 
 
