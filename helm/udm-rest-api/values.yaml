@@ -472,7 +472,7 @@ waitForDependency:
     registry: null
     pullPolicy: null
     repository: "nubus/images/wait-for-dependency"
-    tag: "0.33.0@sha256:7e0e5e93422b2e99915d95d674ab37a8f9c79c0b8f1ebf69c2e7706bb718ae75"
+    tag: "0.35.0@sha256:61dfaea28a2b150459138dfd6a554ce53850cee05ef2a72ab47bbe23f2a92d0d"
 
   # -- Array with extra environment variables to add to containers.
   extraEnvVars: []
