@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.39.1](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/compare/v0.39.0...v0.39.1) (2025-07-18)
+
+
+### Bug Fixes
+
+* add missing python3-univention-authorization dependency ([87a8609](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/commit/87a86098fc8d730fdaa8fb8fd9c77b56533a439f)), closes [univention/dev/internal/team-nubus#1320](https://git.knut.univention.de/univention/dev/internal/team-nubus/issues/1320)
+
 ## [0.39.0](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/compare/v0.38.0...v0.39.0) (2025-07-18)
 
 
