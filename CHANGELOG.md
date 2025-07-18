@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.39.0](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/compare/v0.38.0...v0.39.0) (2025-07-18)
+
+
+### Features
+
+* update wait-for-dependency to 0.35.0 ([3791e42](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/commit/3791e42e69b927615109cebcb8168d707d22978b)), closes [univention/dev/internal/team-nubus#1320](https://git.knut.univention.de/univention/dev/internal/team-nubus/issues/1320)
+
 ## [0.38.0](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/compare/v0.37.1...v0.38.0) (2025-07-16)
 
 
