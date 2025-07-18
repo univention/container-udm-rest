@@ -51,6 +51,7 @@ RUN chown _apt . && \
   python3-univention-directory-manager-rest \
   libunivention-debug1 \
   python3-ldap \
+  python3-univention-authorization \
   python3-univention-config-registry \
   python3-univention-debhelper \
   # dependencies of univention-management-console-module-udm
