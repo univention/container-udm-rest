@@ -2,7 +2,7 @@
 # SPDX-FileCopyrightText: 2024-2025 Univention GmbH
 
 ARG UCS_BASE_IMAGE=gitregistry.knut.univention.de/univention/dev/projects/ucs-base-image/ucs-base
-ARG UCS_BASE_IMAGE_TAG=5.2.2-build.20250821@sha256:839b93e89298c51a9c8cd45c119a284f9161b18d7270da4dc92588772ca20f4d
+ARG UCS_BASE_IMAGE_TAG=5.2.2-build.20250828@sha256:40615df599a3ac99e351c04d42895bb2f5104b8f95528ffe62bdc78b73bb6a44
 
 ARG WORKDIR="/app"
 
