@@ -12,4 +12,20 @@ global:
     - "kyverno-test"
   imagePullPolicy: "kyverno"
 
+initResources:
+  limits:
+    memory: "1Gi"
+    cpu: "1"
+  requests:
+    memory: "512Mi"
+    cpu: "250m"
+
+resources:
+  limits:
+    memory: "4Gi"
+    cpu: "4"
+  requests:
+    memory: "512Mi"
+    cpu: "250m"
+
 ...

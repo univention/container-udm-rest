@@ -174,8 +174,10 @@ repos:
           - "manual"
 
   - repo: "https://git.knut.univention.de/univention/dev/tooling/kyverno-test-pre-commit"
-    rev: "v0.3.0"
+    rev: "6541b47dd4c8147b598ecc46bf4d5b3319294392"
     hooks:
       - id: "kyverno-test"
+        args:
+          - "--keep"
 
 ...
