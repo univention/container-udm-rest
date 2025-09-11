@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.39.6](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/compare/v0.39.5...v0.39.6) (2025-09-11)
+
+
+### Bug Fixes
+
+* **deps:** Update gitregistry.knut.univention.de/univention/dev/nubus-for-k8s/common-helm/testrunner Docker tag to v0.24.3 ([7a1ad2b](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/commit/7a1ad2b021a906a95d256e75a33fb171ad54e80f)), closes [#0](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/issues/0)
+* **deps:** Update gitregistry.knut.univention.de/univention/dev/nubus-for-k8s/common-helm/testrunner Docker tag to v0.24.5 ([bb83bd4](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/commit/bb83bd4d5f86dd640d9f9e338cbc04e227ee2103)), closes [#0](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/issues/0)
+
 ## [0.39.5](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/compare/v0.39.4...v0.39.5) (2025-09-02)
 
 
