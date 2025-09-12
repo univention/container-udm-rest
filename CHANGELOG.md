@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.40.0](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/compare/v0.39.8...v0.40.0) (2025-09-12)
+
+
+### Features
+
+* **udm-rest-api:** support Bearer HTTP authentication in UDM REST API ([07fa009](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/commit/07fa0096936e2d559fbf3972677d41546c678c83)), closes [univention/dev/internal/dev-issues/dev-incidents#138](https://git.knut.univention.de/univention/dev/internal/dev-issues/dev-incidents/issues/138)
+
+
+### Bug Fixes
+
+* **udm-rest-api:** fix entrypoint for read-only filesystems ([3537fc3](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/commit/3537fc3e545d6bacab2dfabed62de484b7fa46fc)), closes [univention/dev/internal/dev-issues/dev-incidents#138](https://git.knut.univention.de/univention/dev/internal/dev-issues/dev-incidents/issues/138)
+
 ## [0.39.8](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/compare/v0.39.7...v0.39.8) (2025-09-12)
 
 
