@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.40.2](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/compare/v0.40.1...v0.40.2) (2025-09-25)
+
+
+### Bug Fixes
+
+* Automate kyverno tests ([72870c6](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/commit/72870c6dc4edc0256527a4736a4df39faa14223b)), closes [univention/dev/internal/team-nubus#1426](https://git.knut.univention.de/univention/dev/internal/team-nubus/issues/1426)
+* **deps:** Update gitregistry.knut.univention.de/univention/dev/projects/ucs-base-image/ucs-base Docker tag to v5.2.3-build.20250923 ([b6424f8](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/commit/b6424f80d03ea5d019b3c767a8e1386e4b2b5778)), closes [#0](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/issues/0)
+
 ## [0.40.1](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/compare/v0.40.0...v0.40.1) (2025-09-16)
 
 
