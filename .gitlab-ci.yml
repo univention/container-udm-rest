@@ -87,7 +87,7 @@ test-udm-rest:
 test-chart-udm-rest-api:
   stage: test
   needs: []
-  image: "gitregistry.knut.univention.de/univention/dev/nubus-for-k8s/common-helm/testrunner:0.24.5@sha256:efa1b3300fca2367e67dec8525c71f5445d75d88ae1da20aa64083a411bc3337"
+  image: "gitregistry.knut.univention.de/univention/dev/nubus-for-k8s/common-helm/testrunner:0.27.0@sha256:d03b61175b0daa81b972df9995e70dc32112b42dab499b2b7dca952309e5b044"
   script:
     - helm dep build helm/udm-rest-api
     - pytest -W error tests/chart
