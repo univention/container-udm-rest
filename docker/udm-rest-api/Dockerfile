@@ -4,8 +4,8 @@
 # SPDX-License-Identifier: AGPL-3.0-only
 # SPDX-FileCopyrightText: 2021-2025 Univention GmbH
 
-ARG UCS_BASE_IMAGE=gitregistry.knut.univention.de/univention/dev/projects/ucs-base-image/ucs-base
-ARG UCS_BASE_IMAGE_TAG=5.2.3-build.20250925@sha256:6991ef35ec61a114b0896fa1b6a52c888af8990c00e68292d80f95b20a1f5209
+ARG UCS_BASE_IMAGE=gitregistry.knut.univention.de/univention/dev/projects/ucs-base-image/ucs-base-dev-523
+ARG UCS_BASE_IMAGE_TAG=latest
 
 
 FROM ${UCS_BASE_IMAGE}:${UCS_BASE_IMAGE_TAG} AS build
@@ -28,6 +28,10 @@ COPY fake.sh /usr/sbin/univention-management-console-acls
 COPY fake-uv-lib.sh /usr/local/bin/fake-uv-lib.sh
 
 WORKDIR /apt
+
+# hadolint ignore=DL3009
+RUN ucs-dev-add-branch.sh mmeschter-udm-search-perf-improvements \
+    && apt-get update
 
 # hadolint ignore=SC2016
 RUN chown _apt . && \
@@ -104,6 +108,10 @@ ARG LABEL_SOURCE=undefined
 ARG LABEL_VERSION=undefined
 
 WORKDIR /apt
+
+# hadolint ignore=DL3009
+RUN ucs-dev-add-branch.sh mmeschter-udm-search-perf-improvements \
+    && apt-get update
 
 RUN chown _apt . && \
   DEBIAN_FRONTEND=noninteractive \
