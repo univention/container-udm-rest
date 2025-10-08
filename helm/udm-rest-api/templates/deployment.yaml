@@ -240,7 +240,7 @@ spec:
         - name: secret-ldap
           secret:
             defaultMode: 420
-            secretName: {{ include "nubus-common.secrets.name" (dict "existingSecret" .Values.ldap.auth.existingSecret "defaultNameSuffix" "ldap" "context" .) | quote }}
+            secretName: {{ include "nubus-common.secrets.name" (dict "existingSecret" .Values.ldap.auth.existingSecret "defaultNameSuffix" "ldap" "context" .) }}
         {{- if .Values.udmRestApi.tls.enabled }}
         - name: {{ printf "%s-tls-volume" (include "common.names.fullname" .) }}
           secret:

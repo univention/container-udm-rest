@@ -54,7 +54,7 @@ spec:
           - name: LDAP_URI
             value: {{ include "udm-rest-api.ldapUri" . }}
           - name: LDAP_ADMIN_USER
-            value: {{ tpl ( required "The parameter \"ldap.auth.bindDn\" is required." .Values.ldap.auth.bindDn ) . | quote }}
+            value: {{ tpl ( required "The parameter \"ldap.auth.bindDn\" as username is required." .Values.ldap.auth.bindDn ) . | quote }}
           - name: LDAP_ADMIN_PASSWORD_FILE
             value: "/var/secrets/ldap_password"
           {{- with .Values.waitForDependency.extraEnvVars }}
@@ -82,11 +82,11 @@ spec:
           - name: LDAP_URI
             value: {{ include "udm-rest-api.ldapUri" . }}
           - name: LDAP_ADMIN_USER
-            value: {{ tpl ( required "The parameter \"ldap.auth.bindDn\" is required." .Values.ldap.auth.bindDn ) . | quote }}
+            value: {{ tpl ( required "The parameter \"ldap.auth.bindDn\" as username is required." .Values.ldap.auth.bindDn ) . | quote }}
           - name: LDAP_ADMIN_PASSWORD
             valueFrom:
               secretKeyRef:
-                name: {{ include "nubus-common.secrets.name" (dict "existingSecret" .Values.ldap.auth.existingSecret "defaultNameSuffix" "ldap" "context" .) | quote }}
+                name: {{ include "nubus-common.secrets.name" (dict "existingSecret" .Values.ldap.auth.existingSecret "defaultNameSuffix" "ldap" "context" .) }}
                 {{- /* FIXME Workaround because of bug in nubus-common.secrets.key. Function needs a tpl call like nubus-common.secrets.name! */}}
                 key: {{ tpl (include "nubus-common.secrets.key" (dict "existingSecret" .Values.ldap.auth.existingSecret "key" "password")) . }}
           - name: LDAP_BASE_DN
@@ -99,7 +99,7 @@ spec:
         - name: secret-ldap
           secret:
             defaultMode: 0400
-            secretName: {{ include "nubus-common.secrets.name" (dict "existingSecret" .Values.ldap.auth.existingSecret "defaultNameSuffix" "ldap" "context" .) | quote }}
+            secretName: {{ include "nubus-common.secrets.name" (dict "existingSecret" .Values.ldap.auth.existingSecret "defaultNameSuffix" "ldap" "context" .) }}
         {{- if .Values.waitForDependency.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.waitForDependency.extraVolumes  "context" .) | nindent 8 }}
         {{- end }}
