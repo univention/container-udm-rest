@@ -63,7 +63,7 @@ spec:
         volumeMounts:
           - name: secret-ldap
             mountPath: /var/secrets/ldap_password
-            subPath: {{ tpl (include "nubus-common.secrets.key" (dict "existingSecret" .Values.ldap.auth.existingSecret "key" "password")) . }}
+            subPath: {{ tpl (include "nubus-common.secrets.key" (dict "existingSecret" .Values.ldap.auth.existingSecret "key" "password" "context" .)) . }}
           {{- if .Values.waitForDependency.extraVolumeMounts }}
           {{- include "common.tplvalues.render" (dict "value" .Values.waitForDependency.extraVolumeMounts "context" .) | nindent 10 }}
           {{- end }}
@@ -88,7 +88,7 @@ spec:
               secretKeyRef:
                 name: {{ include "nubus-common.secrets.name" (dict "existingSecret" .Values.ldap.auth.existingSecret "defaultNameSuffix" "ldap" "context" .) }}
                 {{- /* FIXME Workaround because of bug in nubus-common.secrets.key. Function needs a tpl call like nubus-common.secrets.name! */}}
-                key: {{ tpl (include "nubus-common.secrets.key" (dict "existingSecret" .Values.ldap.auth.existingSecret "key" "password")) . }}
+                key: {{ tpl (include "nubus-common.secrets.key" (dict "existingSecret" .Values.ldap.auth.existingSecret "key" "password" "context" .)) . }}
           - name: LDAP_BASE_DN
             value: {{ required "Either .Values.ldap.baseDn or .Values.global.ldap.baseDn must be set" (coalesce .Values.ldap.baseDn .Values.global.ldap.baseDn) }}
           - name: PYTHON_LOG_LEVEL

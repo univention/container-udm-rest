@@ -58,7 +58,7 @@ spec:
               volumeMounts:
                 - name: secret-ldap
                   mountPath: /etc/ldap.secret
-                  subPath: {{ tpl (include "nubus-common.secrets.key" (dict "existingSecret" .Values.ldap.auth.existingSecret "key" "password")) . }}
+                  subPath: {{ tpl (include "nubus-common.secrets.key" (dict "existingSecret" .Values.ldap.auth.existingSecret "key" "password" "context" .)) . }}
 
               resources:
                 {{- toYaml .Values.resources | nindent 16 }}
