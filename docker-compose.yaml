@@ -1,8 +1,6 @@
 # SPDX-License-Identifier: AGPL-3.0-only
 # SPDX-FileCopyrightText: 2023-2025 Univention GmbH
 
----
-
 services:
   udm-rest-api:
     image: gitregistry.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/udm-rest-api:${IMAGE_TAG:-latest}
@@ -43,8 +41,8 @@ services:
 
   pre-commit:
     profiles:
-      - "pre-commit"
-    image: gitregistry.knut.univention.de/univention/dev/tooling/pre-commit/upx-pre-commit:${IMAGE_TAG:-latest}
+      - test
+    image: gitregistry.knut.univention.de/univention/dev/tooling/pre-commit/upx-pre-commit:latest
     volumes:
       - type: bind
         source: .
@@ -100,7 +98,7 @@ services:
       - ./tests/init-internal-database.sh:/entrypoint.d/91-init-internal-database.sh
 
   test-chart-udm-rest-api:
-    image: gitregistry.knut.univention.de/univention/dev/nubus-for-k8s/common-helm/testrunner:0.24.5@sha256:efa1b3300fca2367e67dec8525c71f5445d75d88ae1da20aa64083a411bc3337
+    image: gitregistry.knut.univention.de/univention/dev/nubus-for-k8s/common-helm/testrunner:0.27.0
     command: pytest tests/chart
     profiles:
       - test
@@ -126,5 +124,3 @@ secrets:
 volumes:
   pre-commit-cache:
   ldap-shared-data:
-
-...
