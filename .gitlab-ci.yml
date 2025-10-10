@@ -5,7 +5,7 @@
 
 include:
   - project: "univention/dev/nubus-for-k8s/common-ci"
-    ref: "8a1275e68c059b91bbe84fff131c73de132bfaa0"
+    ref: "b3060525ee32d79bfd4b5a0ac52f9efa12e26d52"
     file:
       - "defaults/stages.yaml"
       - "defaults/nubus-workflow.yaml"
@@ -30,7 +30,7 @@ include:
     DOCKERFILE_PATH: "docker/udm-rest-api-python-client/Dockerfile"
   - IMAGE_NAME: "udm-cli"
     BUILD_ARGS: "--opt target=cli"
-    DOCKERFILE_PATH: "docker/udm-rest-api-python-client/Dockerfile"
+    KANIKO_BUILD_CONTEXT: "$CI_PROJECT_DIR/docker/udm-rest-api-python-client"
   - IMAGE_NAME: "ldap-update-univention-object-identifier"
     KANIKO_BUILD_CONTEXT: "$CI_PROJECT_DIR/docker/ldap-update-univention-object-identifier"
   - IMAGE_NAME: "blocklist-cleanup"
