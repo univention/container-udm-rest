@@ -5,7 +5,7 @@
 
 include:
   - project: "univention/dev/nubus-for-k8s/common-ci"
-    ref: "v1.43.3"
+    ref: "9a751136e350658a5059d19e403a9ef67d6373a1"
     file:
       - "defaults/stages.yaml"
       - "defaults/nubus-workflow.yaml"
@@ -26,10 +26,10 @@ include:
       - "udm-rest-api"
       - "testrunner"
   - IMAGE_NAME: "udm-rest-api-python-client"
-    KANIKO_ARGS: "--target final"
+    BUILD_ARGS: "--opt target=final"
     DOCKERFILE_PATH: "docker/udm-rest-api-python-client/Dockerfile"
   - IMAGE_NAME: "udm-cli"
-    KANIKO_ARGS: "--target cli"
+    BUILD_ARGS: "--opt target=cli"
     DOCKERFILE_PATH: "docker/udm-rest-api-python-client/Dockerfile"
   - IMAGE_NAME: "ldap-update-univention-object-identifier"
     KANIKO_BUILD_CONTEXT: "$CI_PROJECT_DIR/docker/ldap-update-univention-object-identifier"
