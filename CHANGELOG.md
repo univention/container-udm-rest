@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.40.4](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/compare/v0.40.3...v0.40.4) (2025-10-14)
+
+
+### Bug Fixes
+
+* **deps:** Update gitregistry.knut.univention.de/univention/dev/projects/ucs-base-image/ucs-base Docker tag to v5.2.3-build.20251009 ([bd52ed4](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/commit/bd52ed4eb7a7dec1ca3a6ff6fc1482b23a4b2d65)), closes [#0](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/issues/0)
+
 ## [0.40.3](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/compare/v0.40.2...v0.40.3) (2025-09-27)
 
 
