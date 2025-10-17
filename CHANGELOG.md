@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.41.0](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/compare/v0.40.4...v0.41.0) (2025-10-17)
+
+
+### Features
+
+* **secrets:** allow templated keymappings ([6ef5c7c](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/commit/6ef5c7c599dfaff065bf7ae448d6a5d85ecb3ca8)), closes [univention/dev/internal/team-nubus#1441](https://git.knut.univention.de/univention/dev/internal/team-nubus/issues/1441)
+
 ## [0.40.4](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/compare/v0.40.3...v0.40.4) (2025-10-14)
 
 
