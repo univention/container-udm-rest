@@ -150,6 +150,7 @@ spec:
             - configMapRef:
                 name: {{ include "common.names.fullname" . }}
           {{- with .Values.extraEnvVars }}
+          env:
             {{- . | toYaml | nindent 12 }}
           {{- end }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.livenessProbe "context" .) | nindent 12 }}
