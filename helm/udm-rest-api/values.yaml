@@ -3,6 +3,7 @@
 
 ---
 
+# -- Global configuration options
 global:
   # -- Indicates wether this chart is part of a Nubus deployment.
   nubusDeployment: false
@@ -42,6 +43,7 @@ global:
     # -- The LDAP base DN to use when connecting.
     # Example: "dc=univention-organization,dc=intranet"
     baseDn: null
+    # -- LDAP connection configuration
     connection:
       # -- The LDAP URI to connect to.
       # Example: "ldap://example-ldap-server:389"
@@ -58,14 +60,16 @@ additionalLabels: {}
 # Note: podAffinityPreset, podAntiAffinityPreset, and nodeAffinityPreset will be ignored when it's set.
 affinity: {}
 
-# Security Context.
+# -- Security Context.
 # Ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
 containerSecurityContext:
+  # -- Run container in privileged mode.
   privileged: false
   # -- Enable container privileged escalation.
   allowPrivilegeEscalation: false
   # -- Security capabilities for container.
   capabilities:
+    # -- Linux capabilities to drop from the container.
     drop:
       - "ALL"
   # -- Enable security context.
@@ -74,7 +78,7 @@ containerSecurityContext:
   runAsUser: 1000
   # -- Process group id.
   runAsGroup: 1000
-  # Set Seccomp profile.
+  # -- Set Seccomp profile.
   seccompProfile:
     # -- Disallow custom Seccomp profile by setting it to RuntimeDefault.
     type: "RuntimeDefault"
@@ -114,7 +118,7 @@ fullnameOverride: ""
 #   - "docker-registry"
 imagePullSecrets: []
 
-# Define and create Kubernetes Ingress.
+# -- Define and create Kubernetes Ingress.
 #
 # Ref.: https://kubernetes.io/docs/concepts/services-networking/ingress/
 ingress:
@@ -124,12 +128,12 @@ ingress:
   # -- Define the Fully Qualified Domain Name (FQDN) where application should be reachable.
   host: ""
 
-  # Request certificates via cert-manager.io annotation
+  # -- Request certificates via cert-manager.io annotation
   certManager:
     # -- Enable cert-manager.io annotaion.
     enabled: true
 
-    # Issuer reference.
+    # -- Issuer reference.
     issuerRef:
       # -- Name of cert-manager.io Issuer resource.
       name: ""
@@ -138,7 +142,9 @@ ingress:
 
   # -- Define the Ingress paths.
   paths:
+    # -- Path pattern for the Ingress rule.
     - path: "/(univention/)(udm/.*)$"
+      # -- Path type for the Ingress rule.
       pathType: "ImplementationSpecific"
 
   # -- The Ingress controller class name.
@@ -150,10 +156,14 @@ ingress:
   annotations:
     # -- Some responses of the UDM Rest API contain very large response headers
     nginx.ingress.kubernetes.io/proxy-buffer-size: "64k"
+    # -- NGINX configuration snippet (disabled).
     nginx.ingress.kubernetes.io/configuration-snippet-disabled: |
       rewrite ^/univention(/udm/.*)$ $1 break;
+    # -- Enable regex matching for paths.
     nginx.ingress.kubernetes.io/use-regex: "true"
+    # -- Session affinity configuration.
     nginx.ingress.kubernetes.io/affinity: "none"
+    # -- Rewrite target for URL path rewriting.
     nginx.ingress.kubernetes.io/rewrite-target: "/$2$3"
 
 
@@ -171,7 +181,7 @@ ingress:
 # -- Lifecycle to automate configuration before or after startup.
 lifecycleHooks: {}
 
-#  Configure extra options for containers probes.
+# -- Configure extra options for containers probes.
 livenessProbe:
   # -- Number of failed executions until container is terminated.
   failureThreshold: 10
@@ -183,7 +193,9 @@ livenessProbe:
   successThreshold: 1
   # -- Timeout for command return.
   timeoutSeconds: 5
+  # -- TCP socket configuration for the liveness probe.
   tcpSocket:
+    # -- Port to check for liveness.
     port: 9979
 
 # -- String to partially override release name.
@@ -193,7 +205,7 @@ nameOverride: ""
 # Ref: https://kubernetes.io/docs/user-guide/node-selection/
 nodeSelector: {}
 
-# Volume persistence settings.
+# -- Volume persistence settings.
 persistence:
   # -- The volume access modes, some of "ReadWriteOnce", "ReadOnlyMany", "ReadWriteMany", "ReadWriteOncePod".
   #
@@ -244,7 +256,7 @@ podAnnotations: {}
 # Ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
 podLabels: {}
 
-# Pod Security Context.
+# -- Pod Security Context.
 # Ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
 podSecurityContext:
   # -- Enable security context.
@@ -256,7 +268,7 @@ podSecurityContext:
   # -- Change ownership and permission of the volume before being exposed inside a Pod.
   fsGroupChangePolicy: "Always"
 
-#  Configure extra options for containers probes.
+# -- Configure extra options for containers probes.
 readinessProbe:
   # -- Delay after container start until ReadinessProbe is executed.
   initialDelaySeconds: 15
@@ -268,22 +280,22 @@ readinessProbe:
   successThreshold: 1
   # -- Timeout for command return.
   timeoutSeconds: 5
+  # -- TCP socket configuration for the readiness probe.
   tcpSocket:
+    # -- Port to check for readiness.
     port: 9979
 
 # -- Set the amount of replicas of deployment.
 replicaCount: 1
 
-# Configure resource requests and limits.
-#
+# -- Configure resource requests and limits.
 # Ref: https://kubernetes.io/docs/user-guide/compute-resources/
 resources: {}
 
-# Configure resource requests and limits for initContainers
+# -- Configure resource requests and limits for initContainers.
 initResources: {}
 
-# Define and create Kubernetes Service.
-#
+# -- Define and create Kubernetes Service.
 # Ref.: https://kubernetes.io/docs/concepts/services-networking/service
 service:
   # -- Additional custom annotations.
@@ -301,14 +313,14 @@ service:
   # Ref.: https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types
   # -- Choose the kind of Service, one of "ClusterIP", "NodePort" or "LoadBalancer".
   type: "ClusterIP"
-  # This creates a headless service. Instead of load balancing, it creates a
+  # -- This creates a headless service. Instead of load balancing, it creates a
   # DNS A record for each pod.
   clusterIP: "None"
 
-  # Define the ports of Service.
+  # -- Define the ports of Service.
   # You can set the port value to an arbitrary value, it will map the container port by name.
-  #
   ports:
+    # -- HTTP port configuration.
     http:
       # -- Accessible port.
       port: 9979
@@ -317,26 +329,27 @@ service:
       # -- service protocol.
       protocol: "TCP"
 
-  # @param service.sessionAffinity Session Affinity for Kubernetes service, can be "None" or "ClientIP"
+  # -- Session Affinity for Kubernetes service, can be "None" or "ClientIP"
   # If "ClientIP", consecutive client requests will be directed to the same Pod
   # ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
   #
   sessionAffinity: ""
-  # @param service.sessionAffinityConfig Additional settings for the sessionAffinity
+  # -- Additional settings for the sessionAffinity
   # sessionAffinityConfig:
   #   clientIP:
   #     timeoutSeconds: 300
   sessionAffinityConfig: {}
 
+# -- Configuration for the ServiceAccount used by the application.
 serviceAccount:
-  # Specifies whether a service account should be created
+  # -- Specifies whether a service account should be created
   create: true
-  # Annotations to add to the service account
+  # -- Annotations to add to the service account
   annotations: {}
-  # The name of the service account to use.
+  # -- The name of the service account to use.
   # If not set and create is true, a name is generated using the fullname template
   name: ""
-  ## @param serviceAccount.automountServiceAccountToken Allows auto mount of
+  ## -- Allows auto mount of
   # ServiceAccountToken on the serviceAccount created
   ## Can be set to false if pods using this serviceAccount do not need to use K8s API
   ##
@@ -344,7 +357,7 @@ serviceAccount:
   # -- Additional custom labels for the ServiceAccount.
   labels: {}
 
-#  Configure extra options for containers probes.
+# -- Configure extra options for containers probes.
 startupProbe:
   # -- Delay after container start until StartupProbe is executed.
   initialDelaySeconds: 15
@@ -356,7 +369,9 @@ startupProbe:
   successThreshold: 1
   # -- Timeout for command return.
   timeoutSeconds: 5
+  # -- TCP socket configuration for the startup probe.
   tcpSocket:
+    # -- Port to check for startup.
     port: 9979
 
 # -- Allows to configure the system extensions to load. This is intended for
@@ -381,8 +396,7 @@ tolerations: []
 #     whenUnsatisfiable: DoNotSchedule
 topologySpreadConstraints: []
 
-# Set up update strategy.
-#
+# -- Set up update strategy.
 # Ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
 #
 # Example:
@@ -398,14 +412,18 @@ updateStrategy:
 
 # -- Application configuration of the UDM REST API
 udmRestApi:
-  # Container image section.
+  # -- Container image configuration.
   image:
     # -- Container registry address. This setting has higher precedence than global.registry.
     registry: ""
+    # -- Container image repository.
     repository: "nubus-dev/images/udm-rest-api"
     # -- Image pull policy. This setting has higher precedence than global.imagePullPolicy.
     pullPolicy: null
+    # -- Container image tag.
     tag: "latest"
+  # -- TLS configuration for LDAP connections.
+  # -- TLS configuration for LDAP connections.
   tls:
     # -- Enable TLS for LDAP connection.
     enabled: false
@@ -430,48 +448,70 @@ ldapUpdateUniventionObjectIdentifier:
   suspend: true
   # -- Log Level for the Python script
   pythonLogLevel: "INFO"
+  # -- Container image configuration.
   image:
     # -- Image pull policy. This setting has higher precedence than global.imagePullPolicy.
     pullPolicy: null
     # -- Container registry address. This setting has higher precedence than global.registry.
     registry: null
+    # -- Container image repository.
     repository: "nubus-dev/images/ldap-update-univention-object-identifier"
+    # -- Container image tag.
     tag: "latest"
 
 # -- Settings to configure the UDM blocklist cleanup job
 blocklistCleanup:
+  # -- Enable the blocklist cleanup cronjob.
   enabled: true
+  # -- Cron schedule for the blocklist cleanup job.
   schedule: "0 8 * * *"
+  # -- Container image configuration.
   image:
     # -- Container registry address. This setting has higher precedence than global.registry.
     registry: null
+    # -- Container image repository.
     repository: "nubus-dev/images/blocklist-cleanup"
     # -- Image pull policy. This setting has higher precedence than global.imagePullPolicy.
     pullPolicy: null
+    # -- Container image tag.
     tag: "latest"
 
-# LDAP Client configuration
+# -- LDAP Client configuration
 ldap:
   # -- The LDAP base DN to use when connecting.
   # baseDn: "dc=univention-organization,dc=intranet"
   baseDn: ""
+  # -- LDAP connection configuration.
   connection:
     # -- The LDAP URI to connect to.
     # uri: "ldap://my-ldap-server:389"
     uri: ""
+  # -- LDAP authentication configuration.
   auth:
+    # -- Bind DN for LDAP authentication.
     bindDn: 'cn=admin,{{ default "dc=univention-organization,dc=intranet" .Values.global.ldap.baseDn }}'
+    # -- Password for LDAP authentication.
     password: null
+    # -- Configuration for using an existing secret for LDAP credentials.
     existingSecret:
+      # -- Name of the existing secret.
       name: null
+      # -- Key mapping for the existing secret.
       keyMapping:
+        # -- Key in the secret for the password.
         password: null
 
+# -- Configuration for the wait-for-dependency init container.
 waitForDependency:
+  # -- Container image configuration.
   image:
+    # -- Container registry address. This setting has higher precedence than global.registry.
     registry: null
+    # -- Image pull policy. This setting has higher precedence than global.imagePullPolicy.
     pullPolicy: null
+    # -- Container image repository.
     repository: "nubus/images/wait-for-dependency"
+    # -- Container image tag.
     tag: "0.35.27@sha256:3f9f37e224a7a8e268ee2cdf1ca8d18826d2d0d5b356a2a5a3cbfa4968a2a281"
 
   # -- Array with extra environment variables to add to containers.

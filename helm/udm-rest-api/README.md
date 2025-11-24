@@ -97,6 +97,29 @@ helm uninstall udm-rest-api
 			<td>Settings to configure the UDM blocklist cleanup job</td>
 		</tr>
 		<tr>
+			<td>blocklistCleanup.enabled</td>
+			<td>bool</td>
+			<td><pre lang="json">
+true
+</pre>
+</td>
+			<td>Enable the blocklist cleanup cronjob.</td>
+		</tr>
+		<tr>
+			<td>blocklistCleanup.image</td>
+			<td>object</td>
+			<td><pre lang="json">
+{
+  "pullPolicy": null,
+  "registry": null,
+  "repository": "nubus-dev/images/blocklist-cleanup",
+  "tag": "latest"
+}
+</pre>
+</td>
+			<td>Container image configuration.</td>
+		</tr>
+		<tr>
 			<td>blocklistCleanup.image.pullPolicy</td>
 			<td>string</td>
 			<td><pre lang="json">
@@ -113,6 +136,58 @@ null
 </pre>
 </td>
 			<td>Container registry address. This setting has higher precedence than global.registry.</td>
+		</tr>
+		<tr>
+			<td>blocklistCleanup.image.repository</td>
+			<td>string</td>
+			<td><pre lang="json">
+"nubus-dev/images/blocklist-cleanup"
+</pre>
+</td>
+			<td>Container image repository.</td>
+		</tr>
+		<tr>
+			<td>blocklistCleanup.image.tag</td>
+			<td>string</td>
+			<td><pre lang="json">
+"latest"
+</pre>
+</td>
+			<td>Container image tag.</td>
+		</tr>
+		<tr>
+			<td>blocklistCleanup.schedule</td>
+			<td>string</td>
+			<td><pre lang="json">
+"0 8 * * *"
+</pre>
+</td>
+			<td>Cron schedule for the blocklist cleanup job.</td>
+		</tr>
+		<tr>
+			<td>containerSecurityContext</td>
+			<td>object</td>
+			<td><pre lang="json">
+{
+  "allowPrivilegeEscalation": false,
+  "capabilities": {
+    "drop": [
+      "ALL"
+    ]
+  },
+  "enabled": true,
+  "privileged": false,
+  "readOnlyRootFilesystem": true,
+  "runAsGroup": 1000,
+  "runAsNonRoot": true,
+  "runAsUser": 1000,
+  "seccompProfile": {
+    "type": "RuntimeDefault"
+  }
+}
+</pre>
+</td>
+			<td>Security Context. Ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/</td>
 		</tr>
 		<tr>
 			<td>containerSecurityContext.allowPrivilegeEscalation</td>
@@ -137,6 +212,17 @@ false
 			<td>Security capabilities for container.</td>
 		</tr>
 		<tr>
+			<td>containerSecurityContext.capabilities.drop</td>
+			<td>list</td>
+			<td><pre lang="json">
+[
+  "ALL"
+]
+</pre>
+</td>
+			<td>Linux capabilities to drop from the container.</td>
+		</tr>
+		<tr>
 			<td>containerSecurityContext.enabled</td>
 			<td>bool</td>
 			<td><pre lang="json">
@@ -152,7 +238,7 @@ true
 false
 </pre>
 </td>
-			<td></td>
+			<td>Run container in privileged mode.</td>
 		</tr>
 		<tr>
 			<td>containerSecurityContext.readOnlyRootFilesystem</td>
@@ -189,6 +275,17 @@ true
 </pre>
 </td>
 			<td>Process user id.</td>
+		</tr>
+		<tr>
+			<td>containerSecurityContext.seccompProfile</td>
+			<td>object</td>
+			<td><pre lang="json">
+{
+  "type": "RuntimeDefault"
+}
+</pre>
+</td>
+			<td>Set Seccomp profile.</td>
 		</tr>
 		<tr>
 			<td>containerSecurityContext.seccompProfile.type</td>
@@ -252,6 +349,29 @@ true
 </pre>
 </td>
 			<td>Provide a name to substitute for the full names of resources.</td>
+		</tr>
+		<tr>
+			<td>global</td>
+			<td>object</td>
+			<td><pre lang="json">
+{
+  "configMapUcr": null,
+  "extensions": [],
+  "imagePullPolicy": null,
+  "imagePullSecrets": [],
+  "imageRegistry": "artifacts.software-univention.de",
+  "ldap": {
+    "baseDn": null,
+    "connection": {
+      "uri": null
+    }
+  },
+  "nubusDeployment": false,
+  "systemExtensions": []
+}
+</pre>
+</td>
+			<td>Global configuration options</td>
 		</tr>
 		<tr>
 			<td>global.configMapUcr</td>
@@ -322,6 +442,17 @@ null
 			<td>The LDAP base DN to use when connecting. Example: "dc=univention-organization,dc=intranet"</td>
 		</tr>
 		<tr>
+			<td>global.ldap.connection</td>
+			<td>object</td>
+			<td><pre lang="json">
+{
+  "uri": null
+}
+</pre>
+</td>
+			<td>LDAP connection configuration</td>
+		</tr>
+		<tr>
 			<td>global.ldap.connection.uri</td>
 			<td>string</td>
 			<td><pre lang="json">
@@ -358,6 +489,43 @@ false
 			<td>Credentials to fetch images from private registry. Ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/  imagePullSecrets:   - "docker-registry"</td>
 		</tr>
 		<tr>
+			<td>ingress</td>
+			<td>object</td>
+			<td><pre lang="json">
+{
+  "annotations": {
+    "nginx.ingress.kubernetes.io/affinity": "none",
+    "nginx.ingress.kubernetes.io/configuration-snippet-disabled": "rewrite ^/univention(/udm/.*)$ $1 break;\n",
+    "nginx.ingress.kubernetes.io/proxy-buffer-size": "64k",
+    "nginx.ingress.kubernetes.io/rewrite-target": "/$2$3",
+    "nginx.ingress.kubernetes.io/use-regex": "true"
+  },
+  "certManager": {
+    "enabled": true,
+    "issuerRef": {
+      "kind": "ClusterIssuer",
+      "name": ""
+    }
+  },
+  "enabled": true,
+  "host": "",
+  "ingressClassName": "",
+  "paths": [
+    {
+      "path": "/(univention/)(udm/.*)$",
+      "pathType": "ImplementationSpecific"
+    }
+  ],
+  "tls": {
+    "enabled": true,
+    "secretName": ""
+  }
+}
+</pre>
+</td>
+			<td>Define and create Kubernetes Ingress.  Ref.: https://kubernetes.io/docs/concepts/services-networking/ingress/</td>
+		</tr>
+		<tr>
 			<td>ingress.annotations</td>
 			<td>object</td>
 			<td><pre lang="json">
@@ -373,6 +541,24 @@ false
 			<td>Define custom ingress annotations. annotations:   nginx.ingress.kubernetes.io/rewrite-target: /</td>
 		</tr>
 		<tr>
+			<td>ingress.annotations."nginx.ingress.kubernetes.io/affinity"</td>
+			<td>string</td>
+			<td><pre lang="json">
+"none"
+</pre>
+</td>
+			<td>Session affinity configuration.</td>
+		</tr>
+		<tr>
+			<td>ingress.annotations."nginx.ingress.kubernetes.io/configuration-snippet-disabled"</td>
+			<td>string</td>
+			<td><pre lang="json">
+"rewrite ^/univention(/udm/.*)$ $1 break;\n"
+</pre>
+</td>
+			<td>NGINX configuration snippet (disabled).</td>
+		</tr>
+		<tr>
 			<td>ingress.annotations."nginx.ingress.kubernetes.io/proxy-buffer-size"</td>
 			<td>string</td>
 			<td><pre lang="json">
@@ -382,6 +568,39 @@ false
 			<td>Some responses of the UDM Rest API contain very large response headers</td>
 		</tr>
 		<tr>
+			<td>ingress.annotations."nginx.ingress.kubernetes.io/rewrite-target"</td>
+			<td>string</td>
+			<td><pre lang="json">
+"/$2$3"
+</pre>
+</td>
+			<td>Rewrite target for URL path rewriting.</td>
+		</tr>
+		<tr>
+			<td>ingress.annotations."nginx.ingress.kubernetes.io/use-regex"</td>
+			<td>string</td>
+			<td><pre lang="json">
+"true"
+</pre>
+</td>
+			<td>Enable regex matching for paths.</td>
+		</tr>
+		<tr>
+			<td>ingress.certManager</td>
+			<td>object</td>
+			<td><pre lang="json">
+{
+  "enabled": true,
+  "issuerRef": {
+    "kind": "ClusterIssuer",
+    "name": ""
+  }
+}
+</pre>
+</td>
+			<td>Request certificates via cert-manager.io annotation</td>
+		</tr>
+		<tr>
 			<td>ingress.certManager.enabled</td>
 			<td>bool</td>
 			<td><pre lang="json">
@@ -389,6 +608,18 @@ true
 </pre>
 </td>
 			<td>Enable cert-manager.io annotaion.</td>
+		</tr>
+		<tr>
+			<td>ingress.certManager.issuerRef</td>
+			<td>object</td>
+			<td><pre lang="json">
+{
+  "kind": "ClusterIssuer",
+  "name": ""
+}
+</pre>
+</td>
+			<td>Issuer reference.</td>
 		</tr>
 		<tr>
 			<td>ingress.certManager.issuerRef.kind</td>
@@ -450,6 +681,27 @@ true
 			<td>Define the Ingress paths.</td>
 		</tr>
 		<tr>
+			<td>ingress.paths[0]</td>
+			<td>object</td>
+			<td><pre lang="json">
+{
+  "path": "/(univention/)(udm/.*)$",
+  "pathType": "ImplementationSpecific"
+}
+</pre>
+</td>
+			<td>Path pattern for the Ingress rule.</td>
+		</tr>
+		<tr>
+			<td>ingress.paths[0].pathType</td>
+			<td>string</td>
+			<td><pre lang="json">
+"ImplementationSpecific"
+</pre>
+</td>
+			<td>Path type for the Ingress rule.</td>
+		</tr>
+		<tr>
 			<td>ingress.tls</td>
 			<td>object</td>
 			<td><pre lang="json">
@@ -486,7 +738,49 @@ true
 {}
 </pre>
 </td>
-			<td></td>
+			<td>Configure resource requests and limits for initContainers.</td>
+		</tr>
+		<tr>
+			<td>ldap</td>
+			<td>object</td>
+			<td><pre lang="json">
+{
+  "auth": {
+    "bindDn": "cn=admin,{{ default \"dc=univention-organization,dc=intranet\" .Values.global.ldap.baseDn }}",
+    "existingSecret": {
+      "keyMapping": {
+        "password": null
+      },
+      "name": null
+    },
+    "password": null
+  },
+  "baseDn": "",
+  "connection": {
+    "uri": ""
+  }
+}
+</pre>
+</td>
+			<td>LDAP Client configuration</td>
+		</tr>
+		<tr>
+			<td>ldap.auth</td>
+			<td>object</td>
+			<td><pre lang="json">
+{
+  "bindDn": "cn=admin,{{ default \"dc=univention-organization,dc=intranet\" .Values.global.ldap.baseDn }}",
+  "existingSecret": {
+    "keyMapping": {
+      "password": null
+    },
+    "name": null
+  },
+  "password": null
+}
+</pre>
+</td>
+			<td>LDAP authentication configuration.</td>
 		</tr>
 		<tr>
 			<td>ldap.auth.bindDn</td>
@@ -495,7 +789,32 @@ true
 "cn=admin,{{ default \"dc=univention-organization,dc=intranet\" .Values.global.ldap.baseDn }}"
 </pre>
 </td>
-			<td></td>
+			<td>Bind DN for LDAP authentication.</td>
+		</tr>
+		<tr>
+			<td>ldap.auth.existingSecret</td>
+			<td>object</td>
+			<td><pre lang="json">
+{
+  "keyMapping": {
+    "password": null
+  },
+  "name": null
+}
+</pre>
+</td>
+			<td>Configuration for using an existing secret for LDAP credentials.</td>
+		</tr>
+		<tr>
+			<td>ldap.auth.existingSecret.keyMapping</td>
+			<td>object</td>
+			<td><pre lang="json">
+{
+  "password": null
+}
+</pre>
+</td>
+			<td>Key mapping for the existing secret.</td>
 		</tr>
 		<tr>
 			<td>ldap.auth.existingSecret.keyMapping.password</td>
@@ -504,7 +823,7 @@ true
 null
 </pre>
 </td>
-			<td></td>
+			<td>Key in the secret for the password.</td>
 		</tr>
 		<tr>
 			<td>ldap.auth.existingSecret.name</td>
@@ -513,7 +832,7 @@ null
 null
 </pre>
 </td>
-			<td></td>
+			<td>Name of the existing secret.</td>
 		</tr>
 		<tr>
 			<td>ldap.auth.password</td>
@@ -522,7 +841,7 @@ null
 null
 </pre>
 </td>
-			<td></td>
+			<td>Password for LDAP authentication.</td>
 		</tr>
 		<tr>
 			<td>ldap.baseDn</td>
@@ -532,6 +851,17 @@ null
 </pre>
 </td>
 			<td>The LDAP base DN to use when connecting. baseDn: "dc=univention-organization,dc=intranet"</td>
+		</tr>
+		<tr>
+			<td>ldap.connection</td>
+			<td>object</td>
+			<td><pre lang="json">
+{
+  "uri": ""
+}
+</pre>
+</td>
+			<td>LDAP connection configuration.</td>
 		</tr>
 		<tr>
 			<td>ldap.connection.uri</td>
@@ -571,6 +901,20 @@ true
 			<td>Enables the job creation</td>
 		</tr>
 		<tr>
+			<td>ldapUpdateUniventionObjectIdentifier.image</td>
+			<td>object</td>
+			<td><pre lang="json">
+{
+  "pullPolicy": null,
+  "registry": null,
+  "repository": "nubus-dev/images/ldap-update-univention-object-identifier",
+  "tag": "latest"
+}
+</pre>
+</td>
+			<td>Container image configuration.</td>
+		</tr>
+		<tr>
 			<td>ldapUpdateUniventionObjectIdentifier.image.pullPolicy</td>
 			<td>string</td>
 			<td><pre lang="json">
@@ -587,6 +931,24 @@ null
 </pre>
 </td>
 			<td>Container registry address. This setting has higher precedence than global.registry.</td>
+		</tr>
+		<tr>
+			<td>ldapUpdateUniventionObjectIdentifier.image.repository</td>
+			<td>string</td>
+			<td><pre lang="json">
+"nubus-dev/images/ldap-update-univention-object-identifier"
+</pre>
+</td>
+			<td>Container image repository.</td>
+		</tr>
+		<tr>
+			<td>ldapUpdateUniventionObjectIdentifier.image.tag</td>
+			<td>string</td>
+			<td><pre lang="json">
+"latest"
+</pre>
+</td>
+			<td>Container image tag.</td>
 		</tr>
 		<tr>
 			<td>ldapUpdateUniventionObjectIdentifier.pythonLogLevel</td>
@@ -614,6 +976,24 @@ true
 </pre>
 </td>
 			<td>Lifecycle to automate configuration before or after startup.</td>
+		</tr>
+		<tr>
+			<td>livenessProbe</td>
+			<td>object</td>
+			<td><pre lang="json">
+{
+  "failureThreshold": 10,
+  "initialDelaySeconds": 15,
+  "periodSeconds": 20,
+  "successThreshold": 1,
+  "tcpSocket": {
+    "port": 9979
+  },
+  "timeoutSeconds": 5
+}
+</pre>
+</td>
+			<td>Configure extra options for containers probes.</td>
 		</tr>
 		<tr>
 			<td>livenessProbe.failureThreshold</td>
@@ -652,13 +1032,24 @@ true
 			<td>Number of successful executions after failed ones until container is marked healthy.</td>
 		</tr>
 		<tr>
+			<td>livenessProbe.tcpSocket</td>
+			<td>object</td>
+			<td><pre lang="json">
+{
+  "port": 9979
+}
+</pre>
+</td>
+			<td>TCP socket configuration for the liveness probe.</td>
+		</tr>
+		<tr>
 			<td>livenessProbe.tcpSocket.port</td>
 			<td>int</td>
 			<td><pre lang="json">
 9979
 </pre>
 </td>
-			<td></td>
+			<td>Port to check for liveness.</td>
 		</tr>
 		<tr>
 			<td>livenessProbe.timeoutSeconds</td>
@@ -686,6 +1077,27 @@ true
 </pre>
 </td>
 			<td>Node labels for pod assignment. Ref: https://kubernetes.io/docs/user-guide/node-selection/</td>
+		</tr>
+		<tr>
+			<td>persistence</td>
+			<td>object</td>
+			<td><pre lang="json">
+{
+  "accessModes": [
+    "ReadWriteOnce"
+  ],
+  "annotations": {},
+  "dataSource": {},
+  "enabled": true,
+  "existingClaim": "",
+  "labels": {},
+  "selector": {},
+  "size": "1Gi",
+  "storageClass": ""
+}
+</pre>
+</td>
+			<td>Volume persistence settings.</td>
 		</tr>
 		<tr>
 			<td>persistence.accessModes</td>
@@ -789,6 +1201,19 @@ true
 			<td>Pod Labels. Ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/</td>
 		</tr>
 		<tr>
+			<td>podSecurityContext</td>
+			<td>object</td>
+			<td><pre lang="json">
+{
+  "enabled": true,
+  "fsGroup": 1000,
+  "fsGroupChangePolicy": "Always"
+}
+</pre>
+</td>
+			<td>Pod Security Context. Ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/</td>
+		</tr>
+		<tr>
 			<td>podSecurityContext.enabled</td>
 			<td>bool</td>
 			<td><pre lang="json">
@@ -814,6 +1239,24 @@ true
 </pre>
 </td>
 			<td>Change ownership and permission of the volume before being exposed inside a Pod.</td>
+		</tr>
+		<tr>
+			<td>readinessProbe</td>
+			<td>object</td>
+			<td><pre lang="json">
+{
+  "failureThreshold": 10,
+  "initialDelaySeconds": 15,
+  "periodSeconds": 20,
+  "successThreshold": 1,
+  "tcpSocket": {
+    "port": 9979
+  },
+  "timeoutSeconds": 5
+}
+</pre>
+</td>
+			<td>Configure extra options for containers probes.</td>
 		</tr>
 		<tr>
 			<td>readinessProbe.failureThreshold</td>
@@ -852,13 +1295,24 @@ true
 			<td>Number of successful executions after failed ones until container is marked healthy.</td>
 		</tr>
 		<tr>
+			<td>readinessProbe.tcpSocket</td>
+			<td>object</td>
+			<td><pre lang="json">
+{
+  "port": 9979
+}
+</pre>
+</td>
+			<td>TCP socket configuration for the readiness probe.</td>
+		</tr>
+		<tr>
 			<td>readinessProbe.tcpSocket.port</td>
 			<td>int</td>
 			<td><pre lang="json">
 9979
 </pre>
 </td>
-			<td></td>
+			<td>Port to check for readiness.</td>
 		</tr>
 		<tr>
 			<td>readinessProbe.timeoutSeconds</td>
@@ -885,7 +1339,30 @@ true
 {}
 </pre>
 </td>
-			<td></td>
+			<td>Configure resource requests and limits. Ref: https://kubernetes.io/docs/user-guide/compute-resources/</td>
+		</tr>
+		<tr>
+			<td>service</td>
+			<td>object</td>
+			<td><pre lang="json">
+{
+  "annotations": {},
+  "clusterIP": "None",
+  "enabled": true,
+  "ports": {
+    "http": {
+      "containerPort": 9979,
+      "port": 9979,
+      "protocol": "TCP"
+    }
+  },
+  "sessionAffinity": "",
+  "sessionAffinityConfig": {},
+  "type": "ClusterIP"
+}
+</pre>
+</td>
+			<td>Define and create Kubernetes Service. Ref.: https://kubernetes.io/docs/concepts/services-networking/service</td>
 		</tr>
 		<tr>
 			<td>service.annotations</td>
@@ -903,7 +1380,7 @@ true
 "None"
 </pre>
 </td>
-			<td></td>
+			<td>This creates a headless service. Instead of load balancing, it creates a DNS A record for each pod.</td>
 		</tr>
 		<tr>
 			<td>service.enabled</td>
@@ -913,6 +1390,34 @@ true
 </pre>
 </td>
 			<td>Enable kubernetes service creation.</td>
+		</tr>
+		<tr>
+			<td>service.ports</td>
+			<td>object</td>
+			<td><pre lang="json">
+{
+  "http": {
+    "containerPort": 9979,
+    "port": 9979,
+    "protocol": "TCP"
+  }
+}
+</pre>
+</td>
+			<td>Define the ports of Service. You can set the port value to an arbitrary value, it will map the container port by name.</td>
+		</tr>
+		<tr>
+			<td>service.ports.http</td>
+			<td>object</td>
+			<td><pre lang="json">
+{
+  "containerPort": 9979,
+  "port": 9979,
+  "protocol": "TCP"
+}
+</pre>
+</td>
+			<td>HTTP port configuration.</td>
 		</tr>
 		<tr>
 			<td>service.ports.http.containerPort</td>
@@ -948,7 +1453,7 @@ true
 ""
 </pre>
 </td>
-			<td></td>
+			<td>Session Affinity for Kubernetes service, can be "None" or "ClientIP" If "ClientIP", consecutive client requests will be directed to the same Pod ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies </td>
 		</tr>
 		<tr>
 			<td>service.sessionAffinityConfig</td>
@@ -957,7 +1462,7 @@ true
 {}
 </pre>
 </td>
-			<td></td>
+			<td>Additional settings for the sessionAffinity sessionAffinityConfig:   clientIP:     timeoutSeconds: 300</td>
 		</tr>
 		<tr>
 			<td>service.type</td>
@@ -969,22 +1474,28 @@ true
 			<td>Choose the kind of Service, one of "ClusterIP", "NodePort" or "LoadBalancer".</td>
 		</tr>
 		<tr>
+			<td>serviceAccount</td>
+			<td>object</td>
+			<td><pre lang="json">
+{
+  "annotations": {},
+  "automountServiceAccountToken": false,
+  "create": true,
+  "labels": {},
+  "name": ""
+}
+</pre>
+</td>
+			<td>Configuration for the ServiceAccount used by the application.</td>
+		</tr>
+		<tr>
 			<td>serviceAccount.annotations</td>
 			<td>object</td>
 			<td><pre lang="json">
 {}
 </pre>
 </td>
-			<td></td>
-		</tr>
-		<tr>
-			<td>serviceAccount.automountServiceAccountToken</td>
-			<td>bool</td>
-			<td><pre lang="json">
-false
-</pre>
-</td>
-			<td></td>
+			<td>Annotations to add to the service account</td>
 		</tr>
 		<tr>
 			<td>serviceAccount.create</td>
@@ -993,7 +1504,7 @@ false
 true
 </pre>
 </td>
-			<td></td>
+			<td>Specifies whether a service account should be created</td>
 		</tr>
 		<tr>
 			<td>serviceAccount.labels</td>
@@ -1011,7 +1522,25 @@ true
 ""
 </pre>
 </td>
-			<td></td>
+			<td>The name of the service account to use. If not set and create is true, a name is generated using the fullname template</td>
+		</tr>
+		<tr>
+			<td>startupProbe</td>
+			<td>object</td>
+			<td><pre lang="json">
+{
+  "failureThreshold": 10,
+  "initialDelaySeconds": 15,
+  "periodSeconds": 20,
+  "successThreshold": 1,
+  "tcpSocket": {
+    "port": 9979
+  },
+  "timeoutSeconds": 5
+}
+</pre>
+</td>
+			<td>Configure extra options for containers probes.</td>
 		</tr>
 		<tr>
 			<td>startupProbe.failureThreshold</td>
@@ -1050,13 +1579,24 @@ true
 			<td>Number of successful executions after failed ones until container is marked healthy.</td>
 		</tr>
 		<tr>
+			<td>startupProbe.tcpSocket</td>
+			<td>object</td>
+			<td><pre lang="json">
+{
+  "port": 9979
+}
+</pre>
+</td>
+			<td>TCP socket configuration for the startup probe.</td>
+		</tr>
+		<tr>
 			<td>startupProbe.tcpSocket.port</td>
 			<td>int</td>
 			<td><pre lang="json">
 9979
 </pre>
 </td>
-			<td></td>
+			<td>Port to check for startup.</td>
 		</tr>
 		<tr>
 			<td>startupProbe.timeoutSeconds</td>
@@ -1136,6 +1676,20 @@ true
 			<td>The verbosity of log messages. Possible values: 0-4/99 (0: Error, 1: Warn, 2: Info, 3: Debug, 4: Trace, 99: sensitive data like cleartext passwords is logged as well).</td>
 		</tr>
 		<tr>
+			<td>udmRestApi.image</td>
+			<td>object</td>
+			<td><pre lang="json">
+{
+  "pullPolicy": null,
+  "registry": "",
+  "repository": "nubus-dev/images/udm-rest-api",
+  "tag": "latest"
+}
+</pre>
+</td>
+			<td>Container image configuration.</td>
+		</tr>
+		<tr>
 			<td>udmRestApi.image.pullPolicy</td>
 			<td>string</td>
 			<td><pre lang="json">
@@ -1152,6 +1706,38 @@ null
 </pre>
 </td>
 			<td>Container registry address. This setting has higher precedence than global.registry.</td>
+		</tr>
+		<tr>
+			<td>udmRestApi.image.repository</td>
+			<td>string</td>
+			<td><pre lang="json">
+"nubus-dev/images/udm-rest-api"
+</pre>
+</td>
+			<td>Container image repository.</td>
+		</tr>
+		<tr>
+			<td>udmRestApi.image.tag</td>
+			<td>string</td>
+			<td><pre lang="json">
+"latest"
+</pre>
+</td>
+			<td>Container image tag.</td>
+		</tr>
+		<tr>
+			<td>udmRestApi.tls</td>
+			<td>object</td>
+			<td><pre lang="json">
+{
+  "caCertificateFile": "/certificates/ca.crt",
+  "certificateFile": "/certificates/tls.crt",
+  "certificateKeyFile": "/certificates/tls.key",
+  "enabled": false
+}
+</pre>
+</td>
+			<td>TLS configuration for LDAP connections.</td>
 		</tr>
 		<tr>
 			<td>udmRestApi.tls.caCertificateFile</td>
@@ -1190,6 +1776,17 @@ false
 			<td>Enable TLS for LDAP connection.</td>
 		</tr>
 		<tr>
+			<td>updateStrategy</td>
+			<td>object</td>
+			<td><pre lang="json">
+{
+  "type": "RollingUpdate"
+}
+</pre>
+</td>
+			<td>Set up update strategy. Ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy  Example: updateStrategy:  type: RollingUpdate  rollingUpdate:    maxSurge: 25%    maxUnavailable: 25%</td>
+		</tr>
+		<tr>
 			<td>updateStrategy.type</td>
 			<td>string</td>
 			<td><pre lang="json">
@@ -1197,6 +1794,25 @@ false
 </pre>
 </td>
 			<td>Set to Recreate if you use persistent volume that cannot be mounted by more than one pods to make sure the pods are destroyed first.</td>
+		</tr>
+		<tr>
+			<td>waitForDependency</td>
+			<td>object</td>
+			<td><pre lang="json">
+{
+  "extraEnvVars": [],
+  "extraVolumeMounts": [],
+  "extraVolumes": [],
+  "image": {
+    "pullPolicy": null,
+    "registry": null,
+    "repository": "nubus/images/wait-for-dependency",
+    "tag": "0.35.27@sha256:3f9f37e224a7a8e268ee2cdf1ca8d18826d2d0d5b356a2a5a3cbfa4968a2a281"
+  }
+}
+</pre>
+</td>
+			<td>Configuration for the wait-for-dependency init container.</td>
 		</tr>
 		<tr>
 			<td>waitForDependency.extraEnvVars</td>
@@ -1226,13 +1842,27 @@ false
 			<td>Optionally specify an extra list of additional volumes.</td>
 		</tr>
 		<tr>
+			<td>waitForDependency.image</td>
+			<td>object</td>
+			<td><pre lang="json">
+{
+  "pullPolicy": null,
+  "registry": null,
+  "repository": "nubus/images/wait-for-dependency",
+  "tag": "0.35.27@sha256:3f9f37e224a7a8e268ee2cdf1ca8d18826d2d0d5b356a2a5a3cbfa4968a2a281"
+}
+</pre>
+</td>
+			<td>Container image configuration.</td>
+		</tr>
+		<tr>
 			<td>waitForDependency.image.pullPolicy</td>
 			<td>string</td>
 			<td><pre lang="json">
 null
 </pre>
 </td>
-			<td></td>
+			<td>Image pull policy. This setting has higher precedence than global.imagePullPolicy.</td>
 		</tr>
 		<tr>
 			<td>waitForDependency.image.registry</td>
@@ -1241,7 +1871,7 @@ null
 null
 </pre>
 </td>
-			<td></td>
+			<td>Container registry address. This setting has higher precedence than global.registry.</td>
 		</tr>
 		<tr>
 			<td>waitForDependency.image.repository</td>
@@ -1250,7 +1880,7 @@ null
 "nubus/images/wait-for-dependency"
 </pre>
 </td>
-			<td></td>
+			<td>Container image repository.</td>
 		</tr>
 		<tr>
 			<td>waitForDependency.image.tag</td>
@@ -1259,7 +1889,7 @@ null
 "0.35.27@sha256:3f9f37e224a7a8e268ee2cdf1ca8d18826d2d0d5b356a2a5a3cbfa4968a2a281"
 </pre>
 </td>
-			<td></td>
+			<td>Container image tag.</td>
 		</tr>
 	</tbody>
 </table>

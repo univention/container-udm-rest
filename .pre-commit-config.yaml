@@ -173,5 +173,9 @@ repos:
         stages:
           - "manual"
 
+  - repo: "https://git.knut.univention.de/jconde/ensure-helm-docs"
+    rev: "80438fb3c76e8577940edb51c549c1b3b6d1441c"
+    hooks:
+      - id: "ensure-helm-docs"
 
 ...
