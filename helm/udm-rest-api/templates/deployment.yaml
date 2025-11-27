@@ -33,7 +33,7 @@ spec:
       imagePullSecrets:
         {{- range .Values.global.imagePullSecrets }}
         - name: "{{ . }}"
-        {{- end }}
+        {{ end }}
         {{- range .Values.imagePullSecrets }}
         - name: "{{ . }}"
         {{- end }}
@@ -73,6 +73,10 @@ spec:
               mkdir -p /target/etc/univention /target/usr/lib/python3
               cp -a /etc/univention/* /target/etc/univention/
               cp -a /usr/lib/python3/* /target/usr/lib/python3/
+          {{- with .Values.udmRestApi.extraEnvVars }}
+          env:
+            {{- . | toYaml | nindent 12 }}
+          {{- end }}
           volumeMounts:
             - name: etc-univention-volume
               mountPath: /target/etc/univention
@@ -89,6 +93,10 @@ spec:
             - sh
             - -c
             - 'ucr commit /etc/univention/directory/reports/config.ini'
+          {{- with .Values.udmRestApi.extraEnvVars }}
+          env:
+            {{- . | toYaml | nindent 12 }}
+          {{- end }}
           volumeMounts:
             - name: etc-univention-volume
               mountPath: /etc/univention
@@ -111,6 +119,10 @@ spec:
               cp -av /usr/lib/python3/dist-packages/univention/admin/syntax.d/* /target/udm-syntax.d
               cp -av /usr/lib/python3/dist-packages/univention/admin/handlers/* /target/udm-handlers
               cp -av /usr/share/univention-management-console-frontend/js/dijit/themes/umc/icons/* /target/umc-icons
+          {{- with .Values.udmRestApi.extraEnvVars }}
+          env:
+            {{- . | toYaml | nindent 12 }}
+          {{- end }}
           volumeMounts:
             - name: plugin-targets
               mountPath: /target
@@ -124,6 +136,10 @@ spec:
           {{- end }}
           image: "{{ coalesce .image.registry $.Values.global.imageRegistry }}/{{ .image.repository }}:{{ .image.tag }}"
           imagePullPolicy: {{ coalesce .image.pullPolicy $.Values.global.imagePullPolicy | quote }}
+          {{- with $.Values.udmRestApi.extraEnvVars }}
+          env:
+            {{- . | toYaml | nindent 12 }}
+          {{- end }}
           volumeMounts:
             - name: plugin-targets
               mountPath: /target
@@ -149,7 +165,8 @@ spec:
           envFrom:
             - configMapRef:
                 name: {{ include "common.names.fullname" . }}
-          {{- with .Values.extraEnvVars }}
+          {{- with .Values.udmRestApi.extraEnvVars }}
+          env:
             {{- . | toYaml | nindent 12 }}
           {{- end }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.livenessProbe "context" .) | nindent 12 }}

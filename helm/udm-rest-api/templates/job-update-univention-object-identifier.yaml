@@ -93,6 +93,9 @@ spec:
             value: {{ required "Either .Values.ldap.baseDn or .Values.global.ldap.baseDn must be set" (coalesce .Values.ldap.baseDn .Values.global.ldap.baseDn) }}
           - name: PYTHON_LOG_LEVEL
             value: "{{ .Values.ldapUpdateUniventionObjectIdentifier.pythonLogLevel }}"
+          {{- with .Values.ldapUpdateUniventionObjectIdentifier.extraEnvVars }}
+          {{- . | toYaml | nindent 10 }}
+          {{- end }}
         resources:
           {{- toYaml .Values.resources | nindent 10 }}
       volumes:

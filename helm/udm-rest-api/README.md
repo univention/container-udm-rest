@@ -84,6 +84,7 @@ helm uninstall udm-rest-api
 			<td><pre lang="json">
 {
   "enabled": true,
+  "extraEnvVars": [],
   "image": {
     "pullPolicy": null,
     "registry": null,
@@ -95,6 +96,15 @@ helm uninstall udm-rest-api
 </pre>
 </td>
 			<td>Settings to configure the UDM blocklist cleanup job</td>
+		</tr>
+		<tr>
+			<td>blocklistCleanup.extraEnvVars</td>
+			<td>list</td>
+			<td><pre lang="json">
+[]
+</pre>
+</td>
+			<td>Array with extra environment variables to add to containers.  extraEnvVars:   - name: FOO     value: "bar"</td>
 		</tr>
 		<tr>
 			<td>blocklistCleanup.image.pullPolicy</td>
@@ -548,6 +558,7 @@ null
 			<td><pre lang="json">
 {
   "enabled": true,
+  "extraEnvVars": [],
   "image": {
     "pullPolicy": null,
     "registry": null,
@@ -569,6 +580,15 @@ true
 </pre>
 </td>
 			<td>Enables the job creation</td>
+		</tr>
+		<tr>
+			<td>ldapUpdateUniventionObjectIdentifier.extraEnvVars</td>
+			<td>list</td>
+			<td><pre lang="json">
+[]
+</pre>
+</td>
+			<td>Array with extra environment variables to add to containers.  extraEnvVars:   - name: FOO     value: "bar"</td>
 		</tr>
 		<tr>
 			<td>ldapUpdateUniventionObjectIdentifier.image.pullPolicy</td>
@@ -1109,6 +1129,7 @@ true
 			<td><pre lang="json">
 {
   "debug": "2",
+  "extraEnvVars": [],
   "image": {
     "pullPolicy": null,
     "registry": "",
@@ -1134,6 +1155,15 @@ true
 </pre>
 </td>
 			<td>The verbosity of log messages. Possible values: 0-4/99 (0: Error, 1: Warn, 2: Info, 3: Debug, 4: Trace, 99: sensitive data like cleartext passwords is logged as well).</td>
+		</tr>
+		<tr>
+			<td>udmRestApi.extraEnvVars</td>
+			<td>list</td>
+			<td><pre lang="json">
+[]
+</pre>
+</td>
+			<td>Array with extra environment variables to add to containers.  extraEnvVars:   - name: FOO     value: "bar"</td>
 		</tr>
 		<tr>
 			<td>udmRestApi.image.pullPolicy</td>

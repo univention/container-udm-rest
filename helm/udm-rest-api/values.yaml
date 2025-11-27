@@ -2,7 +2,6 @@
 # SPDX-FileCopyrightText: 2024-2025 Univention GmbH
 
 ---
-
 global:
   # -- Indicates wether this chart is part of a Nubus deployment.
   nubusDeployment: false
@@ -155,7 +154,6 @@ ingress:
     nginx.ingress.kubernetes.io/use-regex: "true"
     nginx.ingress.kubernetes.io/affinity: "none"
     nginx.ingress.kubernetes.io/rewrite-target: "/$2$3"
-
 
   # -- Secure an Ingress by specifying a Secret that contains a TLS private key and certificate.
   #
@@ -406,6 +404,12 @@ udmRestApi:
     # -- Image pull policy. This setting has higher precedence than global.imagePullPolicy.
     pullPolicy: null
     tag: "latest"
+  # -- Array with extra environment variables to add to containers.
+  #
+  # extraEnvVars:
+  #   - name: FOO
+  #     value: "bar"
+  extraEnvVars: []
   tls:
     # -- Enable TLS for LDAP connection.
     enabled: false
@@ -437,6 +441,12 @@ ldapUpdateUniventionObjectIdentifier:
     registry: null
     repository: "nubus-dev/images/ldap-update-univention-object-identifier"
     tag: "latest"
+  # -- Array with extra environment variables to add to containers.
+  #
+  # extraEnvVars:
+  #   - name: FOO
+  #     value: "bar"
+  extraEnvVars: []
 
 # -- Settings to configure the UDM blocklist cleanup job
 blocklistCleanup:
@@ -449,6 +459,12 @@ blocklistCleanup:
     # -- Image pull policy. This setting has higher precedence than global.imagePullPolicy.
     pullPolicy: null
     tag: "latest"
+  # -- Array with extra environment variables to add to containers.
+  #
+  # extraEnvVars:
+  #   - name: FOO
+  #     value: "bar"
+  extraEnvVars: []
 
 # LDAP Client configuration
 ldap:
@@ -482,4 +498,3 @@ waitForDependency:
 
   # -- Optionally specify an extra list of additional volumeMounts.
   extraVolumeMounts: []
-...

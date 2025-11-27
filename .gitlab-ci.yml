@@ -2,7 +2,6 @@
 # SPDX-FileCopyrightText: 2023-2025 Univention GmbH
 
 ---
-
 include:
   - project: "univention/dev/nubus-for-k8s/common-ci"
     ref: "v1.50.0"
@@ -87,7 +86,7 @@ test-udm-rest:
 test-chart-udm-rest-api:
   stage: test
   needs: []
-  image: "gitregistry.knut.univention.de/univention/dev/nubus-for-k8s/common-helm/testrunner:0.28.0"
+  image: "gitregistry.knut.univention.de/univention/dev/nubus-for-k8s/common-helm/testrunner:0.29.0"
   script:
     - helm dep build helm/udm-rest-api
     - pytest -W error tests/chart
@@ -109,5 +108,3 @@ check-debian-updates:
 sonarqube:
   extends: .sonarqube
   needs: []
-
-...
