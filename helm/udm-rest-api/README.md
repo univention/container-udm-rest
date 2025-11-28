@@ -1247,7 +1247,7 @@ null
 			<td>waitForDependency.image.repository</td>
 			<td>string</td>
 			<td><pre lang="json">
-"nubus/images/wait-for-dependency"
+"nubus-dev/images/wait-for-dependency"
 </pre>
 </td>
 			<td></td>
@@ -1256,7 +1256,7 @@ null
 			<td>waitForDependency.image.tag</td>
 			<td>string</td>
 			<td><pre lang="json">
-"0.35.27@sha256:3f9f37e224a7a8e268ee2cdf1ca8d18826d2d0d5b356a2a5a3cbfa4968a2a281"
+"0.35.32-pre-jtorres-bump-version-errata298"
 </pre>
 </td>
 			<td></td>
