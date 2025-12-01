@@ -114,6 +114,7 @@ RUN chown _apt . && \
   librhonabwy1.1 \
   locales \
   python3 \
+  python3-certifi \
   python3-ldap \
   python3-pil \
   python3-magic \
