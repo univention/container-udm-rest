@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.41.7](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/compare/v0.41.6...v0.41.7) (2025-12-03)
+
+
+### Bug Fixes
+
+* explicitly install python3-certifi ([0c6544d](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/commit/0c6544d0970fd1d02eb58e32e1daefadb73e1a94)), closes [univention/dev/internal/team-nubus#1540](https://git.knut.univention.de/univention/dev/internal/team-nubus/issues/1540)
+
 ## [0.41.6](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/compare/v0.41.5...v0.41.6) (2025-12-03)
 
 
