@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.41.6](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/compare/v0.41.5...v0.41.6) (2025-12-03)
+
+
+### Bug Fixes
+
+* bump image to errata 298 ([cbb8c60](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/commit/cbb8c601339048cb207a44a2d869950a3c8251db)), closes [univention/dev/internal/team-nubus#1543](https://git.knut.univention.de/univention/dev/internal/team-nubus/issues/1543)
+* **helm:** Add component-specific extraEnvVars support ([728ebf3](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/commit/728ebf3b14d0a9ea145c557a686bb0db1d1aa18e)), closes [univention/dev/internal/team-nubus#977](https://git.knut.univention.de/univention/dev/internal/team-nubus/issues/977)
+
 ## [0.41.5](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/compare/v0.41.4...v0.41.5) (2025-11-21)
 
 
