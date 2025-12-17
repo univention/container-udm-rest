@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.41.8](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/compare/v0.41.7...v0.41.8) (2025-12-17)
+
+
+### Bug Fixes
+
+* **deps:** Update dependency univention/dev/nubus-for-k8s/common-ci to v1.54.0 ([057620b](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/commit/057620b17061d337e50f3856c5cdfcc9966feab4)), closes [#0](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/issues/0)
+
 ## [0.41.7](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/compare/v0.41.6...v0.41.7) (2025-12-03)
 
 
