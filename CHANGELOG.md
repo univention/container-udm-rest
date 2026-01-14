@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.41.9](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/compare/v0.41.8...v0.41.9) (2026-01-14)
+
+
+### Bug Fixes
+
+* Bump image to errata 299 ([b495527](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/commit/b49552797d45d1e270d6203854c1ee9f531e6b7f)), closes [univention/dev/internal/team-nubus#1518](https://git.knut.univention.de/univention/dev/internal/team-nubus/issues/1518)
+* failing pipeline job ([8c15e2f](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/commit/8c15e2f3d4b5eca097b0c319b81ac36aa2e22b31)), closes [univention/dev/internal/team-nubus#1518](https://git.knut.univention.de/univention/dev/internal/team-nubus/issues/1518)
+
 ## [0.41.8](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/compare/v0.41.7...v0.41.8) (2025-12-17)
 
 
