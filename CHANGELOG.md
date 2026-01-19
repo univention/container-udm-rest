@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.41.10](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/compare/v0.41.9...v0.41.10) (2026-01-19)
+
+
+### Bug Fixes
+
+* Bump image to errata 333 ([92f4fc9](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/commit/92f4fc9e6570296299da52409d23a50377308aeb)), closes [univention/dev/internal/team-nubus#1530](https://git.knut.univention.de/univention/dev/internal/team-nubus/issues/1530)
+
 ## [0.41.9](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/compare/v0.41.8...v0.41.9) (2026-01-14)
 
 
