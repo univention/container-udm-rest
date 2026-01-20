@@ -8,7 +8,7 @@ They are defined so other sub-charts can read information that otherwise would b
 If compatible Helm charts set .Values.global.nubusDeployment to true, the templates defined here will be imported.
 */}}
 {{- define "nubusTemplates.udmRestApi.uri" -}}
-{{- printf "http://%s-udm-rest-api:9979/udm/" .Release.Name }}
+{{- printf "http://%s-udm-rest-api:9979/univention/udm/" .Release.Name }}
 {{- end -}}
 
 {{- define "nubusTemplates.udmRestApi.host" -}}

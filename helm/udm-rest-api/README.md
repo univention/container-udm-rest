@@ -373,10 +373,7 @@ false
 			<td><pre lang="json">
 {
   "nginx.ingress.kubernetes.io/affinity": "none",
-  "nginx.ingress.kubernetes.io/configuration-snippet-disabled": "rewrite ^/univention(/udm/.*)$ $1 break;\n",
-  "nginx.ingress.kubernetes.io/proxy-buffer-size": "64k",
-  "nginx.ingress.kubernetes.io/rewrite-target": "/$2$3",
-  "nginx.ingress.kubernetes.io/use-regex": "true"
+  "nginx.ingress.kubernetes.io/proxy-buffer-size": "64k"
 }
 </pre>
 </td>
@@ -451,8 +448,8 @@ true
 			<td><pre lang="json">
 [
   {
-    "path": "/(univention/)(udm/.*)$",
-    "pathType": "ImplementationSpecific"
+    "path": "/univention/udm",
+    "pathType": "Prefix"
   }
 ]
 </pre>
@@ -1136,6 +1133,7 @@ true
     "repository": "nubus-dev/images/udm-rest-api",
     "tag": "latest"
   },
+  "rootPath": "/univention",
   "tls": {
     "caCertificateFile": "/certificates/ca.crt",
     "certificateFile": "/certificates/tls.crt",
@@ -1182,6 +1180,15 @@ null
 </pre>
 </td>
 			<td>Container registry address. This setting has higher precedence than global.registry.</td>
+		</tr>
+		<tr>
+			<td>udmRestApi.rootPath</td>
+			<td>string</td>
+			<td><pre lang="json">
+"/univention"
+</pre>
+</td>
+			<td>Root path for the UDM REST API. This allows the API to handle path prefixes (e.g., /univention) itself instead of relying on rewrites in the Ingress.</td>
 		</tr>
 		<tr>
 			<td>udmRestApi.tls.caCertificateFile</td>
