@@ -1,0 +1,40 @@
+From 56d902b9bbef2996ad73086e193b918079a685f4 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Carlos=20Garc=C3=ADa-Mauri=C3=B1o?=
+ <garcia-maurino@univention.de>
+Date: Tue, 20 Jan 2026 13:39:41 +0100
+Subject: [PATCH] fix: disabling structured logging restores original formatter
+
+Bug 58975
+univention/dev/internal/team-nubus#1588
+---
+ base/univention-debug-python/python/univention/logging.py | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/base/univention-debug-python/python/univention/logging.py b/base/univention-debug-python/python/univention/logging.py
+index 166fa5004a..a71029e18c 100644
+--- a/base/univention-debug-python/python/univention/logging.py
++++ b/base/univention-debug-python/python/univention/logging.py
+@@ -236,6 +236,12 @@ def basicConfig(
+     >>> logger = logging.getLogger('ADMIN').getChild(__name__)
+     >>> logger.info('some info')
+     """
++    # Remove any fallback handlers from the root logger that may have been added
++    # by importing univention.management.console.log
++    for handler in logging.root.handlers[:]:
++        if isinstance(handler, logging.StreamHandler) and isinstance(handler.formatter, StructuredFormatter):
++            logging.root.removeHandler(handler)
++
+     categories = univention_debug_categories or list(_UD_CATEGORIES.values())
+
+     if isinstance(univention_debug_flush, bool):
+@@ -437,6 +443,8 @@ class Logger(logging.Logger):
+         self.univention_debug_handler.set_structured(use_structured_logging)
+         if use_structured_logging:
+             self.univention_debug_handler.setFormatter(StructuredFormatter())
++        else:
++            self.univention_debug_handler.setFormatter(self._formatter)
+
+     def __repr__(self):
+         msg = super().__repr__()
+--
+2.47.3

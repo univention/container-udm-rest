@@ -44,6 +44,7 @@ RUN chown _apt . && \
   # install unlisted dependencies
   DEBIAN_FRONTEND=noninteractive \
   apt-get --assume-yes --verbose-versions --no-install-recommends install \
+  patch \
   python3-distutils \
   && \
   DEBIAN_FRONTEND=noninteractive \
@@ -82,6 +83,12 @@ RUN chown _apt . && \
   dpkg --force-depends --install univention-directory-manager-rest_12.*.deb && \
   rm univention-directory-manager-rest_12.*.deb && \
   dpkg-query -f '${Version}' -W python3-univention-directory-manager-rest > /version
+
+COPY patches/*.patch /
+
+RUN \
+  patch -p 4 -d /usr/lib/python3/dist-packages/ -i /0001-fix-disabling-structured-logging-restores-original-f.patch && \
+  rm -v /*.patch
 
 
 ###############################################################################
