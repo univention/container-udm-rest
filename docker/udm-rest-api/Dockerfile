@@ -4,9 +4,10 @@
 # SPDX-License-Identifier: AGPL-3.0-only
 # SPDX-FileCopyrightText: 2021-2025 Univention GmbH
 
-ARG UCS_BASE_IMAGE=gitregistry.knut.univention.de/univention/dev/projects/ucs-base-image/ucs-base
-ARG UCS_BASE_IMAGE_TAG=5.2.4-build.20260115@sha256:291b8d17b48be775a3bbb859d13207d9d42ff7f5649dd8147b4931b3e6840f5c
-
+# ARG UCS_BASE_IMAGE=gitregistry.knut.univention.de/univention/dev/projects/ucs-base-image/ucs-base
+# ARG UCS_BASE_IMAGE_TAG=5.2.4-build.20260115@sha256:291b8d17b48be775a3bbb859d13207d9d42ff7f5649dd8147b4931b3e6840f5c
+ARG UCS_BASE_IMAGE=gitregistry.knut.univention.de/univention/dev/projects/ucs-base-image/ucs-base-dev-524
+ARG UCS_BASE_IMAGE_TAG=latest
 
 FROM ${UCS_BASE_IMAGE}:${UCS_BASE_IMAGE_TAG} AS build
 
@@ -28,6 +29,10 @@ COPY fake.sh /usr/sbin/univention-management-console-acls
 COPY fake-uv-lib.sh /usr/local/bin/fake-uv-lib.sh
 
 WORKDIR /apt
+
+# hadolint ignore=DL3009
+RUN ucs-dev-add-branch.sh jconde-udm-root-path \
+    && apt-get update
 
 # hadolint ignore=SC2016
 RUN chown _apt . && \
@@ -66,6 +71,7 @@ RUN chown _apt . && \
   python3-mimeparse \
   python3-pycurl \
   python3-tornado \
+  python3-click \
   python3-univention-directory-manager \
   python3-univention-directory-reports \
   python3-univention-management-console \
@@ -104,6 +110,10 @@ ARG LABEL_SOURCE=undefined
 ARG LABEL_VERSION=undefined
 
 WORKDIR /apt
+
+# hadolint ignore=DL3009
+RUN ucs-dev-add-branch.sh jconde-udm-root-path \
+    && apt-get update
 
 RUN chown _apt . && \
   DEBIAN_FRONTEND=noninteractive \
