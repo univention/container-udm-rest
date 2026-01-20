@@ -19,8 +19,10 @@ data:
   {{- if .Values.udmRestApi.tls.enabled }}
   CA_CERT_FILE: "{{ .Values.udmRestApi.ldap.tls.caCertificateFile }}"
   {{- end }}
+  # Root path for the UDM REST API to handle path prefixes like /univention
+  UDM_REST_API_ROOT_PATH: "/univention"
   # used by the load-join-data job
-  UDM_API_URL: 'http://{{ include "common.names.fullname" . }}:{{ .Values.service.ports.http.port }}/udm/'
+  UDM_API_URL: 'http://{{ include "common.names.fullname" . }}:{{ .Values.service.ports.http.port }}/univention/udm/'
   # This is hard-coded to be cn=admin in UCS
   UDM_API_USER: "cn=admin"
   UDM_API_PASSWORD_FILE: "/etc/ldap.secret"

@@ -373,10 +373,7 @@ false
 			<td><pre lang="json">
 {
   "nginx.ingress.kubernetes.io/affinity": "none",
-  "nginx.ingress.kubernetes.io/configuration-snippet-disabled": "rewrite ^/univention(/udm/.*)$ $1 break;\n",
-  "nginx.ingress.kubernetes.io/proxy-buffer-size": "64k",
-  "nginx.ingress.kubernetes.io/rewrite-target": "/$2$3",
-  "nginx.ingress.kubernetes.io/use-regex": "true"
+  "nginx.ingress.kubernetes.io/proxy-buffer-size": "64k"
 }
 </pre>
 </td>
@@ -451,8 +448,8 @@ true
 			<td><pre lang="json">
 [
   {
-    "path": "/(univention/)(udm/.*)$",
-    "pathType": "ImplementationSpecific"
+    "path": "/univention/udm",
+    "pathType": "Prefix"
   }
 ]
 </pre>

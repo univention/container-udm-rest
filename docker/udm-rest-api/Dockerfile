@@ -2,10 +2,10 @@
 # Dockerfile for UDM REST API
 #
 # SPDX-License-Identifier: AGPL-3.0-only
-# SPDX-FileCopyrightText: 2021-2025 Univention GmbH
+# SPDX-FileCopyrightText: 2021-2026 Univention GmbH
 
 ARG UCS_BASE_IMAGE=gitregistry.knut.univention.de/univention/dev/projects/ucs-base-image/ucs-base
-ARG UCS_BASE_IMAGE_TAG=5.2.4-build.20260122@sha256:6d56ece83f5b501d9f079a87946ace02b86e490f67fae8d431e49bab72e0d1d7
+ARG UCS_BASE_IMAGE_TAG=5.2.4-build.20260212@sha256:81ec7cbef5fa56278eda6ecc3903f5f3393209c9178ec21bc106330194525534
 
 
 FROM ${UCS_BASE_IMAGE}:${UCS_BASE_IMAGE_TAG} AS build
