@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.41.11](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/compare/v0.41.10...v0.41.11) (2026-01-21)
+
+
+### Bug Fixes
+
+* add patch for structured logging bug ([12fb0ab](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/commit/12fb0ab2646a1c3131ed91fb9825a3909c48c2f4)), closes [univention/dev/internal/team-nubus#1588](https://git.knut.univention.de/univention/dev/internal/team-nubus/issues/1588)
+
 ## [0.41.10](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/compare/v0.41.9...v0.41.10) (2026-01-19)
 
 
