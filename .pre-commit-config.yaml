@@ -6,6 +6,9 @@
 # See https://pre-commit.com for more information
 # See https://pre-commit.com/hooks.html for more hooks
 
+default_language_version:
+  python: python3.11
+
 repos:
   # "Copy .env.udm-rest-api.example so that docker-compose.yaml can be linted"
   - repo: "local"
@@ -18,7 +21,7 @@ repos:
         pass_filenames: false
 
   - repo: "https://github.com/pre-commit/pre-commit-hooks"
-    rev: "v4.5.0"
+    rev: "v6.0.0"
     hooks:
       - id: "check-added-large-files"
         name: "check for added large files"
@@ -54,7 +57,7 @@ repos:
         name: "trim trailing whitespace"
 
   - repo: "https://github.com/compilerla/conventional-pre-commit"
-    rev: "v3.0.0"
+    rev: "v4.3.0"
     hooks:
       - id: "conventional-pre-commit"
         name: "Conventional Commit"
@@ -67,7 +70,7 @@ repos:
         name: "Check issue reference"
 
   - repo: "https://git.knut.univention.de/univention/infrastructure/pre-commit-hooks/addlicense"
-    rev: "v1.0.1"
+    rev: "v1.0.3"
     hooks:
       - id: "addlicense"
         name: "Check or add license headers to files"
@@ -77,7 +80,7 @@ repos:
           - "yaml"
 
   - repo: "https://github.com/adrienverge/yamllint"
-    rev: "v1.33.0"
+    rev: "v1.38.0"
     hooks:
       - id: "yamllint"
         name: "yamllint"
@@ -92,7 +95,7 @@ repos:
           - "--no-warnings"
 
   - repo: "https://github.com/astral-sh/ruff-pre-commit"
-    rev: "v0.11.8"
+    rev: "v0.14.13"
     hooks:
       - id: "ruff"
         name: "ruff"
@@ -105,7 +108,7 @@ repos:
           - "--extend-select=COM"
 
   - repo: "https://github.com/hadolint/hadolint"
-    rev: "v2.12.0"
+    rev: "v2.14.0"
     hooks:
       - id: "hadolint"
         name: "Lint Dockerfiles"
@@ -149,13 +152,13 @@ repos:
           - "--exclude=SC2250"
 
   - repo: "https://github.com/gruntwork-io/pre-commit"
-    rev: "v0.1.23"
+    rev: "v0.1.30"
     hooks:
       - id: "helmlint"
         name: "helmlint"
 
   - repo: "https://github.com/norwoodj/helm-docs"
-    rev: "v1.12.0"
+    rev: "v1.14.2"
     hooks:
       - id: "helm-docs"
         name: "Helm Docs"
