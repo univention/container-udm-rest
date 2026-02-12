@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.42.0](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/compare/v0.41.13...v0.42.0) (2026-02-12)
+
+
+### Features
+
+* Configure root-path ([198fbaa](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/commit/198fbaa0714b354eaff11c71878abd4b2bd8159e)), closes [univention/dev/internal/team-nubus#1553](https://git.knut.univention.de/univention/dev/internal/team-nubus/issues/1553)
+
 ## [0.41.13](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/compare/v0.41.12...v0.41.13) (2026-02-12)
 
 
