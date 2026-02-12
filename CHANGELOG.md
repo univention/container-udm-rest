@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.42.1](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/compare/v0.42.0...v0.42.1) (2026-02-12)
+
+
+### Bug Fixes
+
+* **helm:** Stop the kubernetes service from routing rest-api request to job pods by adding an additional and unique label to the real udm pod ([8492cf7](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/commit/8492cf7f512b46e91e3f6174d7efeec21e6fa362)), closes [univention/dev/internal/team-nubus#1550](https://git.knut.univention.de/univention/dev/internal/team-nubus/issues/1550)
+
 ## [0.42.0](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/compare/v0.41.13...v0.42.0) (2026-02-12)
 
 
