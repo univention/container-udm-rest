@@ -6,7 +6,7 @@
 
 
 ARG UCS_BASE_IMAGE=gitregistry.knut.univention.de/univention/dev/projects/ucs-base-image/ucs-base
-ARG UCS_BASE_IMAGE_TAG=5.2.4-build.20260122@sha256:6d56ece83f5b501d9f079a87946ace02b86e490f67fae8d431e49bab72e0d1d7
+ARG UCS_BASE_IMAGE_TAG=5.2.4-build.20260219@sha256:945922a021476d4b948063cae4655d28fc226f6d41afa16199de11a6674641aa
 
 FROM ${UCS_BASE_IMAGE}:${UCS_BASE_IMAGE_TAG} AS base
 
