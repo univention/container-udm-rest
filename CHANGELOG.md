@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.42.4](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/compare/v0.42.3...v0.42.4) (2026-02-25)
+
+
+### Bug Fixes
+
+* **deps:** Update nubus/images/wait-for-dependency Docker tag to v0.36.6 ([d015ac4](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/commit/d015ac4aa78f024d32d1f4b634376d929f0e8984)), closes [#0](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/issues/0)
+
 ## [0.42.3](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/compare/v0.42.2...v0.42.3) (2026-02-25)
 
 
