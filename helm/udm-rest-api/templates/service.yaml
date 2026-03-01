@@ -30,6 +30,12 @@ spec:
       nodePort: {{ $value.nodePort }}
       {{- end }}
     {{- end }}
+  {{- if .Values.service.sessionAffinity }}
+  sessionAffinity: {{ .Values.service.sessionAffinity }}
+  {{- if .Values.service.sessionAffinityConfig }}
+  sessionAffinityConfig: {{- toYaml .Values.service.sessionAffinityConfig | nindent 4 }}
+  {{- end }}
+  {{- end }}
   selector:
     {{- include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: "server"

@@ -7,6 +7,12 @@ global:
   nubusDeployment: false
   # -- ConfigMap name to read UCR values from.
   configMapUcr: null
+  # -- Kubernetes API version override, e.g. "1.28". Used to select the correct API version for resources.
+  kubeVersion: null
+  # -- Cert-manager cluster issuer name for ingress TLS certificates.
+  certManagerIssuer: null
+  # -- Ingress class name override.
+  ingressClass: null
 
   # -- Allows to configure extensions globally.
   extensions: []
@@ -45,6 +51,12 @@ global:
       # -- The LDAP URI to connect to.
       # Example: "ldap://example-ldap-server:389"
       uri: null
+
+# -- Kubernetes API version override. Used to select the correct API version for resources.
+kubeVersion: null
+
+# -- ConfigMap name to read UCR values from.
+configMapUcr: null
 
 # -- Additional custom annotations to add to all deployed objects.
 additionalAnnotations: {}
@@ -86,13 +98,6 @@ containerSecurityContext:
 # `global.extensions`.
 extensions: []
 
-# -- Array with extra environment variables to add to containers.
-#
-# extraEnvVars:
-#   - name: FOO
-#     value: "bar"
-extraEnvVars: []
-
 # -- Optionally specify a secret to create (primarily intended to be used in
 # development environments to provide custom certificates)
 extraSecrets: []
@@ -120,6 +125,9 @@ ingress:
   # -- Enable creation of Ingress.
   enabled: true
 
+  # -- Ingress API version override.
+  apiVersion: null
+
   # -- Define the Fully Qualified Domain Name (FQDN) where application should be reachable.
   host: ""
 
@@ -139,6 +147,8 @@ ingress:
   paths:
     - path: "/univention/udm"
       pathType: "Prefix"
+      # -- Override the backend service name (defaults to the chart fullname).
+      serviceName: ""
 
   # -- The Ingress controller class name.
   ingressClassName: ""
@@ -147,7 +157,7 @@ ingress:
   # annotations:
   #   nginx.ingress.kubernetes.io/rewrite-target: /
   annotations:
-    # -- Some responses of the UDM Rest API contain very large response headers
+    # Some responses of the UDM REST API contain very large response headers
     nginx.ingress.kubernetes.io/proxy-buffer-size: "64k"
     nginx.ingress.kubernetes.io/affinity: "none"
 
@@ -186,49 +196,6 @@ nameOverride: ""
 # -- Node labels for pod assignment.
 # Ref: https://kubernetes.io/docs/user-guide/node-selection/
 nodeSelector: {}
-
-# Volume persistence settings.
-persistence:
-  # -- The volume access modes, some of "ReadWriteOnce", "ReadOnlyMany", "ReadWriteMany", "ReadWriteOncePod".
-  #
-  # "ReadWriteOnce" => The volume can be mounted as read-write by a single node. ReadWriteOnce access mode still can
-  #                    allow multiple pods to access the volume when the pods are running on the same node.
-  # "ReadOnlyMany" => The volume can be mounted as read-only by many nodes.
-  # "ReadWriteMany" => The volume can be mounted as read-write by many nodes.
-  # "ReadWriteOncePod" => The volume can be mounted as read-write by a single Pod. Use ReadWriteOncePod access mode if
-  #                       you want to ensure that only one pod across whole cluster can read that PVC or write to it.
-  #
-  accessModes:
-    - "ReadWriteOnce"
-
-  # -- Annotations for the PVC.
-  annotations: {}
-
-  # -- Custom PVC data source.
-  dataSource: {}
-
-  # -- Enable data persistence (true) or use temporary storage (false).
-  enabled: true
-
-  # -- Use an already existing claim.
-  existingClaim: ""
-
-  # -- Labels for the PVC.
-  labels: {}
-
-  # -- The volume size with unit.
-  size: "1Gi"
-
-  # -- The (storage) class of PV.
-  storageClass: ""
-
-  # -- Selector to match an existing Persistent Volume (this value is evaluated as a template).
-  #
-  # selector:
-  #   matchLabels:
-  #     app: my-app
-  #
-  selector: {}
 
 # -- Pod Annotations.
 # Ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
@@ -310,6 +277,8 @@ service:
       containerPort: 9979
       # -- service protocol.
       protocol: "TCP"
+      # -- Node port (only used when service.type is "NodePort").
+      nodePort: null
 
   # @param service.sessionAffinity Session Affinity for Kubernetes service, can be "None" or "ClientIP"
   # If "ClientIP", consecutive client requests will be directed to the same Pod
@@ -327,9 +296,6 @@ serviceAccount:
   create: true
   # Annotations to add to the service account
   annotations: {}
-  # The name of the service account to use.
-  # If not set and create is true, a name is generated using the fullname template
-  name: ""
   ## @param serviceAccount.automountServiceAccountToken Allows auto mount of
   # ServiceAccountToken on the serviceAccount created
   ## Can be set to false if pods using this serviceAccount do not need to use K8s API
@@ -406,17 +372,23 @@ udmRestApi:
   #   - name: FOO
   #     value: "bar"
   extraEnvVars: []
+  # -- Path to the LDAP secret file mounted in the container.
+  ldapSecretFile: "/etc/ldap.secret"
+  # -- Path to the machine secret file mounted in the container.
+  machineSecretFile: "/etc/machine.secret"
   tls:
-    # -- Enable TLS for LDAP connection.
+    # -- Enable TLS for the LDAP connection.
     enabled: false
-    # -- The name of the secret containing the certificates.
-    # certificateSecret: ""
-    # -- Path the CA certificate file (TLSCACertPath (slapd), CA_CERT_FILE(entrypoint))
-    caCertificateFile: "/certificates/ca.crt"
-    # -- Path the servers certificate file
-    certificateFile: "/certificates/tls.crt"
-    # -- Path the servers private-key file
-    certificateKeyFile: "/certificates/tls.key"
+    # -- Name of the Kubernetes secret containing the TLS certificates.
+    certificateSecret: null
+  ldap:
+    tls:
+      # -- Path to the CA certificate file (TLSCACertPath / CA_CERT_FILE).
+      caCertificateFile: "/certificates/ca.crt"
+      # -- Path to the server certificate file.
+      certificateFile: "/certificates/tls.crt"
+      # -- Path to the server private-key file.
+      certificateKeyFile: "/certificates/tls.key"
   # -- The verbosity of log messages.
   # Possible values: 0-4/99 (0: Error, 1: Warn, 2: Info, 3: Debug, 4: Trace,
   # 99: sensitive data like cleartext passwords is logged as well).

@@ -125,6 +125,15 @@ null
 			<td>Container registry address. This setting has higher precedence than global.registry.</td>
 		</tr>
 		<tr>
+			<td>configMapUcr</td>
+			<td>string</td>
+			<td><pre lang="json">
+null
+</pre>
+</td>
+			<td>ConfigMap name to read UCR values from.</td>
+		</tr>
+		<tr>
 			<td>containerSecurityContext.allowPrivilegeEscalation</td>
 			<td>bool</td>
 			<td><pre lang="json">
@@ -219,15 +228,6 @@ true
 			<td>Extensions to load. This will override the configuration in `global.extensions`.</td>
 		</tr>
 		<tr>
-			<td>extraEnvVars</td>
-			<td>list</td>
-			<td><pre lang="json">
-[]
-</pre>
-</td>
-			<td>Array with extra environment variables to add to containers.  extraEnvVars:   - name: FOO     value: "bar"</td>
-		</tr>
-		<tr>
 			<td>extraSecrets</td>
 			<td>list</td>
 			<td><pre lang="json">
@@ -262,6 +262,15 @@ true
 </pre>
 </td>
 			<td>Provide a name to substitute for the full names of resources.</td>
+		</tr>
+		<tr>
+			<td>global.certManagerIssuer</td>
+			<td>string</td>
+			<td><pre lang="json">
+null
+</pre>
+</td>
+			<td>Cert-manager cluster issuer name for ingress TLS certificates.</td>
 		</tr>
 		<tr>
 			<td>global.configMapUcr</td>
@@ -307,6 +316,24 @@ null
 </pre>
 </td>
 			<td>Container registry address.</td>
+		</tr>
+		<tr>
+			<td>global.ingressClass</td>
+			<td>string</td>
+			<td><pre lang="json">
+null
+</pre>
+</td>
+			<td>Ingress class name override.</td>
+		</tr>
+		<tr>
+			<td>global.kubeVersion</td>
+			<td>string</td>
+			<td><pre lang="json">
+null
+</pre>
+</td>
+			<td>Kubernetes API version override, e.g. "1.28". Used to select the correct API version for resources.</td>
 		</tr>
 		<tr>
 			<td>global.ldap</td>
@@ -380,13 +407,13 @@ false
 			<td>Define custom ingress annotations. annotations:   nginx.ingress.kubernetes.io/rewrite-target: /</td>
 		</tr>
 		<tr>
-			<td>ingress.annotations."nginx.ingress.kubernetes.io/proxy-buffer-size"</td>
+			<td>ingress.apiVersion</td>
 			<td>string</td>
 			<td><pre lang="json">
-"64k"
+null
 </pre>
 </td>
-			<td>Some responses of the UDM Rest API contain very large response headers</td>
+			<td>Ingress API version override.</td>
 		</tr>
 		<tr>
 			<td>ingress.certManager.enabled</td>
@@ -449,12 +476,22 @@ true
 [
   {
     "path": "/univention/udm",
-    "pathType": "Prefix"
+    "pathType": "Prefix",
+    "serviceName": ""
   }
 ]
 </pre>
 </td>
 			<td>Define the Ingress paths.</td>
+		</tr>
+		<tr>
+			<td>ingress.paths[0].serviceName</td>
+			<td>string</td>
+			<td><pre lang="json">
+""
+</pre>
+</td>
+			<td>Override the backend service name (defaults to the chart fullname).</td>
 		</tr>
 		<tr>
 			<td>ingress.tls</td>
@@ -494,6 +531,15 @@ true
 </pre>
 </td>
 			<td></td>
+		</tr>
+		<tr>
+			<td>kubeVersion</td>
+			<td>string</td>
+			<td><pre lang="json">
+null
+</pre>
+</td>
+			<td>Kubernetes API version override. Used to select the correct API version for resources.</td>
 		</tr>
 		<tr>
 			<td>ldap.auth.bindDn</td>
@@ -705,89 +751,6 @@ true
 			<td>Node labels for pod assignment. Ref: https://kubernetes.io/docs/user-guide/node-selection/</td>
 		</tr>
 		<tr>
-			<td>persistence.accessModes</td>
-			<td>list</td>
-			<td><pre lang="json">
-[
-  "ReadWriteOnce"
-]
-</pre>
-</td>
-			<td>The volume access modes, some of "ReadWriteOnce", "ReadOnlyMany", "ReadWriteMany", "ReadWriteOncePod".  "ReadWriteOnce" => The volume can be mounted as read-write by a single node. ReadWriteOnce access mode still can                    allow multiple pods to access the volume when the pods are running on the same node. "ReadOnlyMany" => The volume can be mounted as read-only by many nodes. "ReadWriteMany" => The volume can be mounted as read-write by many nodes. "ReadWriteOncePod" => The volume can be mounted as read-write by a single Pod. Use ReadWriteOncePod access mode if                       you want to ensure that only one pod across whole cluster can read that PVC or write to it. </td>
-		</tr>
-		<tr>
-			<td>persistence.annotations</td>
-			<td>object</td>
-			<td><pre lang="json">
-{}
-</pre>
-</td>
-			<td>Annotations for the PVC.</td>
-		</tr>
-		<tr>
-			<td>persistence.dataSource</td>
-			<td>object</td>
-			<td><pre lang="json">
-{}
-</pre>
-</td>
-			<td>Custom PVC data source.</td>
-		</tr>
-		<tr>
-			<td>persistence.enabled</td>
-			<td>bool</td>
-			<td><pre lang="json">
-true
-</pre>
-</td>
-			<td>Enable data persistence (true) or use temporary storage (false).</td>
-		</tr>
-		<tr>
-			<td>persistence.existingClaim</td>
-			<td>string</td>
-			<td><pre lang="json">
-""
-</pre>
-</td>
-			<td>Use an already existing claim.</td>
-		</tr>
-		<tr>
-			<td>persistence.labels</td>
-			<td>object</td>
-			<td><pre lang="json">
-{}
-</pre>
-</td>
-			<td>Labels for the PVC.</td>
-		</tr>
-		<tr>
-			<td>persistence.selector</td>
-			<td>object</td>
-			<td><pre lang="json">
-{}
-</pre>
-</td>
-			<td>Selector to match an existing Persistent Volume (this value is evaluated as a template).  selector:   matchLabels:     app: my-app </td>
-		</tr>
-		<tr>
-			<td>persistence.size</td>
-			<td>string</td>
-			<td><pre lang="json">
-"1Gi"
-</pre>
-</td>
-			<td>The volume size with unit.</td>
-		</tr>
-		<tr>
-			<td>persistence.storageClass</td>
-			<td>string</td>
-			<td><pre lang="json">
-""
-</pre>
-</td>
-			<td>The (storage) class of PV.</td>
-		</tr>
-		<tr>
 			<td>podAnnotations</td>
 			<td>object</td>
 			<td><pre lang="json">
@@ -941,6 +904,15 @@ true
 			<td>Internal port.</td>
 		</tr>
 		<tr>
+			<td>service.ports.http.nodePort</td>
+			<td>string</td>
+			<td><pre lang="json">
+null
+</pre>
+</td>
+			<td>Node port (only used when service.type is "NodePort").</td>
+		</tr>
+		<tr>
 			<td>service.ports.http.port</td>
 			<td>int</td>
 			<td><pre lang="json">
@@ -1020,15 +992,6 @@ true
 </pre>
 </td>
 			<td>Additional custom labels for the ServiceAccount.</td>
-		</tr>
-		<tr>
-			<td>serviceAccount.name</td>
-			<td>string</td>
-			<td><pre lang="json">
-""
-</pre>
-</td>
-			<td></td>
 		</tr>
 		<tr>
 			<td>startupProbe.failureThreshold</td>
@@ -1133,10 +1096,17 @@ true
     "repository": "nubus-dev/images/udm-rest-api",
     "tag": "latest"
   },
+  "ldap": {
+    "tls": {
+      "caCertificateFile": "/certificates/ca.crt",
+      "certificateFile": "/certificates/tls.crt",
+      "certificateKeyFile": "/certificates/tls.key"
+    }
+  },
+  "ldapSecretFile": "/etc/ldap.secret",
+  "machineSecretFile": "/etc/machine.secret",
   "tls": {
-    "caCertificateFile": "/certificates/ca.crt",
-    "certificateFile": "/certificates/tls.crt",
-    "certificateKeyFile": "/certificates/tls.key",
+    "certificateSecret": null,
     "enabled": false
   }
 }
@@ -1181,31 +1151,58 @@ null
 			<td>Container registry address. This setting has higher precedence than global.registry.</td>
 		</tr>
 		<tr>
-			<td>udmRestApi.tls.caCertificateFile</td>
+			<td>udmRestApi.ldap.tls.caCertificateFile</td>
 			<td>string</td>
 			<td><pre lang="json">
 "/certificates/ca.crt"
 </pre>
 </td>
-			<td>Path the CA certificate file (TLSCACertPath (slapd), CA_CERT_FILE(entrypoint))</td>
+			<td>Path to the CA certificate file (TLSCACertPath / CA_CERT_FILE).</td>
 		</tr>
 		<tr>
-			<td>udmRestApi.tls.certificateFile</td>
+			<td>udmRestApi.ldap.tls.certificateFile</td>
 			<td>string</td>
 			<td><pre lang="json">
 "/certificates/tls.crt"
 </pre>
 </td>
-			<td>Path the servers certificate file</td>
+			<td>Path to the server certificate file.</td>
 		</tr>
 		<tr>
-			<td>udmRestApi.tls.certificateKeyFile</td>
+			<td>udmRestApi.ldap.tls.certificateKeyFile</td>
 			<td>string</td>
 			<td><pre lang="json">
 "/certificates/tls.key"
 </pre>
 </td>
-			<td>Path the servers private-key file</td>
+			<td>Path to the server private-key file.</td>
+		</tr>
+		<tr>
+			<td>udmRestApi.ldapSecretFile</td>
+			<td>string</td>
+			<td><pre lang="json">
+"/etc/ldap.secret"
+</pre>
+</td>
+			<td>Path to the LDAP secret file mounted in the container.</td>
+		</tr>
+		<tr>
+			<td>udmRestApi.machineSecretFile</td>
+			<td>string</td>
+			<td><pre lang="json">
+"/etc/machine.secret"
+</pre>
+</td>
+			<td>Path to the machine secret file mounted in the container.</td>
+		</tr>
+		<tr>
+			<td>udmRestApi.tls.certificateSecret</td>
+			<td>string</td>
+			<td><pre lang="json">
+null
+</pre>
+</td>
+			<td>Name of the Kubernetes secret containing the TLS certificates.</td>
 		</tr>
 		<tr>
 			<td>udmRestApi.tls.enabled</td>
@@ -1214,7 +1211,7 @@ null
 false
 </pre>
 </td>
-			<td>Enable TLS for LDAP connection.</td>
+			<td>Enable TLS for the LDAP connection.</td>
 		</tr>
 		<tr>
 			<td>updateStrategy.type</td>

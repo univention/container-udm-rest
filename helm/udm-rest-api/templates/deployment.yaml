@@ -28,6 +28,9 @@ spec:
         {{- end }}
       labels:
         {{- include "common.labels.standard" ( dict "customLabels" (dict "app.kubernetes.io/component" "server") "context" . ) | nindent 8 }}
+        {{- if .Values.podLabels }}
+        {{- toYaml .Values.podLabels | nindent 8 }}
+        {{- end }}
     spec:
       {{- if or .Values.imagePullSecrets .Values.global.imagePullSecrets  }}
       imagePullSecrets:
