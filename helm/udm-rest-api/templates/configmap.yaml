@@ -14,7 +14,7 @@ metadata:
     "context" . )
     | nindent 2 }}
 data:
-  LDAP_SECRET_FILE: "{{ .Values.udmRestApi.ldapSecretFile }}"
+  LDAP_SECRET_FILE2: "{{ .Values.udmRestApi.ldapSecretFile }}"
   MACHINE_SECRET_FILE: "{{ .Values.udmRestApi.machineSecretFile }}"
   {{- if .Values.udmRestApi.tls.enabled }}
   CA_CERT_FILE: "{{ .Values.udmRestApi.ldap.tls.caCertificateFile }}"
