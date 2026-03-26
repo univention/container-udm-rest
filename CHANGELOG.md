@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.42.5](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/compare/v0.42.4...v0.42.5) (2026-03-26)
+
+
+### Bug Fixes
+
+* **deps:** Update Base Image ([696e2da](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/commit/696e2da959f1905d6e4b83f8f2294dcbc2af72ae)), closes [#0](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/issues/0)
+
 ## [0.42.4](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/compare/v0.42.3...v0.42.4) (2026-02-25)
 
 
