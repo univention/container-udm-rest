@@ -448,6 +448,18 @@ true
 			<td><pre lang="json">
 [
   {
+    "backend": {
+      "service": {
+        "name": "does-not-exist",
+        "port": {
+          "number": 80
+        }
+      }
+    },
+    "path": "/univention/udm/-/metrics",
+    "pathType": "Prefix"
+  },
+  {
     "path": "/univention/udm",
     "pathType": "Prefix"
   }

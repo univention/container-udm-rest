@@ -137,6 +137,13 @@ ingress:
 
   # -- Define the Ingress paths.
   paths:
+    - path: "/univention/udm/-/metrics"
+      pathType: "Prefix"
+      backend:
+        service:
+          name: does-not-exist
+          port:
+            number: 80
     - path: "/univention/udm"
       pathType: "Prefix"
 
