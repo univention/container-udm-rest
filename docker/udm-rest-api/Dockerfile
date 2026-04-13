@@ -144,6 +144,12 @@ COPY --from=build \
   /usr/lib/python3/dist-packages/ \
   /usr/lib/python3/dist-packages/
 
+# UDM tool scripts used by k8s CronJobs
+COPY --from=build \
+  /usr/share/univention-directory-manager-tools/univention-update-license-cache \
+  /usr/share/univention-directory-manager-tools/univention-blocklist-clean-expired-entries \
+  /usr/share/univention-directory-manager-tools/
+
 # Copy favicons
 COPY --from=build \
   /usr/share/univention-management-console-frontend/js/dijit/themes/umc/icons/ \
@@ -153,6 +159,7 @@ COPY --from=build \
 COPY --from=build \
   /etc/univention/directory/reports/ \
   /etc/univention/directory/reports/
+
 # static web, e.g. stylesheets and js
 COPY --from=build \
   /var/www/univention/udm/ \
