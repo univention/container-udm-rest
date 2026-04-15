@@ -624,6 +624,46 @@ true
 			<td>Switch to suspend the job</td>
 		</tr>
 		<tr>
+			<td>licenseCache</td>
+			<td>object</td>
+			<td><pre lang="json">
+{
+  "enabled": true,
+  "extraEnvVars": [],
+  "schedule": "0 * * * *"
+}
+</pre>
+</td>
+			<td>Settings to configure the UDM license cache update job</td>
+		</tr>
+		<tr>
+			<td>licenseCache.enabled</td>
+			<td>bool</td>
+			<td><pre lang="json">
+true
+</pre>
+</td>
+			<td>Enables the cron job that updates the UDM license count cache.</td>
+		</tr>
+		<tr>
+			<td>licenseCache.extraEnvVars</td>
+			<td>list</td>
+			<td><pre lang="json">
+[]
+</pre>
+</td>
+			<td>Array with extra environment variables to add to containers.  extraEnvVars:   - name: FOO     value: "bar"</td>
+		</tr>
+		<tr>
+			<td>licenseCache.schedule</td>
+			<td>string</td>
+			<td><pre lang="json">
+"0 * * * *"
+</pre>
+</td>
+			<td>Cron schedule for the license cache update job.</td>
+		</tr>
+		<tr>
 			<td>lifecycleHooks</td>
 			<td>object</td>
 			<td><pre lang="json">

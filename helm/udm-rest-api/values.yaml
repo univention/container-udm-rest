@@ -462,6 +462,19 @@ blocklistCleanup:
   #     value: "bar"
   extraEnvVars: []
 
+# -- Settings to configure the UDM license cache update job
+licenseCache:
+  # -- Enables the cron job that updates the UDM license count cache.
+  enabled: true
+  # -- Cron schedule for the license cache update job.
+  schedule: "0 * * * *"
+  # -- Array with extra environment variables to add to containers.
+  #
+  # extraEnvVars:
+  #   - name: FOO
+  #     value: "bar"
+  extraEnvVars: []
+
 # LDAP Client configuration
 ldap:
   # -- The LDAP base DN to use when connecting.

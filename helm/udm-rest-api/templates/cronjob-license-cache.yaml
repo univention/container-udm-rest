@@ -1,0 +1,87 @@
+{{/*
+# SPDX-FileCopyrightText: 2026 Univention GmbH
+# SPDX-License-Identifier: AGPL-3.0-only
+*/}}
+
+{{- if .Values.licenseCache.enabled }}
+---
+apiVersion: "batch/v1"
+kind: "CronJob"
+metadata:
+  name: {{ printf "%s-license-cache" (include "common.names.fullname" .) }}
+  labels:
+    {{- include "common.labels.standard" ( dict "customLabels" .Values.additionalLabels "context" . ) | nindent 4 }}
+  {{- include "nubus-common.annotations.render" ( dict
+    "values" ( list .Values.additionalAnnotations )
+    "context" . )
+    | nindent 2 }}
+spec:
+  schedule: "{{ .Values.licenseCache.schedule }}"
+  concurrencyPolicy: "Forbid"
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          name: {{ include "common.names.name" . | quote }}
+          labels:
+            {{- include "common.labels.standard" . | nindent 12 }}
+          {{- if .Values.podAnnotations }}
+          annotations: {{- include "common.tplvalues.render" (dict "value" .Values.podAnnotations "context" .) | nindent 12 }}
+          {{- end }}
+        spec:
+          restartPolicy: "Never"
+          {{- if or .Values.imagePullSecrets .Values.global.imagePullSecrets }}
+          imagePullSecrets:
+            {{- range .Values.global.imagePullSecrets }}
+            - name: {{ . | quote }}
+            {{- end }}
+            {{- range .Values.imagePullSecrets }}
+            - name: {{ . | quote }}
+            {{- end }}
+          {{- end }}
+          {{- if .Values.podSecurityContext.enabled }}
+          securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          {{- if .Values.serviceAccount.create }}
+          serviceAccountName: {{ include "common.names.fullname" . | quote }}
+          {{- end }}
+          containers:
+            - name: "main"
+              {{- if $.Values.containerSecurityContext.enabled }}
+              securityContext: {{- omit $.Values.containerSecurityContext "enabled" | toYaml | nindent 16 }}
+              {{- end }}
+              image: "{{ coalesce .Values.udmRestApi.image.registry .Values.global.imageRegistry }}/{{ .Values.udmRestApi.image.repository }}:{{ .Values.udmRestApi.image.tag }}"
+              imagePullPolicy: {{ coalesce .Values.udmRestApi.image.pullPolicy .Values.global.imagePullPolicy | quote }}
+              command:
+                - "/usr/share/univention-directory-manager-tools/univention-update-license-cache"
+              envFrom:
+                - configMapRef:
+                    name: {{ include "common.names.fullname" . | quote }}
+              {{- with .Values.licenseCache.extraEnvVars }}
+              env:
+                {{- . | toYaml | nindent 14 }}
+              {{- end }}
+              volumeMounts:
+                - name: secret-ldap
+                  mountPath: /etc/ldap.secret
+                  subPath: {{ tpl (include "nubus-common.secrets.key" (dict "existingSecret" .Values.ldap.auth.existingSecret "key" "password" "context" .)) . }}
+                - name: config-map-ucr
+                  mountPath: /etc/univention/base.conf
+                  subPath: base.conf
+                - name: config-map-ucr
+                  mountPath: /etc/univention/base-defaults.conf
+                  subPath: base-defaults.conf
+
+              resources:
+                {{- toYaml .Values.resources | nindent 16 }}
+          volumes:
+            - name: secret-ldap
+              secret:
+                defaultMode: 420
+                secretName: {{ include "nubus-common.secrets.name" (dict "existingSecret" .Values.ldap.auth.existingSecret "defaultNameSuffix" "ldap" "context" .) }}
+            - name: config-map-ucr
+              configMap:
+                name: {{ include "udm-rest-api.configMapUcr" . | quote }}
+
+...
+{{- end }}
