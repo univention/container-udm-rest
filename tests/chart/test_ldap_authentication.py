@@ -29,6 +29,11 @@ class TestCronJobBlocklistCleanupUsesLdapCredentialsByVolume(SettingsTestLdapSec
     workload_name = "release-name-udm-rest-api-blocklist-cleanup"
     workload_kind = "CronJob"
 
+class TestCronJobLicenseCacheUsesLdapCredentialsByVolume(SettingsTestLdapSecret, AuthPasswordUsageViaVolume):
+    volume_name = "secret-ldap"
+    workload_name = "release-name-udm-rest-api-license-cache"
+    workload_kind = "CronJob"
+
 class TestCronJobBlocklistCleanupUsesLdapUserByConfigMap(SettingsTestLdapSecret, AuthUsernameViaConfigMap):
     config_map_name = "release-name-udm-rest-api"
     path_username = "data.UDM_API_USER"

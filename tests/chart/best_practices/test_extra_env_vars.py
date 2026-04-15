@@ -11,6 +11,7 @@ class TestExtraEnvVars(ExtraEnvVars):
             "udmRestApi.extraEnvVars": "extraEnvVars",
             "ldapUpdateUniventionObjectIdentifier.extraEnvVars": "extraEnvVars",
             "blocklistCleanup.extraEnvVars": "extraEnvVars",
+            "licenseCache.extraEnvVars": "extraEnvVars",
             "waitForDependency.extraEnvVars": "extraEnvVars",
         }
         apply_mapping(values, mapping, copy=True)
