@@ -20,6 +20,9 @@ include:
     file:
       - "dind.yml"
 
+variables:
+  RENOVATE_USER_ID: "1393"
+
 .build-matrix: &build-matrix
   - IMAGE_NAME:
       - "udm-rest-api"
@@ -57,9 +60,11 @@ container-sign-external:
 test-udm-rest:
   stage: "test"
   extends: .dind
-  rules:
+  rules: &rules_dind
     - if: '$CI_PIPELINE_SOURCE == "schedule"'
       when: "never"
+    - if: '$GITLAB_USER_ID == $RENOVATE_USER_ID && $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS !~ /Renovate run dind/'
+      when: "manual"
     - when: "on_success"
   image: "${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/docker:27.4.1"
   before_script:
