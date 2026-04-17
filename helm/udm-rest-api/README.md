@@ -1283,7 +1283,7 @@ null
 			<td>waitForDependency.image.tag</td>
 			<td>string</td>
 			<td><pre lang="json">
-"0.36.7@sha256:bcd9f939f15c2af5c48dee4e83b58c9b1e3d4684cab7bd8ac29939c9a327efe7"
+"0.36.9@sha256:6f1c6ff90e295773b5af0ba64db2223f1f9b52d08e39d611ca061315ec5ce079"
 </pre>
 </td>
 			<td></td>
