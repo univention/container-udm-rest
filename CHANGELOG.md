@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.43.0](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/compare/v0.42.8...v0.43.0) (2026-04-23)
+
+
+### Features
+
+* **helm:** Add cron job to run the update-license-cache script ([88d1f56](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/commit/88d1f56e20a3fdbd79a2cd957519a04248950cae)), closes [univention/dev/internal/team-nubus#1634](https://git.knut.univention.de/univention/dev/internal/team-nubus/issues/1634) [#59060](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/issues/59060)
+
+
+### Bug Fixes
+
+* **docker:** Add the update-license-cache and blocklist-cleanup scripts to the udm rest api container image ([9edd470](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/commit/9edd470279fa0a227787ef4dbcc41895a1b228ab)), closes [univention/dev/internal/team-nubus#1634](https://git.knut.univention.de/univention/dev/internal/team-nubus/issues/1634) [#59060](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/issues/59060)
+
 ## [0.42.8](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/compare/v0.42.7...v0.42.8) (2026-04-21)
 
 
