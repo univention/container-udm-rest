@@ -475,6 +475,19 @@ licenseCache:
   #     value: "bar"
   extraEnvVars: []
 
+# -- Settings to configure the telemetry sender job
+telemetrySender:
+  # -- Enables the cron job for sending telemetry to Univention.
+  enabled: false
+  # -- Cron schedule for the telemetry sender job.
+  schedule: "0 2 * * *"
+  # -- Array with extra environment variables to add to containers.
+  #
+  # extraEnvVars:
+  #   - name: FOO
+  #     value: "bar"
+  extraEnvVars: []
+
 # LDAP Client configuration
 ldap:
   # -- The LDAP base DN to use when connecting.

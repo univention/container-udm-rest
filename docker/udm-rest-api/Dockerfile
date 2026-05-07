@@ -7,7 +7,6 @@
 ARG UCS_BASE_IMAGE=gitregistry.knut.univention.de/univention/dev/projects/ucs-base-image/ucs-base
 ARG UCS_BASE_IMAGE_TAG=5.2.5-build.20260514@sha256:81b104694a78cf36043f84b5d9e4b3b0cbbe6777e46877239a44f08249379119
 
-
 FROM ${UCS_BASE_IMAGE}:${UCS_BASE_IMAGE_TAG} AS build
 
 ###############################################################################
@@ -73,6 +72,10 @@ RUN chown _apt . && \
   python3-uritemplate \
   univention-management-console-module-udm \
   univention-saml-schema \
+  # telemetry sender and its dependencies
+  univention-telemetry \
+  python3-prometheus-client \
+  python3-requests \
   && \
   # univention-portal module:
   # /usr/lib/python3/dist-packages/univention/udm/modules/portal.py
@@ -149,6 +152,10 @@ COPY --from=build \
   /usr/share/univention-directory-manager-tools/univention-update-license-cache \
   /usr/share/univention-directory-manager-tools/univention-blocklist-clean-expired-entries \
   /usr/share/univention-directory-manager-tools/
+
+COPY --from=build \
+  /usr/share/univention-telemetry/univention-telemetry-sender \
+  /usr/share/univention-telemetry/
 
 # Copy favicons
 COPY --from=build \

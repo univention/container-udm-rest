@@ -1134,6 +1134,46 @@ true
 			<td>Allows to configure the system extensions to load. This is intended for internal usage, prefer to use `extensions` for user configured extensions. This value will override the configuration in `global.systemExtensions`.</td>
 		</tr>
 		<tr>
+			<td>telemetrySender</td>
+			<td>object</td>
+			<td><pre lang="json">
+{
+  "enabled": false,
+  "extraEnvVars": [],
+  "schedule": "0 2 * * *"
+}
+</pre>
+</td>
+			<td>Settings to configure the telemetry sender job</td>
+		</tr>
+		<tr>
+			<td>telemetrySender.enabled</td>
+			<td>bool</td>
+			<td><pre lang="json">
+false
+</pre>
+</td>
+			<td>Enables the cron job for sending telemetry to Univention.</td>
+		</tr>
+		<tr>
+			<td>telemetrySender.extraEnvVars</td>
+			<td>list</td>
+			<td><pre lang="json">
+[]
+</pre>
+</td>
+			<td>Array with extra environment variables to add to containers.  extraEnvVars:   - name: FOO     value: "bar"</td>
+		</tr>
+		<tr>
+			<td>telemetrySender.schedule</td>
+			<td>string</td>
+			<td><pre lang="json">
+"0 2 * * *"
+</pre>
+</td>
+			<td>Cron schedule for the telemetry sender job.</td>
+		</tr>
+		<tr>
 			<td>terminationGracePeriodSeconds</td>
 			<td>string</td>
 			<td><pre lang="json">

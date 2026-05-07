@@ -12,6 +12,7 @@ class TestExtraEnvVars(ExtraEnvVars):
             "ldapUpdateUniventionObjectIdentifier.extraEnvVars": "extraEnvVars",
             "blocklistCleanup.extraEnvVars": "extraEnvVars",
             "licenseCache.extraEnvVars": "extraEnvVars",
+            "telemetrySender.extraEnvVars": "extraEnvVars",
             "waitForDependency.extraEnvVars": "extraEnvVars",
         }
         apply_mapping(values, mapping, copy=True)
