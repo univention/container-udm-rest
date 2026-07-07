@@ -46,6 +46,8 @@ variables:
       - "blocklist-cleanup"
 
 container-build:
+  tags:
+    - dm-m
   parallel:
     matrix: *build-matrix
 
