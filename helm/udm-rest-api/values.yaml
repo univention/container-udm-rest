@@ -177,8 +177,15 @@ livenessProbe:
   successThreshold: 1
   # -- Timeout for command return.
   timeoutSeconds: 5
-  tcpSocket:
-    port: 9979
+  # -- Fails only on connection errors, not HTTP error codes, so an LDAP
+  # outage (surfaced as HTTP 503) doesn't restart the pod. Uses admin
+  # credentials since unauthenticated requests never reach LDAP.
+  exec:
+    command:
+      - "/usr/local/bin/univention-probe-udm.py"
+      - "alive"
+      - "--port"
+      - "{{ .Values.service.ports.http.containerPort }}"
 
 # -- String to partially override release name.
 nameOverride: ""
@@ -262,8 +269,15 @@ readinessProbe:
   successThreshold: 1
   # -- Timeout for command return.
   timeoutSeconds: 5
-  tcpSocket:
-    port: 9979
+  # -- Fails on HTTP 503, the server's signal for "LDAP unreachable", so
+  # traffic is routed away from pods that can't serve requests. Uses admin
+  # credentials since unauthenticated requests never reach LDAP.
+  exec:
+    command:
+      - "/usr/local/bin/univention-probe-udm.py"
+      - "ready"
+      - "--port"
+      - "{{ .Values.service.ports.http.containerPort }}"
 
 # -- Set the amount of replicas of deployment.
 replicaCount: 1

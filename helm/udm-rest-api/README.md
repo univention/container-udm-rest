@@ -673,6 +673,22 @@ true
 			<td>Lifecycle to automate configuration before or after startup.</td>
 		</tr>
 		<tr>
+			<td>livenessProbe.exec</td>
+			<td>object</td>
+			<td><pre lang="json">
+{
+  "command": [
+    "/usr/local/bin/univention-probe-udm.py",
+    "alive",
+    "--port",
+    "{{ .Values.service.ports.http.containerPort }}"
+  ]
+}
+</pre>
+</td>
+			<td>Fails only on connection errors, not HTTP error codes, so an LDAP outage (surfaced as HTTP 503) doesn't restart the pod. Uses admin credentials since unauthenticated requests never reach LDAP.</td>
+		</tr>
+		<tr>
 			<td>livenessProbe.failureThreshold</td>
 			<td>int</td>
 			<td><pre lang="json">
@@ -707,15 +723,6 @@ true
 </pre>
 </td>
 			<td>Number of successful executions after failed ones until container is marked healthy.</td>
-		</tr>
-		<tr>
-			<td>livenessProbe.tcpSocket.port</td>
-			<td>int</td>
-			<td><pre lang="json">
-9979
-</pre>
-</td>
-			<td></td>
 		</tr>
 		<tr>
 			<td>livenessProbe.timeoutSeconds</td>
@@ -873,6 +880,22 @@ true
 			<td>Change ownership and permission of the volume before being exposed inside a Pod.</td>
 		</tr>
 		<tr>
+			<td>readinessProbe.exec</td>
+			<td>object</td>
+			<td><pre lang="json">
+{
+  "command": [
+    "/usr/local/bin/univention-probe-udm.py",
+    "ready",
+    "--port",
+    "{{ .Values.service.ports.http.containerPort }}"
+  ]
+}
+</pre>
+</td>
+			<td>Fails on HTTP 503, the server's signal for "LDAP unreachable", so traffic is routed away from pods that can't serve requests. Uses admin credentials since unauthenticated requests never reach LDAP.</td>
+		</tr>
+		<tr>
 			<td>readinessProbe.failureThreshold</td>
 			<td>int</td>
 			<td><pre lang="json">
@@ -907,15 +930,6 @@ true
 </pre>
 </td>
 			<td>Number of successful executions after failed ones until container is marked healthy.</td>
-		</tr>
-		<tr>
-			<td>readinessProbe.tcpSocket.port</td>
-			<td>int</td>
-			<td><pre lang="json">
-9979
-</pre>
-</td>
-			<td></td>
 		</tr>
 		<tr>
 			<td>readinessProbe.timeoutSeconds</td>

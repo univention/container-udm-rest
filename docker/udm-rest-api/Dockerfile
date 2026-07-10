@@ -228,6 +228,7 @@ RUN \
   echo '{}' > /var/lib/univention-appcenter/attributes/mapping.json
 
 COPY entrypoint.d /entrypoint.d/
+COPY --chmod=755 univention-probe-udm.py /usr/local/bin/univention-probe-udm.py
 WORKDIR /udm/
 
 RUN adduser app
