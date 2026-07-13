@@ -20,6 +20,10 @@ include:
     file:
       - "dind.yml"
 
+default:
+  tags:
+    - "dae-l"
+
 variables:
   RENOVATE_USER_ID: "1393"
 
