@@ -5,7 +5,7 @@
 # SPDX-FileCopyrightText: 2021-2026 Univention GmbH
 
 ARG UCS_BASE_IMAGE=gitregistry.knut.univention.de/univention/dev/projects/ucs-base-image/ucs-base
-ARG UCS_BASE_IMAGE_TAG=5.2.6-build.20260706@sha256:e82e71bbc6008e440a72078b459a2cef2f3a7333a4680a8bfb6448469490e2d6
+ARG UCS_BASE_IMAGE_TAG=5.2.6-build.20260716@sha256:47635451dce567c373f2dd8c107424aeddecbf80e4fd6d0fd6899279f780e15d
 
 FROM ${UCS_BASE_IMAGE}:${UCS_BASE_IMAGE_TAG} AS build
 
@@ -147,10 +147,12 @@ COPY --from=build \
   /usr/lib/python3/dist-packages/ \
   /usr/lib/python3/dist-packages/
 
-# UDM tool scripts used by k8s CronJobs
+# UDM tool scripts used by k8s CronJobs or scripts
 COPY --from=build \
   /usr/share/univention-directory-manager-tools/univention-update-license-cache \
   /usr/share/univention-directory-manager-tools/univention-blocklist-clean-expired-entries \
+  /usr/share/univention-directory-manager-tools/remove_krb5key_keytypes \
+  /usr/share/univention-directory-manager-tools/remove_sambantpassword \
   /usr/share/univention-directory-manager-tools/
 
 COPY --from=build \
