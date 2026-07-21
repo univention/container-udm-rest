@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.45.0](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/compare/v0.44.2...v0.45.0) (2026-07-21)
+
+
+### Features
+
+* add NT hash and Kerberos 5 Key insecure hash removal scripts ([a294c67](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/commit/a294c67ba2615335865b17498c6393432dc21cc5)), closes [univention/dev/ucs#3651](https://git.knut.univention.de/univention/dev/ucs/issues/3651)
+
 ## [0.44.2](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/compare/v0.44.1...v0.44.2) (2026-07-15)
 
 
