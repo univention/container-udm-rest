@@ -83,3 +83,5 @@ else
   echo "Check the \$MACHINE_SECRET_FILE variable and the file that it points to."
   exit 1
 fi
+
+univention-config-registry commit /etc/krb5.conf

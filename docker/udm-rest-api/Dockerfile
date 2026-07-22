@@ -70,6 +70,7 @@ RUN chown _apt . && \
   python3-univention-directory-reports \
   python3-univention-management-console \
   python3-uritemplate \
+  univention-heimdal-common \
   univention-management-console-module-udm \
   univention-saml-schema \
   # telemetry sender and its dependencies
