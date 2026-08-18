@@ -70,6 +70,7 @@ RUN chown _apt . && \
   python3-univention-directory-reports \
   python3-univention-management-console \
   python3-uritemplate \
+  univention-heimdal-common \
   univention-management-console-module-udm \
   univention-saml-schema \
   # telemetry sender and its dependencies
@@ -222,6 +223,8 @@ RUN \
   # for CAcert.pem
   mkdir --parents /etc/univention/ssl/ucsCA/ && \
   #
+  mkdir --parents /etc/krb5/ && \
+  #
   mkdir /udm/ && \
   #
   # create stub for AppCenter attributes mapping
@@ -233,7 +236,8 @@ COPY entrypoint.d /entrypoint.d/
 COPY --chmod=755 univention-probe-udm.py /usr/local/bin/univention-probe-udm.py
 WORKDIR /udm/
 
-RUN adduser app
+RUN adduser app && \
+  chown app:app /etc/krb5
 USER app
 
 # Parameters for UDM

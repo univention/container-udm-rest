@@ -83,3 +83,9 @@ else
   echo "Check the \$MACHINE_SECRET_FILE variable and the file that it points to."
   exit 1
 fi
+
+if [[ -w /etc/krb5 ]]; then
+  univention-config-registry filter \
+    < /etc/univention/templates/files/etc/krb5.conf \
+    > /etc/krb5/krb5.conf
+fi
