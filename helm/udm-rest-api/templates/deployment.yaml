@@ -103,6 +103,32 @@ spec:
             - name: var-cache-univention-config-volume
               mountPath: /var/cache/univention-config
           resources: {{- include "common.tplvalues.render" (dict "value" .Values.initResources "context" .) | nindent 12 }}
+        - name: "render-krb5-conf"
+          {{- if .Values.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          image: "{{ coalesce .Values.udmRestApi.image.registry .Values.global.imageRegistry }}/{{ .Values.udmRestApi.image.repository }}:{{ .Values.udmRestApi.image.tag }}"
+          imagePullPolicy: {{ coalesce .Values.udmRestApi.image.pullPolicy .Values.global.imagePullPolicy | quote }}
+          command:
+            - sh
+            - -c
+            - 'ucr filter < /etc/univention/templates/files/etc/krb5.conf > /etc/krb5/krb5.conf'
+          {{- with .Values.udmRestApi.extraEnvVars }}
+          env:
+            {{- . | toYaml | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: etc-krb5-volume
+              mountPath: /etc/krb5
+            - name: var-cache-univention-config-volume
+              mountPath: /var/cache/univention-config
+            - name: "config-map-ucr"
+              mountPath: "/etc/univention/base.conf"
+              subPath: "base.conf"
+            - name: "config-map-ucr"
+              mountPath: "/etc/univention/base-defaults.conf"
+              subPath: "base-defaults.conf"
+          resources: {{- include "common.tplvalues.render" (dict "value" .Values.initResources "context" .) | nindent 12 }}
         - name: "load-internal-plugins"
           {{- if .Values.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
@@ -165,10 +191,12 @@ spec:
           envFrom:
             - configMapRef:
                 name: {{ include "common.names.fullname" . }}
-          {{- with .Values.udmRestApi.extraEnvVars }}
           env:
+            - name: "KRB5_CONFIG"
+              value: "/etc/krb5/krb5.conf"
+            {{- with .Values.udmRestApi.extraEnvVars }}
             {{- . | toYaml | nindent 12 }}
-          {{- end }}
+            {{- end }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.livenessProbe "context" .) | nindent 12 }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.readinessProbe "context" .) | nindent 12 }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.startupProbe "context" .) | nindent 12 }}
@@ -195,6 +223,9 @@ spec:
               mountPath: /var/run
             - name: etc-ldap-volume
               mountPath: /etc/ldap
+            - name: etc-krb5-volume
+              mountPath: /etc/krb5
+              readOnly: true
             - name: etc-univention-volume
               mountPath: /etc/univention
             - name: secret-ldap
@@ -242,6 +273,8 @@ spec:
         - name: "etc-ldap-volume"
           configMap:
             name: "{{ printf "%s-ldap-conf" (include "common.names.fullname" .) }}"
+        - name: "etc-krb5-volume"
+          emptyDir: {}
         - name: "var-cache-univention-config-volume"
           emptyDir: {}
         - name: "tmp-volume"
