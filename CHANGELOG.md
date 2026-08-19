@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.46.0](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/compare/v0.45.1...v0.46.0) (2026-08-19)
+
+
+### Features
+
+* **docker:** add writeable /etc/krb5/krb5.conf ([39bc206](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/commit/39bc2067b5f9122a2e9482d29b2a6405e76757d8)), closes [univention/dev/nubus-for-k8s/umc#14](https://git.knut.univention.de/univention/dev/nubus-for-k8s/umc/issues/14)
+
+
+### Bug Fixes
+
+* **helm:** initContainer and volume to generate Kerberos configuration ([0ecbd03](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/commit/0ecbd03333fa5e0ac3f81471e6fd682c6ecd7512)), closes [univention/dev/nubus-for-k8s/umc#14](https://git.knut.univention.de/univention/dev/nubus-for-k8s/umc/issues/14)
+
 ## [0.45.1](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/compare/v0.45.0...v0.45.1) (2026-07-22)
 
 
