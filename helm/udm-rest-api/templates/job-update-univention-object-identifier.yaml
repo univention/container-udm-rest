@@ -69,33 +69,32 @@ spec:
           {{- end }}
         resources: {{- include "common.tplvalues.render" (dict "value" .Values.initResources "context" .) | nindent 10 }}
       containers:
-      - name: main
+      - name: "main"
         {{- if $.Values.containerSecurityContext.enabled }}
         securityContext: {{- omit $.Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
         {{- end }}
-        image: "{{ coalesce .Values.ldapUpdateUniventionObjectIdentifier.image.registry .Values.global.imageRegistry }}/{{ .Values.ldapUpdateUniventionObjectIdentifier.image.repository }}:{{ .Values.ldapUpdateUniventionObjectIdentifier.image.tag }}"
-        imagePullPolicy: {{ coalesce .Values.ldapUpdateUniventionObjectIdentifier.image.pullPolicy .Values.global.imagePullPolicy | quote }}
+        image: "{{ coalesce .Values.udmRestApi.image.registry .Values.global.imageRegistry }}/{{ .Values.udmRestApi.image.repository }}:{{ .Values.udmRestApi.image.tag }}"
+        imagePullPolicy: {{ coalesce .Values.udmRestApi.image.pullPolicy .Values.global.imagePullPolicy | quote }}
+        command:
+          - "/usr/share/univention-ldap/univention-update-univention-object-identifier"
         envFrom:
           - configMapRef:
-              name: {{ include "common.names.fullname" . }}
+              name: {{ include "common.names.fullname" . | quote }}
+        {{- with .Values.ldapUpdateUniventionObjectIdentifier.extraEnvVars }}
         env:
-          - name: LDAP_URI
-            value: {{ include "udm-rest-api.ldapUri" . }}
-          - name: LDAP_ADMIN_USER
-            value: {{ tpl ( required "The parameter \"ldap.auth.bindDn\" as username is required." .Values.ldap.auth.bindDn ) . | quote }}
-          - name: LDAP_ADMIN_PASSWORD
-            valueFrom:
-              secretKeyRef:
-                name: {{ include "nubus-common.secrets.name" (dict "existingSecret" .Values.ldap.auth.existingSecret "defaultNameSuffix" "ldap" "context" .) }}
-                {{- /* FIXME Workaround because of bug in nubus-common.secrets.key. Function needs a tpl call like nubus-common.secrets.name! */}}
-                key: {{ tpl (include "nubus-common.secrets.key" (dict "existingSecret" .Values.ldap.auth.existingSecret "key" "password" "context" .)) . }}
-          - name: LDAP_BASE_DN
-            value: {{ required "Either .Values.ldap.baseDn or .Values.global.ldap.baseDn must be set" (coalesce .Values.ldap.baseDn .Values.global.ldap.baseDn) }}
-          - name: PYTHON_LOG_LEVEL
-            value: "{{ .Values.ldapUpdateUniventionObjectIdentifier.pythonLogLevel }}"
-          {{- with .Values.ldapUpdateUniventionObjectIdentifier.extraEnvVars }}
           {{- . | toYaml | nindent 10 }}
-          {{- end }}
+        {{- end }}
+        volumeMounts:
+          - name: secret-ldap
+            mountPath: /etc/ldap.secret
+            subPath: {{ tpl (include "nubus-common.secrets.key" (dict "existingSecret" .Values.ldap.auth.existingSecret "key" "password" "context" .)) . }}
+          - name: config-map-ucr
+            mountPath: /etc/univention/base.conf
+            subPath: base.conf
+          - name: config-map-ucr
+            mountPath: /etc/univention/base-defaults.conf
+            subPath: base-defaults.conf
+
         resources:
           {{- toYaml .Values.resources | nindent 10 }}
       volumes:
@@ -103,6 +102,9 @@ spec:
           secret:
             defaultMode: 0400
             secretName: {{ include "nubus-common.secrets.name" (dict "existingSecret" .Values.ldap.auth.existingSecret "defaultNameSuffix" "ldap" "context" .) }}
+        - name: config-map-ucr
+          configMap:
+            name: {{ include "udm-rest-api.configMapUcr" . | quote }}
         {{- if .Values.waitForDependency.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.waitForDependency.extraVolumes  "context" .) | nindent 8 }}
         {{- end }}

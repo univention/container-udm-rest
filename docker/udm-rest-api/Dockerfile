@@ -71,6 +71,7 @@ RUN chown _apt . && \
   python3-univention-management-console \
   python3-uritemplate \
   univention-heimdal-common \
+  univention-ldap-config-master \
   univention-management-console-module-udm \
   univention-saml-schema \
   # telemetry sender and its dependencies
@@ -155,6 +156,12 @@ COPY --from=build \
   /usr/share/univention-directory-manager-tools/remove_krb5key_keytypes \
   /usr/share/univention-directory-manager-tools/remove_sambantpassword \
   /usr/share/univention-directory-manager-tools/
+
+COPY --from=build \
+  /usr/share/univention-ldap/univention-update-univention-object-identifier \
+  /usr/share/univention-ldap/
+
+RUN sed -i 's/getRootDnConnection/getAdminConnection/g' /usr/share/univention-ldap/univention-update-univention-object-identifier
 
 COPY --from=build \
   /usr/share/univention-telemetry/univention-telemetry-sender \

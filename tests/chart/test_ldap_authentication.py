@@ -2,12 +2,9 @@
 # SPDX-FileCopyrightText: 2025 Univention GmbH
 
 import pytest
-from univention.testing.helm.auth_flavors.password_usage import (
-    AuthPasswordUsageViaEnv, AuthPasswordUsageViaVolume)
-from univention.testing.helm.auth_flavors.secret_generation import \
-    AuthSecretGenerationUser
-from univention.testing.helm.auth_flavors.username import (
-    AuthUsernameViaConfigMap, AuthUsernameViaEnv)
+from univention.testing.helm.auth_flavors.password_usage import AuthPasswordUsageViaVolume
+from univention.testing.helm.auth_flavors.secret_generation import AuthSecretGenerationUser
+from univention.testing.helm.auth_flavors.username import AuthUsernameViaConfigMap
 
 
 class SettingsTestLdapSecret:
@@ -17,24 +14,33 @@ class SettingsTestLdapSecret:
         "ldap.auth": "auth",
     }
 
+
 class TestChartCreatesLdapSecretAsUser(SettingsTestLdapSecret, AuthSecretGenerationUser):
     pass
+
 
 class TestUdmRestApiUsesLdapCredentialsByVolume(SettingsTestLdapSecret, AuthPasswordUsageViaVolume):
     volume_name = "secret-ldap"
     workload_name = "release-name-udm-rest-api"
+
 
 class TestCronJobBlocklistCleanupUsesLdapCredentialsByVolume(SettingsTestLdapSecret, AuthPasswordUsageViaVolume):
     volume_name = "secret-ldap"
     workload_name = "release-name-udm-rest-api-blocklist-cleanup"
     workload_kind = "CronJob"
 
+
 class TestCronJobLicenseCacheUsesLdapCredentialsByVolume(SettingsTestLdapSecret, AuthPasswordUsageViaVolume):
     volume_name = "secret-ldap"
     workload_name = "release-name-udm-rest-api-license-cache"
     workload_kind = "CronJob"
 
-class TestCronJobBlocklistCleanupUsesLdapUserByConfigMap(SettingsTestLdapSecret, AuthUsernameViaConfigMap):
+
+class UsesLdapUserByConfigMap(SettingsTestLdapSecret, AuthUsernameViaConfigMap):
+    """
+    Common expectations for workloads which read the user out of the ConfigMap.
+    """
+
     config_map_name = "release-name-udm-rest-api"
     path_username = "data.UDM_API_USER"
     default_username = "cn=admin"
@@ -51,20 +57,31 @@ class TestCronJobBlocklistCleanupUsesLdapUserByConfigMap(SettingsTestLdapSecret,
         username = config_map.findone(self.path_username)
         assert username == "cn=admin"
 
+
+class TestCronJobBlocklistCleanupUsesLdapUserByConfigMap(UsesLdapUserByConfigMap):
+    pass
+
+
 class TestJobUpdateUniventionObjectIdentifierInitContainerUsesLdapCredentialsByVolume_WaitForLdap(SettingsTestLdapSecret, AuthPasswordUsageViaVolume):
     volume_name = "secret-ldap"
     workload_name = "release-name-udm-rest-api-1-update-univention-object-identifier"
     workload_kind = "Job"
     path_container = "..spec.template.spec.initContainers[?@.name=='wait-for-ldap']"
 
-class TestJobUpdateUniventionObjectIdentifierUsesLdapCredentialsByEnv(SettingsTestLdapSecret, AuthPasswordUsageViaEnv):
-    workload_name = "release-name-udm-rest-api-1-update-univention-object-identifier"
-    workload_kind = "Job"
-    sub_path_env_password = "env[?@name=='LDAP_ADMIN_PASSWORD']"
 
-class TestJobUpdateUniventionObjectIdentifierUsesLdapUserByEnv(SettingsTestLdapSecret, AuthUsernameViaEnv):
+class TestJobUpdateUniventionObjectIdentifierUsesLdapCredentialsByVolume(SettingsTestLdapSecret, AuthPasswordUsageViaVolume):
+    volume_name = "secret-ldap"
     workload_name = "release-name-udm-rest-api-1-update-univention-object-identifier"
     workload_kind = "Job"
-    sub_path_env_username = "env[?@name=='LDAP_ADMIN_USER']"
-    default_username = "cn=admin,dc=univention-organization,dc=intranet"
-    default_username = "cn=admin,dc=univention-organization,dc=intranet"
+
+
+class TestJobUpdateUniventionObjectIdentifierUsesLdapUserByConfigMap(UsesLdapUserByConfigMap):
+    """
+    The migration script reads the user out of the ConfigMap `UDM_API_USER`.
+
+    The bind DN is additionally required by the init container `wait-for-ldap`,
+    which is what `test_auth_username_is_required` checks.
+    """
+
+    workload_name = "release-name-udm-rest-api-1-update-univention-object-identifier"
+    workload_kind = "Job"

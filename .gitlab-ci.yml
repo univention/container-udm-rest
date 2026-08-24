@@ -34,8 +34,6 @@ variables:
     BUILD_TARGET: "cli"
     BUILD_CONTEXT: "docker/udm-rest-api-python-client"
     DOCKERFILE_PATH: "docker/udm-rest-api-python-client/Dockerfile"
-  - IMAGE_NAME: "ldap-update-univention-object-identifier"
-    BUILD_CONTEXT: "$CI_PROJECT_DIR/docker/ldap-update-univention-object-identifier"
   - IMAGE_NAME: "blocklist-cleanup"
     DOCKERFILE_PATH: "docker/blocklist-cleanup/Dockerfile"
 
@@ -43,7 +41,6 @@ variables:
   - IMAGE_NAME:
       - "udm-rest-api"
       - "udm-rest-api-python-client"
-      - "ldap-update-univention-object-identifier"
       - "blocklist-cleanup"
 
 container-build:
