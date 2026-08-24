@@ -77,7 +77,7 @@ spec:
           volumes:
             - name: secret-ldap
               secret:
-                defaultMode: 420
+                defaultMode: 0400
                 secretName: {{ include "nubus-common.secrets.name" (dict "existingSecret" .Values.ldap.auth.existingSecret "defaultNameSuffix" "ldap" "context" .) }}
             - name: config-map-ucr
               configMap:
