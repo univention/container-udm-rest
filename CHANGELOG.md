@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.46.1](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/compare/v0.46.0...v0.46.1) (2026-08-25)
+
+
+### Bug Fixes
+
+* **helm:** secret-ldap mount permissions 0400 everywhere ([6c26b4b](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/commit/6c26b4bec4537c12567205923f4966d2cae5ba6e)), closes [univention/dev/internal/non-product-issues#121](https://git.knut.univention.de/univention/dev/internal/non-product-issues/issues/121)
+* **ldap-update-univention-object-identifier:** let script fail on failures ([5ebdf90](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/commit/5ebdf901a674cfd2c5fddccc7dbee83150c4885b)), closes [univention/dev/internal/non-product-issues#121](https://git.knut.univention.de/univention/dev/internal/non-product-issues/issues/121)
+
 ## [0.46.0](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/compare/v0.45.1...v0.46.0) (2026-08-19)
 
 
