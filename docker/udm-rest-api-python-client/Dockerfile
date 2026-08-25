@@ -2,7 +2,7 @@
 # Dockerfile for UDM REST API Python Client
 #
 # SPDX-License-Identifier: AGPL-3.0-only
-# SPDX-FileCopyrightText: 2021-2025 Univention GmbH
+# SPDX-FileCopyrightText: 2021-2026 Univention GmbH
 
 
 ARG UCS_BASE_IMAGE=gitregistry.knut.univention.de/univention/dev/projects/ucs-base-image/ucs-base
