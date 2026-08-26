@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.46.2](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/compare/v0.46.1...v0.46.2) (2026-08-26)
+
+
+### Bug Fixes
+
+* **deps:** Update Base Image ([b27abd5](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/commit/b27abd509d6c064357262e5c943d3adab63b8b0c)), closes [#0](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/issues/0)
+* **test:** set directory/manager/rest/server/port in UCR test config ([7522b14](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/commit/7522b14a017c2654de7d78d860f36c63a8ca58e3)), closes [#0](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/issues/0)
+
 ## [0.46.1](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/compare/v0.46.0...v0.46.1) (2026-08-25)
 
 
