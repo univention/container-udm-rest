@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.46.3](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/compare/v0.46.2...v0.46.3) (2026-09-03)
+
+
+### Bug Fixes
+
+* **helm:** Mount the krb5.conf at the default location to ensure it's actually picked up by the python process ([bbdb728](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/commit/bbdb728edeabd5e3d6ad454675a226b52b9851b5)), closes [univention/dev/nubus-for-k8s/umc#14](https://git.knut.univention.de/univention/dev/nubus-for-k8s/umc/issues/14)
+
 ## [0.46.2](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/compare/v0.46.1...v0.46.2) (2026-08-26)
 
 
