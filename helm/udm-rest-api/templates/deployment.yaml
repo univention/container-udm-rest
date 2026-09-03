@@ -191,12 +191,10 @@ spec:
           envFrom:
             - configMapRef:
                 name: {{ include "common.names.fullname" . }}
+          {{- with .Values.udmRestApi.extraEnvVars }}
           env:
-            - name: "KRB5_CONFIG"
-              value: "/etc/krb5/krb5.conf"
-            {{- with .Values.udmRestApi.extraEnvVars }}
             {{- . | toYaml | nindent 12 }}
-            {{- end }}
+          {{- end }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.livenessProbe "context" .) | nindent 12 }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.readinessProbe "context" .) | nindent 12 }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.startupProbe "context" .) | nindent 12 }}
@@ -223,8 +221,11 @@ spec:
               mountPath: /var/run
             - name: etc-ldap-volume
               mountPath: /etc/ldap
+            # Must be the default path Heimdal looks at: the worker processes
+            # call os.environ.clear(), so KRB5_CONFIG never reaches them.
             - name: etc-krb5-volume
-              mountPath: /etc/krb5
+              mountPath: /etc/krb5.conf
+              subPath: krb5.conf
               readOnly: true
             - name: etc-univention-volume
               mountPath: /etc/univention
