@@ -64,7 +64,7 @@ test-udm-rest:
     - if: '$GITLAB_USER_ID == $RENOVATE_USER_ID && $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS !~ /Renovate run dind/'
       when: "manual"
     - when: "on_success"
-  image: "${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/docker:27.4.1"
+  image: "${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/docker:29.8.1@sha256:3f3c01aaaebf7cce837356b688b7c059a4749f10bd7660dec7c58fc454a283f0"
   before_script:
     # Allow that the Docker API version is negotiated between client and server
     - unset DOCKER_API_VERSION
