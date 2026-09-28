@@ -95,6 +95,28 @@ RUN \
   patch -p 4 -d /usr/lib/python3/dist-packages/ -i /0001-fix-disabling-structured-logging-restores-original-f.patch && \
   rm -v /*.patch
 
+# Record all installed Debian packages owning at least one non-directory entry
+# below /usr/lib/python3/dist-packages as "<package>=<version>", one per line.
+# The final stage installs exactly these versions via dpkg, so that SBOM
+# scanners attribute the Python modules to their Debian packages.
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+# hadolint ignore=SC2016
+RUN \
+  for list in /var/lib/dpkg/info/*.list; do \
+    pkg="$(basename "${list}" .list)"; \
+    # "|| true": grep fails without matches or on SIGPIPE after "break"
+    { grep '^/usr/lib/python3/dist-packages/.' "${list}" || true; } | \
+    while IFS= read -r path; do \
+      if [ -L "${path}" ] || [ ! -d "${path}" ]; then echo "${pkg}"; break; fi; \
+    done; \
+  done | \
+  xargs --no-run-if-empty \
+  dpkg-query --show --showformat='${db:Status-Abbrev} ${Package}=${Version}\n' | \
+  awk '$1 == "ii" { print $2 }' | \
+  LC_ALL=C sort --unique > /python-packages.list && \
+  test -s /python-packages.list && \
+  cat /python-packages.list
+
 
 ###############################################################################
 # Second stage image to get rid of unneeded files
@@ -142,12 +164,43 @@ RUN chown _apt . && \
   && \
   dpkg --install --force-depends /apt/*
 
-WORKDIR /
+# Install the Debian packages providing /usr/lib/python3/dist-packages in the
+# exact versions recorded in the build stage, instead of copying the files.
+# The build stage's /usr/local/bin provides the fake commands called by the
+# maintainer scripts, its /usr/share/univention-lib the Univention shell
+# library (with all.sh, join.sh and umc.sh replaced by fake-uv-lib.sh).
+WORKDIR /apt/python
 
-# Copy python3 dependencies
+# hadolint ignore=SC2016
+RUN \
+  --mount=type=bind,from=build,source=/usr/local/bin,target=/usr/local/bin \
+  --mount=type=bind,from=build,source=/usr/share/univention-lib,target=/usr/share/univention-lib \
+  --mount=type=bind,from=build,source=/python-packages.list,target=/python-packages.list \
+  chown _apt . && \
+  # skip packages which are already installed in exactly this version
+  while IFS='=' read -r pkg version; do \
+    installed="$(dpkg-query --show --showformat='${db:Status-Abbrev}${Version}' "${pkg}" 2>/dev/null)"; \
+    if [ "${installed}" != "ii ${version}" ]; then \
+      echo "${pkg}=${version}"; \
+    fi; \
+  done < /python-packages.list > python-packages.download && \
+  # /usr/local/bin/systemctl is a copy of fake.sh
+  cp /usr/local/bin/systemctl /usr/sbin/univention-management-console-acls && \
+  mkdir --parents /var/www/univention-directory-reports && \
+  xargs --no-run-if-empty apt-get download < python-packages.download && \
+  dpkg --force-depends --install ./*.deb && \
+  # remove the fake again unless a package took over the file
+  { dpkg-query --search /usr/sbin/univention-management-console-acls > /dev/null 2>&1 || \
+    rm /usr/sbin/univention-management-console-acls; } && \
+  rm ./*
+
+# Re-apply the patches from the build stage, as the files got replaced by the
+# pristine versions from the Debian packages. Keep in sync with patches/.
 COPY --from=build \
-  /usr/lib/python3/dist-packages/ \
-  /usr/lib/python3/dist-packages/
+  /usr/lib/python3/dist-packages/univention/logging.py \
+  /usr/lib/python3/dist-packages/univention/
+
+WORKDIR /
 
 # UDM tool scripts used by k8s CronJobs or scripts
 COPY --from=build \
