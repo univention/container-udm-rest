@@ -186,13 +186,19 @@ RUN \
   # /usr/local/bin/systemctl is a copy of fake.sh
   cp /usr/local/bin/systemctl /usr/sbin/univention-management-console-acls && \
   mkdir --parents /var/www/univention-directory-reports && \
-  xargs --no-run-if-empty apt-get download < python-packages.download && \
-  dpkg --force-depends --install ./*.deb && \
+  # an empty list means everything is installed already, and "./*.deb" would
+  # stay a literal string without any downloaded file
+  if [ -s python-packages.download ]; then \
+    xargs apt-get download < python-packages.download && \
+    dpkg --force-depends --install ./*.deb; \
+  fi && \
   # remove the fake again unless a package took over the file
   { dpkg-query --search /usr/sbin/univention-management-console-acls > /dev/null 2>&1 || \
     rm /usr/sbin/univention-management-console-acls; } && \
-  # "|| exit 1": a for loop only returns the status of its last iteration
+  # "|| exit 1": a for loop only returns the status of its last iteration,
+  # "continue": the glob stays a literal string if patches/ has no patch
   for p in /patches/*.patch; do \
+    [ -e "${p}" ] || continue; \
     patch --no-backup-if-mismatch -p 4 \
       -d /usr/lib/python3/dist-packages/ -i "${p}" || exit 1; \
   done && \
