@@ -43,6 +43,7 @@ RUN chown _apt . && \
   # install unlisted dependencies
   DEBIAN_FRONTEND=noninteractive \
   apt-get --assume-yes --verbose-versions --no-install-recommends install \
+  # used by the final stage to apply patches/
   patch \
   python3-distutils \
   && \
@@ -88,12 +89,6 @@ RUN chown _apt . && \
   dpkg --force-depends --install univention-directory-manager-rest_12.*.deb && \
   rm univention-directory-manager-rest_12.*.deb && \
   dpkg-query -f '${Version}' -W python3-univention-directory-manager-rest > /version
-
-COPY patches/*.patch /
-
-RUN \
-  patch -p 4 -d /usr/lib/python3/dist-packages/ -i /0001-fix-disabling-structured-logging-restores-original-f.patch && \
-  rm -v /*.patch
 
 # Record all installed Debian packages owning at least one non-directory entry
 # below /usr/lib/python3/dist-packages as "<package>=<version>", one per line.
@@ -169,6 +164,8 @@ RUN chown _apt . && \
 # The build stage's /usr/local/bin provides the fake commands called by the
 # maintainer scripts, its /usr/share/univention-lib the Univention shell
 # library (with all.sh, join.sh and umc.sh replaced by fake-uv-lib.sh).
+# Afterwards patches/ is applied on top of the pristine files from the Debian
+# packages, using the patch tool from the build stage.
 WORKDIR /apt/python
 
 # hadolint ignore=SC2016
@@ -176,6 +173,8 @@ RUN \
   --mount=type=bind,from=build,source=/usr/local/bin,target=/usr/local/bin \
   --mount=type=bind,from=build,source=/usr/share/univention-lib,target=/usr/share/univention-lib \
   --mount=type=bind,from=build,source=/python-packages.list,target=/python-packages.list \
+  --mount=type=bind,from=build,source=/usr/bin/patch,target=/usr/bin/patch \
+  --mount=type=bind,source=patches,target=/patches \
   chown _apt . && \
   # skip packages which are already installed in exactly this version
   while IFS='=' read -r pkg version; do \
@@ -192,13 +191,12 @@ RUN \
   # remove the fake again unless a package took over the file
   { dpkg-query --search /usr/sbin/univention-management-console-acls > /dev/null 2>&1 || \
     rm /usr/sbin/univention-management-console-acls; } && \
+  # "|| exit 1": a for loop only returns the status of its last iteration
+  for p in /patches/*.patch; do \
+    patch --no-backup-if-mismatch -p 4 \
+      -d /usr/lib/python3/dist-packages/ -i "${p}" || exit 1; \
+  done && \
   rm ./*
-
-# Re-apply the patches from the build stage, as the files got replaced by the
-# pristine versions from the Debian packages. Keep in sync with patches/.
-COPY --from=build \
-  /usr/lib/python3/dist-packages/univention/logging.py \
-  /usr/lib/python3/dist-packages/univention/
 
 WORKDIR /
 
