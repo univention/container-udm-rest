@@ -258,15 +258,8 @@ COPY --from=build \
 
 # OAUTHBEARER
 COPY --from=build \
-  /usr/lib/x86_64-linux-gnu/sasl2/liboauthbearer.so.0.2.0 \
+  /usr/lib/x86_64-linux-gnu/sasl2/liboauthbearer.so \
   /usr/lib/x86_64-linux-gnu/sasl2/
-
-RUN \
-  ln -s /usr/lib/x86_64-linux-gnu/sasl2/liboauthbearer.so.0.2.0 \
-  /usr/lib/x86_64-linux-gnu/sasl2/liboauthbearer.so.0 \
-  \
-  && ln -s /usr/lib/x86_64-linux-gnu/sasl2/liboauthbearer.so.0.2.0 \
-  /usr/lib/x86_64-linux-gnu/sasl2/liboauthbearer.so
 
 RUN \
   echo > /usr/lib/python3/dist-packages/univention/lib/package_manager.py && \
