@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.46.9](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/compare/v0.46.8...v0.46.9) (2026-10-26)
+
+
+### Bug Fixes
+
+* **deps:** Update Base Image ([75ac840](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/commit/75ac8401b9fa4041215208689952bd731e967d19)), closes [#0](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/issues/0)
+* **docker:** copy unversioned liboauthbearer.so ([9d89e99](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/commit/9d89e99ae91ebb742852fcbf096ecf0fd660a872)), closes [#0](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/issues/0)
+
 ## [0.46.8](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/compare/v0.46.7...v0.46.8) (2026-10-12)
 
 
