@@ -4,7 +4,7 @@
 ---
 include:
   - project: "univention/dev/nubus-for-k8s/common-ci"
-    ref: "v1.69.1"
+    ref: "v1.69.2"
     file:
       - "defaults/stages.yaml"
       - "defaults/nubus-workflow.yaml"
@@ -19,6 +19,7 @@ include:
     ref: "master"
     file:
       - "dind.yml"
+  - component: "$CI_SERVER_FQDN/univention/dev/nubus-for-k8s/common-ci/vul-man@v1.69.2"
 
 variables:
   RENOVATE_USER_ID: "1393"
@@ -99,6 +100,10 @@ push-image-external:
     matrix: *publish-matrix
 
 container-release-attestation:
+  parallel:
+    matrix: *publish-matrix
+
+sbom-upload:
   parallel:
     matrix: *publish-matrix
 
