@@ -20,6 +20,8 @@ spec:
   concurrencyPolicy: "Forbid"
   jobTemplate:
     spec:
+      # The sender retries each request itself; reschedule a failed run once, not the default six times.
+      backoffLimit: 1
       template:
         metadata:
           name: {{ include "common.names.name" . | quote }}
