@@ -223,6 +223,8 @@ RUN sed -i 's/getRootDnConnection/getAdminConnection/g' /usr/share/univention-ld
 COPY --from=build \
   /usr/share/univention-telemetry/univention-telemetry-sender \
   /usr/share/univention-telemetry/
+# TODO: drop once ucs ships the endpoint, fetch-retry and Infinity fixes (team-nubus#1619)
+COPY --chmod=755 univention-telemetry-sender /usr/share/univention-telemetry/univention-telemetry-sender
 
 # Copy favicons
 COPY --from=build \
