@@ -10,16 +10,6 @@ default_language_version:
   python: python3.11
 
 repos:
-  # "Copy .env.udm-rest-api.example so that docker-compose.yaml can be linted"
-  - repo: "local"
-    hooks:
-      - id: "copy-udm-rest-api"
-        name: "copy-udm-rest-api"
-        entry: "sh -c 'if [ ! -f .env.udm-rest-api ]; then cp .env.udm-rest-api.example .env.udm-rest-api; fi'"
-        language: "system"
-        files: "docker-compose.yaml"
-        pass_filenames: false
-
   - repo: "https://github.com/pre-commit/pre-commit-hooks"
     rev: "v6.0.0"
     hooks:

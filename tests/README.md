@@ -6,10 +6,6 @@ The test suite requires an LDAP server along with the UDM REST API.
 You can run it as follows:
 
 ```bash
-cp .env.udm-rest-api.example .env.udm-rest-api
-mkdir secret
-echo -n univention > secret/ldap.secret
-echo -n univention > secret/machine.secret
 docker compose up --detach ldap-server udm-rest-api
 ```
 

@@ -10,36 +10,11 @@ The repository's content provides you with first insights into the containerized
 
 ## Getting Started
 
-### BYOL: Bring Your Own LDAP
+`docker-compose.yaml` runs the UDM REST API against the LDAP server from the
+[LDAP container](https://git.knut.univention.de/univention/dev/nubus-for-k8s/ldap).
+Both read their settings from `tests/base.conf`.
 
-Check out the [LDAP container](https://git.knut.univention.de/univention/dev/nubus-for-k8s/ldap) in a separate folder.
-Follow the instructions from the LDAP repository to initialize the server.
-
-Then copy the provided `.env.udm-rest-api.example` to `.env.udm-rest-api`
-and customize it if needed:
-  - Ensure that the `LDAP_BASE_DN` matches in both containers.
-  - Place the `LDAP_CN_ADMIN_PW` in a new file `secret/machine.secret`.
-
-Start the container:
-
-    docker compose up --detach
-
-
-### Use with UCS VM
-
-Use the provided Ansible script to extract all secrets from your UCS VM
-and create `.env.udm-rest-api` automatically:
-
-1. Create `ansible/inventory/hosts.yaml` based on the provided example file and insert your IP address.
-2. Run the playbook:
-    ```
-    ansible-playbook -i ansible/inventory/hosts.yaml ansible/fetch-secrets-from-ucs-machine.yaml
-    ```
-
-Now, build and run your container:
-```bash
-docker compose up --detach --remove-orphans --build
-```
+    docker compose up --detach ldap-server udm-rest-api
 
 ## Access via Browser
 

@@ -11,7 +11,8 @@ services:
       target: test
     ports:
       - 9979:9979
-    env_file: .env.udm-rest-api
+    environment:
+      KRB5_CONFIG: "/etc/krb5/krb5.conf"
     secrets:
       - machine_secret
     volumes:
@@ -116,10 +117,8 @@ services:
       - docs
 
 secrets:
-  ldap_secret:
-    file: secret/ldap.secret
   machine_secret:
-    file: secret/machine.secret
+    file: tests/machine.secret
 
 volumes:
   pre-commit-cache:

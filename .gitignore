@@ -1,10 +1,6 @@
 **/__pycache__/
-/.env.udm-rest-api
 /docker-compose.override.yaml
-/ansible/inventory/*.yaml
 /helm/*/charts/
-/secret/
-/ssl/
 
 # kyverno test files
 helm/**/.kyverno/kyverno-test.yaml
