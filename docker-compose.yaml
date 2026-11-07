@@ -42,7 +42,7 @@ services:
   pre-commit:
     profiles:
       - test
-    image: gitregistry.knut.univention.de/univention/dev/tooling/pre-commit/univention-pre-commit:latest
+    image: gitregistry.knut.univention.de/univention/dev/tooling/pre-commit/univention-pre-commit:latest@sha256:bca4152a9e2f12fc27ae91eac6d8bb796aa353ac675b472440ecab5424ba26ee
     volumes:
       - type: bind
         source: .
@@ -98,7 +98,7 @@ services:
       - ./tests/init-internal-database.sh:/entrypoint.d/91-init-internal-database.sh
 
   test-chart-udm-rest-api:
-    image: gitregistry.knut.univention.de/univention/dev/nubus-for-k8s/common-helm/testrunner:0.29.10@sha256:5cba2a8fc4c6d5fa82bcec177ad433ab74695b4e02b2a2e9ed9b53c734b34dbf
+    image: gitregistry.knut.univention.de/univention/dev/nubus-for-k8s/common-helm/testrunner:0.29.24@sha256:1f34d54d23452475db4e92a43b669b8cb1817c4837b0003b2d897d47ed2f9d35
     command: pytest tests/chart
     profiles:
       - test
@@ -108,7 +108,7 @@ services:
 
   # Environment to build the documentation
   docs:
-    image: docker-registry.knut.univention.de/sphinx:latest
+    image: docker-registry.knut.univention.de/sphinx:latest@sha256:bd2b67f65aec9681e583379363a9ffb34037e636e79dcf62f5353c4769f228ed
     working_dir: /src/docs
     volumes:
       - ".:/src"
