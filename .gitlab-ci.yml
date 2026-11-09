@@ -4,7 +4,7 @@
 ---
 include:
   - project: "univention/dev/nubus-for-k8s/common-ci"
-    ref: "v1.71.0"
+    ref: "v1.72.0"
     file:
       - "defaults/stages.yaml"
       - "defaults/nubus-workflow.yaml"
@@ -15,11 +15,8 @@ include:
       - "jobs/package-and-publish-helm-charts-external.yaml"
       - "jobs/check-debian-updates.yaml"
       - "templates/sonarqube.yaml"
-  - project: "univention/infrastructure/docker-services"
-    ref: "master"
-    file:
-      - "dind.yml"
-  - component: "$CI_SERVER_FQDN/univention/dev/nubus-for-k8s/common-ci/vul-man@v1.71.0"
+      - "templates/compose-test.yaml"
+  - component: "$CI_SERVER_FQDN/univention/dev/nubus-for-k8s/common-ci/vul-man@v1.72.0"
 
 variables:
   RENOVATE_USER_ID: "1393"
@@ -57,31 +54,12 @@ container-sign-external:
     matrix: *build-matrix
 
 test-udm-rest:
+  extends: ".compose-test"
   stage: "test"
-  extends: .dind
-  rules: &rules_dind
-    - if: '$CI_PIPELINE_SOURCE == "schedule"'
-      when: "never"
-    - if: '$GITLAB_USER_ID == $RENOVATE_USER_ID && $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS !~ /Renovate run dind/'
-      when: "manual"
-    - when: "on_success"
-  image: "${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/docker:27.5.1@sha256:aa3df78ecf320f5fafdce71c659f1629e96e9de0968305fe1de670e0ca9176ce"
-  before_script:
-    # Allow that the Docker API version is negotiated between client and server
-    - unset DOCKER_API_VERSION
-    - export IMAGE_TAG=${RELEASE_VERSION}
-    - echo -e "\e[0Ksection_start:`date +%s`:docker_debug[collapsed=true]\r\e[0KDocker version details"
-    - echo $IMAGE_TAG
-    - docker version
-    - echo -e "\e[0Ksection_end:`date +%s`:docker_debug\r\e[0K"
-    - echo -e "\e[0Ksection_start:`date +%s`:docker_compose_config[collapsed=true]\r\e[0KDocker Compose configuration"
-    - docker compose config udm-rest-api ldap-server test
-    - echo -e "\e[0Ksection_end:`date +%s`:docker_compose_config\r\e[0K"
-    - docker compose up --no-build --quiet-pull --wait --wait-timeout 60 udm-rest-api ldap-server
+  variables:
+    COMPOSE_TEST_SERVICES: "udm-rest-api ldap-server"
   script:
     - docker compose run --quiet-pull --rm test pytest -lvv tests/integration
-  after_script:
-    - docker compose down --volumes
 
 test-chart-udm-rest-api:
   stage: test
