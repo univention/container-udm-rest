@@ -436,6 +436,16 @@ udmRestApi:
   # 99: sensitive data like cleartext passwords is logged as well).
   debug: "2"
 
+# -- Generate and publish the Cerbos policies used for UDM delegated administration.
+udmAuthorization:
+  enabled: false
+  configMapName: "guardian-udm-policies"
+  configMapKey: "udm-policies.tar.gz"
+  guardianDeploymentName: "guardian"
+  retryDelaySeconds: 10
+  ldapConnection: "machine"
+  bindDn: ""
+
 # -- Job configuration for updating the univentionObjectIdentifier
 ldapUpdateUniventionObjectIdentifier:
   # -- Enables the job creation
