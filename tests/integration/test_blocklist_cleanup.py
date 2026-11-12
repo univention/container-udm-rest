@@ -7,7 +7,7 @@ import shutil
 import subprocess
 import tempfile
 import time
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timedelta, UTC
 from pathlib import Path
 
 import pytest
@@ -38,7 +38,7 @@ def test_blocklist_cleanup(udm_rest_api_client, create_user, udm_url,
     blocklist_entry_module = udm_rest_api_client.get("blocklists/entry")
     blocklist_entry_valid_seconds = 5
     blocklist_entry_value_until = datetime.now(
-        timezone.utc) + timedelta(seconds=blocklist_entry_valid_seconds)
+        UTC) + timedelta(seconds=blocklist_entry_valid_seconds)
     blocklist_entry_value_sha = hashlib.sha256(
         "test-value".encode("utf-8")).hexdigest()
     blocklist_entry_obj_props = {

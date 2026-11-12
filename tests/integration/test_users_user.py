@@ -1,8 +1,6 @@
 # SPDX-License-Identifier: AGPL-3.0-only
 # SPDX-FileCopyrightText: 2023-2026 Univention GmbH
-"""
-Module providing integration tests for the UDM users/user objects.
-"""
+"""Module providing integration tests for the UDM users/user objects."""
 import urllib.parse
 
 import requests
