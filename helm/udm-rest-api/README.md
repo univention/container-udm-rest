@@ -1215,6 +1215,23 @@ false
 			<td>Topology spread constraints rely on node labels to identify the topology domain(s) that each Node is in. Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/  topologySpreadConstraints:   - maxSkew: 1     topologyKey: failure-domain.beta.kubernetes.io/zone     whenUnsatisfiable: DoNotSchedule</td>
 		</tr>
 		<tr>
+			<td>udmAuthorization</td>
+			<td>object</td>
+			<td><pre lang="json">
+{
+  "bindDn": "",
+  "configMapKey": "udm-policies.tar.gz",
+  "configMapName": "guardian-udm-policies",
+  "enabled": false,
+  "guardianDeploymentName": "guardian",
+  "ldapConnection": "machine",
+  "retryDelaySeconds": 10
+}
+</pre>
+</td>
+			<td>Generate and publish the Cerbos policies used for UDM delegated administration.</td>
+		</tr>
+		<tr>
 			<td>udmRestApi</td>
 			<td>object</td>
 			<td><pre lang="json">
