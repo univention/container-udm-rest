@@ -224,7 +224,13 @@ COPY --from=build \
   /usr/share/univention-directory-manager-tools/univention-blocklist-clean-expired-entries \
   /usr/share/univention-directory-manager-tools/remove_krb5key_keytypes \
   /usr/share/univention-directory-manager-tools/remove_sambantpassword \
+  /usr/share/univention-directory-manager-tools/univention-configure-udm-authorization \
   /usr/share/univention-directory-manager-tools/
+
+# authorization roles the generate-udm-authorization init container compiles into Cerbos policies
+COPY --from=build \
+  /usr/share/univention-directory-manager-modules/policies/ \
+  /usr/share/univention-directory-manager-modules/policies/
 
 COPY --from=build \
   /usr/share/univention-ldap/univention-update-univention-object-identifier \
