@@ -8,9 +8,8 @@ from univention.testing.helm.client.ldap import (ConnectionUri,
 
 
 class TestUdmRestApiUsesLdapConnectionLdap(ConnectionUriViaConfigMap, ConnectionUri):
-    """
-    Verify the regular ldap client configuration in `/etc/ldap/ldap.conf`
-    """
+    """Verify the regular ldap client configuration in `/etc/ldap/ldap.conf`"""
+
     config_map_name = "release-name-udm-rest-api-ldap-conf"
 
     path_ldap_conf = "data['ldap.conf']"

@@ -67,7 +67,7 @@ def session(pytestconfig):
     )
     session.headers["accept"] = "application/json"
     session.headers["content-type"] = "application/json"
-    yield session
+    return session
 
 
 @pytest.fixture(scope="session")
@@ -100,14 +100,14 @@ def delete_obj_after_test(session: requests.Session,
 
     yield _delete_obj_after_test
 
-    for _udm_mod, _dn in udm_objects:
-        url = urllib.parse.urljoin(udm_url, f"{_udm_mod}/{_dn}")
+    for udm_mod, dn in udm_objects:
+        url = urllib.parse.urljoin(udm_url, f"{udm_mod}/{dn}")
         conn = session.delete(url)
         if conn.status_code == requests.codes.no_content:
-            print(f"Deleted {_udm_mod!r} object at {_dn!r}")
+            print(f"Deleted {udm_mod!r} object at {dn!r}")
         else:
             print(
-                f"Error deleting {_udm_mod!r} object at {_dn!r}: {conn.status_code} {conn.reason}",
+                f"Error deleting {udm_mod!r} object at {dn!r}: {conn.status_code} {conn.reason}",
             )
 
 
