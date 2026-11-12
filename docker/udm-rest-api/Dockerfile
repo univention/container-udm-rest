@@ -28,6 +28,12 @@ COPY fake-uv-lib.sh /usr/local/bin/fake-uv-lib.sh
 
 WORKDIR /apt
 
+# hadolint ignore=DL3009
+RUN printf '%s\n' \
+  'deb [trusted=yes] http://omar.knut.univention.de/build2/git/fbest-udm-authorization-with-cerbos-role-policies/ git main' \
+  > /etc/apt/sources.list.d/udm-authorization.list && \
+  apt-get update
+
 # hadolint ignore=SC2016
 RUN chown _apt . && \
   # install Univention bash helper functions dependency
@@ -133,6 +139,12 @@ ARG LABEL_SOURCE=undefined
 ARG LABEL_VERSION=undefined
 
 WORKDIR /apt
+
+# hadolint ignore=DL3009
+RUN printf '%s\n' \
+  'deb [trusted=yes] http://omar.knut.univention.de/build2/git/fbest-udm-authorization-with-cerbos-role-policies/ git main' \
+  > /etc/apt/sources.list.d/udm-authorization.list && \
+  apt-get update
 
 RUN chown _apt . && \
   DEBIAN_FRONTEND=noninteractive \
@@ -290,6 +302,7 @@ RUN \
   echo '{}' > /var/lib/univention-appcenter/attributes/mapping.json
 
 COPY entrypoint.d /entrypoint.d/
+COPY --chmod=755 upload-udm-authorization.py /usr/local/bin/upload-udm-authorization.py
 COPY --chmod=755 univention-probe-udm.py /usr/local/bin/univention-probe-udm.py
 WORKDIR /udm/
 

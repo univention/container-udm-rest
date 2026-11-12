@@ -56,6 +56,9 @@ spec:
       {{- if .Values.serviceAccount.create }}
       serviceAccountName: {{ include "common.names.fullname" . }}
       {{- end }}
+      {{- if .Values.udmAuthorization.enabled }}
+      automountServiceAccountToken: true
+      {{- end }}
       {{- if .Values.terminationGracePeriodSeconds }}
       terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
       {{- end }}
@@ -171,6 +174,58 @@ spec:
               mountPath: /target
           resources: {{- include "common.tplvalues.render" (dict "value" $.Values.initResources "context" $) | nindent 12 }}
         {{- end }}
+        {{- if .Values.udmAuthorization.enabled }}
+        - name: "generate-udm-authorization"
+          {{- if .Values.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          image: "{{ coalesce .Values.udmRestApi.image.registry .Values.global.imageRegistry }}/{{ .Values.udmRestApi.image.repository }}:{{ .Values.udmRestApi.image.tag }}"
+          imagePullPolicy: {{ coalesce .Values.udmRestApi.image.pullPolicy .Values.global.imagePullPolicy | quote }}
+          command:
+            - sh
+            - -c
+            - |
+              set -eu
+              while true; do
+                rm -rf /tmp/udm-authorization
+                mkdir -p /tmp/udm-authorization
+                if /usr/share/univention-directory-manager-tools/univention-configure-udm-authorization \
+                  --ldap-connection {{ .Values.udmAuthorization.ldapConnection | quote }} \
+                  {{- if .Values.udmAuthorization.bindDn }}--binddn {{ .Values.udmAuthorization.bindDn | quote }} --bindpwdfile /etc/machine.secret \
+                  {{- end }}generate \
+                  --output-dir /tmp/udm-authorization/policies \
+                  --archive /tmp/udm-authorization/policies.tar.gz && \
+                  UDM_AUTHORIZATION_ARCHIVE=/tmp/udm-authorization/policies.tar.gz \
+                  UDM_AUTHORIZATION_NAMESPACE={{ include "common.names.namespace" . | quote }} \
+                  UDM_AUTHORIZATION_CONFIGMAP={{ .Values.udmAuthorization.configMapName | quote }} \
+                  UDM_AUTHORIZATION_CONFIGMAP_KEY={{ .Values.udmAuthorization.configMapKey | quote }} \
+                  UDM_AUTHORIZATION_GUARDIAN_DEPLOYMENT={{ .Values.udmAuthorization.guardianDeploymentName | quote }} \
+                  /usr/local/bin/upload-udm-authorization.py; then
+                  break
+                fi
+                sleep {{ .Values.udmAuthorization.retryDelaySeconds }}
+              done
+          volumeMounts:
+            - name: "tmp-volume"
+              mountPath: "/tmp"
+            - name: "udm-authorization-tmp"
+              mountPath: "/var/lib/univention-directory-manager-modules"
+            - name: "config-map-ucr"
+              mountPath: "/etc/univention/base.conf"
+              subPath: "base.conf"
+            - name: "config-map-ucr"
+              mountPath: "/etc/univention/base-defaults.conf"
+              subPath: "base-defaults.conf"
+            - name: secret-ldap
+              mountPath: "/etc/machine.secret"
+              subPath: {{ include "nubus-common.secrets.key" (dict "existingSecret" .Values.ldap.auth.existingSecret "key" "password" "context" .) }}
+              readOnly: true
+            - name: "plugin-targets"
+              mountPath: "/usr/lib/python3/dist-packages/univention/admin/modules"
+              subPath: "udm-modules"
+              readOnly: true
+          resources: {{- include "common.tplvalues.render" (dict "value" .Values.initResources "context" .) | nindent 12 }}
+        {{- end }}
       containers:
         - name: "main"
           {{- if .Values.containerSecurityContext.enabled }}
@@ -279,6 +334,8 @@ spec:
         - name: "var-cache-univention-config-volume"
           emptyDir: {}
         - name: "tmp-volume"
+          emptyDir: {}
+        - name: "udm-authorization-tmp"
           emptyDir: {}
         - name: "var-run-volume"
           emptyDir: {}
