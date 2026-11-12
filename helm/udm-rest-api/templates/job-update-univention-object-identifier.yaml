@@ -20,7 +20,9 @@ spec:
     metadata:
       name: {{ include "common.names.name" . }}
       labels:
-        {{- include "common.labels.standard" . | nindent 8 }}
+        {{- include "common.labels.standard" ( dict
+          "customLabels" ( dict "app.kubernetes.io/name" ( printf "%s-update-univention-object-identifier" ( include "common.names.fullname" . ) ) )
+          "context" . ) | nindent 8 }}
       annotations:
         {{- if .Values.additionalAnnotations }}
         {{ toYaml .Values.additionalAnnotations | nindent 8 }}
