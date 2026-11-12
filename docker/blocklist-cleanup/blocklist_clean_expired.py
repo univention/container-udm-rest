@@ -7,6 +7,7 @@ import os
 from datetime import UTC, datetime
 
 from univention.admin.rest.client import UDM, HTTPError, ConnectionError
+import sys
 
 log = logging.getLogger("app")
 
@@ -15,7 +16,7 @@ def search_and_delete_expired_blocklist_entries(udm: UDM):
     mod = udm.get("blocklists/entry")
     if mod is None:
         log.error("UDM module 'blocklists/entry' not found")
-        exit(1)
+        sys.exit(1)
 
     now = datetime.now(UTC)
     for entry in mod.search():
@@ -47,7 +48,7 @@ def _get_env_var(key: str, default=_sentinel) -> str:
     value = os.environ.get(key, default)
     if value is _sentinel:
         log.error("missing %s environment variable", key)
-        exit(1)
+        sys.exit(1)
 
     return value
 
@@ -58,7 +59,7 @@ def _connect_to_udm():
     udm_api_user = _get_env_var("UDM_API_USER")
     udm_api_password_file = _get_env_var("UDM_API_PASSWORD_FILE")
 
-    with open(udm_api_password_file, "r") as password_file:
+    with open(udm_api_password_file) as password_file:
         udm_api_password = password_file.read()
 
     try:
@@ -68,7 +69,7 @@ def _connect_to_udm():
     except (HTTPError, ConnectionError) as e:
         log.error("Failed to create a UDM REST-API with URL %s Client: %s",
                   udm_api_url, e)
-        exit(1)
+        sys.exit(1)
 
 
 def main():

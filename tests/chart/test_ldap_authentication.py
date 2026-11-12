@@ -37,9 +37,7 @@ class TestCronJobLicenseCacheUsesLdapCredentialsByVolume(SettingsTestLdapSecret,
 
 
 class UsesLdapUserByConfigMap(SettingsTestLdapSecret, AuthUsernameViaConfigMap):
-    """
-    Common expectations for workloads which read the user out of the ConfigMap.
-    """
+    """Common expectations for workloads which read the user out of the ConfigMap."""
 
     config_map_name = "release-name-udm-rest-api"
     path_username = "data.UDM_API_USER"

@@ -5,9 +5,11 @@ from typing import Any
 from univention.testing.helm.base import Base
 from pytest_helm.utils import load_yaml
 
+
 class TestWaitForLdap(Base):
     template_name = 'templates/job-update-univention-object-identifier.yaml'
     init_container_name = 'wait-for-ldap'
+
     def test_extra_env_vars(self, helm, chart_default_path):
         values = load_yaml(
                 """
@@ -21,7 +23,7 @@ class TestWaitForLdap(Base):
         wait_for_ldap = self.render_chart_and_find_container(helm, chart_default_path, values)
 
         env_vars = wait_for_ldap['env']
-        test_env_var = next((env_var for env_var in env_vars if env_var['name'] == 'foo'))
+        test_env_var = next(env_var for env_var in env_vars if env_var['name'] == 'foo')
         assert test_env_var, f'env var with value \'foo\' not found in env vars {env_vars}'
         assert test_env_var['value'] == 'bar'
 
@@ -39,7 +41,7 @@ class TestWaitForLdap(Base):
         wait_for_ldap = self.render_chart_and_find_container(helm, chart_default_path, values)
 
         volume_mounts = wait_for_ldap['volumeMounts']
-        test_volume_mount = next((volume_mount for volume_mount in volume_mounts if volume_mount['name'] == 'foo'))
+        test_volume_mount = next(volume_mount for volume_mount in volume_mounts if volume_mount['name'] == 'foo')
 
         assert test_volume_mount, f"volume mount with name 'foo' not found in volume mounts {volume_mounts}"
         assert test_volume_mount['mountPath'] == '/bar'
@@ -58,7 +60,7 @@ class TestWaitForLdap(Base):
         chart = self.render_job(helm, chart_default_path, values)
         volumes = chart['spec']['template']['spec']['volumes']
 
-        test_volume = next((volume for volume in volumes if volume['name'] == 'foo'))
+        test_volume = next(volume for volume in volumes if volume['name'] == 'foo')
 
         assert test_volume
         assert test_volume['emptyDir'] is None

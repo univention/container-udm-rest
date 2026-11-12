@@ -9,7 +9,7 @@ import pytest
 base_dir = (Path(__file__).parent / "../../").resolve()
 
 
-@pytest.fixture()
+@pytest.fixture
 def helm_default_values(request):
     default_values = [
         base_dir / "helm/udm-rest-api/linter_values.yaml",
@@ -17,7 +17,7 @@ def helm_default_values(request):
     return default_values
 
 
-@pytest.fixture()
+@pytest.fixture
 def chart_default_path():
     chart_path = base_dir / "helm/udm-rest-api"
     return chart_path
