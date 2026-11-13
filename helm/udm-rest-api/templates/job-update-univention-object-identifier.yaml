@@ -22,8 +22,8 @@ spec:
       labels:
         {{- include "common.labels.standard" ( dict
           "customLabels" ( merge
-            ( deepCopy ( .Values.additionalLabels | default dict ) )
-            ( dict "app.kubernetes.io/name" ( printf "%s-update-univention-object-identifier" ( include "common.names.fullname" . ) ) ) )
+            ( dict "app.kubernetes.io/name" ( printf "%s-update-univention-object-identifier" ( include "common.names.fullname" . ) ) )
+            ( .Values.additionalLabels | default dict ) )
           "context" . ) | nindent 8 }}
       annotations:
         {{- if .Values.additionalAnnotations }}
