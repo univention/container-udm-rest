@@ -32,7 +32,7 @@ WORKDIR /apt
 RUN printf '%s\n' \
   'deb [trusted=yes] http://omar.knut.univention.de/build2/git/fbest-udm-authorization-with-cerbos-role-policies/ git main' \
   > /etc/apt/sources.list.d/udm-authorization.list && \
-  apt-get update
+  apt-get  update
 
 # hadolint ignore=SC2016
 RUN chown _apt . && \
@@ -144,7 +144,7 @@ WORKDIR /apt
 RUN printf '%s\n' \
   'deb [trusted=yes] http://omar.knut.univention.de/build2/git/fbest-udm-authorization-with-cerbos-role-policies/ git main' \
   > /etc/apt/sources.list.d/udm-authorization.list && \
-  apt-get update
+  apt-get  update
 
 RUN chown _apt . && \
   DEBIAN_FRONTEND=noninteractive \
