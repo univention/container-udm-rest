@@ -26,8 +26,8 @@ spec:
           labels:
             {{- include "common.labels.standard" ( dict
               "customLabels" ( merge
-                ( deepCopy ( .Values.additionalLabels | default dict ) )
-                ( dict "app.kubernetes.io/name" ( printf "%s-blocklist-cleanup" ( include "common.names.fullname" . ) ) ) )
+                ( dict "app.kubernetes.io/name" ( printf "%s-blocklist-cleanup" ( include "common.names.fullname" . ) ) )
+                ( .Values.additionalLabels | default dict ) )
               "context" . ) | nindent 12 }}
           {{- if .Values.podAnnotations }}
           annotations: {{- include "common.tplvalues.render" (dict "value" .Values.podAnnotations "context" .) | nindent 12 }}
