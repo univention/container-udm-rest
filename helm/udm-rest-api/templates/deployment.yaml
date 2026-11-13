@@ -194,8 +194,8 @@ spec:
                   {{- if .Values.udmAuthorization.bindDn }}
                   --binddn {{ .Values.udmAuthorization.bindDn | quote }} --bindpwdfile /etc/machine.secret \
                   {{- end }}
-                  generate \
                   --output-dir /tmp/udm-authorization/policies \
+                  generate \
                   --archive /tmp/udm-authorization/policies.tar.gz && \
                   UDM_AUTHORIZATION_ARCHIVE=/tmp/udm-authorization/policies.tar.gz \
                   UDM_AUTHORIZATION_NAMESPACE={{ include "common.names.namespace" . | quote }} \
