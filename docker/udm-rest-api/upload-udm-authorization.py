@@ -25,7 +25,11 @@ def api_request(method, path, body=None):
     request = urllib.request.Request(
         url,
         data=None if body is None else json.dumps(body).encode(),
-        headers={'Authorization': f'Bearer {token}', 'Content-Type': 'application/json'},
+        headers={
+            'Authorization': f'Bearer {token}',
+            # the API server rejects a PATCH with a plain JSON body (415)
+            'Content-Type': 'application/merge-patch+json' if method == 'PATCH' else 'application/json',
+        },
         method=method,
     )
     context = ssl.create_default_context(cafile=ca)
@@ -57,16 +61,17 @@ def main():
     }
 
     status, current = api_request('GET', f'configmaps/{name}')
-    if status == 200 and current.get('metadata', {}).get('annotations', {}).get('udm-authorization.univention.de/sha256') == digest:
-        return
-    if status == 200:
+    up_to_date = status == 200 and current.get('metadata', {}).get('annotations', {}).get('udm-authorization.univention.de/sha256') == digest
+    if status == 200 and not up_to_date:
         configmap['metadata']['resourceVersion'] = current['metadata']['resourceVersion']
         api_request('PUT', f'configmaps/{name}', configmap)
     elif status == 404:
         api_request('POST', 'configmaps', configmap)
-    else:
+    elif status != 200:
         raise RuntimeError(f'Unexpected ConfigMap status: {status}')
 
+    # Patch even when the ConfigMap is up to date, so a retry after a failed patch still restarts Guardian.
+    # The same annotation value starts no new rollout.
     deployment = os.environ['UDM_AUTHORIZATION_GUARDIAN_DEPLOYMENT']
     patch = {
         'metadata': {
