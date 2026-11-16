@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.46.12](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/compare/v0.46.11...v0.46.12) (2026-11-16)
+
+
+### Bug Fixes
+
+* **helm:** give each Job and CronJob pod its own name label ([7cc9ee7](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/commit/7cc9ee7776e261bc88f6b8e61f30436640b57449)), closes [univention/dev/internal/team-nubus#1687](https://git.knut.univention.de/univention/dev/internal/team-nubus/issues/1687)
+* **helm:** render additionalLabels on the Job pods ([a1ee138](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/commit/a1ee1386e638360f560fc0475cab3334bf627492)), closes [univention/dev/internal/team-nubus#1687](https://git.knut.univention.de/univention/dev/internal/team-nubus/issues/1687)
+
 ## [0.46.11](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/compare/v0.46.10...v0.46.11) (2026-11-14)
 
 
