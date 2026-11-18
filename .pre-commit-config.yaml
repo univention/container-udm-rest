@@ -52,6 +52,7 @@ repos:
       - id: "conventional-pre-commit"
         name: "Conventional Commit"
         stages: ["commit-msg"]
+        args: [--strict]
 
   - repo: "https://git.knut.univention.de/univention/infrastructure/pre-commit-hooks/check-issue-reference"
     rev: "v1.0.1"
