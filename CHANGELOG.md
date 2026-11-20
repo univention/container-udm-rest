@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.46.13](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/compare/v0.46.12...v0.46.13) (2026-11-20)
+
+
+### Bug Fixes
+
+* **helm:** reschedule a failed telemetry run once, not six times ([8af542b](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/commit/8af542bbd2f1843cac82379fa1a0781340326fcb)), closes [univention/dev/internal/team-nubus#1619](https://git.knut.univention.de/univention/dev/internal/team-nubus/issues/1619)
+
 ## [0.46.12](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/compare/v0.46.11...v0.46.12) (2026-11-16)
 
 
