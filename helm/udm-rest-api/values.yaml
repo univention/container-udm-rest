@@ -492,7 +492,7 @@ licenseCache:
 # -- Settings to configure the telemetry sender job
 telemetrySender:
   # -- Enables the cron job for sending telemetry to Univention.
-  enabled: false
+  enabled: true
   # -- Cron schedule for the telemetry sender job.
   schedule: "0 2 * * *"
   # -- Array with extra environment variables to add to containers.

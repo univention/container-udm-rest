@@ -1152,7 +1152,7 @@ true
 			<td>object</td>
 			<td><pre lang="json">
 {
-  "enabled": false,
+  "enabled": true,
   "extraEnvVars": [],
   "schedule": "0 2 * * *"
 }
@@ -1164,7 +1164,7 @@ true
 			<td>telemetrySender.enabled</td>
 			<td>bool</td>
 			<td><pre lang="json">
-false
+true
 </pre>
 </td>
 			<td>Enables the cron job for sending telemetry to Univention.</td>
