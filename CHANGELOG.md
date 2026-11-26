@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.47.0](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/compare/v0.46.15...v0.47.0) (2026-11-26)
+
+
+### Features
+
+* **helm:** enable the telemetry sender by default ([820186b](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/commit/820186beb6fafb8861b12d6a020fae6f480181a1)), closes [univention/dev/internal/team-nubus#1622](https://git.knut.univention.de/univention/dev/internal/team-nubus/issues/1622)
+
 ## [0.46.15](https://git.knut.univention.de/univention/dev/nubus-for-k8s/udm-rest-api/compare/v0.46.14...v0.46.15) (2026-11-26)
 
 
