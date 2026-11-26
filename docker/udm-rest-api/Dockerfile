@@ -139,16 +139,15 @@ RUN chown _apt . && \
   apt-get --assume-yes --verbose-versions --no-install-recommends install \
   libc-bin \
   libcurl3-gnutls \
-  libjansson4 \
-  librhonabwy1.1 \
+  libsasl2-modules-oauthbearer \
   locales \
   python3 \
   python3-certifi \
-  python3-ldap \
-  python3-pil \
-  python3-magic \
-  python3-samba \
   python3-cracklib \
+  python3-ldap \
+  python3-magic \
+  python3-pil \
+  python3-samba \
   python3-univention-heimdal \
   && \
   apt-get download \
@@ -157,13 +156,16 @@ RUN chown _apt . && \
   libunivention-license0 \
   libunivention-policy0 \
   && \
-  dpkg --install --force-depends /apt/*
+  dpkg --install --force-depends /apt/* && \
+  rm /apt/*.deb && \
+  rm -rf /var/lib/apt/lists/*
 
 # Install the Debian packages providing /usr/lib/python3/dist-packages in the
 # exact versions recorded in the build stage, instead of copying the files.
 # The build stage's /usr/local/bin provides the fake commands called by the
 # maintainer scripts, its /usr/share/univention-lib the Univention shell
-# library (with all.sh, join.sh and umc.sh replaced by fake-uv-lib.sh).
+# library (with all.sh, join.sh and umc.sh replaced by fake-uv-lib.sh) and
+# its /var/lib/apt/lists the package indices matching the recorded versions.
 # Afterwards patches/ is applied on top of the pristine files from the Debian
 # packages, using the patch tool from the build stage.
 WORKDIR /apt/python
@@ -173,6 +175,7 @@ RUN \
   --mount=type=bind,from=build,source=/usr/local/bin,target=/usr/local/bin \
   --mount=type=bind,from=build,source=/usr/share/univention-lib,target=/usr/share/univention-lib \
   --mount=type=bind,from=build,source=/python-packages.list,target=/python-packages.list \
+  --mount=type=bind,from=build,source=/var/lib/apt/lists,target=/var/lib/apt/lists,rw \
   --mount=type=bind,from=build,source=/usr/bin/patch,target=/usr/bin/patch \
   --mount=type=bind,source=patches,target=/patches \
   chown _apt . && \
@@ -256,11 +259,6 @@ COPY --from=build \
   /version \
   /version
 
-# OAUTHBEARER
-COPY --from=build \
-  /usr/lib/x86_64-linux-gnu/sasl2/liboauthbearer.so \
-  /usr/lib/x86_64-linux-gnu/sasl2/
-
 RUN \
   echo > /usr/lib/python3/dist-packages/univention/lib/package_manager.py && \
   #
@@ -323,6 +321,7 @@ SHELL ["/bin/bash", "-c"]
 
 # make this container debugable:
 RUN \
+  --mount=type=bind,from=build,source=/var/lib/apt/lists,target=/var/lib/apt/lists,rw \
   DEBIAN_FRONTEND=noninteractive \
   apt-get --assume-yes --verbose-versions --no-install-recommends install \
   vim \
